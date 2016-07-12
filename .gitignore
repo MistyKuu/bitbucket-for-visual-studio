@@ -68,6 +68,7 @@ ipch/
 *.psess
 *.vsp
 *.vspx
+.vs/
 
 # Guidance Automation Toolkit
 *.gpState
@@ -184,7 +185,7 @@ $RECYCLE.BIN/
 **/*.sln.ide
 
 # Visual Studio temp something
-.vs/
+
 
 #####
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
