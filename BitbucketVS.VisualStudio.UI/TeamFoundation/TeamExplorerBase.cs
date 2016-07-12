@@ -2,6 +2,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.Controls;
 
@@ -14,7 +15,9 @@ namespace BitbucketVS.VisualStudio.UI.TeamFoundation
     {
         private bool contextSubscribed;
         private IServiceProvider serviceProvider;
-       
+
+        public static readonly Guid TeamExplorerConnectionsSectionId = new Guid("ef6a7a99-f01f-4c91-ad31-183c1354dd97");
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -36,7 +39,7 @@ namespace BitbucketVS.VisualStudio.UI.TeamFoundation
                 }
 
                 this.serviceProvider = value;
-                
+
                 // Subscribe to Team Foundation context changes
                 if (this.serviceProvider != null)
                 {
@@ -82,7 +85,7 @@ namespace BitbucketVS.VisualStudio.UI.TeamFoundation
             return Guid.Empty;
         }
 
-        protected void RaisePropertyChanged(string propertyName)
+        protected void RaisePropertyChanged([CallerMemberName]string propertyName = null)
         {
             if (this.PropertyChanged != null)
             {
