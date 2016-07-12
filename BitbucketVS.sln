@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitbucketVS.UI", "Bitbucket
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitbucketVS.Infrastructure", "BitbucketVS.Infrastructure\BitbucketVS.Infrastructure.csproj", "{CFA26063-E6BD-4189-9E20-13BE59EBAF67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSIXProject1", "VSIXProject1\VSIXProject1.csproj", "{2F52AE85-C595-4EA7-9AB4-86F61FFBF8E7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,10 +51,6 @@ Global
 		{CFA26063-E6BD-4189-9E20-13BE59EBAF67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFA26063-E6BD-4189-9E20-13BE59EBAF67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFA26063-E6BD-4189-9E20-13BE59EBAF67}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F52AE85-C595-4EA7-9AB4-86F61FFBF8E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F52AE85-C595-4EA7-9AB4-86F61FFBF8E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F52AE85-C595-4EA7-9AB4-86F61FFBF8E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F52AE85-C595-4EA7-9AB4-86F61FFBF8E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
