@@ -29,7 +29,7 @@ namespace BitbucketVS.VisualStudio.UI.Sections
 
         public BitbucketConnectSection()
         {
-            Title = "BitBucketExt";
+            Title = "BitBucketExt1";
             PropertyChanged += BitbucketConnectSection_PropertyChanged;
         }
 
