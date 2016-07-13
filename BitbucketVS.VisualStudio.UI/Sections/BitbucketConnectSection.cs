@@ -11,34 +11,25 @@ using BitbucketVS.UI.Views;
 using Microsoft.TeamFoundation.Controls;
 using Microsoft.TeamFoundation.MVVM;
 using BitbucketVS.VisualStudio.UI.TeamFoundation;
+using BitBucketVs.Contracts.Interfaces.ViewModels;
+using BitBucketVs.Contracts.Interfaces.Views;
 
 namespace BitbucketVS.VisualStudio.UI.Sections
 {
-    [TeamExplorerSection(BitbucketConnectSectionId, TeamExplorerPageIds.Connect, 10)]
+    [TeamExplorerSection(Id, TeamExplorerPageIds.Connect, 10)]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class BitbucketConnectSection : TeamExplorerBaseSection
     {
         private ITeamExplorerSection _section;
-        public const string BitbucketConnectSectionId = "a6701970-28da-42ee-a0f4-9e02f486de2c";
+        private const string Id = "a6701970-28da-42ee-a0f4-9e02f486de2c";
 
-        protected BitbucketConnectSectionView View
+        [ImportingConstructor]
+        public BitbucketConnectSection(
+            IBitbucketService bucketService,
+            IBitbucketConnectViewModel viewModel,
+            IBitbucketConnectView view) : base(viewModel, view)
         {
-            get { return SectionContent as BitbucketConnectSectionView; }
-            set { SectionContent = value; }
-        }
-
-        public BitbucketConnectSection()
-        {
-            Title = "BitBucketExt1";
-            PropertyChanged += BitbucketConnectSection_PropertyChanged;
-        }
-
-        private void BitbucketConnectSection_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "IsVisible" && IsVisible && View == null)
-                View = new BitbucketConnectSectionView { DataContext = this };
-            //else if (e.PropertyName == "IsExpanded" && settings != null)
-            //    settings.IsExpanded = IsExpanded;
+            Title = "Bitbucket Extensions";
         }
 
         public override void Initialize(object sender, SectionInitializeEventArgs e)
@@ -51,7 +42,7 @@ namespace BitbucketVS.VisualStudio.UI.Sections
 
         protected ITeamExplorerSection GetSection(Guid section)
         {
-            return ((ITeamExplorerPage) ServiceProvider.GetService(typeof(ITeamExplorerPage))).GetSection(section);
+            return ((ITeamExplorerPage)ServiceProvider.GetService(typeof(ITeamExplorerPage))).GetSection(section);
         }
 
     }

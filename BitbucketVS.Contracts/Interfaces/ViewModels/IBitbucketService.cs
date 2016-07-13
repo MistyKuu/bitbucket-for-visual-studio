@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BitBucketVs.Contracts.Interfaces
+namespace BitBucketVs.Contracts.Interfaces.ViewModels
 {
-    public interface IMainViewModel
+    public interface IBitbucketService
     {
     }
 }

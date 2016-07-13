@@ -1,6 +1,7 @@
 ﻿// <copyright file="TeamExplorerBaseSection.cs" company="Microsoft Corporation">Copyright Microsoft Corporation. All Rights Reserved. This code released under the terms of the Microsoft Public License (MS-PL, http://opensource.org/licenses/ms-pl.html.) This is sample code only, do not use in production environments.</copyright>
 
 using System;
+using BitBucketVs.Contracts;
 using Microsoft.TeamFoundation.Controls;
 
 namespace BitbucketVS.VisualStudio.UI.TeamFoundation
@@ -10,6 +11,12 @@ namespace BitbucketVS.VisualStudio.UI.TeamFoundation
     /// </summary>
     public class TeamExplorerBaseSection : TeamExplorerBase, ITeamExplorerSection
     {
+        public TeamExplorerBaseSection(IViewModel viewModel, IView view)
+        {
+            view.DataContext = viewModel;
+            SectionContent = view;
+        }
+
         private string title;
         private bool isExpanded = true;
         private bool isVisible = true;
@@ -111,5 +118,7 @@ namespace BitbucketVS.VisualStudio.UI.TeamFoundation
         {
             return null;
         }
+
+
     }
 }

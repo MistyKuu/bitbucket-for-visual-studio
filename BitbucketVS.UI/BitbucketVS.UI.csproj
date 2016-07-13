@@ -33,6 +33,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -48,11 +49,15 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\BitbucketConnectSectionView.xaml.cs">
-      <DependentUpon>BitbucketConnectSectionView.xaml</DependentUpon>
+    <Compile Include="Views\BitbucketConnectView.xaml.cs">
+      <DependentUpon>BitbucketConnectView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BitbucketVS.Contracts\BitbucketVS.Contracts.csproj">
+      <Project>{528A613A-1D51-4B23-851B-2549261B580E}</Project>
+      <Name>BitbucketVS.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BitbucketVS.Infrastructure\BitbucketVS.Infrastructure.csproj">
       <Project>{cfa26063-e6bd-4189-9e20-13be59ebaf67}</Project>
       <Name>BitbucketVS.Infrastructure</Name>
@@ -60,7 +65,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Page Include="Views\BitbucketConnectSectionView.xaml">
+    <Page Include="Views\BitbucketConnectView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

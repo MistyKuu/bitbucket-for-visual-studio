@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="VSIXProject1.Kamil Nibisz.665a1637-b7e9-4ccb-9e42-057e92d721bb" Version="1.0" Language="en-US" Publisher="Kamil Nibisz" />
-    <DisplayName>VSIXProject1</DisplayName>
+    <Identity Id="VSIXProject1.Kamil Nibisz.665a1637-b7e9-4ccb-9e42-057e92d721bb" Version="1.0" Language="en-US" Publisher="OneInstance" />
+    <DisplayName>BitbucketVS.VisualStudio.UI</DisplayName>
     <Description>Empty VSIX Project.</Description>
   </Metadata>
   <Installation>
@@ -14,5 +14,9 @@
   <Assets>
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="BitbucketVS.Services" Path="|BitbucketVS.Services|" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="BitbucketVS.Contracts" Path="|BitbucketVS.Contracts|" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="BitbucketVS.UI" Path="|BitbucketVS.UI|" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="BitbucketVS.Infrastructure" Path="|BitbucketVS.Infrastructure|" />
   </Assets>
 </PackageManifest>
