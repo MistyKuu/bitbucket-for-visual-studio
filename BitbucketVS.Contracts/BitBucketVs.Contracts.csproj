@@ -44,9 +44,11 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="IDialogWindow.cs" />
     <Compile Include="Interfaces\ViewModels\IBitbucketService.cs" />
     <Compile Include="Interfaces\ViewModels\IBitbucketConnectViewModel.cs" />
     <Compile Include="Interfaces\Views\IBitbucketConnectView.cs" />
+    <Compile Include="Interfaces\Views\ITestDialogWindow.cs" />
     <Compile Include="IView.cs" />
     <Compile Include="IViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

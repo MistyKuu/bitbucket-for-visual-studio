@@ -13,18 +13,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BitBucketVs.Contracts;
 using BitBucketVs.Contracts.Interfaces.Views;
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace BitbucketVS.UI.Views
 {
     /// <summary>
-    /// Interaction logic for BitbucketConnectView.xaml
+    /// Interaction logic for TestDialogWindow.xaml
     /// </summary>
-    [Export(typeof(IBitbucketConnectView))]
+    [Export(typeof(ITestDialogWindow))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class BitbucketConnectView : UserControl, IBitbucketConnectView
+    public partial class TestDialogWindow : DialogWindow, ITestDialogWindow
     {
-        public BitbucketConnectView()
+        public TestDialogWindow()
         {
             InitializeComponent();
         }
