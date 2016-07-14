@@ -53,11 +53,11 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\TestDialogWindow.xaml.cs">
-      <DependentUpon>TestDialogWindow.xaml</DependentUpon>
+    <Compile Include="Views\LoginDialogView.xaml.cs">
+      <DependentUpon>LoginDialogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BitbucketConnectView.xaml.cs">
-      <DependentUpon>BitbucketConnectView.xaml</DependentUpon>
+    <Compile Include="Views\ConnectSectionView.xaml.cs">
+      <DependentUpon>ConnectSectionView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -72,11 +72,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Page Include="Views\TestDialogWindow.xaml">
+    <Page Include="Views\LoginDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\BitbucketConnectView.xaml">
+    <Page Include="Views\ConnectSectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -49,7 +49,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sections\BitbucketConnectSection.cs" />
+    <Compile Include="Sections\ConnectSection.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBase.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBaseNavigationItem.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBaseNavigationLink.cs" />

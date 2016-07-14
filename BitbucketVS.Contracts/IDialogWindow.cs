@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace BitBucketVs.Contracts
 {
-    public interface IDialogWindow
+    public interface IDialogWindow : IView
     {
         bool? ShowModal();
-    }
+}
 }

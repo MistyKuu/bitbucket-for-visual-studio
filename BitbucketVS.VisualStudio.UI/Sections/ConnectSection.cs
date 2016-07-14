@@ -19,22 +19,19 @@ namespace BitbucketVS.VisualStudio.UI.Sections
 {
     [TeamExplorerSection(Id, TeamExplorerPageIds.Connect, 10)]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class BitbucketConnectSection : TeamExplorerBaseSection
+    public class ConnectSection : TeamExplorerBaseSection
     {
         private ITeamExplorerSection _section;
-        private IDialogWindow _dialogWindow;
         private const string Id = "a6701970-28da-42ee-a0f4-9e02f486de2c";
 
         [ImportingConstructor]
-        public BitbucketConnectSection(
+        public ConnectSection(
             IBitbucketService bucketService,
-            IBitbucketConnectViewModel viewModel,
-            IBitbucketConnectView view,
-            ITestDialogWindow dialogWindow
-            ) : base(viewModel, view)
+            IConnectSectionViewModel sectionViewModel,
+            IConnectSectionView sectionView
+            ) : base(sectionViewModel, sectionView)
         {
             Title = "Bitbucket Extensions";
-            _dialogWindow = dialogWindow;
         }
 
         public override void Initialize(object sender, SectionInitializeEventArgs e)
@@ -42,8 +39,6 @@ namespace BitbucketVS.VisualStudio.UI.Sections
             base.Initialize(sender, e);
             // watch for new repos added to the local repo list
             _section = GetSection(TeamExplorerConnectionsSectionId);
-
-           // _dialogWindow.ShowModal();
         }
 
         protected ITeamExplorerSection GetSection(Guid section)

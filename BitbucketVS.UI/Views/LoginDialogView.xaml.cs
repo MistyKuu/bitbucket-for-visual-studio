@@ -20,13 +20,13 @@ using Microsoft.VisualStudio.PlatformUI;
 namespace BitbucketVS.UI.Views
 {
     /// <summary>
-    /// Interaction logic for TestDialogWindow.xaml
+    /// Interaction logic for LoginDialogView.xaml
     /// </summary>
-    [Export(typeof(ITestDialogWindow))]
+    [Export(typeof(ILoginDialogView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class TestDialogWindow : DialogWindow, ITestDialogWindow
+    public partial class LoginDialogView : DialogWindow, ILoginDialogView
     {
-        public TestDialogWindow()
+        public LoginDialogView()
         {
             InitializeComponent();
         }
