@@ -23,7 +23,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Login: "/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Password: "/>
         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Login,Mode=TwoWay}"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Password,Mode=TwoWay}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Password,Mode=TwoWay}"/> <!-- TODO convert to passwordbox-->
 
         <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ConnectCommand}" Content="Connect"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Text="{Binding Error}"/>

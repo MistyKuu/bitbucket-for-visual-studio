@@ -39,6 +39,7 @@ namespace BitbucketVS.VisualStudio.UI.Sections
             base.Initialize(sender, e);
             // watch for new repos added to the local repo list
             _section = GetSection(TeamExplorerConnectionsSectionId);
+            
         }
 
         protected ITeamExplorerSection GetSection(Guid section)
