@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BitBucketVs.Contracts;
+using BitBucketVs.Contracts.Interfaces.ViewModels;
 using BitBucketVs.Contracts.Interfaces.Views;
 using Microsoft.VisualStudio.PlatformUI;
 
@@ -26,9 +27,11 @@ namespace BitbucketVS.UI.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class LoginDialogView : DialogWindow, ILoginDialogView
     {
-        public LoginDialogView()
+        [ImportingConstructor]
+        public LoginDialogView(ILoginDialogViewModel loginDialogViewModel)
         {
             InitializeComponent();
+            DataContext = loginDialogViewModel;
         }
     }
 }

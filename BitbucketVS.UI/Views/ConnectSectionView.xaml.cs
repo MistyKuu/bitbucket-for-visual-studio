@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BitBucketVs.Contracts.Interfaces.ViewModels;
 using BitBucketVs.Contracts.Interfaces.Views;
 
 namespace BitbucketVS.UI.Views
@@ -24,9 +25,11 @@ namespace BitbucketVS.UI.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class ConnectSectionView : UserControl, IConnectSectionView
     {
-        public ConnectSectionView()
+        [ImportingConstructor]
+        public ConnectSectionView(IConnectSectionViewModel connectSectionViewModel)
         {
             InitializeComponent();
+            DataContext = connectSectionViewModel;
         }
     }
 }

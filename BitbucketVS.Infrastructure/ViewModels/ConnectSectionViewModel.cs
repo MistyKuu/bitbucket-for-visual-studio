@@ -18,13 +18,11 @@ namespace BitbucketVS.Infrastructure.ViewModels
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class ConnectSectionViewModel : ViewModelBase, IConnectSectionViewModel
     {
-        private readonly ILoginDialogView _loginView;
+        private readonly ExportFactory<ILoginDialogView> _loginViewFactory;
         private readonly ReactiveCommand<object> _openConnectCommand;
 
         [ImportingConstructor]
-        public ConnectSectionViewModel(
-            ILoginDialogView loginView, 
-            ILoginDialogViewModel loginViewModel)
+        public ConnectSectionViewModel(ExportFactory<ILoginDialogView> loginViewFactory)
         {
             this.WhenAnyValue(x => x.Message).Subscribe(x =>
             {
@@ -32,11 +30,10 @@ namespace BitbucketVS.Infrastructure.ViewModels
             });
             Message = "Bucket";
 
-            _loginView = loginView;
-            _loginView.DataContext = loginViewModel;
+            _loginViewFactory = loginViewFactory;
 
             _openConnectCommand = ReactiveCommand.Create(CanExecute());
-            _openConnectCommand.Subscribe(_ => _loginView.ShowModal());
+            _openConnectCommand.Subscribe(_ => _loginViewFactory.CreateExport().Value.ShowModal());
         }
 
         private IObservable<bool> CanExecute()

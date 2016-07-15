@@ -37,7 +37,6 @@ namespace BitbucketVS.Infrastructure.ViewModels
             });
         }
 
-
         private IObservable<bool> CanExecute()
         {
             return Observable.Return(true);

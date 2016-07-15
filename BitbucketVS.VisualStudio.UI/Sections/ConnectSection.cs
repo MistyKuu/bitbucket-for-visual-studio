@@ -27,9 +27,7 @@ namespace BitbucketVS.VisualStudio.UI.Sections
         [ImportingConstructor]
         public ConnectSection(
             IBitbucketService bucketService,
-            IConnectSectionViewModel sectionViewModel,
-            IConnectSectionView sectionView
-            ) : base(sectionViewModel, sectionView)
+            IConnectSectionView sectionView) : base(sectionView)
         {
             Title = "Bitbucket Extensions";
         }
@@ -39,7 +37,7 @@ namespace BitbucketVS.VisualStudio.UI.Sections
             base.Initialize(sender, e);
             // watch for new repos added to the local repo list
             _section = GetSection(TeamExplorerConnectionsSectionId);
-            
+
         }
 
         protected ITeamExplorerSection GetSection(Guid section)
