@@ -49,9 +49,10 @@
     <Compile Include="Interfaces\GitClientServices\IGitClient.cs" />
     <Compile Include="Interfaces\GitClientServices\IRepositoriesService.cs" />
     <Compile Include="Interfaces\ViewModels\IBitbucketService.cs" />
-    <Compile Include="Interfaces\ViewModels\IBitbucketConnectViewModel.cs" />
-    <Compile Include="Interfaces\Views\IBitbucketConnectView.cs" />
-    <Compile Include="Interfaces\Views\ITestDialogWindow.cs" />
+    <Compile Include="Interfaces\ViewModels\IConnectSectionViewModel.cs" />
+    <Compile Include="Interfaces\ViewModels\ILoginDialogViewModel.cs" />
+    <Compile Include="Interfaces\Views\IConnectSectionView.cs" />
+    <Compile Include="Interfaces\Views\ILoginDialogView.cs" />
     <Compile Include="IView.cs" />
     <Compile Include="IViewModel.cs" />
     <Compile Include="Models\GitClientModels\GitClientHostAddress.cs" />

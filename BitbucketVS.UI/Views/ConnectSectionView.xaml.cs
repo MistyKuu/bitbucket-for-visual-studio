@@ -13,20 +13,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BitBucketVs.Contracts.Interfaces.ViewModels;
 using BitBucketVs.Contracts.Interfaces.Views;
 
 namespace BitbucketVS.UI.Views
 {
     /// <summary>
-    /// Interaction logic for BitbucketConnectView.xaml
+    /// Interaction logic for ConnectSectionView.xaml
     /// </summary>
-    [Export(typeof(IBitbucketConnectView))]
+    [Export(typeof(IConnectSectionView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class BitbucketConnectView : UserControl, IBitbucketConnectView
+    public partial class ConnectSectionView : UserControl, IConnectSectionView
     {
-        public BitbucketConnectView()
+        [ImportingConstructor]
+        public ConnectSectionView(IConnectSectionViewModel connectSectionViewModel)
         {
             InitializeComponent();
+            DataContext = connectSectionViewModel;
         }
     }
 }

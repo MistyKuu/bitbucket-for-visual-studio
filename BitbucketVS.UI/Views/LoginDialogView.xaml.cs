@@ -14,21 +14,24 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BitBucketVs.Contracts;
+using BitBucketVs.Contracts.Interfaces.ViewModels;
 using BitBucketVs.Contracts.Interfaces.Views;
 using Microsoft.VisualStudio.PlatformUI;
 
 namespace BitbucketVS.UI.Views
 {
     /// <summary>
-    /// Interaction logic for TestDialogWindow.xaml
+    /// Interaction logic for LoginDialogView.xaml
     /// </summary>
-    [Export(typeof(ITestDialogWindow))]
+    [Export(typeof(ILoginDialogView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class TestDialogWindow : DialogWindow, ITestDialogWindow
+    public partial class LoginDialogView : DialogWindow, ILoginDialogView
     {
-        public TestDialogWindow()
+        [ImportingConstructor]
+        public LoginDialogView(ILoginDialogViewModel loginDialogViewModel)
         {
             InitializeComponent();
+            DataContext = loginDialogViewModel;
         }
     }
 }

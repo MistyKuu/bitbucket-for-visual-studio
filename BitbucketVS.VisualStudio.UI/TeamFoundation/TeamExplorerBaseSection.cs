@@ -11,17 +11,16 @@ namespace BitbucketVS.VisualStudio.UI.TeamFoundation
     /// </summary>
     public class TeamExplorerBaseSection : TeamExplorerBase, ITeamExplorerSection
     {
-        public TeamExplorerBaseSection(IViewModel viewModel, IView view)
-        {
-            view.DataContext = viewModel;
-            SectionContent = view;
-        }
-
         private string title;
         private bool isExpanded = true;
         private bool isVisible = true;
         private bool isBusy;
         private object sectionContent;
+
+        public TeamExplorerBaseSection(IView view)
+        {
+            SectionContent = view;
+        }
 
         public string Title
         {

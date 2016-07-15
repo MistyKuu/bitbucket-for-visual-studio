@@ -8,5 +8,6 @@ namespace BitBucketVs.Contracts.Interfaces.ViewModels
 {
     public interface IBitbucketService
     {
+        Task ConnectAsync(string login, string password);
     }
 }

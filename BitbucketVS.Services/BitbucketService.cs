@@ -16,5 +16,11 @@ namespace BitBucketVs.Services
         {
             
         }
+
+        public async Task ConnectAsync(string login, string password)
+        {
+            await Task.Delay(100);
+            throw new Exception();
+        }
     }
 }

@@ -7,7 +7,7 @@ using BitBucketVs.Contracts.Interfaces.ViewModels;
 
 namespace BitBucketVs.Contracts.Interfaces.Views
 {
-    public interface IBitbucketConnectView : IView
+    public interface IConnectSectionView : IView
     {
     }
 }
