@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitbucketVS.UI", "Bitbucket
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitbucketVS.Infrastructure", "BitbucketVS.Infrastructure\BitbucketVS.Infrastructure.csproj", "{CFA26063-E6BD-4189-9E20-13BE59EBAF67}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitbucketVS.Api", "BitbucketVS.Api\BitbucketVS.Api.csproj", "{E0958944-2774-483F-8B43-72E89F87971A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitbucketVS.Api.Integration.Tests", "BitbucketVS.Api.Integration.Tests\BitbucketVS.Api.Integration.Tests.csproj", "{4404B8F3-FD5D-42A7-97E7-19555A308C1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{CFA26063-E6BD-4189-9E20-13BE59EBAF67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFA26063-E6BD-4189-9E20-13BE59EBAF67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFA26063-E6BD-4189-9E20-13BE59EBAF67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0958944-2774-483F-8B43-72E89F87971A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0958944-2774-483F-8B43-72E89F87971A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0958944-2774-483F-8B43-72E89F87971A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0958944-2774-483F-8B43-72E89F87971A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4404B8F3-FD5D-42A7-97E7-19555A308C1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4404B8F3-FD5D-42A7-97E7-19555A308C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4404B8F3-FD5D-42A7-97E7-19555A308C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4404B8F3-FD5D-42A7-97E7-19555A308C1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,5 +71,6 @@ Global
 		{BF6EEA44-013B-40E4-BBE3-6E0D94F9F144} = {D25601EC-B799-4742-A05D-0C7C4398741B}
 		{5403EAEB-209C-43A9-A8BB-45F42DB980A0} = {D25601EC-B799-4742-A05D-0C7C4398741B}
 		{0463CFF7-C41E-422A-A730-213B7C7181F3} = {5403EAEB-209C-43A9-A8BB-45F42DB980A0}
+		{4404B8F3-FD5D-42A7-97E7-19555A308C1A} = {BF6EEA44-013B-40E4-BBE3-6E0D94F9F144}
 	EndGlobalSection
 EndGlobal

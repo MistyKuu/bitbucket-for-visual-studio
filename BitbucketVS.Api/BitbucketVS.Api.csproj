@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{528A613A-1D51-4B23-851B-2549261B580E}</ProjectGuid>
+    <ProjectGuid>{E0958944-2774-483F-8B43-72E89F87971A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BitBucketVs.Contracts</RootNamespace>
-    <AssemblyName>BitBucketVs.Contracts</AssemblyName>
+    <RootNamespace>BitbucketVS.Api</RootNamespace>
+    <AssemblyName>BitbucketVS.Api</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net46\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpBucket, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpBucket.0.6.0\lib\net40\SharpBucket.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -38,28 +50,24 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="IDialogWindow.cs" />
-    <Compile Include="Interfaces\GitClientServices\IConnectionService.cs" />
-    <Compile Include="Interfaces\GitClientServices\IGitClient.cs" />
-    <Compile Include="Interfaces\GitClientServices\IRepositoriesService.cs" />
-    <Compile Include="Interfaces\ViewModels\IBitbucketService.cs" />
-    <Compile Include="Interfaces\ViewModels\IBitbucketConnectViewModel.cs" />
-    <Compile Include="Interfaces\Views\IBitbucketConnectView.cs" />
-    <Compile Include="Interfaces\Views\ITestDialogWindow.cs" />
-    <Compile Include="IView.cs" />
-    <Compile Include="IViewModel.cs" />
-    <Compile Include="Models\GitClientModels\GitClientHostAddress.cs" />
+    <Compile Include="BitbucketClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\BitbucketConnectionService.cs" />
+    <Compile Include="Services\BitbucketRepositoriesService.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BitbucketVS.Contracts\BitbucketVS.Contracts.csproj">
+      <Project>{528a613a-1d51-4b23-851b-2549261b580e}</Project>
+      <Name>BitbucketVS.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
