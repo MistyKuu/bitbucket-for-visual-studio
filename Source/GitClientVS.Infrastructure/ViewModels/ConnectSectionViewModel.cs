@@ -13,6 +13,7 @@ using System.Windows.Input;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure.Events;
 
 namespace GitClientVS.Infrastructure.ViewModels
@@ -26,6 +27,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly ReactiveCommand<object> _openLoginCommand;
         private readonly ReactiveCommand<object> _logoutCommand;
         private bool _isLoggedIn;
+        private IDisposable _observable;
 
         public ICommand OpenLoginCommand => _openLoginCommand;
         public ICommand LogoutCommand => _logoutCommand;
@@ -45,14 +47,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void SetupObservables()
         {
             _openLoginCommand.Subscribe(_ => _loginViewFactory.CreateExport().Value.ShowModal());
-            _logoutCommand.Subscribe(_ => _eventAggregator.Publish(new ConnectionChangedEvent() { IsLoggedIn = false }));
+            _logoutCommand.Subscribe(_ => _eventAggregator.Publish(new ConnectionChangedEvent(ConnectionData.NotLogged)));
 
-            _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
+            _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
         }
 
         private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)
         {
-            IsLoggedIn = connectionChangedEvent.IsLoggedIn;
+            IsLoggedIn = connectionChangedEvent.Data.IsLoggedIn;
         }
 
         private IObservable<bool> CanExecuteOpenLogin()
@@ -60,13 +62,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             return Observable.Return(true);
         }
 
-
-
         public bool IsLoggedIn
         {
             get { return _isLoggedIn; }
             set { this.RaiseAndSetIfChanged(ref _isLoggedIn, value); }
         }
 
+        public void Dispose()
+        {
+            _observable.Dispose();
+        }
     }
 }

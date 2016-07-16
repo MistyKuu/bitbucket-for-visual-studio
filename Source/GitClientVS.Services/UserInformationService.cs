@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models;
+using GitClientVS.Infrastructure.Events;
 
 namespace GitClientVS.Services
 {
@@ -13,11 +14,29 @@ namespace GitClientVS.Services
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class UserInformationService : IUserInformationService
     {
-        public UserInfo UserInfo { get; set; }
+        private readonly IDisposable _observable;
 
-        public UserInformationService()
+        public ConnectionData ConnectionData { get; private set; } = ConnectionData.NotLogged;
+
+        public UserInformationService(IEventAggregatorService eventAggregator)
         {
-            UserInfo = new UserInfo();
+            _observable = eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
+        }
+
+       
+        public void LoadStoreInformation()
+        {
+
+        }
+
+        public void Dispose()
+        {
+            _observable.Dispose();
+        }
+
+        private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)
+        {
+            ConnectionData = connectionChangedEvent.Data;
         }
     }
 }

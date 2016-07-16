@@ -1,7 +1,9 @@
-﻿namespace GitClientVS.Contracts.Interfaces.ViewModels
+﻿using System;
+
+namespace GitClientVS.Contracts.Interfaces.ViewModels
 {
-    public interface IConnectSectionViewModel : IViewModel
+    public interface IConnectSectionViewModel : IViewModel, IDisposable
     {
-        
+
     }
 }

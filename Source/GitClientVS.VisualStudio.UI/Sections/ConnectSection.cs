@@ -14,6 +14,7 @@ using Microsoft.TeamFoundation.Controls;
 using Microsoft.TeamFoundation.MVVM;
 using GitClientVS.VisualStudio.UI.TeamFoundation;
 using GitClientVS.Contracts;
+using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Infrastructure;
@@ -25,16 +26,19 @@ namespace GitClientVS.VisualStudio.UI.Sections
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class ConnectSection : TeamExplorerBaseSection
     {
+        private readonly IUserInformationService _userInfoService;
         private ITeamExplorerSection _section;
         private const string Id = "a6701970-28da-42ee-a0f4-9e02f486de2c";
 
         [ImportingConstructor]
         public ConnectSection(
             IBitbucketService bucketService,
+            IUserInformationService userInfoService,
             IConnectSectionView sectionView) : base(sectionView)
         {
-            LoggerConfigurator.Setup(); // TODO this needs to be set in the entry point like package
+            _userInfoService = userInfoService;
             Title = "Bitbucket Extension";
+
         }
 
         public override void Initialize(object sender, SectionInitializeEventArgs e)
@@ -44,6 +48,8 @@ namespace GitClientVS.VisualStudio.UI.Sections
             // watch for new repos added to the local repo list
             _section = GetSection(TeamExplorerConnectionsSectionId);
 
+            LoggerConfigurator.Setup(); // TODO this needs to be set in the entry point like package
+            _userInfoService.LoadStoreInformation();
         }
 
         protected ITeamExplorerSection GetSection(Guid section)

@@ -14,7 +14,7 @@ namespace GitClientVS.Infrastructure
 {
     public static class LoggerConfigurator
     {
-        public static void Setup()
+        public static void  Setup()
         {
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
 
