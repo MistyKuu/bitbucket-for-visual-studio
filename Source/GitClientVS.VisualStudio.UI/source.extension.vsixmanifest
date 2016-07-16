@@ -18,5 +18,6 @@
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.Contracts" Path="|GitClientVS.Contracts|" />
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.UI" Path="|GitClientVS.UI|" />
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.Infrastructure" Path="|GitClientVS.Infrastructure|" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.Api" Path="|GitClientVS.Api|" />
   </Assets>
 </PackageManifest>

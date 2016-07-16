@@ -87,6 +87,7 @@
     <Compile Include="Events\ConnectionChangedEvent.cs" />
     <Compile Include="Extensions\ServiceProviderExtensions.cs" />
     <Compile Include="LoggerConfigurator.cs" />
+    <Compile Include="Paths.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="ViewModels\LoginDialogViewModel.cs" />

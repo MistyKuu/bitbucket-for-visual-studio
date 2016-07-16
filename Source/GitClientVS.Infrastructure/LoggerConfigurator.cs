@@ -14,7 +14,7 @@ namespace GitClientVS.Infrastructure
 {
     public static class LoggerConfigurator
     {
-        public static void  Setup()
+        public static void Setup()
         {
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
 
@@ -28,7 +28,7 @@ namespace GitClientVS.Infrastructure
             var roller = new RollingFileAppender
             {
                 AppendToFile = false,
-                File = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"GitClientVSExtension\Logs\logs.txt"),
+                File = Paths.GitClientLogFilePath,
                 Layout = patternLayout,
                 MaxSizeRollBackups = 5,
                 MaximumFileSize = "1GB",

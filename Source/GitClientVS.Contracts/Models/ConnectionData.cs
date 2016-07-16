@@ -1,4 +1,6 @@
-﻿namespace GitClientVS.Contracts.Models
+﻿using Newtonsoft.Json;
+
+namespace GitClientVS.Contracts.Models
 {
     public class ConnectionData
     {
@@ -6,6 +8,7 @@
         {
             UserName = userName;
             Password = password;
+            IsLoggedIn = true;
         }
 
         private ConnectionData()
@@ -20,8 +23,11 @@
             return new ConnectionData(userName, password);
         }
 
+        [JsonProperty]
         public bool IsLoggedIn { get; private set; }
+        [JsonProperty]
         public string UserName { get; private set; }
+        [JsonProperty]
         public string Password { get; private set; }
     }
 }
