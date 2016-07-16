@@ -4,9 +4,11 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BitBucket.REST.API.Serializers;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure;
+using GitClientVS.Infrastructure.Extensions;
 using log4net;
 using Newtonsoft.Json;
 
@@ -27,13 +29,13 @@ namespace GitClientVS.Services
             _hashService = hashService;
         }
 
-        public Result SaveUserData(ConnectionData connectionData) // TODO USE NIBA SERIALIZER
+        public Result SaveUserData(ConnectionData connectionData) // TODO USE NIBA SERIALIZER, should I?
         {
             try
             {
-                var serializedJson = JsonConvert.SerializeObject(connectionData);
-                var hashedCredentials = _hashService.Encrypt(serializedJson);
-                _fileService.Save(Paths.GitClientUserDataPath, hashedCredentials);
+                JsonConvert.SerializeObject(connectionData)
+                   .Then(_hashService.Encrypt)
+                   .Then(cred => _fileService.Save(Paths.GitClientUserDataPath, cred));
             }
             catch (Exception ex)
             {
@@ -48,10 +50,11 @@ namespace GitClientVS.Services
         {
             try
             {
-                var creds = _fileService.Read(Paths.GitClientUserDataPath);
-                var unecrypted = _hashService.Decrypt(creds);
-                var connectionData = JsonConvert.DeserializeObject<ConnectionData>(unecrypted);
-                return Result<ConnectionData>.Success(connectionData);
+                return _fileService
+                    .Read(Paths.GitClientUserDataPath)
+                    .Then(_hashService.Decrypt)
+                    .Then(JsonConvert.DeserializeObject<ConnectionData>)
+                    .Then(Result<ConnectionData>.Success);
             }
             catch (Exception ex)
             {

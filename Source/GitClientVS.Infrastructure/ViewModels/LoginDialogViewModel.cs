@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _login;
         private string _password;
         private readonly ReactiveCommand<Unit> _connectCommand;
-        private string _error;
+        private string _loginError;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 
@@ -42,7 +43,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _bucketService = bucketService;
             _eventAggregator = eventAggregator;
-            _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecute(), _ => Connect());
+            _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Connect());
 
             _connectCommand.ThrownExceptions.Subscribe(OnError);
 
@@ -50,7 +51,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private void OnError(Exception ex)
         {
-            Error = ex.Message;
+            LoginError = ex.Message;
         }
 
         private async Task Connect()
@@ -60,29 +61,36 @@ namespace GitClientVS.Infrastructure.ViewModels
             OnClose();
         }
 
-        private IObservable<bool> CanExecute()
+        private IObservable<bool> CanExecuteObservable()
         {
-            return Observable.Return(true);
+            return this.ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
+        }
+
+        private bool CanExecute()
+        {
+            return IsObjectValid();
         }
 
         public ICommand ConnectCommand => _connectCommand;
 
+        [Required]
         public string Login
         {
             get { return _login; }
             set { this.RaiseAndSetIfChanged(ref _login, value); }
         }
 
+        [Required]
         public string Password
         {
             get { return _password; }
             set { this.RaiseAndSetIfChanged(ref _password, value); }
         }
 
-        public string Error
+        public string LoginError
         {
-            get { return _error; }
-            set { this.RaiseAndSetIfChanged(ref _error, value); }
+            get { return _loginError; }
+            set { this.RaiseAndSetIfChanged(ref _loginError, value); }
         }
 
 
