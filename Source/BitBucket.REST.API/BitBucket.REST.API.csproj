@@ -53,9 +53,12 @@
     <Compile Include="Authentication\Authenticator.cs" />
     <Compile Include="Authentication\AuthenticationType.cs" />
     <Compile Include="Authentication\Credentials.cs" />
+    <Compile Include="Authentication\OAuthAuthenticator.cs" />
     <Compile Include="BitbucketClient.cs" />
+    <Compile Include="BitbucketClientInitializer.cs" />
     <Compile Include="Clients\ApiClient.cs" />
     <Compile Include="Clients\RepositoriesClient.cs" />
+    <Compile Include="Clients\UserClient.cs" />
     <Compile Include="Exceptions\AuthorizationException.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Models\Connection.cs" />

@@ -12,12 +12,17 @@ namespace BitBucket.REST.API.Helpers
 
         public static string Repositories(string login)
         {
-            return String.Format("repositories/{0}", login);
+            return $"repositories/{login}";
+        }
+
+        public static string User()
+        {
+            return "user";
         }
 
         public static string Repositories()
         {
-            return String.Format("repositories");
+            return "repositories";
         }
 
     }

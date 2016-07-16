@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{F79F24
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitBucket.REST.API", "Source\BitBucket.REST.API\BitBucket.REST.API.csproj", "{8D9A6680-2F77-485E-B90D-70E70A3444CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitbucket.REST.API.Integration.Tests", "Bitbucket.REST.API.Integration.Tests\Bitbucket.REST.API.Integration.Tests.csproj", "{B47D5BA6-9A5B-4EF6-83C3-93C459F5938D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitbucket.REST.API.Integration.Tests", "Source\Tests\Integration\Bitbucket.REST.API.Integration.Tests\Bitbucket.REST.API.Integration.Tests.csproj", "{B47D5BA6-9A5B-4EF6-83C3-93C459F5938D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

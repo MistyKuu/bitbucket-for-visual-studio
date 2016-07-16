@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -58,15 +62,21 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BitbucketInitializerTests.cs" />
+    <Compile Include="Clients\UserClientTests.cs" />
+    <Compile Include="Helpers\CredentialsHelper.cs" />
     <Compile Include="SerializerTests\BitBucketSerializerTests.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="BitbucketClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="credentials.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Source\BitBucket.REST.API\BitBucket.REST.API.csproj">
+    <ProjectReference Include="..\..\..\BitBucket.REST.API\BitBucket.REST.API.csproj">
       <Project>{8d9a6680-2f77-485e-b90d-70e70a3444cf}</Project>
       <Name>BitBucket.REST.API</Name>
     </ProjectReference>

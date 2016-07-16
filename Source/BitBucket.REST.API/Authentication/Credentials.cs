@@ -20,7 +20,7 @@ namespace BitBucket.REST.API.Models
         {
             Login = null;
             Password = token;
-            AuthenticationType = AuthenticationType.Oauth;
+            AuthenticationType = AuthenticationType.OAuth;
         }
 
         public Credentials(string login, string password)

@@ -11,15 +11,19 @@ namespace BitBucket.REST.API.Authentication
         {
             Credentials = credentials;
             Authenticators = new Dictionary<AuthenticationType, IAuthenticator>
-           {
+            {
                 { AuthenticationType.Anonymous, new AnonymousAuthenticator() },
                 { AuthenticationType.Basic, new HttpBasicAuthenticator(credentials.Login, credentials.Password) },
-           };
+            };
+
+            CreatedAuthenticator = Authenticators[credentials.AuthenticationType];
         }
+
+        public IAuthenticator CreatedAuthenticator { get; private set; }
 
         public Credentials Credentials { get; private set; }
 
-        internal Dictionary<AuthenticationType, IAuthenticator> Authenticators { get; private set; }
+        private Dictionary<AuthenticationType, IAuthenticator> Authenticators { get; set; }
 
     }
 }

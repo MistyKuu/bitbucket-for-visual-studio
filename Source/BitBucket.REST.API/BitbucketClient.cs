@@ -12,18 +12,21 @@ namespace BitBucket.REST.API
         public BitbucketClient(Connection connection)
         {
             Connection = connection;
-            Client = new BitbucketRestClient(connection.BitbucketUrl);
-          
-            // todo: make it a little simpler
-            var auth = new Authenticator(connection.Credentials);
-            Client.Authenticator = auth.Authenticators[connection.Credentials.AuthenticationType];
+            Client = new BitbucketRestClient(connection);
             RepositoriesClient = new RepositoriesClient(Client, Connection);
+            UserClient = new UserClient(Client, Connection);
+        }
 
+        public void Initialize()
+        {
+            
         }
 
         public RepositoriesClient RepositoriesClient { get; private set; }
+        public UserClient UserClient { get; private set; }
         public Connection Connection { get; private set; }
         
-        private RestClient Client { get; set; }
+        private BitbucketRestClient Client { get; set; }
+
     }
 }
