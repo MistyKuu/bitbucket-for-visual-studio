@@ -30,11 +30,25 @@ namespace GitClientVS.Infrastructure.ViewModels
         public LoginDialogViewModel(IBitbucketService bucketService)
         {
             _bucketService = bucketService;
-            _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecute(), async _ => await _bucketService.ConnectAsync(Login, Password));
-            _connectCommand.ThrownExceptions.Subscribe(ex =>
-            {
-                Error = ex.Message;
-            });
+            _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecute(), _ => Connect());
+            _connectCommand.Subscribe(_ => OnLoggedIn());
+
+            _connectCommand.ThrownExceptions.Subscribe(OnError);
+        }
+
+        private void OnError(Exception ex)
+        {
+            Error = ex.Message;
+        }
+
+        private void OnLoggedIn()
+        {
+            OnClose();
+        }
+
+        private async Task Connect()
+        {
+            await _bucketService.ConnectAsync(Login, Password);
         }
 
         private IObservable<bool> CanExecute()
@@ -61,5 +75,13 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _error; }
             set { this.RaiseAndSetIfChanged(ref _error, value); }
         }
+
+
+        protected void OnClose()
+        {
+            Closed?.Invoke(this, new EventArgs());
+        }
+
+        public event EventHandler Closed;
     }
 }

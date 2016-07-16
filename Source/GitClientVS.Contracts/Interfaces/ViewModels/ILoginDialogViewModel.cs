@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Input;
 
 namespace GitClientVS.Contracts.Interfaces.ViewModels
@@ -8,5 +9,6 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         string Password { get; set; }
         string Error { get; set; }
         ICommand ConnectCommand { get; }
+        event EventHandler Closed;
     }
 }

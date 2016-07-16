@@ -7,7 +7,9 @@
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:ConnectSectionViewModel,IsDesignTimeCreatable=False}" >
-    <Grid Background="Blue">
-        <Button Command="{Binding OpenConnectCommand}" Content="Connect"/>
+
+
+    <Grid>
+        <local:ConnectSectionLoggedOutView/>
     </Grid>
 </UserControl>

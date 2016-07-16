@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="VSIXProject1.Kamil Nibisz.665a1637-b7e9-4ccb-9e42-057e92d721bb" Version="1.0" Language="en-US" Publisher="OneInstance" />
+    <Identity Id="VSIXProject1.Kamil Nibisz.665a1637-b7e9-4ccb-9e42-057e92d721bb" Version="1.0" Language="en-US" Publisher="NextIteration" />
     <DisplayName>GitClientVS.VisualStudio.UI</DisplayName>
     <Description>Empty VSIX Project.</Description>
   </Metadata>

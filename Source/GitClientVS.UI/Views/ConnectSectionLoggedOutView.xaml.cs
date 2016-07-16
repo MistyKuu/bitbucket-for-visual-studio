@@ -13,26 +13,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
-using Microsoft.VisualStudio.PlatformUI;
 
 namespace GitClientVS.UI.Views
 {
-    /// <summary>
-    /// Interaction logic for LoginDialogView.xaml
-    /// </summary>
-    [Export(typeof(ILoginDialogView))]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class LoginDialogView : DialogWindow, ILoginDialogView
+    public partial class ConnectSectionLoggedOutView : UserControl
     {
-        [ImportingConstructor]
-        public LoginDialogView(ILoginDialogViewModel loginDialogViewModel)
+        public ConnectSectionLoggedOutView()
         {
             InitializeComponent();
-            DataContext = loginDialogViewModel;
-            loginDialogViewModel.Closed += delegate { Close(); };
         }
     }
 }
