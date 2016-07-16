@@ -15,6 +15,7 @@ using System.Windows.Input;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure.Events;
 using log4net;
 using log4net.Config;
@@ -26,27 +27,25 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class LoginDialogViewModel : ViewModelBase, ILoginDialogViewModel
     {
         private readonly IBitbucketService _bucketService;
-        private readonly IUserInformationService _userInformationService;
         private readonly IEventAggregatorService _eventAggregator;
         private string _login;
         private string _password;
         private readonly ReactiveCommand<Unit> _connectCommand;
         private string _error;
-        private readonly log4net.ILog _logger;
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 
         [ImportingConstructor]
-        public LoginDialogViewModel(IBitbucketService bucketService, IUserInformationService userInformationService, IEventAggregatorService eventAggregator)
+        public LoginDialogViewModel(
+            IBitbucketService bucketService,
+            IEventAggregatorService eventAggregator)
         {
             _bucketService = bucketService;
-            _userInformationService = userInformationService;
             _eventAggregator = eventAggregator;
             _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecute(), _ => Connect());
-            _connectCommand.Subscribe(_ => OnLoggedIn());
 
             _connectCommand.ThrownExceptions.Subscribe(OnError);
-            _logger =  LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _logger.Info("Creating ");
+
         }
 
         private void OnError(Exception ex)
@@ -54,15 +53,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             Error = ex.Message;
         }
 
-        private void OnLoggedIn()
-        {
-            _eventAggregator.Publish(new ConnectionChangedEvent() { IsLoggedIn = true });
-            OnClose();
-        }
-
         private async Task Connect()
         {
             await _bucketService.ConnectAsync(Login, Password);
+            _eventAggregator.Publish(new ConnectionChangedEvent(ConnectionData.Create(Login, Password)));
+            OnClose();
         }
 
         private IObservable<bool> CanExecute()

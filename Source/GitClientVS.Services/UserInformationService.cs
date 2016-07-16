@@ -6,18 +6,45 @@ using System.Text;
 using System.Threading.Tasks;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models;
+using GitClientVS.Infrastructure.Events;
 
 namespace GitClientVS.Services
 {
     [Export(typeof(IUserInformationService))]
-    [PartCreationPolicy(CreationPolicy.Shared)]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserInformationService : IUserInformationService
     {
-        public UserInfo UserInfo { get; set; }
+        private readonly IEventAggregatorService _eventAggregator;
+        private readonly IStorageService _storageService;
+        private readonly IDisposable _observable;
 
-        public UserInformationService()
+        public ConnectionData ConnectionData { get; private set; } = ConnectionData.NotLogged;
+
+        [ImportingConstructor]
+        public UserInformationService(IEventAggregatorService eventAggregator, IStorageService storageService)
         {
-            UserInfo = new UserInfo();
+            _eventAggregator = eventAggregator;
+            _storageService = storageService;
+            _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
+        }
+
+
+        public void LoadStoreInformation()
+        {
+            var result = _storageService.LoadUserData();
+            ConnectionData = result.IsSuccess ? result.Data : ConnectionData.NotLogged;
+            _eventAggregator.Publish(new ConnectionChangedEvent(ConnectionData));
+        }
+
+        public void Dispose()
+        {
+            _observable.Dispose();
+        }
+
+        private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)
+        {
+            ConnectionData = connectionChangedEvent.Data;
+            _storageService.SaveUserData(ConnectionData);
         }
     }
 }

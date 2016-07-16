@@ -28,7 +28,7 @@ namespace GitClientVS.Infrastructure
             var roller = new RollingFileAppender
             {
                 AppendToFile = false,
-                File = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"GitClientVSExtension\Logs\logs.txt"),
+                File = Paths.GitClientLogFilePath,
                 Layout = patternLayout,
                 MaxSizeRollBackups = 5,
                 MaximumFileSize = "1GB",
