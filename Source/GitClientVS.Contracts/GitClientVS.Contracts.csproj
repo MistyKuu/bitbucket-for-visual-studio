@@ -45,9 +45,12 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="IDialogWindow.cs" />
+    <Compile Include="Interfaces\Services\IEventAggregatorService.cs" />
     <Compile Include="Interfaces\GitClientServices\IConnectionService.cs" />
     <Compile Include="Interfaces\GitClientServices\IGitClient.cs" />
     <Compile Include="Interfaces\GitClientServices\IRepositoriesService.cs" />
+    <Compile Include="Interfaces\Services\IUserInformationService.cs" />
+    <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Interfaces\ViewModels\IBitbucketService.cs" />
     <Compile Include="Interfaces\ViewModels\IConnectSectionViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\ILoginDialogViewModel.cs" />

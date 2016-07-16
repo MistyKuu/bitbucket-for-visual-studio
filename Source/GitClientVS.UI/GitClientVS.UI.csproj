@@ -53,11 +53,17 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Converters\BaseMarkupExtensionConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\NegateVisibilityConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConnectSectionLoggedInView.xaml.cs">
+      <DependentUpon>ConnectSectionLoggedInView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ConnectSectionLoggedOutView.xaml.cs">
       <DependentUpon>ConnectSectionLoggedOutView.xaml</DependentUpon>
@@ -83,6 +89,7 @@
     <EmbeddedResource Include="Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +98,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\SharedDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ConnectSectionLoggedInView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

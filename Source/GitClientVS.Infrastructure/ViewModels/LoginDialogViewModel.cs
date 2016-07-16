@@ -11,8 +11,10 @@ using ReactiveUI;
 using System.Reactive.Linq;
 using System.Security;
 using System.Windows.Input;
+using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Infrastructure.Events;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
@@ -21,15 +23,19 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class LoginDialogViewModel : ViewModelBase, ILoginDialogViewModel
     {
         private readonly IBitbucketService _bucketService;
+        private readonly IUserInformationService _userInformationService;
+        private readonly IEventAggregatorService _eventAggregator;
         private string _login;
         private string _password;
         private readonly ReactiveCommand<Unit> _connectCommand;
         private string _error;
 
         [ImportingConstructor]
-        public LoginDialogViewModel(IBitbucketService bucketService)
+        public LoginDialogViewModel(IBitbucketService bucketService, IUserInformationService userInformationService, IEventAggregatorService eventAggregator)
         {
             _bucketService = bucketService;
+            _userInformationService = userInformationService;
+            _eventAggregator = eventAggregator;
             _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecute(), _ => Connect());
             _connectCommand.Subscribe(_ => OnLoggedIn());
 
@@ -43,6 +49,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private void OnLoggedIn()
         {
+            _eventAggregator.Publish(new ConnectionChangedEvent() { IsLoggedIn = true });
             OnClose();
         }
 

@@ -5,11 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GitClientVS.UI.Views"
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
+             xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:ConnectSectionViewModel,IsDesignTimeCreatable=False}" >
 
-
     <Grid>
-        <local:ConnectSectionLoggedOutView/>
+        <local:ConnectSectionLoggedOutView Visibility="{Binding ElementName=LoggedInView,Path=Visibility,Converter={converters:NegateVisibilityConverter}}" />
+        <local:ConnectSectionLoggedInView x:Name="LoggedInView"  Visibility="{Binding IsLoggedIn,Converter={converters:BoolToVisibilityConverter}}"/>
     </Grid>
 </UserControl>
+
