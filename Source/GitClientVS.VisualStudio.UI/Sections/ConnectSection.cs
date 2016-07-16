@@ -34,7 +34,7 @@ namespace GitClientVS.VisualStudio.UI.Sections
             IConnectSectionView sectionView) : base(sectionView)
         {
             LoggerConfigurator.Setup(); // TODO this needs to be set in the entry point like package
-            Title = "Bitbucket Extensions";
+            Title = "Bitbucket Extension";
         }
 
         public override void Initialize(object sender, SectionInitializeEventArgs e)
