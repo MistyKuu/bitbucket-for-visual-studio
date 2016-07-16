@@ -42,7 +42,11 @@ namespace GitClientVS.Infrastructure
             {
                 lock (allValidatedProperties)
                 {
-                    return allValidatedProperties.Get(this.GetType()).Count;
+                    var validatedProperties = allValidatedProperties.Get(GetType());
+                    foreach (var value in validatedProperties.Values)
+                        value.IsTouched = false;
+
+                    return validatedProperties.Count;
                 }
             });
         }
@@ -67,6 +71,9 @@ namespace GitClientVS.Infrastructure
                 this.Log().Debug("Checking {0:X}.{1}...", this.GetHashCode(), columnName);
                 ret = getPropertyValidationError(columnName);
                 this.Log().Debug("Validation result: {0}", ret);
+
+
+
 
                 _validationCache[columnName] = ret;
 
@@ -99,7 +106,7 @@ namespace GitClientVS.Infrastructure
                 return true;
             }
 
-            IEnumerable<string> allProps;
+            Dictionary<string, PropertyExtraInfo>.KeyCollection allProps;
             lock (allValidatedProperties)
             {
                 allProps = allValidatedProperties.Get(GetType()).Keys;
@@ -147,11 +154,19 @@ namespace GitClientVS.Infrastructure
 
             lock (allValidatedProperties)
             {
-                if (!allValidatedProperties.Get(this.GetType()).TryGetValue(propName, out pei))
+                var res = allValidatedProperties.Get(this.GetType()).TryGetValue(propName, out pei);
+
+                if (!res)
                 {
                     return null;
                 }
+                else if (!pei.IsTouched)
+                {
+                    pei.IsTouched = true;
+                    return null;
+                }
             }
+
 
             foreach (var v in pei.ValidationAttributes)
             {
@@ -159,7 +174,7 @@ namespace GitClientVS.Infrastructure
                 {
                     var ctx = new ValidationContext(this, null, null) { MemberName = propName };
                     var pi = pei.Type.GetProperty(pei.PropertyName, BindingFlags.Public | BindingFlags.FlattenHierarchy | BindingFlags.Instance);
-                   
+
                     v.Validate(pi.GetValue(this, null), ctx);
                 }
                 catch (Exception ex)
@@ -184,6 +199,7 @@ namespace GitClientVS.Infrastructure
             set { _Type = value; _typeFullName = value.FullName; }
         }
 
+        public bool IsTouched { get; set; }
         public string PropertyName { get; set; }
         public ValidationAttribute[] ValidationAttributes { get; set; }
 
