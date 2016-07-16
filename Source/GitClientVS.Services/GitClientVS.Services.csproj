@@ -86,6 +86,10 @@
     <Compile Include="UserInformationService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BitBucket.REST.API\BitBucket.REST.API.csproj">
+      <Project>{8d9a6680-2f77-485e-b90d-70e70a3444cf}</Project>
+      <Name>BitBucket.REST.API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GitClientVS.Contracts\GitClientVS.Contracts.csproj">
       <Project>{528a613a-1d51-4b23-851b-2549261b580e}</Project>
       <Name>GitClientVS.Contracts</Name>

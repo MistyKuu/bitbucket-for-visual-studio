@@ -7,7 +7,7 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
     {
         string Login { get; set; }
         string Password { get; set; }
-        string Error { get; set; }
+        string LoginError { get; set; }
         ICommand ConnectCommand { get; }
         event EventHandler Closed;
     }
