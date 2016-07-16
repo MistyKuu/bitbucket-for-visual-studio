@@ -14,13 +14,15 @@ namespace GitClientVS.Services
     {
         public BitbucketService()
         {
-            
+
         }
 
         public async Task ConnectAsync(string login, string password)
         {
             await Task.Delay(100);
-            throw new Exception();
+
+            if (new Random().Next(2) % 2 == 0)
+                throw new Exception();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Reactive;
 using System.Text;
@@ -9,8 +10,10 @@ using GitClientVS.Contracts.Interfaces;
 using ReactiveUI;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Infrastructure.Events;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
@@ -19,38 +22,51 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class ConnectSectionViewModel : ViewModelBase, IConnectSectionViewModel
     {
         private readonly ExportFactory<ILoginDialogView> _loginViewFactory;
-        private readonly ReactiveCommand<object> _openConnectCommand;
+        private readonly IEventAggregatorService _eventAggregator;
+        private readonly ReactiveCommand<object> _openLoginCommand;
+        private readonly ReactiveCommand<object> _logoutCommand;
+        private bool _isLoggedIn;
+
+        public ICommand OpenLoginCommand => _openLoginCommand;
+        public ICommand LogoutCommand => _logoutCommand;
 
         [ImportingConstructor]
-        public ConnectSectionViewModel(ExportFactory<ILoginDialogView> loginViewFactory)
+        public ConnectSectionViewModel(ExportFactory<ILoginDialogView> loginViewFactory, IEventAggregatorService eventAggregator)
         {
-            this.WhenAnyValue(x => x.Message).Subscribe(x =>
-            {
-                MessageB = Message + " Hej";
-            });
-            Message = "Bucket";
-
             _loginViewFactory = loginViewFactory;
+            _eventAggregator = eventAggregator;
 
-            _openConnectCommand = ReactiveCommand.Create(CanExecute());
-            _openConnectCommand.Subscribe(_ => _loginViewFactory.CreateExport().Value.ShowModal());
+            _openLoginCommand = ReactiveCommand.Create(CanExecuteOpenLogin());
+            _logoutCommand = ReactiveCommand.Create();
+
+            SetupObservables();
         }
 
-        private IObservable<bool> CanExecute()
+        private void SetupObservables()
+        {
+            _openLoginCommand.Subscribe(_ => _loginViewFactory.CreateExport().Value.ShowModal());
+            _logoutCommand.Subscribe(_ => _eventAggregator.Publish(new ConnectionChangedEvent() { IsLoggedIn = false }));
+
+            _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
+        }
+
+        private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)
+        {
+            IsLoggedIn = connectionChangedEvent.IsLoggedIn;
+        }
+
+        private IObservable<bool> CanExecuteOpenLogin()
         {
             return Observable.Return(true);
         }
 
-        private string _message;
 
-        public string Message
+
+        public bool IsLoggedIn
         {
-            get { return _message; }
-            set { this.RaiseAndSetIfChanged(ref _message, value); }
+            get { return _isLoggedIn; }
+            set { this.RaiseAndSetIfChanged(ref _isLoggedIn, value); }
         }
 
-        public string MessageB { get; set; }
-
-        public ICommand OpenConnectCommand => _openConnectCommand;
     }
 }

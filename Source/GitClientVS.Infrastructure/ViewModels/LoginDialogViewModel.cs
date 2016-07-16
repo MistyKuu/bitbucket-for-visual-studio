@@ -11,8 +11,10 @@ using ReactiveUI;
 using System.Reactive.Linq;
 using System.Security;
 using System.Windows.Input;
+using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Infrastructure.Events;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
@@ -21,20 +23,39 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class LoginDialogViewModel : ViewModelBase, ILoginDialogViewModel
     {
         private readonly IBitbucketService _bucketService;
+        private readonly IUserInformationService _userInformationService;
+        private readonly IEventAggregatorService _eventAggregator;
         private string _login;
         private string _password;
         private readonly ReactiveCommand<Unit> _connectCommand;
         private string _error;
 
         [ImportingConstructor]
-        public LoginDialogViewModel(IBitbucketService bucketService)
+        public LoginDialogViewModel(IBitbucketService bucketService, IUserInformationService userInformationService, IEventAggregatorService eventAggregator)
         {
             _bucketService = bucketService;
-            _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecute(), async _ => await _bucketService.ConnectAsync(Login, Password));
-            _connectCommand.ThrownExceptions.Subscribe(ex =>
-            {
-                Error = ex.Message;
-            });
+            _userInformationService = userInformationService;
+            _eventAggregator = eventAggregator;
+            _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecute(), _ => Connect());
+            _connectCommand.Subscribe(_ => OnLoggedIn());
+
+            _connectCommand.ThrownExceptions.Subscribe(OnError);
+        }
+
+        private void OnError(Exception ex)
+        {
+            Error = ex.Message;
+        }
+
+        private void OnLoggedIn()
+        {
+            _eventAggregator.Publish(new ConnectionChangedEvent() { IsLoggedIn = true });
+            OnClose();
+        }
+
+        private async Task Connect()
+        {
+            await _bucketService.ConnectAsync(Login, Password);
         }
 
         private IObservable<bool> CanExecute()
@@ -61,5 +82,13 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _error; }
             set { this.RaiseAndSetIfChanged(ref _error, value); }
         }
+
+
+        protected void OnClose()
+        {
+            Closed?.Invoke(this, new EventArgs());
+        }
+
+        public event EventHandler Closed;
     }
 }
