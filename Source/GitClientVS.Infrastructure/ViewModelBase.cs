@@ -3,7 +3,7 @@ using ReactiveUI;
 
 namespace GitClientVS.Infrastructure
 {
-    public abstract class ViewModelBase :ReactiveObject,IViewModel
+    public abstract class ViewModelBase : ReactiveObject, IViewModel
     {
     }
 }

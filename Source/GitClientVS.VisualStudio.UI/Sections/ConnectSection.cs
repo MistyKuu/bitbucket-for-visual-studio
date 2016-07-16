@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ using GitClientVS.VisualStudio.UI.TeamFoundation;
 using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Infrastructure;
 using Reactive.EventAggregator;
 
 namespace GitClientVS.VisualStudio.UI.Sections
@@ -31,6 +33,7 @@ namespace GitClientVS.VisualStudio.UI.Sections
             IBitbucketService bucketService,
             IConnectSectionView sectionView) : base(sectionView)
         {
+            LoggerConfigurator.Setup(); // TODO this needs to be set in the entry point like package
             Title = "Bitbucket Extensions";
         }
 
