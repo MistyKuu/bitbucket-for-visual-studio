@@ -63,8 +63,13 @@
     <Compile Include="Models\Link.cs" />
     <Compile Include="Models\Links.cs" />
     <Compile Include="Models\Repository.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serializers\BitbucketPropertyNamesContractResolver.cs" />
+    <Compile Include="Serializers\IJsonSerializer.cs" />
     <Compile Include="Serializers\NewtonsoftJsonSerializer.cs" />
+    <Compile Include="Wrappers\BitbucketRestClient.cs" />
+    <Compile Include="Wrappers\BitbucketRestRequest.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

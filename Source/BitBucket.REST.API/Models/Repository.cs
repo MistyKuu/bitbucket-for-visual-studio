@@ -1,20 +1,49 @@
-﻿namespace BitBucket.REST.API.Models
+﻿using Newtonsoft.Json;
+
+namespace BitBucket.REST.API.Models
 {
     public class Repository
     {
-        public string scm { get; set; }
-        public bool? has_wiki { get; set; }
-        public string description { get; set; }
-        public Links links { get; set; }
-        public string fork_policy { get; set; }
-        public string language { get; set; }
-        public string created_on { get; set; }
-        public string full_name { get; set; }
-        public bool? has_issues { get; set; }
-        public string owner { get; set; }
-        public string updated_on { get; set; }
-        public ulong? size { get; set; }
-        public bool? is_private { get; set; }
-        public string name { get; set; }
+        [JsonProperty(PropertyName = "scm")]
+        public string Scm { get; set; }
+
+        [JsonProperty(PropertyName = "has_wiki")]
+        public bool? HasWiki { get; set; }
+
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        [JsonProperty(PropertyName = "links")]
+        public Links Links { get; set; }
+
+        [JsonProperty(PropertyName = "fork_policy")]
+        public string ForkPolicy { get; set; }
+
+        [JsonProperty(PropertyName = "language")]
+        public string Language { get; set; }
+
+        [JsonProperty(PropertyName = "created_on")]
+        public string CreatedOn { get; set; }
+
+        [JsonProperty(PropertyName = "full_name")]
+        public string FullName { get; set; }
+
+        [JsonProperty(PropertyName = "has_issues")]
+        public bool? HasIssues { get; set; }
+
+        [JsonProperty(PropertyName = "owner")]
+        public User Owner { get; set; }
+
+        [JsonProperty(PropertyName = "updated_on")]
+        public string UpdatedOn { get; set; }
+
+        [JsonProperty(PropertyName = "size")]
+        public ulong? Size { get; set; }
+
+        [JsonProperty(PropertyName = "is_private")]
+        public bool? IsPrivate { get; set; }
+
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
     }
 }

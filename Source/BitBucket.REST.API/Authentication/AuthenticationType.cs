@@ -10,6 +10,6 @@ namespace BitBucket.REST.API.Authentication
     {
         Anonymous,
         Basic,
-        Oauth
+        OAuth
     }
 }

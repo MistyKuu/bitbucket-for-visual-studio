@@ -1,8 +1,12 @@
-﻿namespace BitBucket.REST.API.Models
+﻿using Newtonsoft.Json;
+
+namespace BitBucket.REST.API.Models
 {
     public class Link
     {
-        public string href { get; set; }
-        public string name { get; set; }
+        [JsonProperty(PropertyName = "href")]
+        public string Href { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
     }
 }

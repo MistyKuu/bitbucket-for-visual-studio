@@ -1,10 +1,12 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
-using RestSharp.Serializers;
+using Newtonsoft.Json.Serialization;
+using RestSharp;
 
 namespace BitBucket.REST.API.Serializers
 {
-    class NewtonsoftJsonSerializer : ISerializer
+   
+    class NewtonsoftJsonSerializer : IJsonSerializer
     {
         private readonly Newtonsoft.Json.JsonSerializer _serializer;
 
@@ -26,7 +28,6 @@ namespace BitBucket.REST.API.Serializers
             _serializer = serializer;
         }
 
-
         public string Serialize(object obj)
         {
             using (var stringWriter = new StringWriter())
@@ -38,13 +39,28 @@ namespace BitBucket.REST.API.Serializers
 
                     _serializer.Serialize(jsonTextWriter, obj);
 
-                    var result = stringWriter.ToString();
-                    return result;
+                    return stringWriter.ToString();
                 }
             }
         }
 
         public string DateFormat { get; set; }
+
+        public T Deserialize<T>(IRestResponse response)
+        {
+            return this.Deserialize<T>(response.Content);
+        }
+
+        public T Deserialize<T>(string json)
+        {
+            using (var stringReader = new StringReader(json))
+            {
+                using (var jsonTextReader = new JsonTextReader(stringReader))
+                {
+                    return _serializer.Deserialize<T>(jsonTextReader);
+                }
+            }
+        }
 
         public string RootElement { get; set; }
 

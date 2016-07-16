@@ -1,15 +1,29 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace BitBucket.REST.API.Models
 {
     public class Links
     {
-        public Link self { get; set; }
-        public Link repositories { get; set; }
-        public Link link { get; set; }
-        public Link followers { get; set; }
-        public Link avatar { get; set; }
-        public Link following { get; set; }
-        public List<Link> clone { get; set; }
+        [JsonProperty(PropertyName = "self")]
+        public Link Self { get; set; }
+
+        [JsonProperty(PropertyName = "repositories")]
+        public Link Repositories { get; set; }
+
+        [JsonProperty(PropertyName = "link")]
+        public Link Link { get; set; }
+
+        [JsonProperty(PropertyName = "followers")]
+        public Link Followers { get; set; }
+
+        [JsonProperty(PropertyName = "avatar")]
+        public Link Avatar { get; set; }
+
+        [JsonProperty(PropertyName = "following")]
+        public Link Following { get; set; }
+
+        [JsonProperty(PropertyName = "clone")]
+        public List<Link> Clone { get; set; }
     }
 }

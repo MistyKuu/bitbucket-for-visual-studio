@@ -1,6 +1,8 @@
 ﻿using BitBucket.REST.API.Authentication;
 using BitBucket.REST.API.Clients;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Serializers;
+using BitBucket.REST.API.Wrappers;
 using RestSharp;
 
 namespace BitBucket.REST.API
@@ -10,7 +12,8 @@ namespace BitBucket.REST.API
         public BitbucketClient(Connection connection)
         {
             Connection = connection;
-            Client = new RestClient(connection.BitbucketUrl);
+            Client = new BitbucketRestClient(connection.BitbucketUrl);
+          
             // todo: make it a little simpler
             var auth = new Authenticator(connection.Credentials);
             Client.Authenticator = auth.Authenticators[connection.Credentials.AuthenticationType];
