@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
@@ -15,6 +16,8 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Infrastructure.Events;
+using log4net;
+using log4net.Config;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
@@ -29,6 +32,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _password;
         private readonly ReactiveCommand<Unit> _connectCommand;
         private string _error;
+        private readonly log4net.ILog _logger;
+
 
         [ImportingConstructor]
         public LoginDialogViewModel(IBitbucketService bucketService, IUserInformationService userInformationService, IEventAggregatorService eventAggregator)
@@ -40,6 +45,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             _connectCommand.Subscribe(_ => OnLoggedIn());
 
             _connectCommand.ThrownExceptions.Subscribe(OnError);
+            _logger =  LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _logger.Info("Creating ");
         }
 
         private void OnError(Exception ex)
