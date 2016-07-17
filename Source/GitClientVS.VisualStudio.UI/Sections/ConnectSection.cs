@@ -51,7 +51,7 @@ namespace GitClientVS.VisualStudio.UI.Sections
         {
             LoggerConfigurator.Setup(); // TODO this needs to be set in the entry point like package
             _userInfoService.LoadStoreInformation();
-
+          //  var gitExt = serviceProvider.GetService<IGitRepositoriesExt>();
             base.Initialize(sender, e);
             // watch for new repos added to the local repo list
             _section = GetSection(TeamExplorerConnectionsSectionId);

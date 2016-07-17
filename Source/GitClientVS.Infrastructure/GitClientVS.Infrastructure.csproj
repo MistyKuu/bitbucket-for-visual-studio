@@ -101,6 +101,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BitBucket.REST.API\BitBucket.REST.API.csproj">
+      <Project>{8D9A6680-2F77-485E-B90D-70E70A3444CF}</Project>
+      <Name>BitBucket.REST.API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GitClientVS.Contracts\GitClientVS.Contracts.csproj">
       <Project>{528a613a-1d51-4b23-851b-2549261b580e}</Project>
       <Name>GitClientVS.Contracts</Name>

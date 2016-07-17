@@ -13,6 +13,8 @@ using ReactiveUI;
 using System.Reactive.Linq;
 using System.Security;
 using System.Windows.Input;
+using BitBucket.REST.API;
+using BitBucket.REST.API.Models;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
@@ -37,11 +39,8 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
         [ImportingConstructor]
-        public LoginDialogViewModel(
-            IBitbucketService bucketService,
-            IEventAggregatorService eventAggregator)
+        public LoginDialogViewModel(IEventAggregatorService eventAggregator)
         {
-            _bucketService = bucketService;
             _eventAggregator = eventAggregator;
             _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Connect());
 
@@ -56,7 +55,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task Connect()
         {
-            await _bucketService.ConnectAsync(Login, Password);
             _eventAggregator.Publish(new ConnectionChangedEvent(ConnectionData.Create(Login, Password)));
             OnClose();
         }
