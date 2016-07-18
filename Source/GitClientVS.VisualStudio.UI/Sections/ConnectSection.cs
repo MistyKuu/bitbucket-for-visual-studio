@@ -32,6 +32,7 @@ namespace GitClientVS.VisualStudio.UI.Sections
     public class ConnectSection : TeamExplorerBaseSection
     {
         private readonly IUserInformationService _userInfoService;
+        private readonly IAppServiceProvider _appServiceProvider;
         private ITeamExplorerSection _section;
         private const string Id = "a6701970-28da-42ee-a0f4-9e02f486de2c";
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -40,23 +41,24 @@ namespace GitClientVS.VisualStudio.UI.Sections
         public ConnectSection(
             IBitbucketService bucketService,
             IUserInformationService userInfoService,
+            IAppServiceProvider appServiceProvider,
             IConnectSectionView sectionView) : base(sectionView)
         {
             _userInfoService = userInfoService;
+            _appServiceProvider = appServiceProvider;
             Title = "Bitbucket Extension";
         }
 
 
         public override void Initialize(object sender, SectionInitializeEventArgs e)
         {
+            ServiceProvider = e.ServiceProvider;
             LoggerConfigurator.Setup(); // TODO this needs to be set in the entry point like package
             _userInfoService.LoadStoreInformation();
-          //  var gitExt = serviceProvider.GetService<IGitRepositoriesExt>();
-            base.Initialize(sender, e);
-            // watch for new repos added to the local repo list
             _section = GetSection(TeamExplorerConnectionsSectionId);
+            _appServiceProvider.GitServiceProvider = e.ServiceProvider;
 
-         
+            base.Initialize(sender, e);
         }
 
         protected ITeamExplorerSection GetSection(Guid section)

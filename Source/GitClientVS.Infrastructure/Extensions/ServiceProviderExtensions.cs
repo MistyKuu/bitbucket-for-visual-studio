@@ -12,5 +12,9 @@ namespace GitClientVS.Infrastructure.Extensions
         {
             return serviceProvider.GetService(typeof(T)) as T;
         }
+        public static TBase GetService<TChild, TBase>(this IServiceProvider serviceProvider) where TChild : class where TBase : class
+        {
+            return serviceProvider.GetService(typeof(TChild)) as TBase;
+        }
     }
 }
