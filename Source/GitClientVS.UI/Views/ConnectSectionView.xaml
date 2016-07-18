@@ -12,7 +12,7 @@
 
     <Grid>
         <local:ConnectSectionLoggedOutView Visibility="{Binding ElementName=LoggedInView,Path=Visibility,Converter={converters:NegateVisibilityConverter}}" />
-        <local:ConnectSectionLoggedInView x:Name="LoggedInView"  Visibility="{Binding IsLoggedIn,Converter={converters:BoolToVisibilityConverter}}"/>
+        <local:ConnectSectionLoggedInView x:Name="LoggedInView"  Visibility="{Binding ConnectionData.IsLoggedIn,Converter={converters:BoolToVisibilityConverter}}"/>
     </Grid>
 </UserControl>
 

@@ -15,9 +15,7 @@ namespace GitClientVS.Services
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserInformationService : IUserInformationService
     {
-        private readonly IEventAggregatorService _eventAggregator;
         private readonly IStorageService _storageService;
-        private readonly IGitClientService _gitClientService;
         private readonly IDisposable _observable;
 
         public ConnectionData ConnectionData { get; private set; } = ConnectionData.NotLogged;
@@ -27,24 +25,10 @@ namespace GitClientVS.Services
             IEventAggregatorService eventAggregator,
             IStorageService storageService)
         {
-            _eventAggregator = eventAggregator;
             _storageService = storageService;
-            _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
+            _observable = eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
         }
-
-
-        public void LoadUserStoreInformation()
-        {
-            var result = _storageService.LoadUserData();
-            ConnectionData = result.IsSuccess ? result.Data : ConnectionData.NotLogged;
-        }
-
-        public void CleanUserStoreInformation()
-        {
-            ConnectionData = ConnectionData.NotLogged;
-            _storageService.SaveUserData(ConnectionData);
-        }
-
+        
         public void Dispose()
         {
             _observable.Dispose();

@@ -18,7 +18,18 @@
     </UserControl.Resources>
 
     <Grid >
-        <StackPanel Orientation="Horizontal" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Margin="5" Grid.Row="0" >
+            <Run Text="Hello "/>
+            <Run Text="{Binding ConnectionData.UserName,Mode=OneWay}" FontWeight="SemiBold"/>
+            <Run Text="!"/>
+        </TextBlock>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
             <Button Style="{StaticResource ActionLinkButton}" KeyboardNavigation.TabIndex="0"  Content="{x:Static prop:Resources.Clone}"/>
             <Separator Style="{StaticResource VerticalSeparator}" />
             <Button Style="{StaticResource ActionLinkButton}" KeyboardNavigation.TabIndex="1"  Content="{x:Static prop:Resources.Create}"/>

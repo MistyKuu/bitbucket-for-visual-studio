@@ -8,6 +8,7 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
 {
     public interface IGitClientService
     {
+        string Title { get; }
         Task LoginAsync(string login, string password);
         void Logout();
     }

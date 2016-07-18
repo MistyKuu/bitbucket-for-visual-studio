@@ -45,7 +45,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _eventAggregator = eventAggregator;
             _gitClientService = gitClientService;
             _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Connect());
-
+            _connectCommand.Subscribe(_ => OnClose());
             _connectCommand.ThrownExceptions.Subscribe(OnError);
         }
 
@@ -57,12 +57,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task Connect()
         {
             await _gitClientService.LoginAsync(Login, Password);
-            OnClose();
         }
 
         private IObservable<bool> CanExecuteObservable()
         {
-            return this.ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
+            return ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
         }
 
         private bool CanExecute()

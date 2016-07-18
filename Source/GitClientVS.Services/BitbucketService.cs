@@ -28,6 +28,8 @@ namespace GitClientVS.Services
             _eventAggregator = eventAggregator;
         }
 
+        public string Title => "Bitbucket Extension";
+
         public async Task LoginAsync(string login, string password)
         {
             if (IsConnected)
