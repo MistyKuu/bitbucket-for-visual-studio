@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GitClientVS.Contracts.Interfaces.Services;
+using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure.Events;
 
@@ -16,12 +17,15 @@ namespace GitClientVS.Services
     {
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IStorageService _storageService;
+        private readonly IGitClientService _gitClientService;
         private readonly IDisposable _observable;
 
         public ConnectionData ConnectionData { get; private set; } = ConnectionData.NotLogged;
 
         [ImportingConstructor]
-        public UserInformationService(IEventAggregatorService eventAggregator, IStorageService storageService)
+        public UserInformationService(
+            IEventAggregatorService eventAggregator,
+            IStorageService storageService)
         {
             _eventAggregator = eventAggregator;
             _storageService = storageService;
@@ -29,11 +33,16 @@ namespace GitClientVS.Services
         }
 
 
-        public void LoadStoreInformation()
+        public void LoadUserStoreInformation()
         {
             var result = _storageService.LoadUserData();
             ConnectionData = result.IsSuccess ? result.Data : ConnectionData.NotLogged;
-            _eventAggregator.Publish(new ConnectionChangedEvent(ConnectionData));
+        }
+
+        public void CleanUserStoreInformation()
+        {
+            ConnectionData = ConnectionData.NotLogged;
+            _storageService.SaveUserData(ConnectionData);
         }
 
         public void Dispose()

@@ -59,7 +59,7 @@
     <Compile Include="Interfaces\Services\IStorageService.cs" />
     <Compile Include="Interfaces\Services\IUserInformationService.cs" />
     <Compile Include="Models\ConnectionData.cs" />
-    <Compile Include="Interfaces\ViewModels\IBitbucketService.cs" />
+    <Compile Include="Interfaces\ViewModels\IGitClientService.cs" />
     <Compile Include="Interfaces\ViewModels\IConnectSectionViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\ILoginDialogViewModel.cs" />
     <Compile Include="Interfaces\Views\IConnectSectionView.cs" />

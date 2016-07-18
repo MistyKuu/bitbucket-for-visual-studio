@@ -6,25 +6,49 @@ using System.Text;
 using System.Threading.Tasks;
 using BitBucket.REST.API;
 using BitBucket.REST.API.Models;
+using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
+using GitClientVS.Contracts.Models;
+using GitClientVS.Infrastructure.Events;
 
 namespace GitClientVS.Services
 {
-    [Export(typeof(IBitbucketService))]
+    [Export(typeof(IGitClientService))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class BitbucketService : IBitbucketService
+    public class BitbucketService : IGitClientService
     {
-        public BitbucketService()
+        private readonly IEventAggregatorService _eventAggregator;
+        private BitbucketClient _bitbucketClient;
+
+        public bool IsConnected => _bitbucketClient != null;
+
+        [ImportingConstructor]
+        public BitbucketService(IEventAggregatorService eventAggregator)
         {
-            
+            _eventAggregator = eventAggregator;
         }
 
-        public async Task ConnectAsync(string login, string password)
+        public async Task LoginAsync(string login, string password)
         {
+            if (IsConnected)
+                return;
+
             var credentials = new Credentials(login, password);
             var connection = new Connection(credentials);
             var bitbucketInitializer = new BitbucketClientInitializer(connection);
-            var bitbucketClient = await bitbucketInitializer.Initialize();
+            _bitbucketClient = await bitbucketInitializer.Initialize();
+            OnConnectionChanged(ConnectionData.Create(login, password));
+        }
+
+        public void Logout()
+        {
+            _bitbucketClient = null;
+            OnConnectionChanged(ConnectionData.NotLogged);
+        }
+
+        private void OnConnectionChanged(ConnectionData connectionData)
+        {
+            _eventAggregator.Publish(new ConnectionChangedEvent(connectionData));
         }
     }
 }

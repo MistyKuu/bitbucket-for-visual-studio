@@ -91,7 +91,7 @@ namespace GitClientVS.VisualStudio.UI
                 {
                     disposable?.Dispose();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // ignore ex on dispose
                 }

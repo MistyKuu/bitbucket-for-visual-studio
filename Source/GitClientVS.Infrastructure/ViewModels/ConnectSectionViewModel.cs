@@ -24,6 +24,7 @@ namespace GitClientVS.Infrastructure.ViewModels
     {
         private readonly ExportFactory<ILoginDialogView> _loginViewFactory;
         private readonly IEventAggregatorService _eventAggregator;
+        private readonly IGitClientService _gitClientService;
         private readonly ReactiveCommand<object> _openLoginCommand;
         private readonly ReactiveCommand<object> _logoutCommand;
         private bool _isLoggedIn;
@@ -33,10 +34,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand LogoutCommand => _logoutCommand;
 
         [ImportingConstructor]
-        public ConnectSectionViewModel(ExportFactory<ILoginDialogView> loginViewFactory, IEventAggregatorService eventAggregator)
+        public ConnectSectionViewModel(ExportFactory<ILoginDialogView> loginViewFactory, IEventAggregatorService eventAggregator, IGitClientService gitClientService)
         {
             _loginViewFactory = loginViewFactory;
             _eventAggregator = eventAggregator;
+            _gitClientService = gitClientService;
 
             _openLoginCommand = ReactiveCommand.Create(CanExecuteOpenLogin());
             _logoutCommand = ReactiveCommand.Create();
@@ -47,7 +49,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void SetupObservables()
         {
             _openLoginCommand.Subscribe(_ => _loginViewFactory.CreateExport().Value.ShowModal());
-            _logoutCommand.Subscribe(_ => _eventAggregator.Publish(new ConnectionChangedEvent(ConnectionData.NotLogged)));
+            _logoutCommand.Subscribe(_ =>
+            {
+                _gitClientService.Logout();
+            });
 
             _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
         }

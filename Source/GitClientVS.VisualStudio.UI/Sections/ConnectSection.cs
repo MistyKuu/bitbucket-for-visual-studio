@@ -19,6 +19,7 @@ using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure;
 using Reactive.EventAggregator;
 using GitClientVS.Infrastructure.Extensions;
@@ -33,32 +34,54 @@ namespace GitClientVS.VisualStudio.UI.Sections
     {
         private readonly IUserInformationService _userInfoService;
         private readonly IAppServiceProvider _appServiceProvider;
+        private readonly IGitClientService _gitClient;
         private ITeamExplorerSection _section;
         private const string Id = "a6701970-28da-42ee-a0f4-9e02f486de2c";
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [ImportingConstructor]
         public ConnectSection(
-            IBitbucketService bucketService,
+            IGitClientService bucketService,
             IUserInformationService userInfoService,
             IAppServiceProvider appServiceProvider,
+            IGitClientService gitClient,
             IConnectSectionView sectionView) : base(sectionView)
         {
             _userInfoService = userInfoService;
             _appServiceProvider = appServiceProvider;
+            _gitClient = gitClient;
             Title = "Bitbucket Extension";
         }
 
 
-        public override void Initialize(object sender, SectionInitializeEventArgs e)
+        public override async void Initialize(object sender, SectionInitializeEventArgs e)
         {
             ServiceProvider = e.ServiceProvider;
             LoggerConfigurator.Setup(); // TODO this needs to be set in the entry point like package
-            _userInfoService.LoadStoreInformation();
+            _userInfoService.LoadUserStoreInformation();
+
+            await GitClientLogin();
+
             _section = GetSection(TeamExplorerConnectionsSectionId);
             _appServiceProvider.GitServiceProvider = e.ServiceProvider;
 
             base.Initialize(sender, e);
+        }
+
+        private async Task GitClientLogin()
+        {
+            if (_userInfoService.ConnectionData.IsLoggedIn)
+            {
+                try
+                {
+                    await _gitClient.LoginAsync(_userInfoService.ConnectionData.UserName, _userInfoService.ConnectionData.Password);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Warn("Couldn't login user using stored credentials. Credentials must have been changed or there is no internet connection", ex);
+                    _userInfoService.CleanUserStoreInformation();
+                }
+            }
         }
 
         protected ITeamExplorerSection GetSection(Guid section)
