@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -54,10 +58,23 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="MapperTests.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BitBucket.REST.API\BitBucket.REST.API.csproj">
+      <Project>{8d9a6680-2f77-485e-b90d-70e70a3444cf}</Project>
+      <Name>BitBucket.REST.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\GitClientVS.Contracts\GitClientVS.Contracts.csproj">
+      <Project>{528a613a-1d51-4b23-851b-2549261b580e}</Project>
+      <Name>GitClientVS.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\GitClientVS.Infrastructure\GitClientVS.Infrastructure.csproj">
+      <Project>{CFA26063-E6BD-4189-9E20-13BE59EBAF67}</Project>
+      <Name>GitClientVS.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\GitClientVS.Services\GitClientVS.Services.csproj">
       <Project>{f8d950b2-10a4-4efc-842c-4a7abd50c1ae}</Project>
       <Name>GitClientVS.Services</Name>
