@@ -19,6 +19,7 @@ using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure;
 using Reactive.EventAggregator;
 using GitClientVS.Infrastructure.Extensions;
@@ -31,32 +32,56 @@ namespace GitClientVS.VisualStudio.UI.Sections
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class ConnectSection : TeamExplorerBaseSection
     {
-        private readonly IUserInformationService _userInfoService;
+        private IStorageService _storageService;
+        private readonly IAppServiceProvider _appServiceProvider;
+        private readonly IGitClientService _gitClient;
         private ITeamExplorerSection _section;
         private const string Id = "a6701970-28da-42ee-a0f4-9e02f486de2c";
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [ImportingConstructor]
         public ConnectSection(
-            IBitbucketService bucketService,
-            IUserInformationService userInfoService,
+            IGitClientService bucketService,
+            IStorageService storageService,
+            IAppServiceProvider appServiceProvider,
+            IGitClientService gitClient,
             IConnectSectionView sectionView) : base(sectionView)
         {
-            _userInfoService = userInfoService;
-            Title = "Bitbucket Extension";
+            _storageService = storageService;
+            _appServiceProvider = appServiceProvider;
+            _gitClient = gitClient;
+            Title = _gitClient.Title;
         }
 
 
-        public override void Initialize(object sender, SectionInitializeEventArgs e)
+        public override async void Initialize(object sender, SectionInitializeEventArgs e)
         {
+            ServiceProvider = e.ServiceProvider;
             LoggerConfigurator.Setup(); // TODO this needs to be set in the entry point like package
-            _userInfoService.LoadStoreInformation();
+            var result = _storageService.LoadUserData();
+
+            await GitClientLogin(result);
+
+            _section = GetSection(TeamExplorerConnectionsSectionId);
+            _appServiceProvider.GitServiceProvider = e.ServiceProvider;
 
             base.Initialize(sender, e);
-            // watch for new repos added to the local repo list
-            _section = GetSection(TeamExplorerConnectionsSectionId);
+        }
 
-         
+        private async Task GitClientLogin(Result<ConnectionData> result)
+        {
+            if (result.IsSuccess && result.Data.IsLoggedIn)
+            {
+                try
+                {
+                    await _gitClient.LoginAsync(result.Data.UserName, result.Data.Password);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Warn("Couldn't login user using stored credentials. Credentials must have been changed or there is no internet connection", ex);
+                    _gitClient.Logout();
+                }
+            }
         }
 
         protected ITeamExplorerSection GetSection(Guid section)
@@ -75,6 +100,7 @@ namespace GitClientVS.VisualStudio.UI.Sections
             "GitClientVS.UI",
             "GitClientVS.VisualStudio.UI"
         };
+
 
         private Assembly LoadNotLoadedAssemblies(object sender, ResolveEventArgs e)
         {

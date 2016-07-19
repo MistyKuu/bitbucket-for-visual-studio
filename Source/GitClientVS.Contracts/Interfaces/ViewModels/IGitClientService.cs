@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace GitClientVS.Contracts.Interfaces.ViewModels
 {
-    public interface IBitbucketService
+    public interface IGitClientService
     {
-        Task ConnectAsync(string login, string password);
+        string Title { get; }
+        Task LoginAsync(string login, string password);
+        void Logout();
     }
 }

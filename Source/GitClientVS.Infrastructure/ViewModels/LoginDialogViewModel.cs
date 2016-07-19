@@ -13,6 +13,8 @@ using ReactiveUI;
 using System.Reactive.Linq;
 using System.Security;
 using System.Windows.Input;
+using BitBucket.REST.API;
+using BitBucket.REST.API.Models;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
@@ -27,8 +29,9 @@ namespace GitClientVS.Infrastructure.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class LoginDialogViewModel : ViewModelBase, ILoginDialogViewModel
     {
-        private readonly IBitbucketService _bucketService;
+        private readonly IGitClientService _bucketService;
         private readonly IEventAggregatorService _eventAggregator;
+        private readonly IGitClientService _gitClientService;
         private string _login;
         private string _password;
         private readonly ReactiveCommand<Unit> _connectCommand;
@@ -37,16 +40,13 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
         [ImportingConstructor]
-        public LoginDialogViewModel(
-            IBitbucketService bucketService,
-            IEventAggregatorService eventAggregator)
+        public LoginDialogViewModel(IEventAggregatorService eventAggregator, IGitClientService gitClientService)
         {
-            _bucketService = bucketService;
             _eventAggregator = eventAggregator;
+            _gitClientService = gitClientService;
             _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Connect());
-
+            _connectCommand.Subscribe(_ => OnClose());
             _connectCommand.ThrownExceptions.Subscribe(OnError);
-
         }
 
         private void OnError(Exception ex)
@@ -56,14 +56,12 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task Connect()
         {
-            await _bucketService.ConnectAsync(Login, Password);
-            _eventAggregator.Publish(new ConnectionChangedEvent(ConnectionData.Create(Login, Password)));
-            OnClose();
+            await _gitClientService.LoginAsync(Login, Password);
         }
 
         private IObservable<bool> CanExecuteObservable()
         {
-            return this.ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
+            return ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
         }
 
         private bool CanExecute()

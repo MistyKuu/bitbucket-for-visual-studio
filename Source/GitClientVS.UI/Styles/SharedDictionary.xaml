@@ -5,6 +5,7 @@
 
   <ResourceDictionary.MergedDictionaries>
         <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/ActionLinkButton.xaml"/>
+        <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/TextBoxStyles.xaml"/>
   </ResourceDictionary.MergedDictionaries>
 
   <Style x:Key="VSStyledButton" BasedOn="{StaticResource VsButtonStyleKey}" TargetType="{x:Type Button}" />

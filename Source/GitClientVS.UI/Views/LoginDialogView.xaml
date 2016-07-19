@@ -5,12 +5,32 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:platformUi="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.11.0"
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
+             xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
              mc:Ignorable="d" 
              WindowStartupLocation="CenterOwner"
              Width="300"
              Height="400"            
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:LoginDialogViewModel,IsDesignTimeCreatable=False}"  >
-    <Grid >
+    <platformUi:DialogWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </platformUi:DialogWindow.Resources>
+
+
+    <Grid Margin="20">
+        <Grid.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Padding" Value="10,0"/>
+            </Style>
+        </Grid.Resources>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -25,12 +45,12 @@
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Login: "/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Password: "/>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Login,Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Password,Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Style="{StaticResource ValidatedTextBoxStyle}" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Login,Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Style="{StaticResource ValidatedTextBoxStyle}" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Password,Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,UpdateSourceTrigger=PropertyChanged}"/>
         <!-- TODO convert to passwordbox-->
 
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ConnectCommand}" Content="Connect"/>
-        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Text="{Binding LoginError}"/>
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ConnectCommand}" Content="Connect" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Text="{Binding LoginError}" HorizontalAlignment="Center" Foreground="Red"/>
     </Grid>
 </platformUi:DialogWindow>
 
