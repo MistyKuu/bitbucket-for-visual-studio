@@ -15,22 +15,20 @@ namespace BitBucket.REST.API.Clients
         {
         }
 
-        public IteratorBasedPage<Repository> GetRepositories()
+        public async Task<IteratorBasedPage<Repository>> GetRepositories()
         {
-          
-            var wtf = ApiUrls.Repositories("nibaa");
-            var request = new BitbucketRestRequest(wtf, Method.GET);
-            //   var response = RestClient.Execute<IteratorBasedPage<Repository>>(request);       
-            var response = RestClient.Execute<IteratorBasedPage<Repository>>(request);
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                throw new AuthorizationException();
-            }
-            //Console.WriteLine(response.Content);  
-            //Console.WriteLine(response.ErrorMessage);
+            var url = ApiUrls.Repositories(Connection.Credentials.Login);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<Repository>>(request);
             return response.Data;
-           
-      
+        }
+
+        public async Task<Repository> CreateRepository(Repository repository)
+        {
+            var url = ApiUrls.CreateRepository(Connection.Credentials.Login, repository.Name);
+            var request = new BitbucketRestRequest(url, Method.POST);
+            var response = await RestClient.ExecuteTaskAsync<Repository>(request);
+            return response.Data;
         }
     }
 }
