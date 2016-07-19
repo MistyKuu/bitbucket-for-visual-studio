@@ -15,7 +15,7 @@ namespace GitClientVS.Services
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class HashService : IHashService
     {
-        byte[] _entropy = { 1, 4, 4, 5, 123 };
+        private readonly byte[] _entropy = { 1, 4, 4, 5, 123 };
 
         /// <summary>
         /// Encrypts a given password and returns the encrypted data

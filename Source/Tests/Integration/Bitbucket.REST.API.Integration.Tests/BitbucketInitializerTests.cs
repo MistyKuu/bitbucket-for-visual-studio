@@ -41,7 +41,7 @@ namespace Bitbucket.REST.API.Integration.Tests
             var connection = new Connection(credentials);
 
             var bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection);
-            Assert.Throws<AuthorizationException>(() => bitbucketClient.RepositoriesClient.GetRepositories());
+            Assert.ThrowsAsync<AuthorizationException>(() => bitbucketClient.RepositoriesClient.GetRepositories());
         }
     }
 }

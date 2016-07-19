@@ -4,11 +4,13 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using BitBucket.REST.API;
 using BitBucket.REST.API.Models;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
+using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Events;
 
 namespace GitClientVS.Services
@@ -40,6 +42,12 @@ namespace GitClientVS.Services
             var bitbucketInitializer = new BitbucketClientInitializer(connection);
             _bitbucketClient = await bitbucketInitializer.Initialize();
             OnConnectionChanged(ConnectionData.Create(login, password));
+        }
+
+        public async Task<IEnumerable<GitRemoteRepository>> GetRepositoryAsync()
+        {
+            var repositories = await _bitbucketClient.RepositoriesClient.GetRepositories();
+            return Mapper.Map<List<Repository>, List<GitRemoteRepository>>(repositories.Values);
         }
 
         public void Logout()

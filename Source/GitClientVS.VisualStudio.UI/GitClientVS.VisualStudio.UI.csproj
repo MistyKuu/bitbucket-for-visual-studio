@@ -48,6 +48,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AppInitializer.cs" />
     <Compile Include="AppServiceProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sections\ConnectSection.cs" />
@@ -68,6 +69,10 @@
     <Content Include="stylesheet.css" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>

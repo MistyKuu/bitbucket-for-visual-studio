@@ -27,12 +27,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly ReactiveCommand<object> _openLoginCommand;
         private readonly ReactiveCommand<object> _logoutCommand;
-        private bool _isLoggedIn;
+        private readonly ReactiveCommand<Unit> _getRepositoriesCommand;
+
         private IDisposable _observable;
         private ConnectionData _connectionData;
 
         public ICommand OpenLoginCommand => _openLoginCommand;
         public ICommand LogoutCommand => _logoutCommand;
+        public ICommand GetRepositoriesCommand => _getRepositoriesCommand;
 
         [ImportingConstructor]
         public ConnectSectionViewModel(
@@ -46,8 +48,14 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             _openLoginCommand = ReactiveCommand.Create(CanExecuteOpenLogin());
             _logoutCommand = ReactiveCommand.Create();
+            _getRepositoriesCommand = ReactiveCommand.CreateAsyncTask(CanExecuteOpenLogin(), _ => GetRepositories());
 
             SetupObservables();
+        }
+
+        private async Task GetRepositories()
+        {
+            var repos = await _gitClientService.GetRepositoryAsync();
         }
 
         private void SetupObservables()

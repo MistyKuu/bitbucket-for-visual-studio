@@ -30,7 +30,7 @@
         </TextBlock>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
-            <Button Style="{StaticResource ActionLinkButton}" KeyboardNavigation.TabIndex="0"  Content="{x:Static prop:Resources.Clone}"/>
+            <Button Style="{StaticResource ActionLinkButton}" KeyboardNavigation.TabIndex="0"  Content="{x:Static prop:Resources.Clone}" Command="{Binding GetRepositoriesCommand}"/>
             <Separator Style="{StaticResource VerticalSeparator}" />
             <Button Style="{StaticResource ActionLinkButton}" KeyboardNavigation.TabIndex="1"  Content="{x:Static prop:Resources.Create}"/>
             <Separator Style="{StaticResource VerticalSeparator}" />

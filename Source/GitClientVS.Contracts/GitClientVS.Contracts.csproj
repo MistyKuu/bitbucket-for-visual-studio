@@ -49,6 +49,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="IDialogWindow.cs" />
+    <Compile Include="Interfaces\Services\IAppInitializer.cs" />
     <Compile Include="Interfaces\Services\IAppServiceProvider.cs" />
     <Compile Include="Interfaces\Services\IEventAggregatorService.cs" />
     <Compile Include="Interfaces\GitClientServices\IConnectionService.cs" />
@@ -67,6 +68,10 @@
     <Compile Include="IView.cs" />
     <Compile Include="IViewModel.cs" />
     <Compile Include="Models\GitClientModels\GitClientHostAddress.cs" />
+    <Compile Include="Models\GitClientModels\GitLink.cs" />
+    <Compile Include="Models\GitClientModels\GitLinks.cs" />
+    <Compile Include="Models\GitClientModels\GitRemoteRepository.cs" />
+    <Compile Include="Models\GitClientModels\GitUser.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
