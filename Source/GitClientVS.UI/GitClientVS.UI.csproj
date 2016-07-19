@@ -55,6 +55,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AttachedProperties\TouchTracker.cs" />
     <Compile Include="Converters\BaseMarkupExtensionConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\NegateVisibilityConverter.cs" />

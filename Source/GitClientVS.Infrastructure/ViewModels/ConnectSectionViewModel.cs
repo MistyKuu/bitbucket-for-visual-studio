@@ -25,6 +25,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly ExportFactory<ILoginDialogView> _loginViewFactory;
         private readonly ExportFactory<ICloneRepositoriesView> _cloneRepoViewFactory;
         private readonly IEventAggregatorService _eventAggregator;
+        private readonly IUserInformationService _userInformationService;
         private readonly IGitClientService _gitClientService;
         private readonly ReactiveCommand<object> _openLoginCommand;
         private readonly ReactiveCommand<object> _logoutCommand;
@@ -36,28 +37,31 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand OpenLoginCommand => _openLoginCommand;
         public ICommand LogoutCommand => _logoutCommand;
         public ICommand OpenCloneCommand => _openCloneCommand;
-     
+
 
         [ImportingConstructor]
         public ConnectSectionViewModel(
             ExportFactory<ILoginDialogView> loginViewFactory,
             ExportFactory<ICloneRepositoriesView> cloneRepoViewFactory,
             IEventAggregatorService eventAggregator,
+            IUserInformationService userInformationService,
             IGitClientService gitClientService)
         {
             _loginViewFactory = loginViewFactory;
             _cloneRepoViewFactory = cloneRepoViewFactory;
             _eventAggregator = eventAggregator;
+            _userInformationService = userInformationService;
             _gitClientService = gitClientService;
 
             _openLoginCommand = ReactiveCommand.Create(CanExecuteOpenLogin());
             _openCloneCommand = ReactiveCommand.Create(CanExecuteOpenClone());
             _logoutCommand = ReactiveCommand.Create();
 
+            ConnectionData = _userInformationService.ConnectionData;
             SetupObservables();
         }
 
-       
+
 
         private void SetupObservables()
         {

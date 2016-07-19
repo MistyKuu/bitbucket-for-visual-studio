@@ -6,6 +6,7 @@
              xmlns:platformUi="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.11.0"
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
+             xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
              mc:Ignorable="d" 
              WindowStartupLocation="CenterOwner"
              Width="300"
@@ -46,7 +47,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Login: "/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Password: "/>
         <TextBox Style="{StaticResource ValidatedTextBoxStyle}" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Login,Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Style="{StaticResource ValidatedTextBoxStyle}" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Password,Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox  Style="{StaticResource ValidatedTextBoxStyle}" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Password,Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,UpdateSourceTrigger=PropertyChanged}"/>
         <!-- TODO convert to passwordbox-->
 
         <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ConnectCommand}" Content="Connect" HorizontalAlignment="Center"/>
