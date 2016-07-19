@@ -51,11 +51,9 @@
     <Compile Include="Interfaces\IDialogWindow.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
     <Compile Include="Interfaces\Services\IAppInitializer.cs" />
+    <Compile Include="Interfaces\Services\IGitService.cs" />
     <Compile Include="Interfaces\Services\IAppServiceProvider.cs" />
     <Compile Include="Interfaces\Services\IEventAggregatorService.cs" />
-    <Compile Include="Interfaces\GitClientServices\IConnectionService.cs" />
-    <Compile Include="Interfaces\GitClientServices\IGitClient.cs" />
-    <Compile Include="Interfaces\GitClientServices\IRepositoriesService.cs" />
     <Compile Include="Interfaces\Services\IFileService.cs" />
     <Compile Include="Interfaces\Services\IHashService.cs" />
     <Compile Include="Interfaces\Services\IStorageService.cs" />

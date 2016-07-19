@@ -29,6 +29,8 @@ namespace GitClientVS.Infrastructure.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class LoginDialogViewModel : ViewModelBase, ILoginDialogViewModel
     {
+        private readonly IGitClientService _bucketService;
+        private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitClientService _gitClientService;
         private string _login;
         private string _password;
@@ -42,6 +44,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         [ImportingConstructor]
         public LoginDialogViewModel(IEventAggregatorService eventAggregator, IGitClientService gitClientService)
         {
+            _eventAggregator = eventAggregator;
             _gitClientService = gitClientService;
             _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Connect());
             _connectCommand.Subscribe(_ => OnClose());

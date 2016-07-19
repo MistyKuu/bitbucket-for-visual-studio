@@ -63,10 +63,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BitbucketInitializerTests.cs" />
+    <Compile Include="Clients\RepositoryClientTests.cs" />
     <Compile Include="Clients\UserClientTests.cs" />
     <Compile Include="Helpers\CredentialsHelper.cs" />
     <Compile Include="SerializerTests\BitBucketSerializerTests.cs" />
-    <Compile Include="BitbucketClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
