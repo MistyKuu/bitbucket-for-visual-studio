@@ -94,7 +94,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private void Clone()
         {
-            _gitService.CloneRepository(SelectedRepository.Links.Clone.First().Href, SelectedRepository.Name, ClonePath);
+            _gitService.CloneRepository(SelectedRepository.CloneUrl, SelectedRepository.Name, ClonePath);
         }
 
 
