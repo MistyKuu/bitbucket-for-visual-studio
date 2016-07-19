@@ -37,11 +37,13 @@ namespace Bitbucket.REST.API.Integration.Tests
         [Test]
         public void Initialize_WithWrongCredentials_ShouldThrowUnauthorizedException()
         {
-            var credentials = new Credentials(CredentialsHelper.TestsCredentials.Email, "test");
+            var credentials = new Credentials(CredentialsHelper.TestsCredentials.Email, "asadaszx");
             var connection = new Connection(credentials);
 
-            var bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection);
-            Assert.ThrowsAsync<AuthorizationException>(() => bitbucketClient.RepositoriesClient.GetRepositories());
+            var bitbucketInitializer = new BitbucketClientInitializer(connection);
+        
+            Assert.ThrowsAsync<AuthorizationException>(() => bitbucketInitializer.Initialize());
+
         }
     }
 }

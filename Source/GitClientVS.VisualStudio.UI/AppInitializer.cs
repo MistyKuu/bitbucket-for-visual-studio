@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using GitClientVS.Contracts.Interfaces.GitClientServices;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
