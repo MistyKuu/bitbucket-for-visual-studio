@@ -31,7 +31,8 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class CloneRepositoriesViewModel : ViewModelBase, ICloneRepositoriesViewModel
     {
         private readonly IGitClientService _gitClientService;
-        private readonly ReactiveCommand<Unit> _cloneCommand;
+        private readonly IGitService _gitService;
+        private readonly ReactiveCommand<object> _cloneCommand;
         private IEnumerable<GitRemoteRepository> _repositories;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _errorMessage;
@@ -65,10 +66,16 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
         [ImportingConstructor]
-        public CloneRepositoriesViewModel(IEventAggregatorService eventAggregator, IGitClientService gitClientService)
+        public CloneRepositoriesViewModel(
+            IEventAggregatorService eventAggregator,
+            IGitClientService gitClientService,
+            IGitService gitService
+            )
         {
             _gitClientService = gitClientService;
-            _cloneCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Clone());
+            _gitService = gitService;
+            _cloneCommand = ReactiveCommand.Create(CanExecuteObservable());
+            _cloneCommand.Subscribe(_ => Clone());
             _cloneCommand.Subscribe(_ => OnClose());
             _cloneCommand.ThrownExceptions.Subscribe(OnError);
         }
@@ -83,9 +90,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             ErrorMessage = ex.Message;
         }
 
-        private async Task Clone()
+        private void Clone()
         {
-            //await _gitClientService.LoginAsync(Login, Password);
+            _gitService.CloneRepository(SelectedRepository.Links.Clone.First().Href, SelectedRepository.Name, ClonePath);
         }
 
 
