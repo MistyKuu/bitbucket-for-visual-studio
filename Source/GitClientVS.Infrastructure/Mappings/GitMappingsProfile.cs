@@ -9,6 +9,7 @@ namespace GitClientVS.Infrastructure.Mappings
         public GitMappingsProfile()
         {
             CreateMap<Repository, GitRemoteRepository>().ConvertUsing<RepositoryTypeConverter>();
+            CreateMap<GitRemoteRepository, Repository>().ConvertUsing<ReverseRepositoryTypeConverter>();
             CreateMap<User, GitUser>();
             CreateMap<Links, GitLinks>();
             CreateMap<Link, GitLink>();

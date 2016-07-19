@@ -95,6 +95,7 @@
     <Compile Include="LoggerConfigurator.cs" />
     <Compile Include="Mappings\GitMappingsProfile.cs" />
     <Compile Include="Mappings\RepositoryTypeConverter.cs" />
+    <Compile Include="Mappings\ReverseRepositoryTypeConverter.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveValidatedObject.cs" />
