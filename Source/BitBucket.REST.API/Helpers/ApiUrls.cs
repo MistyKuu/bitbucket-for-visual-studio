@@ -15,6 +15,11 @@ namespace BitBucket.REST.API.Helpers
             return $"repositories/{login}";
         }
 
+        public static string CreateRepository(string login, string repoName)
+        {
+            return $"repositories/{login}/{repoName}";
+        }
+
         public static string User()
         {
             return "user";
