@@ -64,6 +64,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _clonePath, value); }
         }
 
+        public ICommand CloneCommand => _cloneCommand;
+
 
         [ImportingConstructor]
         public CloneRepositoriesViewModel(
@@ -112,7 +114,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             return IsObjectValid();
         }
 
-        public ICommand CloneCommand => _cloneCommand;
 
 
         protected void OnClose()
