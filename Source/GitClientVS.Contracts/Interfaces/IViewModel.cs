@@ -1,4 +1,4 @@
-﻿namespace GitClientVS.Contracts
+﻿namespace GitClientVS.Contracts.Interfaces
 {
     public interface IViewModel
     {

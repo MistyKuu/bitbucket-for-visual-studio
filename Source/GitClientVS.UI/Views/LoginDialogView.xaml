@@ -50,7 +50,7 @@
         <!-- TODO convert to passwordbox-->
 
         <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ConnectCommand}" Content="Connect" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Text="{Binding LoginError}" HorizontalAlignment="Center" Foreground="Red"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Text="{Binding ErrorMessage}" Style="{StaticResource ErrorTextBlockStyle}"/>
     </Grid>
 </platformUi:DialogWindow>
 

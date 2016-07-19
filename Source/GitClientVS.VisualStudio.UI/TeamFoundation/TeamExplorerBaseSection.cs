@@ -2,6 +2,7 @@
 
 using System;
 using GitClientVS.Contracts;
+using GitClientVS.Contracts.Interfaces;
 using Microsoft.TeamFoundation.Controls;
 
 namespace GitClientVS.VisualStudio.UI.TeamFoundation

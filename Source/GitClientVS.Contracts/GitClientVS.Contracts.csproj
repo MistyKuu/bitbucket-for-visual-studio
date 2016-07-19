@@ -48,7 +48,8 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="IDialogWindow.cs" />
+    <Compile Include="Interfaces\IDialogWindow.cs" />
+    <Compile Include="Interfaces\IInitializable.cs" />
     <Compile Include="Interfaces\Services\IAppInitializer.cs" />
     <Compile Include="Interfaces\Services\IAppServiceProvider.cs" />
     <Compile Include="Interfaces\Services\IEventAggregatorService.cs" />
@@ -59,14 +60,17 @@
     <Compile Include="Interfaces\Services\IHashService.cs" />
     <Compile Include="Interfaces\Services\IStorageService.cs" />
     <Compile Include="Interfaces\Services\IUserInformationService.cs" />
+    <Compile Include="Interfaces\ICloseable.cs" />
+    <Compile Include="Interfaces\ViewModels\ICloneRepositoriesViewModel.cs" />
+    <Compile Include="Interfaces\Views\ICloneRepositoriesView.cs" />
     <Compile Include="Models\ConnectionData.cs" />
     <Compile Include="Interfaces\ViewModels\IGitClientService.cs" />
     <Compile Include="Interfaces\ViewModels\IConnectSectionViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\ILoginDialogViewModel.cs" />
     <Compile Include="Interfaces\Views\IConnectSectionView.cs" />
     <Compile Include="Interfaces\Views\ILoginDialogView.cs" />
-    <Compile Include="IView.cs" />
-    <Compile Include="IViewModel.cs" />
+    <Compile Include="Interfaces\IView.cs" />
+    <Compile Include="Interfaces\IViewModel.cs" />
     <Compile Include="Models\GitClientModels\GitClientHostAddress.cs" />
     <Compile Include="Models\GitClientModels\GitLink.cs" />
     <Compile Include="Models\GitClientModels\GitLinks.cs" />

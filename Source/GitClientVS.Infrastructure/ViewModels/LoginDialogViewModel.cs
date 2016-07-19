@@ -33,9 +33,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _login;
         private string _password;
         private readonly ReactiveCommand<Unit> _connectCommand;
-        private string _loginError;
+        private string _errorMessage;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+
+        public ICommand ConnectCommand => _connectCommand;
 
         [ImportingConstructor]
         public LoginDialogViewModel(IEventAggregatorService eventAggregator, IGitClientService gitClientService)
@@ -48,7 +50,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private void OnError(Exception ex)
         {
-            LoginError = ex.Message;
+            ErrorMessage = ex.Message;
         }
 
         private async Task Connect()
@@ -66,7 +68,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             return IsObjectValid();
         }
 
-        public ICommand ConnectCommand => _connectCommand;
 
         [Required]
         public string Login
@@ -82,10 +83,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _password, value); }
         }
 
-        public string LoginError
+        public string ErrorMessage
         {
-            get { return _loginError; }
-            set { this.RaiseAndSetIfChanged(ref _loginError, value); }
+            get { return _errorMessage; }
+            set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
 

@@ -44,7 +44,7 @@ namespace GitClientVS.Services
             OnConnectionChanged(ConnectionData.Create(login, password));
         }
 
-        public async Task<IEnumerable<GitRemoteRepository>> GetRepositoryAsync()
+        public async Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync()
         {
             var repositories = await _bitbucketClient.RepositoriesClient.GetRepositories();
             return Mapper.Map<List<Repository>, List<GitRemoteRepository>>(repositories.Values);

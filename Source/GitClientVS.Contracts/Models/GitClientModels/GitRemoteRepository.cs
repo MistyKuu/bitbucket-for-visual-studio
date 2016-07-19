@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GitClientVS.Contracts.Models.GitClientModels
 {
-    public class GitRemoteRepository
+    public class  GitRemoteRepository
     {
         public string Name { get; set; }
         public string Description { get; set; }

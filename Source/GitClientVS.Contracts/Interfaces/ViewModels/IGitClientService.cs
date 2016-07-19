@@ -12,6 +12,6 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         string Title { get; }
         Task LoginAsync(string login, string password);
         void Logout();
-        Task<IEnumerable<GitRemoteRepository>> GetRepositoryAsync();
+        Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync();
     }
 }

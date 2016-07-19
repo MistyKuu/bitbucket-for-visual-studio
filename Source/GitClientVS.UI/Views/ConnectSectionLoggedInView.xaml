@@ -21,6 +21,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Margin="5" Grid.Row="0" >
@@ -30,11 +31,13 @@
         </TextBlock>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
-            <Button Style="{StaticResource ActionLinkButton}" KeyboardNavigation.TabIndex="0"  Content="{x:Static prop:Resources.Clone}" Command="{Binding GetRepositoriesCommand}"/>
+            <Button Style="{StaticResource ActionLinkButton}" KeyboardNavigation.TabIndex="0"  Content="{x:Static prop:Resources.Clone}" Command="{Binding OpenCloneCommand}"/>
             <Separator Style="{StaticResource VerticalSeparator}" />
             <Button Style="{StaticResource ActionLinkButton}" KeyboardNavigation.TabIndex="1"  Content="{x:Static prop:Resources.Create}"/>
             <Separator Style="{StaticResource VerticalSeparator}" />
             <Button Style="{StaticResource ActionLinkButton}" KeyboardNavigation.TabIndex="2"  Content="{x:Static prop:Resources.Logout}" Command="{Binding LogoutCommand}"/>
         </StackPanel>
+
+        <local:ConnectSectionRepositoriesView Grid.Row="2"/>
     </Grid>
 </UserControl>

@@ -23,44 +23,46 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class ConnectSectionViewModel : ViewModelBase, IConnectSectionViewModel
     {
         private readonly ExportFactory<ILoginDialogView> _loginViewFactory;
+        private readonly ExportFactory<ICloneRepositoriesView> _cloneRepoViewFactory;
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitClientService _gitClientService;
         private readonly ReactiveCommand<object> _openLoginCommand;
         private readonly ReactiveCommand<object> _logoutCommand;
-        private readonly ReactiveCommand<Unit> _getRepositoriesCommand;
+        private readonly ReactiveCommand<object> _openCloneCommand;
 
         private IDisposable _observable;
         private ConnectionData _connectionData;
 
         public ICommand OpenLoginCommand => _openLoginCommand;
         public ICommand LogoutCommand => _logoutCommand;
-        public ICommand GetRepositoriesCommand => _getRepositoriesCommand;
+        public ICommand OpenCloneCommand => _openCloneCommand;
+     
 
         [ImportingConstructor]
         public ConnectSectionViewModel(
             ExportFactory<ILoginDialogView> loginViewFactory,
+            ExportFactory<ICloneRepositoriesView> cloneRepoViewFactory,
             IEventAggregatorService eventAggregator,
             IGitClientService gitClientService)
         {
             _loginViewFactory = loginViewFactory;
+            _cloneRepoViewFactory = cloneRepoViewFactory;
             _eventAggregator = eventAggregator;
             _gitClientService = gitClientService;
 
             _openLoginCommand = ReactiveCommand.Create(CanExecuteOpenLogin());
+            _openCloneCommand = ReactiveCommand.Create(CanExecuteOpenClone());
             _logoutCommand = ReactiveCommand.Create();
-            _getRepositoriesCommand = ReactiveCommand.CreateAsyncTask(CanExecuteOpenLogin(), _ => GetRepositories());
 
             SetupObservables();
         }
 
-        private async Task GetRepositories()
-        {
-            var repos = await _gitClientService.GetRepositoryAsync();
-        }
+       
 
         private void SetupObservables()
         {
             _openLoginCommand.Subscribe(_ => _loginViewFactory.CreateExport().Value.ShowModal());
+            _openCloneCommand.Subscribe(_ => _cloneRepoViewFactory.CreateExport().Value.ShowModal());
             _logoutCommand.Subscribe(_ => { _gitClientService.Logout(); });
 
             _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
@@ -78,6 +80,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         private IObservable<bool> CanExecuteOpenLogin()
+        {
+            return Observable.Return(true);
+        }
+        private IObservable<bool> CanExecuteOpenClone()
         {
             return Observable.Return(true);
         }

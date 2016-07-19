@@ -1,4 +1,5 @@
 ﻿using GitClientVS.Contracts;
+using GitClientVS.Contracts.Interfaces;
 using ReactiveUI;
 
 namespace GitClientVS.Infrastructure
