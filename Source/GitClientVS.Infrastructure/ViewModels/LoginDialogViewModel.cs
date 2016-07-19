@@ -32,6 +32,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _bucketService;
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitClientService _gitClientService;
+        private readonly IGitService _gitService;
         private string _login;
         private string _password;
         private readonly ReactiveCommand<Unit> _connectCommand;
@@ -40,13 +41,14 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
         [ImportingConstructor]
-        public LoginDialogViewModel(IEventAggregatorService eventAggregator, IGitClientService gitClientService)
+        public LoginDialogViewModel(IEventAggregatorService eventAggregator, IGitClientService gitClientService, IGitService gitService)
         {
             _eventAggregator = eventAggregator;
             _gitClientService = gitClientService;
             _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Connect());
             _connectCommand.Subscribe(_ => OnClose());
             _connectCommand.ThrownExceptions.Subscribe(OnError);
+            _gitService = gitService;
         }
 
         private void OnError(Exception ex)
@@ -56,7 +58,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task Connect()
         {
+          
             await _gitClientService.LoginAsync(Login, Password);
+            _gitService.CloneRepository("https://bitbucketvsextension@bitbucket.org/bitbucketvsextension/test.git", "Test", @"C:\testujemy\");
         }
 
         private IObservable<bool> CanExecuteObservable()
