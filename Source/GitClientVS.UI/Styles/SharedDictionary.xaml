@@ -4,9 +4,10 @@
   xmlns:styles="clr-namespace:GitClientVS.UI.Styles">
 
   <ResourceDictionary.MergedDictionaries>
-        <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/ActionLinkButton.xaml"/>
+        <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/ButtonStyles.xaml"/>
         <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/TextBoxStyles.xaml"/>
         <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/TextBlockStyles.xaml"/>
+        <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/ButtonStyles.xaml"/>
   </ResourceDictionary.MergedDictionaries>
 
   <Style x:Key="VSStyledButton" BasedOn="{StaticResource VsButtonStyleKey}" TargetType="{x:Type Button}" />

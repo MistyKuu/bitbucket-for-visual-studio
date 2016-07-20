@@ -70,11 +70,65 @@ namespace GitClientVS.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clone Repository.
+        /// </summary>
+        public static string CloneWindowTitle {
+            get {
+                return ResourceManager.GetString("CloneWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect.
+        /// </summary>
+        public static string Connect {
+            get {
+                return ResourceManager.GetString("Connect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
             get {
                 return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Repository.
+        /// </summary>
+        public static string CreateWindowTitle {
+            get {
+                return ResourceManager.GetString("CreateWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Private Repository.
+        /// </summary>
+        public static string IsPrivateRepo {
+            get {
+                return ResourceManager.GetString("IsPrivateRepo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local path.
+        /// </summary>
+        public static string LocalPath {
+            get {
+                return ResourceManager.GetString("LocalPath", resourceCulture);
             }
         }
         
@@ -88,11 +142,38 @@ namespace GitClientVS.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login to Bitbucket.
+        /// </summary>
+        public static string LoginWindowTitle {
+            get {
+                return ResourceManager.GetString("LoginWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logout.
         /// </summary>
         public static string Logout {
             get {
                 return ResourceManager.GetString("Logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path.
+        /// </summary>
+        public static string Path {
+            get {
+                return ResourceManager.GetString("Path", resourceCulture);
             }
         }
     }

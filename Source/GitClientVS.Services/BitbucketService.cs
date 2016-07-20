@@ -50,10 +50,11 @@ namespace GitClientVS.Services
             return Mapper.Map<List<Repository>, List<GitRemoteRepository>>(repositories.Values);
         }
 
-        public async Task<Repository> CreateRepositoryAsync(GitRemoteRepository newRepository)
+        public async Task<GitRemoteRepository> CreateRepositoryAsync(GitRemoteRepository newRepository)
         {
             var repository = Mapper.Map<GitRemoteRepository, Repository>(newRepository);
-            return await _bitbucketClient.RepositoriesClient.CreateRepository(repository);
+            var result = await _bitbucketClient.RepositoriesClient.CreateRepository(repository);
+            return Mapper.Map<Repository, GitRemoteRepository>(result);
         }
 
         public void Logout()

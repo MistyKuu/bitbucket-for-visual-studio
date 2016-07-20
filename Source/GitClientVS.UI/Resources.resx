@@ -120,13 +120,40 @@
   <data name="Clone" xml:space="preserve">
     <value>Clone</value>
   </data>
+  <data name="CloneWindowTitle" xml:space="preserve">
+    <value>Clone Repository</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Connect</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
+  </data>
+  <data name="CreateWindowTitle" xml:space="preserve">
+    <value>Create Repository</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="IsPrivateRepo" xml:space="preserve">
+    <value>Private Repository</value>
+  </data>
+  <data name="LocalPath" xml:space="preserve">
+    <value>Local path</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
+  <data name="LoginWindowTitle" xml:space="preserve">
+    <value>Login to Bitbucket</value>
+  </data>
   <data name="Logout" xml:space="preserve">
     <value>Logout</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Path" xml:space="preserve">
+    <value>Path</value>
   </data>
 </root>

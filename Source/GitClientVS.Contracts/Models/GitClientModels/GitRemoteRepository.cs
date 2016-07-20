@@ -13,7 +13,6 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public bool? IsPrivate { get; set; }
         public bool? HasIssues { get; set; }
         public bool? HasWiki { get; set; }
-        public string FullName { get; set; }
         public string CloneUrl { get; set; }
     }
 }
