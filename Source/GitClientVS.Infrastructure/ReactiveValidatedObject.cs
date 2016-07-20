@@ -42,12 +42,9 @@ namespace GitClientVS.Infrastructure
             {
                 lock (allValidatedProperties)
                 {
-                    var validatedProperties = allValidatedProperties.Get(GetType());
-                    foreach (var value in validatedProperties.Values)
-                        value.IsTouched = false;
-
-                    return validatedProperties.Count;
+                    return allValidatedProperties.Get(this.GetType()).Count;
                 }
+
             });
         }
 
@@ -71,9 +68,6 @@ namespace GitClientVS.Infrastructure
                 this.Log().Debug("Checking {0:X}.{1}...", this.GetHashCode(), columnName);
                 ret = getPropertyValidationError(columnName);
                 this.Log().Debug("Validation result: {0}", ret);
-
-
-
 
                 _validationCache[columnName] = ret;
 
@@ -106,7 +100,7 @@ namespace GitClientVS.Infrastructure
                 return true;
             }
 
-            Dictionary<string, PropertyExtraInfo>.KeyCollection allProps;
+            IEnumerable<string> allProps;
             lock (allValidatedProperties)
             {
                 allProps = allValidatedProperties.Get(GetType()).Keys;
@@ -154,19 +148,11 @@ namespace GitClientVS.Infrastructure
 
             lock (allValidatedProperties)
             {
-                var res = allValidatedProperties.Get(this.GetType()).TryGetValue(propName, out pei);
-
-                if (!res)
+                if (!allValidatedProperties.Get(this.GetType()).TryGetValue(propName, out pei))
                 {
-                    return null;
-                }
-                else if (!pei.IsTouched)
-                {
-                    pei.IsTouched = true;
                     return null;
                 }
             }
-
 
             foreach (var v in pei.ValidationAttributes)
             {
@@ -199,7 +185,6 @@ namespace GitClientVS.Infrastructure
             set { _Type = value; _typeFullName = value.FullName; }
         }
 
-        public bool IsTouched { get; set; }
         public string PropertyName { get; set; }
         public ValidationAttribute[] ValidationAttributes { get; set; }
 

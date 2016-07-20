@@ -100,7 +100,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveValidatedObject.cs" />
     <Compile Include="ViewModelBase.cs" />
-    <Compile Include="ViewModels\CloneRepositoriesViewModel.cs" />
+    <Compile Include="ViewModels\CreateRepositoriesDialogViewModel.cs" />
+    <Compile Include="ViewModels\CloneRepositoriesDialogViewModel.cs" />
     <Compile Include="ViewModels\LoginDialogViewModel.cs" />
     <Compile Include="ViewModels\ConnectSectionViewModel.cs" />
   </ItemGroup>

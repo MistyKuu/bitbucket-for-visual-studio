@@ -55,6 +55,8 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AttachedProperties\TouchTracker.cs" />
+    <Compile Include="Bindings\ValidatedBinding.cs" />
     <Compile Include="Converters\BaseMarkupExtensionConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\NegateVisibilityConverter.cs" />
@@ -65,6 +67,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Styles\SharedResourceDictionary.cs" />
+    <Compile Include="Views\CreateRepositoriesDialogView.xaml.cs">
+      <DependentUpon>CreateRepositoriesDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ConnectSectionLoggedInView.xaml.cs">
       <DependentUpon>ConnectSectionLoggedInView.xaml</DependentUpon>
     </Compile>
@@ -77,8 +82,8 @@
     <Compile Include="Views\LoginDialogView.xaml.cs">
       <DependentUpon>LoginDialogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CloneRepositoriesView.xaml.cs">
-      <DependentUpon>CloneRepositoriesView.xaml</DependentUpon>
+    <Compile Include="Views\CloneRepositoriesDialogView.xaml.cs">
+      <DependentUpon>CloneRepositoriesDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ConnectSectionView.xaml.cs">
       <DependentUpon>ConnectSectionView.xaml</DependentUpon>
@@ -102,6 +107,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Styles\ButtonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\TextBlockStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -110,11 +119,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\ActionLinkButton.xaml">
+    <Page Include="Styles\SharedDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\SharedDictionary.xaml">
+    <Page Include="Views\CreateRepositoriesDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -134,7 +143,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CloneRepositoriesView.xaml">
+    <Page Include="Views\CloneRepositoriesDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -21,27 +21,19 @@ using Microsoft.VisualStudio.PlatformUI;
 namespace GitClientVS.UI.Views
 {
     /// <summary>
-    /// Interaction logic for CloneRepositoriesView.xaml
+    /// Interaction logic for CloneRepositoriesDialogView.xaml
     /// </summary>
-    [Export(typeof(ICloneRepositoriesView))]
+    [Export(typeof(ICreateRepositoriesDialogView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class CloneRepositoriesView : DialogWindow, ICloneRepositoriesView
+    public partial class CreateRepositoriesDialogView : DialogWindow, ICreateRepositoriesDialogView
     {
-        private readonly ICloneRepositoriesViewModel _vm;
 
         [ImportingConstructor]
-        public CloneRepositoriesView(ICloneRepositoriesViewModel vm)
+        public CreateRepositoriesDialogView(ICreateRepositoriesDialogViewModel vm)
         {
             InitializeComponent();
             DataContext = vm;
-            _vm = vm;
             vm.Closed += delegate { Close(); };
-            Activated += CloneRepositoriesView_Activated;
-        }
-
-        private async void CloneRepositoriesView_Activated(object sender, EventArgs e)
-        {
-            await _vm.InitializeAsync();
         }
     }
 }

@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Text;
@@ -26,63 +27,78 @@ using log4net.Config;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
-    [Export(typeof(ICloneRepositoriesViewModel))]
+    [Export(typeof(ICreateRepositoriesDialogViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class CloneRepositoriesViewModel : ViewModelBase, ICloneRepositoriesViewModel
+    public class CreateRepositoriesDialogViewModel : ViewModelBase, ICreateRepositoriesDialogViewModel
     {
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
-        private readonly ReactiveCommand<object> _cloneCommand;
-        private IEnumerable<GitRemoteRepository> _repositories;
+        private readonly IFileService _fileService;
+        private readonly ReactiveCommand<Unit> _createCommand;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _errorMessage;
-        private GitRemoteRepository _selectedRepository;
-        private string _clonePath;
+        private GitRemoteRepository _repository;
+        private string _localPath;
+        private string _name;
+        private string _description;
+        private bool _isPrivate;
 
         public string ErrorMessage
         {
             get { return _errorMessage; }
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
-        public IEnumerable<GitRemoteRepository> Repositories
+
+        [Required]
+        public string LocalPath
         {
-            get { return _repositories; }
-            set { this.RaiseAndSetIfChanged(ref _repositories, value); }
+            get { return _localPath; }
+            set { this.RaiseAndSetIfChanged(ref _localPath, value); }
         }
 
         [Required]
-        public GitRemoteRepository SelectedRepository
+        public string Name
         {
-            get { return _selectedRepository; }
-            set { this.RaiseAndSetIfChanged(ref _selectedRepository, value); }
+            get { return _name; }
+            set { this.RaiseAndSetIfChanged(ref _name, value); }
         }
 
-        [Required(AllowEmptyStrings = false)]
-        public string ClonePath
+        public string Description
         {
-            get { return _clonePath; }
-            set { this.RaiseAndSetIfChanged(ref _clonePath, value); }
+            get { return _description; }
+            set { this.RaiseAndSetIfChanged(ref _description, value); }
         }
 
+        public bool IsPrivate
+        {
+            get { return _isPrivate; }
+            set { this.RaiseAndSetIfChanged(ref _isPrivate, value); }
+        }
+
+
+        public ICommand CreateCommand => _createCommand;
 
         [ImportingConstructor]
-        public CloneRepositoriesViewModel(
-            IEventAggregatorService eventAggregator,
+        public CreateRepositoriesDialogViewModel(
             IGitClientService gitClientService,
-            IGitService gitService
+            IGitService gitService,
+            IFileService fileService
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
-            _cloneCommand = ReactiveCommand.Create(CanExecuteObservable());
-            _cloneCommand.Subscribe(_ => Clone());
-            _cloneCommand.Subscribe(_ => OnClose());
-            _cloneCommand.ThrownExceptions.Subscribe(OnError);
+            _fileService = fileService;
+            _createCommand = ReactiveCommand.CreateAsyncTask(CanExecuteCreateObservable(), _ => Create());
+
+            LocalPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory), "Source", "Repos");
+
+            SetupObservables();
         }
 
-        public async Task InitializeAsync()
+        private void SetupObservables()
         {
-            await RefreshRepositories();
+            _createCommand.Subscribe(_ => OnClose());
+            _createCommand.ThrownExceptions.Subscribe(OnError);
         }
 
         private void OnError(Exception ex)
@@ -90,19 +106,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             ErrorMessage = ex.Message;
         }
 
-        private void Clone()
+        private async Task Create()
         {
-            _gitService.CloneRepository(SelectedRepository.CloneUrl, SelectedRepository.Name, ClonePath);
+            var repository = new GitRemoteRepository { Name = Name, Description = Description, IsPrivate = IsPrivate };
+            var remoteRepo = await _gitClientService.CreateRepositoryAsync(repository);
+            _gitService.PublishRepository(remoteRepo, "bitbucketvsextension", "bitbucketvsextension");
         }
 
 
-        private async Task RefreshRepositories()
-        {
-            Repositories = await _gitClientService.GetUserRepositoriesAsync();
-            SelectedRepository = Repositories.FirstOrDefault();
-        }
-
-        private IObservable<bool> CanExecuteObservable()
+        private IObservable<bool> CanExecuteCreateObservable()
         {
             return ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
         }
@@ -111,9 +123,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             return IsObjectValid();
         }
-
-        public ICommand CloneCommand => _cloneCommand;
-
 
         protected void OnClose()
         {

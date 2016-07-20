@@ -1,6 +1,6 @@
 ﻿namespace GitClientVS.Contracts.Interfaces.Views
 {
-    public interface ICloneRepositoriesView : IDialogWindow
+    public interface ICloneRepositoriesDialogView : IDialogWindow
     {
     }
 }

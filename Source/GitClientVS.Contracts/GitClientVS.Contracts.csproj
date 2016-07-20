@@ -48,6 +48,8 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Interfaces\Views\ICreateRepositoriesDialogView.cs" />
+    <Compile Include="Interfaces\ViewModels\ICreateRepositoriesDialogViewModel.cs" />
     <Compile Include="Interfaces\IDialogWindow.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
     <Compile Include="Interfaces\Services\IAppInitializer.cs" />
@@ -59,8 +61,8 @@
     <Compile Include="Interfaces\Services\IStorageService.cs" />
     <Compile Include="Interfaces\Services\IUserInformationService.cs" />
     <Compile Include="Interfaces\ICloseable.cs" />
-    <Compile Include="Interfaces\ViewModels\ICloneRepositoriesViewModel.cs" />
-    <Compile Include="Interfaces\Views\ICloneRepositoriesView.cs" />
+    <Compile Include="Interfaces\ViewModels\ICloneRepositoriesDialogViewModel.cs" />
+    <Compile Include="Interfaces\Views\ICloneRepositoriesDialogView.cs" />
     <Compile Include="Models\ConnectionData.cs" />
     <Compile Include="Interfaces\ViewModels\IGitClientService.cs" />
     <Compile Include="Interfaces\ViewModels\IConnectSectionViewModel.cs" />

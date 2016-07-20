@@ -6,8 +6,12 @@
              xmlns:platformUi="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.11.0"
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
+             xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
+             xmlns:ui="clr-namespace:GitClientVS.UI"
+             xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              mc:Ignorable="d" 
              WindowStartupLocation="CenterOwner"
+             Title="{x:Static ui:Resources.LoginWindowTitle}"
              Width="300"
              Height="400"            
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:LoginDialogViewModel,IsDesignTimeCreatable=False}"  >
@@ -45,11 +49,11 @@
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Login: "/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Password: "/>
-        <TextBox Style="{StaticResource ValidatedTextBoxStyle}" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Login,Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Style="{StaticResource ValidatedTextBoxStyle}" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Password,Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Style="{StaticResource ValidatedTextBoxStyle}" Grid.Row="0" Grid.Column="1" Text="{bindings:ValidatedBinding Login}"/>
+        <TextBox  Style="{StaticResource ValidatedTextBoxStyle}" Grid.Row="1" Grid.Column="1" Text="{bindings:ValidatedBinding Password}"/>
         <!-- TODO convert to passwordbox-->
 
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ConnectCommand}" Content="Connect" HorizontalAlignment="Center"/>
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ConnectCommand}" Content="{x:Static ui:Resources.Connect}" HorizontalAlignment="Center"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Text="{Binding ErrorMessage}" Style="{StaticResource ErrorTextBlockStyle}"/>
     </Grid>
 </platformUi:DialogWindow>

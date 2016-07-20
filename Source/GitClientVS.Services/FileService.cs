@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using GitClientVS.Contracts.Interfaces.Services;
+using GitClientVS.Contracts.Models;
 
 namespace GitClientVS.Services
 {
@@ -24,5 +26,34 @@ namespace GitClientVS.Services
         {
             return File.ReadAllText(path);
         }
+
+
+        public Result<string> OpenSaveDialog(string filterPattern)
+        {
+            var dialog = new SaveFileDialog()
+            {
+                Filter = filterPattern
+            };
+
+            return dialog.ShowDialog() == DialogResult.OK ? Result<string>.Success(dialog.FileName) : Result<string>.Fail();
+        }
+
+        public Result<string> OpenDirectoryDialog(string selectedPath, string title = null)
+        {
+            using (var folderBrowser = new FolderBrowserDialog())
+            {
+                folderBrowser.RootFolder = Environment.SpecialFolder.Desktop;
+                folderBrowser.SelectedPath = selectedPath;
+                folderBrowser.ShowNewFolderButton = true;
+
+                if (title != null)
+                {
+                    folderBrowser.Description = title;
+                }
+
+                return folderBrowser.ShowDialog() == DialogResult.OK ? Result<string>.Success(folderBrowser.SelectedPath) : Result<string>.Fail();
+            }
+        }
+
     }
 }
