@@ -10,6 +10,8 @@ using GitClientVS.Contracts.Models.GitClientModels;
 using log4net;
 using LibGit2Sharp;
 using Microsoft.TeamFoundation.Git.Controls.Extensibility;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TeamFoundation.Git.Extensibility;
 using CloneOptions = Microsoft.TeamFoundation.Git.Controls.Extensibility.CloneOptions;
 
@@ -52,14 +54,30 @@ namespace GitClientVS.VisualStudio.UI.Services
             var gitExt = _appServiceProvider.GetService<IGitExt>();
             var vsRepo = gitExt.ActiveRepositories.FirstOrDefault();
             // if null take git repository from solution
+            Repository activeRepository;
             if (vsRepo == null)
             {
-                Logger.Error($"Could not find active repository");
-                throw new Exception();
+                var vsSolution = _appServiceProvider.GetService<IVsSolution>();
+                string solutionDir, solutionFile, userFile;
+                if (!ErrorHandler.Succeeded(vsSolution.GetSolutionInfo(out solutionDir, out solutionFile, out userFile)))
+                {
+                    Logger.Error($"Could not find active repository");
+                    throw new Exception();
+                }
+                if (solutionDir == null)
+                {
+                    Logger.Error($"Could not find active repository");
+                    throw new Exception();
+                }
+                activeRepository = new Repository(Repository.Discover(solutionDir));
+            }
+            else
+            {
+                activeRepository = new Repository(Repository.Discover(vsRepo.RepositoryPath));
             }
             var remoteName = "origin";
             var mainBranch = "master";
-            var activeRepository = new Repository(Repository.Discover(vsRepo.RepositoryPath));
+          
 
             // set remote
             activeRepository.Config.Set($"remote.{remoteName}.url", repository.CloneUrl);
