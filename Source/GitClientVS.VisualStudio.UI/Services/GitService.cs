@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models.GitClientModels;
+using GitClientVS.Infrastructure.Extensions;
 using log4net;
 using LibGit2Sharp;
 using Microsoft.TeamFoundation.Git.Controls.Extensibility;
@@ -22,6 +23,8 @@ namespace GitClientVS.VisualStudio.UI.Services
     public class GitService: IGitService
     {
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly string remoteName;
+        private readonly string mainBranch;
 
         private readonly IAppServiceProvider _appServiceProvider; 
 
@@ -29,6 +32,18 @@ namespace GitClientVS.VisualStudio.UI.Services
         public GitService(IAppServiceProvider appServiceProvider)
         {
             _appServiceProvider = appServiceProvider;
+            remoteName = "origin";
+            mainBranch = "master";
+        }
+
+        private Credentials CreateCredentials(string url, string user, SupportedCredentialTypes supportedCredentialTypes)
+        {
+            var userInformationService = _appServiceProvider.GetService<IUserInformationService>();
+            return new SecureUsernamePasswordCredentials
+            {
+                Username = userInformationService.ConnectionData.UserName,
+                Password = userInformationService.ConnectionData.Password.ToSecureString(),
+            };
         }
 
         public void CloneRepository(string cloneUrl, string repositoryName, string repositoryPath)
@@ -49,11 +64,10 @@ namespace GitClientVS.VisualStudio.UI.Services
             }
         }
 
-        public void PublishRepository(GitRemoteRepository repository, string username, string password)
+        private Repository GetRepository()
         {
             var gitExt = _appServiceProvider.GetService<IGitExt>();
             var vsRepo = gitExt.ActiveRepositories.FirstOrDefault();
-            // if null take git repository from solution
             Repository activeRepository;
             if (vsRepo == null)
             {
@@ -75,32 +89,21 @@ namespace GitClientVS.VisualStudio.UI.Services
             {
                 activeRepository = new Repository(Repository.Discover(vsRepo.RepositoryPath));
             }
-            var remoteName = "origin";
-            var mainBranch = "master";
-          
 
-            // set remote
-            activeRepository.Config.Set($"remote.{remoteName}.url", repository.CloneUrl);
+            return activeRepository;
+        }
+
+        private void SetRemote(Repository activeRepository, string cloneUrl)
+        {
+            activeRepository.Config.Set($"remote.{remoteName}.url", cloneUrl);
             activeRepository.Config.Set($"remote.{remoteName}.fetch", $"+refs/heads/*:refs/remotes/{remoteName}/*");
+        }
 
-            // push
-
+        private void Push(Repository activeRepository)
+        {
             var pushOptions = new PushOptions()
             {
-                CredentialsProvider = (_url, _user, _cred) => new UsernamePasswordCredentials
-                {
-                    Username = username,
-                    Password = password
-                }
-            };
-
-            var fetchOptions = new FetchOptions()
-            {
-                CredentialsProvider = (_url, _user, _cred) => new UsernamePasswordCredentials
-                {
-                    Username = username,
-                    Password = password
-                }
+                CredentialsProvider = this.CreateCredentials
             };
 
             var remote = activeRepository.Network.Remotes[remoteName];
@@ -108,14 +111,21 @@ namespace GitClientVS.VisualStudio.UI.Services
             {
                 activeRepository.Network.Push(remote, "HEAD", @"refs/heads/" + mainBranch, pushOptions);
             }
+        }
 
-            // fetch
+        private void Fetch(Repository activeRepository)
+        {
+            var fetchOptions = new FetchOptions()
+            {
+                CredentialsProvider = this.CreateCredentials
+            };
 
-
+            var remote = activeRepository.Network.Remotes[remoteName];
             activeRepository.Network.Fetch(remote, fetchOptions);
+        }
 
-            // set tracking branch
-
+        private void SetTrackingRemote(Repository activeRepository)
+        {
             var remoteBranchName = "refs/remotes/" + remoteName + "/" + mainBranch;
             var remoteBranch = activeRepository.Branches[remoteBranchName];
             // if it's null, it's because nothing was pushed
@@ -125,6 +135,15 @@ namespace GitClientVS.VisualStudio.UI.Services
                 var localBranch = activeRepository.Branches[localBranchName];
                 activeRepository.Branches.Update(localBranch, b => b.TrackedBranch = remoteBranch.CanonicalName);
             }
+        }
+
+        public void PublishRepository(GitRemoteRepository repository, string username, string password)
+        {
+            Repository activeRepository = GetRepository();
+            SetRemote(activeRepository, repository.CloneUrl);
+            Push(activeRepository);
+            Fetch(activeRepository);
+            SetTrackingRemote(activeRepository);
         }
 
 
