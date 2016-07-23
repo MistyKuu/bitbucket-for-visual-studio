@@ -137,7 +137,7 @@ namespace GitClientVS.VisualStudio.UI.Services
             }
         }
 
-        public void PublishRepository(GitRemoteRepository repository, string username, string password)
+        public void PublishRepository(GitRemoteRepository repository)
         {
             Repository activeRepository = GetRepository();
             SetRemote(activeRepository, repository.CloneUrl);

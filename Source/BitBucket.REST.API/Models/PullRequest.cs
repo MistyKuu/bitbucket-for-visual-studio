@@ -37,7 +37,7 @@ namespace BitBucket.REST.API.Models
         public Source Source { get; set; }
 
         [JsonProperty(PropertyName = "state")]
-        public string State { get; set; }
+        public PullRequestOptions State { get; set; }
 
         [JsonProperty(PropertyName = "created_on")]
         public string CreatedOn { get; set; }

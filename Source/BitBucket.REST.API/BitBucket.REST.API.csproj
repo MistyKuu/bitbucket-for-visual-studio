@@ -71,6 +71,7 @@
     <Compile Include="Models\Links.cs" />
     <Compile Include="Models\Parent.cs" />
     <Compile Include="Models\PullRequest.cs" />
+    <Compile Include="Models\PullRequestOptions.cs" />
     <Compile Include="Models\Repository.cs" />
     <Compile Include="Models\Source.cs" />
     <Compile Include="Models\User.cs" />
@@ -82,7 +83,9 @@
     <Compile Include="Wrappers\BitbucketRestClient.cs" />
     <Compile Include="Wrappers\BitbucketRestRequest.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

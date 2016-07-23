@@ -110,7 +110,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var repository = new GitRemoteRepository { Name = Name, Description = Description, IsPrivate = IsPrivate };
             var remoteRepo = await _gitClientService.CreateRepositoryAsync(repository);
-            _gitService.PublishRepository(remoteRepo, "bitbucketvsextension", "bitbucketvsextension");
+            _gitService.CloneRepository(remoteRepo.CloneUrl, remoteRepo.Name, LocalPath);
         }
 
 
