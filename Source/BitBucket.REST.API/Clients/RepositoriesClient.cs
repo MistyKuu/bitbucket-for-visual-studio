@@ -23,6 +23,14 @@ namespace BitBucket.REST.API.Clients
             return response.Data;
         }
 
+        public async Task<IteratorBasedPage<Branch>> GetBranches(string repoName)
+        {
+            var url = ApiUrls.Branches(Connection.Credentials.Login, repoName);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<Branch>>(request);
+            return response.Data;
+        }
+
         public async Task<Repository> CreateRepository(Repository repository)
         {
             var url = ApiUrls.CreateRepository(Connection.Credentials.Login, repository.Name);
