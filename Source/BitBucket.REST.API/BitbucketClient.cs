@@ -25,6 +25,7 @@ namespace BitBucket.REST.API
         public RepositoriesClient RepositoriesClient { get; private set; }
         public UserClient UserClient { get; private set; }
         public Connection Connection { get; private set; }
+        public PullRequestsClient PullRequestsClient { get; private set; }
         
         private BitbucketRestClient Client { get; set; }
 

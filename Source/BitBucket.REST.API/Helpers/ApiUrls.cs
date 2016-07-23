@@ -20,6 +20,11 @@ namespace BitBucket.REST.API.Helpers
             return $"repositories/{login}/{repoName}";
         }
 
+        public static string PullRequests(string username, string repository)
+        {
+            return $"repositories/{username}/{repository}/pullrequests";
+        }
+
         public static string User()
         {
             return "user";
