@@ -57,6 +57,13 @@ namespace GitClientVS.Services
             return Mapper.Map<Repository, GitRemoteRepository>(result);
         }
 
+        public async Task<IEnumerable<GitPullRequest>> GetPullRequests()
+        {
+            //todo put real repository name
+            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests("repositoryName");
+            return Mapper.Map<List<PullRequest>, List<GitPullRequest>>(pullRequests.Values);
+        }
+
         public void Logout()
         {
             _bitbucketClient = null;

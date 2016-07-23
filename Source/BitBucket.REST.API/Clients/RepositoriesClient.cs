@@ -27,7 +27,7 @@ namespace BitBucket.REST.API.Clients
         {
             var url = ApiUrls.CreateRepository(Connection.Credentials.Login, repository.Name);
             var request = new BitbucketRestRequest(url, Method.POST);
-            request.AddParameter("application/json; charset=utf-8", repository, ParameterType.RequestBody);
+            request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(repository), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<Repository>(request);
             return response.Data;
         }

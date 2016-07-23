@@ -15,6 +15,7 @@ namespace BitBucket.REST.API
             Client = new BitbucketRestClient(connection);
             RepositoriesClient = new RepositoriesClient(Client, Connection);
             UserClient = new UserClient(Client, Connection);
+            PullRequestsClient = new PullRequestsClient(Client, Connection);
         }
 
         public void Initialize()

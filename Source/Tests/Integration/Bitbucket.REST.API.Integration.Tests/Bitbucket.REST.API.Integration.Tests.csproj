@@ -63,6 +63,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BitbucketInitializerTests.cs" />
+    <Compile Include="Clients\PullRequestsClientTests.cs" />
     <Compile Include="Clients\RepositoryClientTests.cs" />
     <Compile Include="Clients\UserClientTests.cs" />
     <Compile Include="Helpers\CredentialsHelper.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="credentials.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

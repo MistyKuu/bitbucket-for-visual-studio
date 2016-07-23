@@ -74,6 +74,7 @@
     <Compile Include="Models\GitClientModels\GitClientHostAddress.cs" />
     <Compile Include="Models\GitClientModels\GitLink.cs" />
     <Compile Include="Models\GitClientModels\GitLinks.cs" />
+    <Compile Include="Models\GitClientModels\GitPullRequest.cs" />
     <Compile Include="Models\GitClientModels\GitRemoteRepository.cs" />
     <Compile Include="Models\GitClientModels\GitUser.cs" />
     <Compile Include="Models\Result.cs" />

@@ -15,36 +15,40 @@ namespace BitBucket.REST.API.Clients
         }
 
 
-        public async Task<IteratorBasedPage<PullRequest>> GetPullRequests(Repository repository)
+        public async Task<IteratorBasedPage<PullRequest>> GetPullRequests(string repositoryName)
         {
-            var url = ApiUrls.PullRequests(Connection.Credentials.Login, repository.Name);
+            var url = ApiUrls.PullRequests(Connection.Credentials.Login, repositoryName);
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<PullRequest>>(request);
             return response.Data;
         }
 
-        public async Task<IteratorBasedPage<PullRequest>> GetPullRequests(Repository repository, PullRequestOptions option)
+        public async Task<IteratorBasedPage<PullRequest>> GetPullRequests(string repositoryName, PullRequestOptions option)
         {
-            var url = ApiUrls.PullRequests(Connection.Credentials.Login, repository.Name);
+            var url = ApiUrls.PullRequests(Connection.Credentials.Login, repositoryName);
             var request = new BitbucketRestRequest(url, Method.GET);
             request.AddQueryParameter("state", option.ToString());
             var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<PullRequest>>(request);
             return response.Data;
         }
 
-        public async Task<PullRequest> GetPullRequest(Repository repository, long id)
+        public async Task<PullRequest> GetPullRequest(string repositoryName, long id)
         {
-            var url = ApiUrls.PullRequest(Connection.Credentials.Login, repository.Name, id);
+            var url = ApiUrls.PullRequest(Connection.Credentials.Login, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await RestClient.ExecuteTaskAsync<PullRequest>(request);
             return response.Data;
         }
 
-        public async Task<PullRequest> CreatePullRequest(PullRequest pullRequest, Repository repository)
+        public async Task<PullRequest> CreatePullRequest(PullRequest pullRequest, string repositoryName)
         {
-            var url = ApiUrls.PullRequests(Connection.Credentials.Login, repository.Name);
+            pullRequest.Author = new User()
+            {
+                Username = Connection.Credentials.Login
+            };
+            var url = ApiUrls.PullRequests(Connection.Credentials.Login, repositoryName);
             var request = new BitbucketRestRequest(url, Method.POST);
-            request.AddParameter("application/json; charset=utf-8", pullRequest, ParameterType.RequestBody);
+            request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(pullRequest), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<PullRequest>(request);
             return response.Data;
         }
