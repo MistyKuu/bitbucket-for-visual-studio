@@ -71,10 +71,12 @@
     <Compile Include="Interfaces\Views\ILoginDialogView.cs" />
     <Compile Include="Interfaces\IView.cs" />
     <Compile Include="Interfaces\IViewModel.cs" />
+    <Compile Include="Models\GitClientModels\GitBranch.cs" />
     <Compile Include="Models\GitClientModels\GitClientHostAddress.cs" />
     <Compile Include="Models\GitClientModels\GitLink.cs" />
     <Compile Include="Models\GitClientModels\GitLinks.cs" />
     <Compile Include="Models\GitClientModels\GitPullRequest.cs" />
+    <Compile Include="Models\GitClientModels\GitPullRequestStatus.cs" />
     <Compile Include="Models\GitClientModels\GitRemoteRepository.cs" />
     <Compile Include="Models\GitClientModels\GitUser.cs" />
     <Compile Include="Models\Result.cs" />

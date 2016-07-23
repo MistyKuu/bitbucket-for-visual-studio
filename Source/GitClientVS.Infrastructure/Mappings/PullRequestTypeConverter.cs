@@ -11,8 +11,24 @@ namespace GitClientVS.Infrastructure.Mappings
         public GitPullRequest Convert(PullRequest source, GitPullRequest destination, ResolutionContext context)
         {
             var gitPullRequest = new GitPullRequest(source.Title, source.Description, source.Source.Branch.Name,
-                source.Destination.Branch.Name, source.Source.Repository.Name);
+                source.Destination.Branch.Name);
             gitPullRequest.Id = source.Id.ToString();
+
+            //todo how
+            if (source.State == PullRequestOptions.DECLINED)
+            {
+                gitPullRequest.Status = GitPullRequestStatus.Declined;
+            }
+            else if (source.State == PullRequestOptions.MERGED)
+            {
+                gitPullRequest.Status = GitPullRequestStatus.Merged;
+            }
+            else
+            {
+                gitPullRequest.Status = GitPullRequestStatus.Open;
+            }
+
+
             return gitPullRequest;
         }
 

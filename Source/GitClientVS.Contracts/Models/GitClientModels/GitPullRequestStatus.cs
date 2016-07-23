@@ -1,7 +1,9 @@
 ﻿namespace GitClientVS.Contracts.Models.GitClientModels
 {
-    public class GitPullRequestStatus
+    public enum GitPullRequestStatus
     {
-        
+        Merged,
+        Open,
+        Declined
     }
 }

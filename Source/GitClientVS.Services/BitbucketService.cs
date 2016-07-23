@@ -57,11 +57,44 @@ namespace GitClientVS.Services
             return Mapper.Map<Repository, GitRemoteRepository>(result);
         }
 
-        public async Task<IEnumerable<GitPullRequest>> GetPullRequests()
+        public async Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName)
         {
             //todo put real repository name
-            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests("repositoryName");
+            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests(repositoryName);
             return Mapper.Map<List<PullRequest>, List<GitPullRequest>>(pullRequests.Values);
+        }
+
+        public async Task<IEnumerable<GitPullRequest>> GetPullRequests(GitPullRequestStatus gitPullRequestStatus, string repositoryName)
+        {
+            PullRequestOptions option = PullRequestOptions.OPEN;
+            if (gitPullRequestStatus == GitPullRequestStatus.Declined)
+            {
+                option = PullRequestOptions.DECLINED;
+            } else if (gitPullRequestStatus == GitPullRequestStatus.Merged)
+            {
+                option = PullRequestOptions.MERGED;
+            } else if (gitPullRequestStatus == GitPullRequestStatus.Open)
+            {
+                option = PullRequestOptions.OPEN;
+            }
+            // todo: how better   
+            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests(repositoryName, option);
+            return Mapper.Map<List<PullRequest>, List<GitPullRequest>>(pullRequests.Values);
+        }
+
+        public async Task<IEnumerable<GitBranch>> GetBranches(string repoName)
+        {
+            var repositories = await _bitbucketClient.RepositoriesClient.GetBranches(repoName);
+            return Mapper.Map<List<Branch>, List<GitBranch>>(repositories.Values);
+        }
+
+        public async Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName)
+        {
+            var responsePullRequest =
+                await
+                    _bitbucketClient.PullRequestsClient.CreatePullRequest(
+                        Mapper.Map<GitPullRequest, PullRequest>(gitPullRequest), repositoryName);
+            return Mapper.Map<PullRequest, GitPullRequest>(responsePullRequest);
         }
 
         public void Logout()

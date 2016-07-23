@@ -12,10 +12,35 @@ namespace GitClientVS.Infrastructure.Mappings
             var pullRequest = new PullRequest();
             pullRequest.Title = source.Title;
             pullRequest.Description = source.Description;
-            pullRequest.Source.Branch.Name = source.SourceBranch;
-            pullRequest.Destination.Branch.Name = source.DestinationBranch;
-            pullRequest.Source.Repository.Name = source.RepoName;
+
+            //todo how
+            if (source.Status == GitPullRequestStatus.Declined)
+            {
+                pullRequest.State = PullRequestOptions.DECLINED;
+            } else if (source.Status == GitPullRequestStatus.Merged)
+            {
+                pullRequest.State = PullRequestOptions.MERGED;
+            } else 
+            {
+                pullRequest.State = PullRequestOptions.OPEN;
+            }
           
+
+            pullRequest.Source = new Source
+            {
+                Branch = new Branch()
+                {
+                    Name = source.SourceBranch
+                },
+            };
+            pullRequest.Destination = new Source()
+            {
+                Branch = new Branch()
+                {
+                    Name = source.DestinationBranch
+                }
+            };
+
             return pullRequest;
         }
 
