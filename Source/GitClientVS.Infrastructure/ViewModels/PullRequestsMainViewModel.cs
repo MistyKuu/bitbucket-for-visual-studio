@@ -27,10 +27,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         public IEnumerable<GitPullRequest> GitPullRequests
         {
             get { return _gitPullRequests; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _gitPullRequests, value);
-            }
+            set { this.RaiseAndSetIfChanged(ref _gitPullRequests, value); }
         }
 
         public string ErrorMessage
@@ -63,7 +60,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadPullRequests()
         {
-            var c = await _gitClientService.GetPullRequests("TEST");
+            GitPullRequests = await _gitClientService.GetPullRequests("Test");
         }
 
         private IObservable<bool> CanLoadPullRequests()

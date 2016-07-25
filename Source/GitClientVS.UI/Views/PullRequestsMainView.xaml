@@ -3,9 +3,49 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
+             xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
+             xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
+             xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance viewModels:PullRequestsMainViewModel,IsDesignTimeCreatable=False}" 
+             >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    
     <Grid>
-        <TextBlock Text="test"/>
+        <Grid.Resources>
+            <DataTemplate x:Key="PullRequestTemplate" DataType="gitClientModels:GitPullRequest">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Text="{Binding Author}" Grid.Row="0" Grid.Column="0"/>
+                    <TextBlock Text="{Binding Title}" Grid.Row="1" Grid.Column="0"/>
+                    <TextBlock Text="{Binding Description}" Grid.Row="2" Grid.Column="0"/>
+                    
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
+        
+        <controls:ProgressRing x:Name="ProgressRing" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsLoading,Converter={converters:BoolToVisibilityConverter}}"/>
+        <Grid Margin="20" Visibility="{Binding ElementName=ProgressRing,Path=Visibility,Converter={converters:NegateVisibilityConverter}}">
+         <ListView ItemsSource="{Binding GitPullRequests}" ItemTemplate="{StaticResource PullRequestTemplate}"/>
+        </Grid>
     </Grid>
 </UserControl>
