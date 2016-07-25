@@ -22,6 +22,7 @@ using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Events;
+using GitClientVS.Infrastructure.Extensions;
 using log4net;
 using log4net.Config;
 
@@ -51,11 +52,14 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
         }
 
+
+
         public string ErrorMessage
         {
             get { return _errorMessage; }
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
+
         public IEnumerable<GitRemoteRepository> Repositories
         {
             get { return _repositories; }
@@ -79,6 +83,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand CloneCommand => _cloneCommand;
         public ICommand ChoosePathCommand => _choosePathCommand;
         public ICommand InitializeCommand => _initializeCommand;
+        public IEnumerable<IReactiveCommand> CatchableCommands => new[] { _cloneCommand, _initializeCommand };
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _cloneCommand, _initializeCommand };
 
         [ImportingConstructor]
         public CloneRepositoriesDialogViewModel(
@@ -99,22 +105,17 @@ namespace GitClientVS.Infrastructure.ViewModels
             ClonePath = Paths.DefaultRepositoryPath;
 
             SetupObservables();
+            this.CatchCommandErrors();
+            this.SetupLoadingCommands();
         }
-
-
 
         private void SetupObservables()
         {
             _cloneCommand.Subscribe(_ => OnClose());
-            _cloneCommand.ThrownExceptions.Subscribe(OnError);
-            _initializeCommand.ThrownExceptions.Subscribe(OnError);
             _choosePathCommand.Subscribe(_ => ChooseClonePath());
-
-            _cloneCommand.IsExecuting.Merge(_initializeCommand.IsExecuting).Subscribe(x =>
-            {
-                IsLoading = x;
-            });
         }
+
+
 
         private void ChooseClonePath()
         {
@@ -123,10 +124,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 ClonePath = result.Data;
         }
 
-        private void OnError(Exception ex)
-        {
-            ErrorMessage = ex.Message;
-        }
+
 
         private async Task Clone()
         {

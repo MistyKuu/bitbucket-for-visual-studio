@@ -22,6 +22,7 @@ using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Events;
+using GitClientVS.Infrastructure.Extensions;
 using log4net;
 using log4net.Config;
 
@@ -48,6 +49,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _errorMessage; }
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
+
+        public IEnumerable<IReactiveCommand> CatchableCommands => new [] { _createCommand };
 
         [Required]
         public string LocalPath
@@ -93,18 +96,14 @@ namespace GitClientVS.Infrastructure.ViewModels
             LocalPath = Paths.DefaultRepositoryPath;
 
             SetupObservables();
+            this.CatchCommandErrors();
         }
 
         private void SetupObservables()
         {
             _createCommand.Subscribe(_ => OnClose());
-            _createCommand.ThrownExceptions.Subscribe(OnError);
         }
 
-        private void OnError(Exception ex)
-        {
-            ErrorMessage = ex.Message;
-        }
 
         private async Task Create()
         {

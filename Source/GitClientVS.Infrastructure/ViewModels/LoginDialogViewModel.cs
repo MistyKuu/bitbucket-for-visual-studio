@@ -20,6 +20,7 @@ using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure.Events;
+using GitClientVS.Infrastructure.Extensions;
 using log4net;
 using log4net.Config;
 
@@ -48,13 +49,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Connect());
             _connectCommand.Subscribe(_ => OnClose());
-            _connectCommand.ThrownExceptions.Subscribe(OnError);
+            this.CatchCommandErrors();
         }
 
-        private void OnError(Exception ex)
-        {
-            ErrorMessage = ex.Message;
-        }
+        public IEnumerable<IReactiveCommand> CatchableCommands => new [] { _connectCommand };
+
 
         private async Task Connect()
         {
@@ -91,6 +90,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _errorMessage; }
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
+
+
 
 
         protected void OnClose()
