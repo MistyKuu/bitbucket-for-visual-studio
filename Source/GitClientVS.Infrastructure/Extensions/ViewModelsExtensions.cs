@@ -12,7 +12,7 @@ namespace GitClientVS.Infrastructure.Extensions
     {
         public static void CatchCommandErrors(this IViewModelWithErrorMessage vm)
         {
-            foreach (var reactiveCommand in vm.CatchableCommands)
+            foreach (var reactiveCommand in vm.ThrowableCommands)
                 reactiveCommand.ThrownExceptions.Subscribe((ex) => vm.ErrorMessage = ex.Message);
         }
 

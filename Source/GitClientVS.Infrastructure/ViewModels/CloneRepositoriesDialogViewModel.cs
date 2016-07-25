@@ -35,9 +35,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IFileService _fileService;
-        private readonly ReactiveCommand<Unit> _cloneCommand;
-        private readonly ReactiveCommand<object> _choosePathCommand;
-        private readonly ReactiveCommand<Unit> _initializeCommand;
+        private ReactiveCommand<Unit> _cloneCommand;
+        private ReactiveCommand<object> _choosePathCommand;
+        private ReactiveCommand<Unit> _initializeCommand;
         private IEnumerable<GitRemoteRepository> _repositories;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _errorMessage;
@@ -83,7 +83,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand CloneCommand => _cloneCommand;
         public ICommand ChoosePathCommand => _choosePathCommand;
         public ICommand InitializeCommand => _initializeCommand;
-        public IEnumerable<IReactiveCommand> CatchableCommands => new[] { _cloneCommand, _initializeCommand };
+
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _cloneCommand, _initializeCommand };
         public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _cloneCommand, _initializeCommand };
 
         [ImportingConstructor]
@@ -96,17 +97,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _gitService = gitService;
             _fileService = fileService;
+            ClonePath = Paths.DefaultRepositoryPath;
+            SetupObservables();
+        }
 
+        public void InitializeCommands()
+        {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(CanRefreshObservable(), _ => RefreshRepositories());
             _cloneCommand = ReactiveCommand.CreateAsyncTask(CanExecuteCloneObservable(), _ => Clone());
-
             _choosePathCommand = ReactiveCommand.Create(Observable.Return(true));
-
-            ClonePath = Paths.DefaultRepositoryPath;
-
-            SetupObservables();
-            this.CatchCommandErrors();
-            this.SetupLoadingCommands();
         }
 
         private void SetupObservables()
@@ -114,8 +113,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             _cloneCommand.Subscribe(_ => OnClose());
             _choosePathCommand.Subscribe(_ => ChooseClonePath());
         }
-
-
 
         private void ChooseClonePath()
         {
@@ -161,5 +158,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         public event EventHandler Closed;
+
     }
 }

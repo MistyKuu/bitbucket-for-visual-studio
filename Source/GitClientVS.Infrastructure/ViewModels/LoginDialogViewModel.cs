@@ -20,7 +20,6 @@ using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure.Events;
-using GitClientVS.Infrastructure.Extensions;
 using log4net;
 using log4net.Config;
 
@@ -30,30 +29,40 @@ namespace GitClientVS.Infrastructure.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class LoginDialogViewModel : ViewModelBase, ILoginDialogViewModel
     {
-        private readonly IGitClientService _bucketService;
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitClientService _gitClientService;
         private string _login;
         private string _password;
-        private readonly ReactiveCommand<Unit> _connectCommand;
+        private ReactiveCommand<Unit> _connectCommand;
         private string _errorMessage;
+        private bool _isLoading;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-
         public ICommand ConnectCommand => _connectCommand;
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new List<IReactiveCommand> { _connectCommand };
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _connectCommand };
+
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
+        }
+
 
         [ImportingConstructor]
         public LoginDialogViewModel(IEventAggregatorService eventAggregator, IGitClientService gitClientService)
         {
             _eventAggregator = eventAggregator;
             _gitClientService = gitClientService;
-            _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Connect());
+
             _connectCommand.Subscribe(_ => OnClose());
-            this.CatchCommandErrors();
         }
 
-        public IEnumerable<IReactiveCommand> CatchableCommands => new [] { _connectCommand };
 
+        public void InitializeCommands()
+        {
+            _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Connect());
+        }
 
         private async Task Connect()
         {
@@ -90,7 +99,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _errorMessage; }
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
-
 
 
 

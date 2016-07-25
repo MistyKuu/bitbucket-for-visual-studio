@@ -8,9 +8,9 @@ using ReactiveUI;
 
 namespace GitClientVS.Contracts.Interfaces
 {
-    public interface IViewModelWithErrorMessage
+    public interface IViewModelWithErrorMessage : IViewModelWithCommands
     {
         string ErrorMessage { get; set; }
-        IEnumerable<IReactiveCommand> CatchableCommands { get; }
+        IEnumerable<IReactiveCommand> ThrowableCommands { get; }
     }
 }

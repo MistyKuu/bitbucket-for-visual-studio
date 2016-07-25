@@ -76,6 +76,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Interfaces\IViewModelWithCommands.cs" />
     <Compile Include="Interfaces\IViewModelWithErrorMessage.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestsMainViewModel.cs" />
     <Compile Include="Interfaces\Views\ICreateRepositoriesDialogView.cs" />

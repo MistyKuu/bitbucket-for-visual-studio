@@ -22,7 +22,6 @@ using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Events;
-using GitClientVS.Infrastructure.Extensions;
 using log4net;
 using log4net.Config;
 
@@ -35,7 +34,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IFileService _fileService;
-        private readonly ReactiveCommand<Unit> _createCommand;
+        private ReactiveCommand<Unit> _createCommand;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _errorMessage;
         private GitRemoteRepository _repository;
@@ -50,7 +49,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
-        public IEnumerable<IReactiveCommand> CatchableCommands => new [] { _createCommand };
+     
 
         [Required]
         public string LocalPath
@@ -80,6 +79,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
         public ICommand CreateCommand => _createCommand;
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new List<IReactiveCommand> { _createCommand };
 
         [ImportingConstructor]
         public CreateRepositoriesDialogViewModel(
@@ -91,12 +91,14 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _gitService = gitService;
             _fileService = fileService;
-            _createCommand = ReactiveCommand.CreateAsyncTask(CanExecuteCreateObservable(), _ => Create());
-
             LocalPath = Paths.DefaultRepositoryPath;
 
             SetupObservables();
-            this.CatchCommandErrors();
+        }
+
+        public void InitializeCommands()
+        {
+            _createCommand = ReactiveCommand.CreateAsyncTask(CanExecuteCreateObservable(), _ => Create());
         }
 
         private void SetupObservables()
@@ -129,5 +131,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         public event EventHandler Closed;
+     
     }
 }

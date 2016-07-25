@@ -19,13 +19,10 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class PullRequestsMainViewModel : ViewModelBase, IPullRequestsMainViewModel
     {
         private readonly IGitClientService _gitClientService;
-        private readonly ReactiveCommand<IEnumerable<GitPullRequest>> _initializeCommand;
+        private ReactiveCommand<Unit> _initializeCommand;
         private bool _isLoading;
         private IEnumerable<GitPullRequest> _gitPullRequests;
         private string _errorMessage;
-
-
-        public ICommand InitializeCommand => _initializeCommand;
 
         public IEnumerable<GitPullRequest> GitPullRequests
         {
@@ -42,8 +39,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
-        public IEnumerable<IReactiveCommand> CatchableCommands => new List<IReactiveCommand>() { _initializeCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] {  _initializeCommand };
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand };
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand };
 
         public bool IsLoading
         {
@@ -51,29 +48,29 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
         }
 
+        public ICommand InitializeCommand => _initializeCommand;
+
         [ImportingConstructor]
         public PullRequestsMainViewModel(IGitClientService gitClientService)
         {
             _gitClientService = gitClientService;
+        }
+
+        public void InitializeCommands()
+        {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), _ => LoadPullRequests());
-            SetupObservables();
-            this.CatchCommandErrors();
-            this.SetupLoadingCommands();
         }
 
-        private void SetupObservables()
+        private async Task LoadPullRequests()
         {
-            _initializeCommand.ToProperty(this, x => x.GitPullRequests);
-        }
-
-        private async Task<IEnumerable<GitPullRequest>> LoadPullRequests()
-        {
-            return await _gitClientService.GetPullRequests("TEST");
+            var c = await _gitClientService.GetPullRequests("TEST");
         }
 
         private IObservable<bool> CanLoadPullRequests()
         {
             return Observable.Return(true);
         }
+
+
     }
 }
