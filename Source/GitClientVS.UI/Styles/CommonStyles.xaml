@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls">
+    <Style x:Key="DefaultMetroWindowStyle" TargetType="controls:MetroWindow" BasedOn="{StaticResource {x:Type controls:MetroWindow}}">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Topmost" Value="True"/>
+        <Setter Property="ResizeMode" Value="NoResize"/>
+    </Style>
+</ResourceDictionary>

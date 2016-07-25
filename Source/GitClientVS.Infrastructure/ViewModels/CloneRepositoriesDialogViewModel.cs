@@ -34,13 +34,22 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IFileService _fileService;
-        private readonly ReactiveCommand<object> _cloneCommand;
+        private readonly ReactiveCommand<Unit> _cloneCommand;
         private readonly ReactiveCommand<object> _choosePathCommand;
+        private readonly ReactiveCommand<Unit> _initializeCommand;
         private IEnumerable<GitRemoteRepository> _repositories;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _errorMessage;
         private GitRemoteRepository _selectedRepository;
         private string _clonePath;
+        private bool _isLoading;
+
+
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
+        }
 
         public string ErrorMessage
         {
@@ -69,6 +78,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public ICommand CloneCommand => _cloneCommand;
         public ICommand ChoosePathCommand => _choosePathCommand;
+        public ICommand InitializeCommand => _initializeCommand;
 
         [ImportingConstructor]
         public CloneRepositoriesDialogViewModel(
@@ -80,20 +90,30 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _gitService = gitService;
             _fileService = fileService;
-            _cloneCommand = ReactiveCommand.Create(CanExecuteCloneObservable());
+
+            _initializeCommand = ReactiveCommand.CreateAsyncTask(CanRefreshObservable(), _ => RefreshRepositories());
+            _cloneCommand = ReactiveCommand.CreateAsyncTask(CanExecuteCloneObservable(), _ => Clone());
+
             _choosePathCommand = ReactiveCommand.Create(Observable.Return(true));
 
-            ClonePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory), "Source", "Repos");
+            ClonePath = Paths.DefaultRepositoryPath;
 
             SetupObservables();
         }
 
+
+
         private void SetupObservables()
         {
-            _cloneCommand.Subscribe(_ => Clone());
             _cloneCommand.Subscribe(_ => OnClose());
             _cloneCommand.ThrownExceptions.Subscribe(OnError);
+            _initializeCommand.ThrownExceptions.Subscribe(OnError);
             _choosePathCommand.Subscribe(_ => ChooseClonePath());
+
+            _cloneCommand.IsExecuting.Merge(_initializeCommand.IsExecuting).Subscribe(x =>
+            {
+                IsLoading = x;
+            });
         }
 
         private void ChooseClonePath()
@@ -103,21 +123,23 @@ namespace GitClientVS.Infrastructure.ViewModels
                 ClonePath = result.Data;
         }
 
-        public async Task InitializeAsync()
-        {
-            await RefreshRepositories();
-        }
-
         private void OnError(Exception ex)
         {
             ErrorMessage = ex.Message;
         }
 
-        private void Clone()
+        private async Task Clone()
         {
-            _gitService.CloneRepository(SelectedRepository.CloneUrl, SelectedRepository.Name, ClonePath);
+            await Task.Run(() =>
+            {
+                _gitService.CloneRepository(SelectedRepository.CloneUrl, SelectedRepository.Name, ClonePath);
+            });
         }
 
+        private IObservable<bool> CanRefreshObservable()
+        {
+            return this.WhenAnyValue(x => x.IsLoading).Select(x => !x);
+        }
 
         private async Task RefreshRepositories()
         {
@@ -134,8 +156,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             return IsObjectValid();
         }
-
-
 
         protected void OnClose()
         {

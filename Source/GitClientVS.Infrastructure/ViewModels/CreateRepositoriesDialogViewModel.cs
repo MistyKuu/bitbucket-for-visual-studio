@@ -90,7 +90,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _fileService = fileService;
             _createCommand = ReactiveCommand.CreateAsyncTask(CanExecuteCreateObservable(), _ => Create());
 
-            LocalPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory), "Source", "Repos");
+            LocalPath = Paths.DefaultRepositoryPath;
 
             SetupObservables();
         }

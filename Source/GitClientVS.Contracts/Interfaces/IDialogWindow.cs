@@ -2,6 +2,6 @@
 {
     public interface IDialogWindow : IView
     {
-        bool? ShowModal();
+        bool? ShowDialog();
 }
 }

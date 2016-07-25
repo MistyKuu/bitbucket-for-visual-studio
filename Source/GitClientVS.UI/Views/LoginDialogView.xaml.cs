@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using MahApps.Metro.Controls;
 using Microsoft.VisualStudio.PlatformUI;
 
 namespace GitClientVS.UI.Views
@@ -25,15 +26,15 @@ namespace GitClientVS.UI.Views
     /// </summary>
     [Export(typeof(ILoginDialogView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class LoginDialogView : DialogWindow, ILoginDialogView
+    public partial class LoginDialogView : MetroWindow, ILoginDialogView
     {
         [ImportingConstructor]
         public LoginDialogView(ILoginDialogViewModel vm)
         {
             InitializeComponent();
             DataContext = vm;
+            Owner = Application.Current.MainWindow;
             vm.Closed += delegate { Close(); };
         }
-
     }
 }

@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using MahApps.Metro.Controls;
 using Microsoft.VisualStudio.PlatformUI;
 
 namespace GitClientVS.UI.Views
@@ -25,7 +26,7 @@ namespace GitClientVS.UI.Views
     /// </summary>
     [Export(typeof(ICloneRepositoriesDialogView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class CloneRepositoriesDialogView : DialogWindow, ICloneRepositoriesDialogView
+    public partial class CloneRepositoriesDialogView : MetroWindow, ICloneRepositoriesDialogView
     {
         private readonly ICloneRepositoriesDialogViewModel _vm;
 
@@ -36,12 +37,13 @@ namespace GitClientVS.UI.Views
             DataContext = vm;
             _vm = vm;
             vm.Closed += delegate { Close(); };
+            Owner = Application.Current.MainWindow;
             Loaded += CloneRepositoriesView_Loaded;
         }
 
-        private async void CloneRepositoriesView_Loaded(object sender, EventArgs e)
+        private void CloneRepositoriesView_Loaded(object sender, EventArgs e)
         {
-            await _vm.InitializeAsync();
+            _vm.InitializeCommand.Execute(null);
         }
     }
 }

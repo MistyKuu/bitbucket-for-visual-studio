@@ -71,9 +71,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private void SetupObservables()
         {
-            _openLoginCommand.Subscribe(_ => _loginViewFactory.CreateExport().Value.ShowModal());
-            _openCreateCommand.Subscribe(_ => _createRepoViewFactory.CreateExport().Value.ShowModal());
-            _openCloneCommand.Subscribe(_ => _cloneRepoViewFactory.CreateExport().Value.ShowModal());
+            _openLoginCommand.Subscribe(_ => _loginViewFactory.CreateExport().Value.ShowDialog());
+            _openCreateCommand.Subscribe(_ => _createRepoViewFactory.CreateExport().Value.ShowDialog());
+            _openCloneCommand.Subscribe(_ => _cloneRepoViewFactory.CreateExport().Value.ShowDialog());
             _logoutCommand.Subscribe(_ => { _gitClientService.Logout(); });
 
             _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);

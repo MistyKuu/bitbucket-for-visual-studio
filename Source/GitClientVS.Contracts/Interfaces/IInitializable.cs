@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace GitClientVS.Contracts.Interfaces
 {
-    public interface IInitializable<in T>
-    {
-        Task InitializeAsync(T param);
-    }
-
     public interface IInitializable
     {
-        Task InitializeAsync();
+        ICommand InitializeCommand { get; }
     }
 }

@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using MahApps.Metro.Controls;
 using Microsoft.VisualStudio.PlatformUI;
 
 namespace GitClientVS.UI.Views
@@ -25,7 +26,7 @@ namespace GitClientVS.UI.Views
     /// </summary>
     [Export(typeof(ICreateRepositoriesDialogView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class CreateRepositoriesDialogView : DialogWindow, ICreateRepositoriesDialogView
+    public partial class CreateRepositoriesDialogView : MetroWindow, ICreateRepositoriesDialogView
     {
 
         [ImportingConstructor]
@@ -33,6 +34,7 @@ namespace GitClientVS.UI.Views
         {
             InitializeComponent();
             DataContext = vm;
+            Owner = Application.Current.MainWindow;
             vm.Closed += delegate { Close(); };
         }
     }
