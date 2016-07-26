@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.UI;
 using GitClientVS.VisualStudio.UI.Pages;
 using GitClientVS.VisualStudio.UI.TeamFoundation;
@@ -18,11 +19,13 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class PullRequestNavigationItem : TeamExplorerBaseNavigationItem
     {
+        private readonly IPageNavigationService _navigationService;
         public const string PullRequestsNavigationItemId = "4269bd3b-7f80-4463-978e-8a1c9431c362";
 
         [ImportingConstructor]
-        public PullRequestNavigationItem([Import(typeof(SVsServiceProvider))] IServiceProvider serviceProvider) : base(serviceProvider)
+        public PullRequestNavigationItem(IPageNavigationService navigationService) : base(null)
         {
+            _navigationService = navigationService;
             Text = Resources.PullRequestNavigationItemTitle;
             Image = Resources.luki;
             //TODO theme changed
@@ -31,8 +34,7 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
 
         public override void Execute()
         {
-            var service = this.GetService<ITeamExplorer>();
-            service?.NavigateToPage(new Guid(PullRequestsMainPage.PageId), null);
+            _navigationService.Navigate(PullRequestsMainPage.PageId);
         }
     }
 }
