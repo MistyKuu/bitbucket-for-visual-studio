@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using BitBucket.REST.API.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
+using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.Infrastructure.Mappings;
 using NUnit.Framework;
 
@@ -36,7 +37,7 @@ namespace GitClientVS.Services.Tests
                 }
             };
 
-            var remoteRepository = Mapper.Map<Repository, GitRemoteRepository>(repository);
+            var remoteRepository = repository.MapTo<GitRemoteRepository>();
 
             Assert.AreEqual(repository.Name, remoteRepository.Name);
             Assert.AreEqual(repository.Links.Clone.First().Href, remoteRepository.CloneUrl);
