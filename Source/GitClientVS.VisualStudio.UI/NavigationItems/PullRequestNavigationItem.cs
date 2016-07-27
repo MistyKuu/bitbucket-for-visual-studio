@@ -47,7 +47,7 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
             _userInformationService = userInformationService;
             Text = Resources.PullRequestNavigationItemTitle;
             Image = Resources.luki;
-            IsVisible = ShouldBeVisible(_userInformationService.ConnectionData);
+           // IsVisible = ShouldBeVisible(_userInformationService.ConnectionData);
 
             _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
         }
