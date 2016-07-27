@@ -12,7 +12,7 @@ using GitClientVS.Infrastructure.Events;
 namespace GitClientVS.Services
 {
     [Export(typeof(IUserInformationService))]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
+    [PartCreationPolicy(CreationPolicy.Shared)]
     public class UserInformationService : IUserInformationService
     {
         private readonly IStorageService _storageService;

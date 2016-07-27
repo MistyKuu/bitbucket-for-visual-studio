@@ -19,7 +19,7 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         Task<IEnumerable<GitPullRequest>> GetPullRequests(GitPullRequestStatus gitPullRequestStatus,
             string repositoryName);
 
-        bool IsBitbucketRepo(GitRemoteRepository gitRemoteRepository);
+        bool IsOriginRepo(GitRemoteRepository gitRemoteRepository);
 
         Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName);
     }

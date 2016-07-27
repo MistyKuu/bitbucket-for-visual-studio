@@ -47,16 +47,15 @@ namespace GitClientVS.Services
 
         public async Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync()
         {
-
             var repositories = await _bitbucketClient.RepositoriesClient.GetRepositories();
             return repositories.Values.MapTo<List<GitRemoteRepository>>();
         }
 
 
-        public bool IsBitbucketRepo(GitRemoteRepository gitRemoteRepository)
+        public bool IsOriginRepo(GitRemoteRepository gitRemoteRepository)
         {
             Uri uri = new Uri(gitRemoteRepository.CloneUrl);
-            return uri.Host.Equals("https://bitbucket.org", StringComparison.OrdinalIgnoreCase);
+            return uri.Host.Contains("bitbucket.org", StringComparison.OrdinalIgnoreCase);
         }
 
         public async Task<GitRemoteRepository> CreateRepositoryAsync(GitRemoteRepository newRepository)
