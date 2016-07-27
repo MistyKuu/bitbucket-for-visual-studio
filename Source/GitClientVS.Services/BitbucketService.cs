@@ -50,6 +50,13 @@ namespace GitClientVS.Services
             return Mapper.Map<List<Repository>, List<GitRemoteRepository>>(repositories.Values);
         }
 
+
+        public bool IsBitbucketRepo(GitRemoteRepository gitRemoteRepository)
+        {
+            Uri uri = new Uri(gitRemoteRepository.CloneUrl);
+            return uri.Host.Equals("https://bitbucket.org", StringComparison.OrdinalIgnoreCase);
+        }
+
         public async Task<GitRemoteRepository> CreateRepositoryAsync(GitRemoteRepository newRepository)
         {
             var repository = Mapper.Map<GitRemoteRepository, Repository>(newRepository);
