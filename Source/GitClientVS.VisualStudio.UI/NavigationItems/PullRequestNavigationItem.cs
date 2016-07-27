@@ -46,8 +46,8 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
             _eventAggregator = eventAggregator;
             _userInformationService = userInformationService;
             Text = Resources.PullRequestNavigationItemTitle;
-            Image = Resources.luki;
-           // IsVisible = ShouldBeVisible(_userInformationService.ConnectionData);
+            //Image = Resources.luki;
+           // IsVisible = ShouldBeVisible(_userInformationService.ConnectionData); TODO activerepository changed + uncomment when development done
 
             _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
         }
@@ -60,6 +60,7 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
         private bool ShouldBeVisible(ConnectionData connectionData)
         {
             return _gitClientService.IsOriginRepo(_gitService.GetActiveRepository()) && connectionData.IsLoggedIn;
+            //TODO if its private i wont be able to see it if not logged in as the user of repo.
         }
 
         public override void Execute()

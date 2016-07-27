@@ -43,6 +43,7 @@ namespace GitClientVS.VisualStudio.UI
             {
                 cfg.AddProfile<GitMappingsProfile>();
             });
+
         }
 
         private async Task GitClientLogin(Result<ConnectionData> result)

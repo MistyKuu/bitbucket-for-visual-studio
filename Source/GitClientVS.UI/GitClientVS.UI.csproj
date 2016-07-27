@@ -62,7 +62,6 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AttachedProperties\TouchTracker.cs" />
     <Compile Include="Bindings\ValidatedBinding.cs" />
     <Compile Include="Controls\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
@@ -185,7 +184,9 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="AttachedProperties\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Resources\Entypo.ttf" />

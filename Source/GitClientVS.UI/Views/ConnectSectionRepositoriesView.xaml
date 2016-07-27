@@ -33,6 +33,6 @@
             </DataTemplate>
         </Grid.Resources>
         
-        <ListView ItemsSource="{Binding Repositories}" ItemTemplate="{StaticResource RepositoryDateTemplate}" />
+        <!--<ListView ItemsSource="{Binding Repositories}" ItemTemplate="{StaticResource RepositoryDateTemplate}" />-->
     </Grid>
 </UserControl>

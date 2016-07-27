@@ -6,7 +6,6 @@
              xmlns:platformUi="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.11.0"
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
-             xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
              xmlns:ui="clr-namespace:GitClientVS.UI"
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"

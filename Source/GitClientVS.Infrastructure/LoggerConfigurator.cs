@@ -20,17 +20,17 @@ namespace GitClientVS.Infrastructure
 
             var patternLayout = new PatternLayout
             {
-                ConversionPattern = "%date [%thread] %-5level %logger - %message%newline"
+                ConversionPattern = "%date [%thread] %-5level %logger [%property{NDC}] - %message%newline"
             };
 
             patternLayout.ActivateOptions();
 
             var roller = new RollingFileAppender
             {
-                AppendToFile = false,
+                AppendToFile = true,
                 File = Paths.GitClientLogFilePath,
                 Layout = patternLayout,
-                MaxSizeRollBackups = 5,
+                MaxSizeRollBackups = 10,
                 MaximumFileSize = "1GB",
                 RollingStyle = RollingFileAppender.RollingMode.Size,
                 StaticLogFileName = true

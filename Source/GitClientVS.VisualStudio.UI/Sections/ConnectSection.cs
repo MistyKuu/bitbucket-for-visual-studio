@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using GitClientVS.UI.Views;
 using Microsoft.TeamFoundation.Controls;
 using Microsoft.TeamFoundation.MVVM;
@@ -49,8 +50,13 @@ namespace GitClientVS.VisualStudio.UI.Sections
             _appInitializer = appInitializer;
             _appServiceProvider = appServiceProvider;
             Title = gitClient.Title;
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
         }
 
+        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+           
+        }
 
         public override async void Initialize(object sender, SectionInitializeEventArgs e)
         {

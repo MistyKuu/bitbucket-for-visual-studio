@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
@@ -19,6 +20,7 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class PullRequestsMainViewModel : ViewModelBase, IPullRequestsMainViewModel
     {
         private readonly IGitClientService _gitClientService;
+        private readonly IGitService _gitService;
         private ReactiveCommand<Unit> _initializeCommand;
         private bool _isLoading;
         private IEnumerable<GitPullRequest> _gitPullRequests;
@@ -48,9 +50,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand InitializeCommand => _initializeCommand;
 
         [ImportingConstructor]
-        public PullRequestsMainViewModel(IGitClientService gitClientService)
+        public PullRequestsMainViewModel(IGitClientService gitClientService, IGitService gitService)
         {
             _gitClientService = gitClientService;
+            _gitService = gitService;
         }
 
         public void InitializeCommands()
@@ -60,7 +63,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadPullRequests()
         {
-            GitPullRequests = await _gitClientService.GetPullRequests("Test");
+            GitPullRequests = await _gitClientService.GetPullRequests(_gitService.GetActiveRepository().Name);
         }
 
         private IObservable<bool> CanLoadPullRequests()
