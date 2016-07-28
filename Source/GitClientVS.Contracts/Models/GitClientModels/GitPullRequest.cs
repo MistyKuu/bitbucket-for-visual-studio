@@ -8,7 +8,8 @@
         public string DestinationBranch { get; set; }
         public GitPullRequestStatus Status { get; set; }
         public string Id { get; set; }
-        public string Author { get; set; }
+        public GitUser Author { get; set; }
+        public string CreationDate { get; set; }
 
         public GitPullRequest(string title, string description, string sourceBranch, string destinationBranch)
         {

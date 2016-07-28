@@ -59,7 +59,8 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
 
         private bool ShouldBeVisible(ConnectionData connectionData)
         {
-            return _gitClientService.IsOriginRepo(_gitService.GetActiveRepository()) && connectionData.IsLoggedIn;
+            return true;
+           // return _gitClientService.IsOriginRepo(_gitService.GetActiveRepository()) && connectionData.IsLoggedIn;
             //TODO if its private i wont be able to see it if not logged in as the user of repo.
         }
 

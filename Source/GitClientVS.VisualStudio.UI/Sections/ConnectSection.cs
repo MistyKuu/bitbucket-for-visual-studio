@@ -33,7 +33,6 @@ namespace GitClientVS.VisualStudio.UI.Sections
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class ConnectSection : TeamExplorerBaseSection
     {
-        private readonly IAppInitializer _appInitializer;
         private readonly IAppServiceProvider _appServiceProvider;
         private ITeamExplorerSection _section;
         private const string Id = "a6701970-28da-42ee-a0f4-9e02f486de2c";
