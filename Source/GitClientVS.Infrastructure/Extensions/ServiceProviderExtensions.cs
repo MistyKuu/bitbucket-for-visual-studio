@@ -16,5 +16,7 @@ namespace GitClientVS.Infrastructure.Extensions
         {
             return serviceProvider.GetService(typeof(TChild)) as TBase;
         }
+        
+
     }
 }
