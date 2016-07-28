@@ -60,8 +60,6 @@ namespace GitClientVS.VisualStudio.UI
 
         public GitClientVSPackage()
         {
-            Logger.Info("Creating GitClientVsPackage Extension");
-
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
         }
 
@@ -74,7 +72,6 @@ namespace GitClientVS.VisualStudio.UI
 
         protected override async void Initialize()
         {
-            Logger.Info("Initializing GitClientVsPackage Extension");
             AppDomain.CurrentDomain.AssemblyResolve += LoadNotLoadedAssemblies;
             base.Initialize();
 
