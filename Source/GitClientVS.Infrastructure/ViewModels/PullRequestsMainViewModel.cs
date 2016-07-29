@@ -63,7 +63,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadPullRequests()
         {
-            GitPullRequests = await _gitClientService.GetPullRequests("test");
+            GitPullRequests = await _gitClientService.GetPullRequests("django-piston", "jespern");
             //GitPullRequests = new List<GitPullRequest>()
             //{
             //    new GitPullRequest("TITLE", "DESCRIPTION", "A", "B")
