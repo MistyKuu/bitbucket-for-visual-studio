@@ -40,7 +40,7 @@
         
         <controls:ProgressRing x:Name="ProgressRing" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsLoading,Converter={converters:BoolToVisibilityConverter}}"/>
         <Grid Margin="20" Visibility="{Binding ElementName=ProgressRing,Path=Visibility,Converter={converters:NegateVisibilityConverter}}">
-         <ListView ItemsSource="{Binding GitPullRequests}" ItemTemplate="{StaticResource PullRequestTemplate}"/>
+         <ListBox ItemsSource="{Binding GitPullRequests}" ItemTemplate="{StaticResource PullRequestTemplate}"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -73,7 +73,7 @@ namespace GitClientVS.VisualStudio.UI
 
         protected override async void Initialize()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += LoadNotLoadedAssemblies;
+           AppDomain.CurrentDomain.AssemblyResolve += LoadNotLoadedAssemblies;
             base.Initialize();
 
             var componentModel = this.GetService<SComponentModel, IComponentModel>();

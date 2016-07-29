@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using BitBucket.REST.API.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
@@ -15,7 +16,7 @@ namespace GitClientVS.Infrastructure.Mappings
             {
                 Id = source.Id.ToString(),
                 Author = source.Author.MapTo<GitUser>(),
-                CreationDate = source.CreatedOn
+                CreationDate = DateTime.Parse(source.CreatedOn).ToString("F") // TODO PARSE WON"T WORK WITH ALL CULTURES FIX
             };
 
             //todo how
