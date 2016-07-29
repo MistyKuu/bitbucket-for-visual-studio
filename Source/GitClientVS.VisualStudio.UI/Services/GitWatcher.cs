@@ -25,7 +25,10 @@ namespace GitClientVS.VisualStudio.UI.Services
             syncContext = SynchronizationContext.Current;
             this.eventAggregatorService = eventAggregatorService;
             gitExt = appServiceProvider.GetService<IGitExt>();
+        }
 
+        public void Initialize()
+        {
             gitExt.PropertyChanged += CheckAndUpdate;
         }
 

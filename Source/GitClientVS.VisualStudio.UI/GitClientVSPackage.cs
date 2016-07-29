@@ -80,7 +80,9 @@ namespace GitClientVS.VisualStudio.UI
             var serviceProvider = componentModel.DefaultExportProvider;
             var appInitializer = serviceProvider.GetExportedValue<IAppInitializer>();
             var userService = serviceProvider.GetExportedValue<IUserInformationService>();
+            var gitWatcher = serviceProvider.GetExportedValue<IGitWatcher>();
             userService.StartListening();
+            gitWatcher.Initialize();
 
             await appInitializer.Initialize();
             Logger.Info("Initialized GitClientVsPackage Extension");
