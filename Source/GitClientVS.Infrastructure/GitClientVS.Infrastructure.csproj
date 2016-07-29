@@ -89,6 +89,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Events\ActiveRepositoryChangedEvent.cs" />
     <Compile Include="Events\ConnectionChangedEvent.cs" />
     <Compile Include="Extensions\ChainingExtensions.cs" />
     <Compile Include="Extensions\MapperExtensions.cs" />

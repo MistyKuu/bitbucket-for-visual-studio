@@ -14,5 +14,16 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public bool? HasIssues { get; set; }
         public bool? HasWiki { get; set; }
         public string CloneUrl { get; set; }
+
+        public GitRemoteRepository()
+        {
+            
+        }
+
+        public GitRemoteRepository(string name, string cloneUrl)
+        {
+            Name = name;
+            CloneUrl = cloneUrl;
+        }
     }
 }

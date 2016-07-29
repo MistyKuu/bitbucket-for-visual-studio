@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
+using GitClientVS.VisualStudio.UI.Extensions;
 using log4net;
 using LibGit2Sharp;
 using Microsoft.TeamFoundation.Git.Controls.Extensibility;
@@ -50,15 +51,7 @@ namespace GitClientVS.VisualStudio.UI.Services
         {
             var gitExt = _appServiceProvider.GetService<IGitExt>();
             var activeRepository = gitExt.ActiveRepositories.FirstOrDefault();
-            if (activeRepository == null) return null;
-            var repoPath = Repository.Discover(activeRepository.RepositoryPath);
-            var dir = new DirectoryInfo(activeRepository.RepositoryPath);
-            var repo = repoPath == null ? null : new Repository(repoPath);
-            if (repo == null) return null;
-            GitRemoteRepository gitRemoteRepository = new GitRemoteRepository();
-            gitRemoteRepository.CloneUrl = repo?.Network.Remotes["origin"]?.Url;
-            gitRemoteRepository.Name = dir.Name;
-            return gitRemoteRepository;
+            return activeRepository.ToModel();
         }
 
         public void CloneRepository(string cloneUrl, string repositoryName, string repositoryPath)

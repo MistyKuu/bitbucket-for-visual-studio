@@ -55,7 +55,7 @@ namespace GitClientVS.Services
         public bool IsOriginRepo(GitRemoteRepository gitRemoteRepository)
         {
             Uri uri = new Uri(gitRemoteRepository.CloneUrl);
-            return uri.Host.Contains("bitbucket.org", StringComparison.OrdinalIgnoreCase);
+            return uri.Host.Contains(_bitbucketClient.GetHost(), StringComparison.OrdinalIgnoreCase);
         }
 
         public async Task<GitRemoteRepository> CreateRepositoryAsync(GitRemoteRepository newRepository)
