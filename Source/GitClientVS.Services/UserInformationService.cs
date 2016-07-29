@@ -15,8 +15,9 @@ namespace GitClientVS.Services
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class UserInformationService : IUserInformationService
     {
+        private readonly IEventAggregatorService _eventAggregator;
         private readonly IStorageService _storageService;
-        private readonly IDisposable _observable;
+        private IDisposable _observable;
 
         public ConnectionData ConnectionData { get; private set; } = ConnectionData.NotLogged;
 
@@ -25,13 +26,18 @@ namespace GitClientVS.Services
             IEventAggregatorService eventAggregator,
             IStorageService storageService)
         {
+            _eventAggregator = eventAggregator;
             _storageService = storageService;
-            _observable = eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
         }
-        
+
+        public void StartListening()
+        {
+            _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
+        }
+
         public void Dispose()
         {
-            _observable.Dispose();
+            _observable?.Dispose();
         }
 
         private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)

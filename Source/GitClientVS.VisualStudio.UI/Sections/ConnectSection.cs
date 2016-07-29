@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using GitClientVS.UI.Views;
 using Microsoft.TeamFoundation.Controls;
 using Microsoft.TeamFoundation.MVVM;
@@ -32,7 +33,6 @@ namespace GitClientVS.VisualStudio.UI.Sections
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class ConnectSection : TeamExplorerBaseSection
     {
-        private readonly IAppInitializer _appInitializer;
         private readonly IAppServiceProvider _appServiceProvider;
         private ITeamExplorerSection _section;
         private const string Id = "a6701970-28da-42ee-a0f4-9e02f486de2c";
@@ -41,22 +41,20 @@ namespace GitClientVS.VisualStudio.UI.Sections
         [ImportingConstructor]
         public ConnectSection(
             IGitClientService bucketService,
-            IAppInitializer appInitializer,
             IAppServiceProvider appServiceProvider,
             IGitClientService gitClient,
             IConnectSectionView sectionView) : base(sectionView)
         {
-            _appInitializer = appInitializer;
             _appServiceProvider = appServiceProvider;
             Title = gitClient.Title;
         }
 
+     
 
-        public override async void Initialize(object sender, SectionInitializeEventArgs e)
+        public override void Initialize(object sender, SectionInitializeEventArgs e)
         {
             _appServiceProvider.GitServiceProvider = ServiceProvider = e.ServiceProvider;
             _section = GetSection(TeamExplorerConnectionsSectionId);
-            await _appInitializer.Initialize();
 
             base.Initialize(sender, e);
         }
@@ -68,51 +66,7 @@ namespace GitClientVS.VisualStudio.UI.Sections
             return ((ITeamExplorerPage)ServiceProvider.GetService(typeof(ITeamExplorerPage))).GetSection(section);
         }
 
-        #region JustInCaseLoadingAssemblies
-
-        static readonly string[] OurAssemblies =
-      {
-            "GitClientVS.Api",
-            "GitClientVS.Contracts",
-            "GitClientVS.Infrastructure",
-            "GitClientVS.Services",
-            "GitClientVS.UI",
-            "GitClientVS.VisualStudio.UI"
-        };
-
-
-
-
-        private Assembly LoadNotLoadedAssemblies(object sender, ResolveEventArgs e)
-        {
-            AppDomain.CurrentDomain.AssemblyResolve += LoadNotLoadedAssemblies;
-            try
-            {
-                var name = new AssemblyName(e.Name);
-                if (!OurAssemblies.Contains(name.Name))
-                    return null;
-                var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                var filename = Path.Combine(path, name.Name + ".dll");
-                if (!File.Exists(filename))
-                    return null;
-                return Assembly.LoadFrom(filename);
-            }
-            catch (Exception ex)
-            {
-                var log = string.Format(CultureInfo.CurrentCulture,
-                    "Error occurred loading {0} from {1}.{2}{3}{4}",
-                    e.Name,
-                    Assembly.GetExecutingAssembly().Location,
-                    Environment.NewLine,
-                    ex,
-                    Environment.NewLine);
-
-                Logger.Error(log);
-
-            }
-            return null;
-        }
-        #endregion
+    
 
     }
 }

@@ -37,12 +37,13 @@ namespace GitClientVS.VisualStudio.UI
         {
             LoggerConfigurator.Setup(); // TODO this needs to be set in the entry point like package
             var result = _storageService.LoadUserData();
-            await GitClientLogin(result);
-
+           
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<GitMappingsProfile>();
             });
+
+            await GitClientLogin(result);
         }
 
         private async Task GitClientLogin(Result<ConnectionData> result)

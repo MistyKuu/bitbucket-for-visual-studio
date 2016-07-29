@@ -7,5 +7,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
     public interface IUserInformationService
     {
         ConnectionData ConnectionData { get; }
+        void StartListening();
     }
 }

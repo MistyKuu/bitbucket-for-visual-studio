@@ -10,5 +10,6 @@ namespace GitClientVS.Contracts.Models.GitClientModels
     {
         public string Username { get; set; }
         public string DisplayName { get; set; }
+        public GitLinks Links { get; set; }
     }
 }

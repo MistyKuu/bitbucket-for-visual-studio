@@ -1,0 +1,49 @@
+﻿<UserControl
+    x:Class="GitClientVS.UI.Controls.CustomizedListItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    x:Name="UserControl"
+    >
+
+    <Grid >
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2" />
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
+
+
+            <Border Grid.Column="0" Canvas.ZIndex="2">
+                <StackPanel VerticalAlignment="Center">
+                    <Image Width="30" Height="30" HorizontalAlignment="Center"
+                           Source="{Binding ElementName=UserControl,Path=Image}"
+                           VerticalAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Text="{Binding ElementName=UserControl,Path=UnderImage}" />
+                </StackPanel>
+            </Border>
+            <Grid Grid.Column="2">
+
+                <StackPanel Margin="10">
+                    <TextBlock HorizontalAlignment="Right"
+                               Text="{Binding ElementName=UserControl,Path=Created}" FontSize="10" />
+                    <TextBlock FontSize="12" HorizontalAlignment="Left"
+                               Text="{Binding ElementName=UserControl,Path=Title}"
+                               FontWeight="SemiBold" TextWrapping="Wrap" />
+
+                    <TextBlock FontSize="10" TextTrimming="WordEllipsis" TextWrapping="Wrap"
+                               Text="{Binding ElementName=UserControl,Path=Body}" />
+                    <TextBlock FontSize="10" FontWeight="Light" HorizontalAlignment="Right"
+                               Text="{Binding ElementName=UserControl,Path=Sender}" />
+                </StackPanel>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

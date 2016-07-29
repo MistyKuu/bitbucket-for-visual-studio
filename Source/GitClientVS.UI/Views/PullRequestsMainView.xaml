@@ -8,6 +8,7 @@
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
+             xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsMainViewModel,IsDesignTimeCreatable=False}" 
@@ -24,22 +25,16 @@
     <Grid>
         <Grid.Resources>
             <DataTemplate x:Key="PullRequestTemplate" DataType="gitClientModels:GitPullRequest">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <TextBlock Text="{Binding Author}" Grid.Row="0" Grid.Column="0"/>
-                    <TextBlock Text="{Binding Title}" Grid.Row="1" Grid.Column="0"/>
-                    <TextBlock Text="{Binding Description}" Grid.Row="2" Grid.Column="0"/>
-                    
-                </Grid>
+                <controls1:CustomizedListItem
+                    Created="{Binding CreationDate}"
+                    Title="{Binding Title}"
+                    Body="{Binding Description}"
+                    Sender="{Binding Author.DisplayName}"
+                    Image="{Binding Author.Links.Avatar.Href}"
+                    DetailsCommand="{Binding DataContext.GoToDetailsCommand, ElementName=PushView}"
+                    DetailsCommandParameter="{Binding}"
+                    >
+                </controls1:CustomizedListItem>
             </DataTemplate>
         </Grid.Resources>
         

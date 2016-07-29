@@ -2,6 +2,7 @@
 using AutoMapper;
 using BitBucket.REST.API.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
+using GitClientVS.Infrastructure.Extensions;
 
 namespace GitClientVS.Infrastructure.Mappings
 {
@@ -10,9 +11,12 @@ namespace GitClientVS.Infrastructure.Mappings
     {
         public GitPullRequest Convert(PullRequest source, GitPullRequest destination, ResolutionContext context)
         {
-            var gitPullRequest = new GitPullRequest(source.Title, source.Description, source.Source.Branch.Name,
-                source.Destination.Branch.Name);
-            gitPullRequest.Id = source.Id.ToString();
+            var gitPullRequest = new GitPullRequest(source.Title, source.Description, source.Source.Branch.Name, source.Destination.Branch.Name)
+            {
+                Id = source.Id.ToString(),
+                Author = source.Author.MapTo<GitUser>(),
+                CreationDate = source.CreatedOn
+            };
 
             //todo how
             if (source.State == PullRequestOptions.DECLINED)
