@@ -72,6 +72,13 @@ namespace GitClientVS.Services
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
 
+        public async Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName)
+        {
+            //todo put real repository name
+            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests(repositoryName, ownerName);
+            return pullRequests.Values.MapTo<List<GitPullRequest>>();
+        }
+
         public async Task<IEnumerable<GitPullRequest>> GetPullRequests(GitPullRequestStatus gitPullRequestStatus, string repositoryName)
         {
             PullRequestOptions option = PullRequestOptions.OPEN;
