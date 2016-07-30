@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using BitBucket.REST.API.Models;
@@ -10,16 +11,38 @@ namespace GitClientVS.Infrastructure.Mappings
     {
         public GitRemoteRepository Convert(Repository source, GitRemoteRepository destination, ResolutionContext context)
         {
-            var remoteRepository = new GitRemoteRepository();
-            remoteRepository.Name = source.Name;
-            remoteRepository.Description = source.Description;
-            remoteRepository.IsPrivate = source.IsPrivate;
-            remoteRepository.HasIssues = source.HasIssues;
-            remoteRepository.HasWiki = source.HasWiki;
-            remoteRepository.CloneUrl = source.Links.Clone.First().Href;
-
-            return remoteRepository;
+            return new GitRemoteRepository()
+            {
+                Name = source.Name,
+                Description = source.Description,
+                IsPrivate = source.IsPrivate,
+                HasWiki = source.HasWiki,
+                HasIssues = source.HasIssues,
+                IsForked = (source.Parent != null),
+                CloneUrl = source.Links.Clone.First().Href
+            };
         }
+    }
 
+    public class ReverseRepositoryTypeConverter : ITypeConverter<GitRemoteRepository, Repository>
+    {
+        public Repository Convert(GitRemoteRepository source, Repository destination, ResolutionContext context)
+        {
+            return new Repository()
+            {
+                Name = source.Name,
+                Description = source.Description,
+                IsPrivate = source.IsPrivate,
+                HasIssues = source.HasIssues,
+                HasWiki = source.HasWiki,
+                Links = new Links()
+                {
+                    Clone = new List<Link>(new Link[]
+                    {
+                        new Link() {Href = source.CloneUrl}
+                    })
+                }
+            };
+        }
     }
 }

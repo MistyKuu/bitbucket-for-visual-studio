@@ -13,6 +13,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public bool? IsPrivate { get; set; }
         public bool? HasIssues { get; set; }
         public bool? HasWiki { get; set; }
+        public bool? IsForked { get; set; }
         public string CloneUrl { get; set; }
 
         public GitRemoteRepository()

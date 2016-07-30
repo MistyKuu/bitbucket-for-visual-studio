@@ -59,6 +59,7 @@
     <Compile Include="Clients\ApiClient.cs" />
     <Compile Include="Clients\PullRequestsClient.cs" />
     <Compile Include="Clients\RepositoriesClient.cs" />
+    <Compile Include="Clients\TeamsClient.cs" />
     <Compile Include="Clients\UserClient.cs" />
     <Compile Include="Exceptions\AuthorizationException.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Models\PullRequestOptions.cs" />
     <Compile Include="Models\Repository.cs" />
     <Compile Include="Models\Source.cs" />
+    <Compile Include="Models\Team.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserShort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

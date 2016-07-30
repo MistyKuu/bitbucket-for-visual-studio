@@ -4,6 +4,7 @@
     {
         Merged,
         Open,
-        Declined
+        Declined,
+        Supersend
     }
 }
