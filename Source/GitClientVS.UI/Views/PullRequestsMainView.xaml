@@ -25,22 +25,29 @@
     <Grid>
         <Grid.Resources>
             <DataTemplate x:Key="PullRequestTemplate" DataType="gitClientModels:GitPullRequest">
-                <controls1:CustomizedListItem
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <controls1:CustomizedListItem
                     Created="{Binding CreationDate}"
                     Title="{Binding Title}"
-                    Body="{Binding Description}"
                     Sender="{Binding Author.DisplayName}"
                     Image="{Binding Author.Links.Avatar.Href}"
                     DetailsCommand="{Binding DataContext.GoToDetailsCommand, ElementName=PushView}"
                     DetailsCommandParameter="{Binding}"
-                    >
-                </controls1:CustomizedListItem>
+                    Margin="0,10"
+                    />
+                    <Separator Grid.Row="1"/>
+                </Grid>
             </DataTemplate>
         </Grid.Resources>
         
         <controls:ProgressRing x:Name="ProgressRing" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsLoading,Converter={converters:BoolToVisibilityConverter}}"/>
         <Grid Margin="20" Visibility="{Binding ElementName=ProgressRing,Path=Visibility,Converter={converters:NegateVisibilityConverter}}">
-         <ListView ItemsSource="{Binding GitPullRequests}" ItemTemplate="{StaticResource PullRequestTemplate}"/>
+            <ListBox ItemsSource="{Binding GitPullRequests}" ItemTemplate="{StaticResource PullRequestTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
         </Grid>
     </Grid>
 </UserControl>

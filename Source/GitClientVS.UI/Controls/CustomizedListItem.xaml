@@ -11,37 +11,34 @@
     >
 
     <Grid >
-
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="50" />
                 <ColumnDefinition Width="2" />
-                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <Border Grid.Column="0" Canvas.ZIndex="2">
-                <StackPanel VerticalAlignment="Center">
-                    <Image Width="30" Height="30" HorizontalAlignment="Center"
-                           Source="{Binding ElementName=UserControl,Path=Image}"
-                           VerticalAlignment="Center" />
-                    <TextBlock HorizontalAlignment="Center"  Text="{Binding ElementName=UserControl,Path=UnderImage}" />
-                </StackPanel>
-            </Border>
+            <StackPanel  Grid.Column="0" VerticalAlignment="Center">
+                <Image Width="30" Height="30" HorizontalAlignment="Center"  Source="{Binding ElementName=UserControl,Path=Image}"  VerticalAlignment="Center"/>
+            </StackPanel>
+
             <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                <StackPanel Margin="10">
-                    <TextBlock HorizontalAlignment="Right"
-                               Text="{Binding ElementName=UserControl,Path=Created}" FontSize="10" />
-                    <TextBlock FontSize="12" HorizontalAlignment="Left"
-                               Text="{Binding ElementName=UserControl,Path=Title}"
-                               FontWeight="SemiBold" TextWrapping="Wrap" />
-
-                    <TextBlock FontSize="10" TextTrimming="WordEllipsis" TextWrapping="Wrap"
-                               Text="{Binding ElementName=UserControl,Path=Body}" />
-                    <TextBlock FontSize="10" FontWeight="Light" HorizontalAlignment="Right"
-                               Text="{Binding ElementName=UserControl,Path=Sender}" />
-                </StackPanel>
+                <TextBlock Grid.Row="0" FontSize="13"  HorizontalAlignment="Left" Text="{Binding ElementName=UserControl,Path=Title}" TextWrapping="NoWrap" TextTrimming="WordEllipsis" />
+                <TextBlock Grid.Row="1" TextWrapping="Wrap" FontSize="10" FontWeight="Light">
+                     <Run  Text="{Binding ElementName=UserControl,Path=Sender}" />
+                     <Run  Text=" - created on" />
+                     <Run  Text="{Binding ElementName=UserControl,Path=Created}"/>`
+                </TextBlock>
 
             </Grid>
         </Grid>
