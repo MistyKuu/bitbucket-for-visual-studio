@@ -79,6 +79,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Styles\SharedResourceDictionary.cs" />
+    <Compile Include="Views\CreatePullRequestsView.xaml.cs">
+      <DependentUpon>CreatePullRequestsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CreateRepositoriesDialogView.xaml.cs">
       <DependentUpon>CreateRepositoriesDialogView.xaml</DependentUpon>
     </Compile>
@@ -155,6 +158,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\SharedDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CreatePullRequestsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

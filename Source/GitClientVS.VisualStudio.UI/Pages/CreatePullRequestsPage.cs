@@ -7,14 +7,13 @@ using Microsoft.TeamFoundation.Controls;
 
 namespace GitClientVS.VisualStudio.UI.Pages
 {
-    [TeamExplorerPage(PageIds.PullRequestsMainPageId)]
-    public class PullRequestsMainPage : TeamExplorerBasePage
+    [TeamExplorerPage(PageIds.CreatePullRequestsPageId)]
+    public class CreatePullRequestsPage : TeamExplorerBasePage
     {
-
         [ImportingConstructor]
-        public PullRequestsMainPage(IPullRequestsMainView view)
+        public CreatePullRequestsPage(ICreatePullRequestsView view)
         {
-            Title = Resources.PullRequestNavigationItemTitle;
+            Title = Resources.CreatePullRequestsPageTitle;
             PageContent = view;
         }
     }

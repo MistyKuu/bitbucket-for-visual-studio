@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="GitClientVS.UI.Views.PullRequestsMainView"
+﻿<UserControl x:Class="GitClientVS.UI.Views.CreatePullRequestsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -50,21 +50,18 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal">
-            <Button 
+        <Button 
             Style="{StaticResource ActionLinkButton}"
             KeyboardNavigation.TabIndex="0"
-            Command="{Binding GotoCreateNewPullRequestCommand}" 
+            Command="{Binding CreateNewPullRequestCommand}" 
             Content="{x:Static ui:Resources.CreatePullRequest}"/>
 
-            <Separator Style="{StaticResource VerticalSeparator}" />
-            
-            <Button 
+        <Button 
             Style="{StaticResource ActionLinkButton}"
-            KeyboardNavigation.TabIndex="0" 
+            KeyboardNavigation.TabIndex="0"
+            Command="{Binding CreateNewPullRequestCommand}" 
             Content="{x:Static ui:Resources.Actions}"/>
-        </StackPanel>
-        
+
         <controls:ProgressRing Grid.Row="0" x:Name="ProgressRing" 
                                Foreground="{DynamicResource AccentColorBrush}" 
                                HorizontalAlignment="Center" 
