@@ -199,6 +199,10 @@
     <None Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\BitbucketWhite.png" />
+    <Resource Include="Images\BitbucketWhite.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Entypo-license.txt" />
     <None Include="Resources\luki.png" />
     <Content Include="Resources\WindowsIcons-license.txt" />
