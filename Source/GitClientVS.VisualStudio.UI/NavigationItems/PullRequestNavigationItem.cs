@@ -8,6 +8,7 @@ using System.Windows.Media;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
+using GitClientVS.Infrastructure;
 using GitClientVS.Infrastructure.Events;
 using GitClientVS.UI;
 using GitClientVS.VisualStudio.UI.Pages;
@@ -66,7 +67,7 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
 
         public override void Execute()
         {
-            _navigationService.Navigate(PullRequestsMainPage.PageId);
+            _navigationService.Navigate(PageIds.PullRequestsMainPageId);
         }
 
         public override void Dispose()

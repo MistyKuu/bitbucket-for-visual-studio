@@ -28,8 +28,8 @@
     </controls:MetroWindow.Resources>
 
     <Grid>
-        <controls:ProgressRing x:Name="ProgressRing" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsLoading,Converter={converters:BoolToVisibilityConverter}}"/>
-        <Grid Margin="20" Visibility="{Binding ElementName=ProgressRing,Path=Visibility,Converter={converters:NegateVisibilityConverter}}">
+        <controls1:ProgressBar ProgressContent="{Binding ElementName=ContentGrid}"/>
+        <Grid Margin="20" x:Name="ContentGrid">
             <Grid.Resources>
                 <DataTemplate x:Key="RepositoryDateTemplate" DataType="gitClientModels:GitRemoteRepository">
                     <Grid>
@@ -75,7 +75,7 @@
             </Grid>
 
             <Button Margin="5" HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0"  Style="{StaticResource AccentedSquareButtonStyle}" BorderThickness="0" Command="{Binding CloneCommand}" Content="Clone"/>
-            <controls1:ErrorView  Grid.Row="3" Grid.Column="0" ErrorMessage="{Binding ErrorMessage}" />
+            <controls1:ErrorView  Grid.Row="3" Grid.Column="0"/>
         </Grid>
     </Grid>
 </controls:MetroWindow>

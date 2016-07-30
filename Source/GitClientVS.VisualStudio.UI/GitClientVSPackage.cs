@@ -62,18 +62,24 @@ namespace GitClientVS.VisualStudio.UI
         public GitClientVSPackage()
         {
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 
-        #region Package Members
 
+
+        #region Package Members
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Logger.Error("Unhandled GitClientVsExtensions Error: " + e.ExceptionObject);
+        }
         private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            Logger.Error("Unhandled GitClientVsExtensions Error", e.Exception);
+            Logger.Error("Unhandled Dispatcher GitClientVsExtensions Error", e.Exception);
         }
 
         protected override async void Initialize()
         {
-           AppDomain.CurrentDomain.AssemblyResolve += LoadNotLoadedAssemblies;
+            AppDomain.CurrentDomain.AssemblyResolve += LoadNotLoadedAssemblies;
             base.Initialize();
 
             var componentModel = this.GetService<SComponentModel, IComponentModel>();

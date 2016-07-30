@@ -80,7 +80,9 @@
     <Compile Include="Interfaces\IViewModelWithErrorMessage.cs" />
     <Compile Include="Interfaces\Services\IGitWatcher.cs" />
     <Compile Include="Interfaces\Services\IPageNavigationService.cs" />
+    <Compile Include="Interfaces\ViewModels\ICreatePullRequestsViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestsMainViewModel.cs" />
+    <Compile Include="Interfaces\Views\ICreatePullRequestsView.cs" />
     <Compile Include="Interfaces\Views\ICreateRepositoriesDialogView.cs" />
     <Compile Include="Interfaces\ViewModels\ICreateRepositoriesDialogViewModel.cs" />
     <Compile Include="Interfaces\IDialogWindow.cs" />

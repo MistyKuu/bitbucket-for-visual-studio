@@ -7,6 +7,7 @@
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              xmlns:prop="clr-namespace:GitClientVS.UI"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
+             xmlns:teamExplorer="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;assembly=Microsoft.TeamFoundation.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:ConnectSectionViewModel,IsDesignTimeCreatable=False}" >
 
@@ -19,6 +20,6 @@
     </UserControl.Resources>
 
     <Grid >
-        <Button Style="{StaticResource ActionLinkButton}" KeyboardNavigation.TabIndex="0" Command="{Binding OpenLoginCommand}" Content="{x:Static prop:Resources.Login}"/>
+        <teamExplorer:TextLink  KeyboardNavigation.TabIndex="0" Command="{Binding OpenLoginCommand}" Text="{x:Static prop:Resources.Login}"/>
     </Grid>
 </UserControl>

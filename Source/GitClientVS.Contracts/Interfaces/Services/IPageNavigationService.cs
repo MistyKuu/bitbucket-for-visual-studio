@@ -3,5 +3,6 @@
     public interface IPageNavigationService
     {
         void Navigate(string pageId);
+        void NavigateBack();
     }
 }

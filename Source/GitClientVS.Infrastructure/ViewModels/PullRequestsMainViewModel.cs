@@ -21,10 +21,12 @@ namespace GitClientVS.Infrastructure.ViewModels
     {
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
+        private readonly IPageNavigationService _pageNavigationService;
         private ReactiveCommand<Unit> _initializeCommand;
         private bool _isLoading;
         private IEnumerable<GitPullRequest> _gitPullRequests;
         private string _errorMessage;
+        private ReactiveCommand<object> _goToCreateNewPullRequestCommand;
 
         public IEnumerable<GitPullRequest> GitPullRequests
         {
@@ -48,49 +50,30 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         public ICommand InitializeCommand => _initializeCommand;
+        public ICommand GotoCreateNewPullRequestCommand => _goToCreateNewPullRequestCommand;
 
         [ImportingConstructor]
-        public PullRequestsMainViewModel(IGitClientService gitClientService, IGitService gitService)
+        public PullRequestsMainViewModel(
+            IGitClientService gitClientService,
+            IGitService gitService,
+            IPageNavigationService pageNavigationService
+            )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
+            _pageNavigationService = pageNavigationService;
         }
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), _ => LoadPullRequests());
+            _goToCreateNewPullRequestCommand = ReactiveCommand.Create(Observable.Return(true));
+            _goToCreateNewPullRequestCommand.Subscribe(_ => _pageNavigationService.Navigate(PageIds.CreatePullRequestsPageId));
         }
 
         private async Task LoadPullRequests()
         {
             GitPullRequests = await _gitClientService.GetPullRequests("django-piston", "jespern");
-            //GitPullRequests = new List<GitPullRequest>()
-            //{
-            //    new GitPullRequest("TITLE", "DESCRIPTION", "A", "B")
-            //    {
-            //        Author = new GitUser()
-            //        {
-            //            DisplayName = "YO",
-            //            Links = new GitLinks() {Avatar = new GitLink()
-            //            {
-            //                Href = "http://www.jqueryscript.net/images/Simplest-Responsive-jQuery-Image-Lightbox-Plugin-simple-lightbox.jpg"
-            //            }},
-            //        },
-            //        CreationDate = DateTime.Now.ToString()
-            //    },
-            //     new GitPullRequest("TITLE2", "DESCRIPTION2", "A2", "B2")
-            //    {
-            //        Author = new GitUser()
-            //        {
-            //            DisplayName = "wqdqwdqwdwqdwqd qwdwqdwqdqw",
-            //            Links = new GitLinks() {Avatar = new GitLink()
-            //            {
-            //                Href = "http://www.jqueryscript.net/images/Simplest-Responsive-jQuery-Image-Lightbox-Plugin-simple-lightbox.jpg"
-            //            }}
-            //        },
-            //           CreationDate = DateTime.Now.ToString()
-            //    },
-            //};
         }
 
         private IObservable<bool> CanLoadPullRequests()

@@ -61,6 +61,15 @@ namespace GitClientVS.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actions.
+        /// </summary>
+        public static string Actions {
+            get {
+                return ResourceManager.GetString("Actions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap BitbucketWhite {
@@ -103,6 +112,24 @@ namespace GitClientVS.UI {
         public static string Create {
             get {
                 return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New.
+        /// </summary>
+        public static string CreatePullRequest {
+            get {
+                return ResourceManager.GetString("CreatePullRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Pull Request.
+        /// </summary>
+        public static string CreatePullRequestsPageTitle {
+            get {
+                return ResourceManager.GetString("CreatePullRequestsPageTitle", resourceCulture);
             }
         }
         
@@ -203,6 +230,15 @@ namespace GitClientVS.UI {
         public static string PullRequestNavigationItemTitle {
             get {
                 return ResourceManager.GetString("PullRequestNavigationItemTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
     }

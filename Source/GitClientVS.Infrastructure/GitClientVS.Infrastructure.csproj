@@ -101,10 +101,12 @@
     <Compile Include="Mappings\PullRequestOptionsTypeConverter.cs" />
     <Compile Include="Mappings\PullRequestTypeConverter.cs" />
     <Compile Include="Mappings\RepositoryTypeConverter.cs" />
+    <Compile Include="PageIds.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveValidatedObject.cs" />
     <Compile Include="ViewModelBase.cs" />
+    <Compile Include="ViewModels\CreatePullRequestsViewModel.cs" />
     <Compile Include="ViewModels\CreateRepositoriesDialogViewModel.cs" />
     <Compile Include="ViewModels\CloneRepositoriesDialogViewModel.cs" />
     <Compile Include="ViewModels\LoginDialogViewModel.cs" />
