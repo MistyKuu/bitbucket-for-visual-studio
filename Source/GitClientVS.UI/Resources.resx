@@ -163,6 +163,9 @@
   <data name="PullRequestNavigationItemTitle" xml:space="preserve">
     <value>Pull Requests</value>
   </data>
+  <data name="BitbucketWhite" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\BitbucketWhite.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Actions" xml:space="preserve">
     <value>Actions</value>
   </data>

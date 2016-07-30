@@ -11,11 +11,16 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              mc:Ignorable="d" 
-             Title="{x:Static ui:Resources.LoginWindowTitle}"
+             Title=""
              Style="{DynamicResource DefaultMetroWindowStyle}"
+             ShowTitleBar="true"
+             BorderThickness="0" 
+             GlowBrush="Black"
              WindowStartupLocation="CenterOwner"
-             Width="300"
-             Height="400"            
+             WindowTitleBrush="#004f83"
+             Background="#004f83"
+             Width="400"
+             Height="300"            
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:LoginDialogViewModel,IsDesignTimeCreatable=False}"  >
     <controls:MetroWindow.Resources>
         <ResourceDictionary>
@@ -25,8 +30,8 @@
         </ResourceDictionary>
     </controls:MetroWindow.Resources>
 
-
-    <Grid Margin="20">
+    
+    <Grid Margin="20,20,20,0">
         <Grid.Resources>
             <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                 <Setter Property="Margin" Value="5"/>
@@ -35,29 +40,38 @@
                 <Setter Property="Margin" Value="5"/>
                 <Setter Property="Padding" Value="10,0"/>
             </Style>
+            <Style x:Key="ConnectButtonStyle" TargetType="{x:Type Button}"
+                BasedOn="{StaticResource MetroFlatButton}" 
+                />
         </Grid.Resources>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Image Source="../Images/BitbucketWhite.png"/>
+        
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Login: "/>
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Password: "/>
-        <TextBox Style="{StaticResource ValidatedTextBoxStyle}" Grid.Row="0" Grid.Column="1" Text="{bindings:ValidatedBinding Login}"/>
-        <TextBox  Style="{StaticResource ValidatedTextBoxStyle}" Grid.Row="1" Grid.Column="1" Text="{bindings:ValidatedBinding Password}"/>
-        <!-- TODO convert to passwordbox-->
 
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ConnectCommand}" Content="{x:Static ui:Resources.Connect}" HorizontalAlignment="Center"/>
-     
-        <controls1:ErrorView  Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  />
+            <Label Content="Please log in." Grid.Row="0" Foreground="White" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <TextBox x:Name="LoginBox" Grid.Row="1" Style="{StaticResource ValidatedTextBoxStyle}"  controls:TextBoxHelper.Watermark="Login" Margin="50,0,50,0"  Text="{bindings:ValidatedBinding Login}"/>
+            <TextBox x:Name="PasswordBox" Grid.Row="2" Style="{StaticResource ValidatedTextBoxStyle}" controls:TextBoxHelper.Watermark="Password" Margin="50,10,50,10"  Text="{bindings:ValidatedBinding Password}"/>
+          
+            <!-- TODO convert to passwordbox-->
+
+            <Button Style="{StaticResource ConnectButtonStyle}" IsEnabled="True" Grid.Row="3"  Command="{Binding ConnectCommand}" Content="{x:Static ui:Resources.Connect}" HorizontalAlignment="Center"/>
+            <controls1:ErrorView  Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  />
+            
+        </Grid> 
     </Grid>
 </controls:MetroWindow>
 
