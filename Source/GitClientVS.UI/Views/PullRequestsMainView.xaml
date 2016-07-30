@@ -10,6 +10,8 @@
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              xmlns:ui="clr-namespace:GitClientVS.UI"
+             xmlns:teamExplorer="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;assembly=Microsoft.TeamFoundation.Controls"
+             xmlns:infrastructure="clr-namespace:GitClientVS.Infrastructure;assembly=GitClientVS.Infrastructure"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsMainViewModel,IsDesignTimeCreatable=False}" 
@@ -21,7 +23,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.Resources>
             <DataTemplate x:Key="PullRequestTemplate" DataType="gitClientModels:GitPullRequest">
@@ -30,7 +32,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
+
                     <controls1:CustomizedListItem
                     Created="{Binding CreationDate}"
                     Title="{Binding Title}"
@@ -44,35 +46,30 @@
                 </Grid>
             </DataTemplate>
         </Grid.Resources>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal">
-            <Button 
-            Style="{StaticResource ActionLinkButton}"
-            KeyboardNavigation.TabIndex="0"
-            Command="{Binding GotoCreateNewPullRequestCommand}" 
-            Content="{x:Static ui:Resources.CreatePullRequest}"/>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <teamExplorer:TextLink  Command="{Binding GotoCreateNewPullRequestCommand}"
+            KeyboardNavigation.TabIndex="0" 
+            Text="{x:Static ui:Resources.CreatePullRequest}"/>
 
             <Separator Style="{StaticResource VerticalSeparator}" />
-            
-            <Button 
-            Style="{StaticResource ActionLinkButton}"
-            KeyboardNavigation.TabIndex="0" 
-            Content="{x:Static ui:Resources.Actions}"/>
+
+            <teamExplorer:DropDownLink 
+                KeyboardNavigation.TabIndex="1" 
+                Text="{x:Static ui:Resources.Actions}" />
         </StackPanel>
-        
-        <controls:ProgressRing Grid.Row="0" x:Name="ProgressRing" 
-                               Foreground="{DynamicResource AccentColorBrush}" 
-                               HorizontalAlignment="Center" 
-                               VerticalAlignment="Center"
-                               Visibility="{Binding IsLoading,Converter={converters:BoolToVisibilityConverter}}"/>
-        
-        <Grid Grid.Row="1" Margin="20" Visibility="{Binding ElementName=ProgressRing,Path=Visibility,Converter={converters:NegateVisibilityConverter}}">
+
+
+        <controls1:ProgressBar Grid.Row="1" ProgressContent="{Binding ElementName=PullRequests}"/>
+
+        <Grid Grid.Row="1" Margin="20" x:Name="PullRequests">
             <ListBox ItemsSource="{Binding GitPullRequests}" ItemTemplate="{StaticResource PullRequestTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
         </Grid>
+
+        <controls1:ErrorView Grid.Row="1"/>
     </Grid>
 </UserControl>

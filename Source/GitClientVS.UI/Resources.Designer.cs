@@ -106,7 +106,7 @@ namespace GitClientVS.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New....
+        ///   Looks up a localized string similar to New.
         /// </summary>
         public static string CreatePullRequest {
             get {
@@ -220,6 +220,15 @@ namespace GitClientVS.UI {
         public static string PullRequestNavigationItemTitle {
             get {
                 return ResourceManager.GetString("PullRequestNavigationItemTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
     }

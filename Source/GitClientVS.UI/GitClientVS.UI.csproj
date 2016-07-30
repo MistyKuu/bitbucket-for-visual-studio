@@ -34,6 +34,9 @@
       <HintPath>..\..\packages\MahApps.Metro.1.2.4.0\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.TeamFoundation.Controls">
+      <HintPath>..\..\AssemblyReferences\VS2015\Microsoft.TeamFoundation.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.11.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AssemblyReferences\VS2015\Microsoft.VisualStudio.Shell.11.0.dll</HintPath>
@@ -65,6 +68,9 @@
     <Compile Include="Bindings\ValidatedBinding.cs" />
     <Compile Include="Controls\CustomizedListItem.xaml.cs">
       <DependentUpon>CustomizedListItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProgressBar.xaml.cs">
+      <DependentUpon>ProgressBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
@@ -126,6 +132,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\CustomizedListItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ProgressBar.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

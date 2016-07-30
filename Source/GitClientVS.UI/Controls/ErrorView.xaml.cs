@@ -20,22 +20,10 @@ namespace GitClientVS.UI.Controls
     /// </summary>
     public partial class ErrorView : UserControl
     {
-        public string ErrorMessage
-        {
-            get { return (string)GetValue(ErrorMessageProperty); }
-            set { SetValue(ErrorMessageProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for ErrorMessage.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ErrorMessageProperty =
-            DependencyProperty.Register("ErrorMessage", typeof(string), typeof(ErrorView), new PropertyMetadata(null));
-
-
-
+       
         public ErrorView()
         {
             InitializeComponent();
-            (this.Content as FrameworkElement).DataContext = this;
         }
     }
 }

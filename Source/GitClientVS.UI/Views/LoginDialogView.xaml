@@ -9,6 +9,7 @@
              xmlns:ui="clr-namespace:GitClientVS.UI"
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              mc:Ignorable="d" 
              Title="{x:Static ui:Resources.LoginWindowTitle}"
              Style="{DynamicResource DefaultMetroWindowStyle}"
@@ -55,7 +56,8 @@
         <!-- TODO convert to passwordbox-->
 
         <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ConnectCommand}" Content="{x:Static ui:Resources.Connect}" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Text="{Binding ErrorMessage}" Style="{StaticResource ErrorTextBlockStyle}"/>
+     
+        <controls1:ErrorView  Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  />
     </Grid>
 </controls:MetroWindow>
 

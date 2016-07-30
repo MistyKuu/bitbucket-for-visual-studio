@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -21,11 +22,16 @@ namespace GitClientVS.Infrastructure.ViewModels
     {
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
+        private readonly IPageNavigationService _pageNavigationService;
         private ReactiveCommand<Unit> _initializeCommand;
         private bool _isLoading;
         private string _errorMessage;
         private ReactiveCommand<Unit> _createNewPullRequestCommand;
         private IEnumerable<GitBranch> _branches;
+        private GitBranch _sourceBranch;
+        private GitBranch _destinationBranch;
+        private string _description;
+        private string _title;
 
 
         public string ErrorMessage
@@ -38,6 +44,34 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get { return _branches; }
             set { this.RaiseAndSetIfChanged(ref _branches, value); }
+        }
+
+        [Required]
+        public GitBranch SourceBranch
+        {
+            get { return _sourceBranch; }
+            set { this.RaiseAndSetIfChanged(ref _sourceBranch, value); }
+        }
+
+        [Required]
+        public GitBranch DestinationBranch
+        {
+            get { return _destinationBranch; }
+            set { this.RaiseAndSetIfChanged(ref _destinationBranch, value); }
+        }
+
+        [Required]
+        public string Description
+        {
+            get { return _description; }
+            set { this.RaiseAndSetIfChanged(ref _description, value); }
+        }
+
+        [Required]
+        public string Title
+        {
+            get { return _title; }
+            set { this.RaiseAndSetIfChanged(ref _title, value); }
         }
 
         public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
@@ -53,33 +87,58 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand CreateNewPullRequestCommand => _createNewPullRequestCommand;
 
         [ImportingConstructor]
-        public CreatePullRequestsViewModel(IGitClientService gitClientService, IGitService gitService)
+        public CreatePullRequestsViewModel(IGitClientService gitClientService, IGitService gitService, IPageNavigationService pageNavigationService)
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
+            _pageNavigationService = pageNavigationService;
         }
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), _ => LoadBranches());
-            _createNewPullRequestCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => CreateNewPullRequest());
+            _createNewPullRequestCommand = ReactiveCommand.CreateAsyncTask(CanCreatePullRequest(), _ => CreateNewPullRequest());
+
+            _createNewPullRequestCommand.Subscribe(_ =>
+            {
+                _pageNavigationService.NavigateBack();
+            });
         }
+
+
 
         private async Task CreateNewPullRequest()
         {
-            var currentRepo = (_gitService.GetActiveRepository()).Name;
-            var gitPullRequest = new GitPullRequest("asd", "asd", "asd", "asd");
+            // var currentRepo = (_gitService.GetActiveRepository()).Name; todo real repo
+            var currentRepo = "test";
+            var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.Name, DestinationBranch.Name);
             await _gitClientService.CreatePullRequest(gitPullRequest, currentRepo);
         }
 
         private async Task LoadBranches()
         {
-            Branches = await _gitClientService.GetBranches(_gitService.GetActiveRepository().Name);
+            Branches = (await _gitClientService.GetBranches("test")).ToList(); //todo real repo
+            SourceBranch = Branches.FirstOrDefault();
+            DestinationBranch = Branches.FirstOrDefault();
         }
 
         private IObservable<bool> CanLoadPullRequests()
         {
             return Observable.Return(true);
         }
+
+        private IObservable<bool> CanCreatePullRequest()
+        {
+            return ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
+        }
+
+        private bool CanExecute()
+        {
+            return IsObjectValid() &&
+                !string.IsNullOrEmpty(SourceBranch.Name) &&
+                !string.IsNullOrEmpty(DestinationBranch.Name) &&
+                SourceBranch.Name != DestinationBranch.Name;
+        }
+
     }
 }

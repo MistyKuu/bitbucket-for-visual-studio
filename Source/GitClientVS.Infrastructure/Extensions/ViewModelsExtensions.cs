@@ -13,7 +13,10 @@ namespace GitClientVS.Infrastructure.Extensions
         public static void CatchCommandErrors(this IViewModelWithErrorMessage vm)
         {
             foreach (var reactiveCommand in vm.ThrowableCommands)
+            {
+                reactiveCommand.IsExecuting.Where(x => x).Subscribe(_ => vm.ErrorMessage = null);
                 reactiveCommand.ThrownExceptions.Subscribe((ex) => vm.ErrorMessage = ex.Message);
+            }
         }
 
         public static void SetupLoadingCommands(this ILoadableViewModel vm)

@@ -10,9 +10,10 @@
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              xmlns:ui="clr-namespace:GitClientVS.UI"
+             xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance viewModels:PullRequestsMainViewModel,IsDesignTimeCreatable=False}" 
+             d:DataContext="{d:DesignInstance viewModels:CreatePullRequestsViewModel,IsDesignTimeCreatable=False}" 
              >
     <UserControl.Resources>
         <ResourceDictionary>
@@ -21,55 +22,60 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
     <Grid>
-        <Grid.Resources>
-            <DataTemplate x:Key="PullRequestTemplate" DataType="gitClientModels:GitPullRequest">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    
-                    <controls1:CustomizedListItem
-                    Created="{Binding CreationDate}"
-                    Title="{Binding Title}"
-                    Sender="{Binding Author.DisplayName}"
-                    Image="{Binding Author.Links.Avatar.Href}"
-                    DetailsCommand="{Binding DataContext.GoToDetailsCommand, ElementName=PushView}"
-                    DetailsCommandParameter="{Binding}"
-                    Margin="0,10"
-                    />
-                    <Separator Grid.Row="1"/>
-                </Grid>
-            </DataTemplate>
-        </Grid.Resources>
-        
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
-        <Button 
-            Style="{StaticResource ActionLinkButton}"
-            KeyboardNavigation.TabIndex="0"
-            Command="{Binding CreateNewPullRequestCommand}" 
-            Content="{x:Static ui:Resources.CreatePullRequest}"/>
+        <controls1:ProgressBar ProgressContent="{Binding ElementName=ContentGrid}"/>
 
-        <Button 
-            Style="{StaticResource ActionLinkButton}"
-            KeyboardNavigation.TabIndex="0"
-            Command="{Binding CreateNewPullRequestCommand}" 
-            Content="{x:Static ui:Resources.Actions}"/>
+        <Grid x:Name="ContentGrid" Margin="10">
+            <Grid.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource ValidatedTextBoxStyle}">
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+            </Grid.Resources>
 
-        <controls:ProgressRing Grid.Row="0" x:Name="ProgressRing" 
-                               Foreground="{DynamicResource AccentColorBrush}" 
-                               HorizontalAlignment="Center" 
-                               VerticalAlignment="Center"
-                               Visibility="{Binding IsLoading,Converter={converters:BoolToVisibilityConverter}}"/>
-        
-        <Grid Grid.Row="1" Margin="20" Visibility="{Binding ElementName=ProgressRing,Path=Visibility,Converter={converters:NegateVisibilityConverter}}">
-            <ListBox ItemsSource="{Binding GitPullRequests}" ItemTemplate="{StaticResource PullRequestTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <ComboBox SelectedItem="{bindings:ValidatedBinding SourceBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name"/>
+                <Rectangle Fill="Black">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Visual="{StaticResource appbar_add}" Stretch="Fill" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+                <ComboBox SelectedItem="{bindings:ValidatedBinding DestinationBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name"/>
+            </StackPanel>
+
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="{x:Static ui:Resources.Title}"/>
+                <TextBox Grid.Row="1" Text="{bindings:ValidatedBinding Title}"/>
+                <TextBlock Grid.Row="2" Text="{x:Static ui:Resources.Description}"/>
+                <TextBox Grid.Row="3" Text="{bindings:ValidatedBinding Description}" AcceptsReturn="True" MinLines="3"/>
+                <Button Grid.Row="4" Command="{Binding CreateNewPullRequestCommand}" HorizontalAlignment="Left" Content="Create"/>
+                <controls1:ErrorView Grid.Row="5" />
+            </Grid>
+
         </Grid>
     </Grid>
 </UserControl>

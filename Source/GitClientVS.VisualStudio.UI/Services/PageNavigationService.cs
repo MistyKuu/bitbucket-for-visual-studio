@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Windows.Input;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.VisualStudio.UI.Pages;
 using Microsoft.TeamFoundation.Controls;
@@ -24,6 +25,13 @@ namespace GitClientVS.VisualStudio.UI.Services
         {
             ITeamExplorer service = _appServiceProvider.GetService<ITeamExplorer>();
             service?.NavigateToPage(new Guid(pageId), null);
+
+        }
+
+        public void NavigateBack()
+        {
+            ITeamExplorer service = _appServiceProvider.GetService<ITeamExplorer>();
+            service?.ClosePage(service.CurrentPage);
         }
     }
 }
