@@ -163,4 +163,13 @@
   <data name="PullRequestNavigationItemTitle" xml:space="preserve">
     <value>Pull Requests</value>
   </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="CreatePullRequest" xml:space="preserve">
+    <value>New...</value>
+  </data>
+  <data name="CreatePullRequestsPageTitle" xml:space="preserve">
+    <value>Create Pull Request</value>
+  </data>
 </root>
