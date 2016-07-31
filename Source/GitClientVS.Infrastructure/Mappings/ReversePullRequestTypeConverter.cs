@@ -9,9 +9,12 @@ namespace GitClientVS.Infrastructure.Mappings
     {
         public PullRequest Convert(GitPullRequest source, PullRequest destination, ResolutionContext context)
         {
-            var pullRequest = new PullRequest();
-            pullRequest.Title = source.Title;
-            pullRequest.Description = source.Description;
+            var pullRequest = new PullRequest
+            {
+                Title = source.Title,
+                Description = source.Description,
+                CloseSourceBranch = source.CloseSourceBranch
+            };
 
             //todo how
             if (source.Status == GitPullRequestStatus.Declined)
