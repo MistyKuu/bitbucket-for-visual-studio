@@ -11,6 +11,7 @@
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              xmlns:ui="clr-namespace:GitClientVS.UI"
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
+             xmlns:views="clr-namespace:GitClientVS.UI.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModels:CreatePullRequestsViewModel,IsDesignTimeCreatable=False}" 
@@ -49,6 +50,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" Grid.Row="0">
@@ -81,6 +84,9 @@
                 <Button Grid.Row="5" Command="{Binding CreateNewPullRequestCommand}" HorizontalAlignment="Left" Content="{x:Static ui:Resources.Create}"/>
                 <controls1:ErrorView Grid.Row="6" />
             </Grid>
+            
+            <Separator Grid.Row="2"/>
+            <views:PullRequestDetailView Grid.Row="3"/>
 
         </Grid>
     </Grid>
