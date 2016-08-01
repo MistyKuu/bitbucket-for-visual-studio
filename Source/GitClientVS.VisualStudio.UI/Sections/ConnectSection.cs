@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using EnvDTE;
 using GitClientVS.UI.Views;
 using Microsoft.TeamFoundation.Controls;
 using Microsoft.TeamFoundation.MVVM;
@@ -49,7 +50,7 @@ namespace GitClientVS.VisualStudio.UI.Sections
             Title = gitClient.Title;
         }
 
-     
+
 
         public override void Initialize(object sender, SectionInitializeEventArgs e)
         {
@@ -60,13 +61,12 @@ namespace GitClientVS.VisualStudio.UI.Sections
         }
 
 
-
         protected ITeamExplorerSection GetSection(Guid section)
         {
             return ((ITeamExplorerPage)ServiceProvider.GetService(typeof(ITeamExplorerPage))).GetSection(section);
         }
 
-    
+
 
     }
 }

@@ -22,6 +22,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IPageNavigationService _pageNavigationService;
+        private readonly IVsTools _vsTools;
         private ReactiveCommand<Unit> _initializeCommand;
         private bool _isLoading;
         private IEnumerable<GitPullRequest> _gitPullRequests;

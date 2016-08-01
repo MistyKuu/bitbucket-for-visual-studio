@@ -13,9 +13,9 @@ namespace GitClientVS.UI.Controls
             DependencyProperty.Register("Title", typeof (string), typeof (CustomizedListItem),
                 new PropertyMetadata(null));
 
-        // Using a DependencyProperty as the backing store for Created.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CreatedProperty =
-            DependencyProperty.Register("Created", typeof (string), typeof (CustomizedListItem),
+        // Using a DependencyProperty as the backing store for Date.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DateProperty =
+            DependencyProperty.Register("Date", typeof (string), typeof (CustomizedListItem),
                 new PropertyMetadata(null));
 
         // Using a DependencyProperty as the backing store for Body.  This enables animation, styling, binding, etc...
@@ -54,10 +54,10 @@ namespace GitClientVS.UI.Controls
             set { SetValue(TitleProperty, value); }
         }
 
-        public string Created
+        public string Date
         {
-            get { return (string) GetValue(CreatedProperty); }
-            set { SetValue(CreatedProperty, value); }
+            get { return (string) GetValue(DateProperty); }
+            set { SetValue(DateProperty, value); }
         }
 
         public string Body
