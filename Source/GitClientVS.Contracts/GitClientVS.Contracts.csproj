@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Interfaces\IViewModelWithCommands.cs" />
     <Compile Include="Interfaces\IViewModelWithErrorMessage.cs" />
+    <Compile Include="Interfaces\Services\IVsTools.cs" />
     <Compile Include="Interfaces\Services\IGitWatcher.cs" />
     <Compile Include="Interfaces\Services\IPageNavigationService.cs" />
     <Compile Include="Interfaces\ViewModels\ICreatePullRequestsViewModel.cs" />

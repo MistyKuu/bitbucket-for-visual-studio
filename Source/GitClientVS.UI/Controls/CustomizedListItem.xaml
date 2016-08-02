@@ -36,8 +36,8 @@
                 <TextBlock Grid.Row="0" FontSize="13"  HorizontalAlignment="Left" Text="{Binding ElementName=UserControl,Path=Title}" TextWrapping="NoWrap" TextTrimming="WordEllipsis" />
                 <TextBlock Grid.Row="1" TextWrapping="Wrap" FontSize="10" FontWeight="Light">
                      <Run  Text="{Binding ElementName=UserControl,Path=Sender}" />
-                     <Run  Text=" - created on" />
-                     <Run  Text="{Binding ElementName=UserControl,Path=Created}"/>`
+                     <Run  Text=" - updated on" />
+                     <Run  Text="{Binding ElementName=UserControl,Path=Date}"/>`
                 </TextBlock>
 
             </Grid>

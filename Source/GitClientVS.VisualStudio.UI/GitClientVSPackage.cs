@@ -104,10 +104,9 @@ namespace GitClientVS.VisualStudio.UI
             "GitClientVS.Infrastructure",
             "GitClientVS.Services",
             "GitClientVS.UI",
-            "GitClientVS.VisualStudio.UI"
+            "GitClientVS.VisualStudio.UI",
+            "MahApps.Metro"
         };
-
-
 
 
         private Assembly LoadNotLoadedAssemblies(object sender, ResolveEventArgs e)
