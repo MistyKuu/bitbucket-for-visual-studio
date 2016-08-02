@@ -43,6 +43,9 @@ namespace BitBucket.REST.API.Models
         [JsonProperty(PropertyName = "is_private")]
         public bool? IsPrivate { get; set; }
 
+        [JsonProperty(PropertyName = "parent")]
+        public Parent Parent { get; set; }
+
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
     }

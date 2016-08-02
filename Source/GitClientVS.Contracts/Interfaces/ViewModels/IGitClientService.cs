@@ -21,6 +21,9 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
 
         Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName);
 
+        Task<string> GetPullRequestDiff(string repositoryName, string ownerName, long id);
+        Task<string> GetPullRequestDiff(string repositoryName, long id);
+
         bool IsOriginRepo(GitRemoteRepository gitRemoteRepository);
 
         Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName);

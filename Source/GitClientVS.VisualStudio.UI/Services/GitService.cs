@@ -54,6 +54,12 @@ namespace GitClientVS.VisualStudio.UI.Services
             return activeRepository.ToModel();
         }
 
+        public string GetActiveBranchFromRepo(string repositoryPath)
+        {
+            var repository = new Repository(Repository.Discover(repositoryPath));
+            return repository.Head.FriendlyName;
+        }
+
         public void CloneRepository(string cloneUrl, string repositoryName, string repositoryPath)
         {
             var gitExt = _appServiceProvider.GetService<IGitRepositoriesExt>();

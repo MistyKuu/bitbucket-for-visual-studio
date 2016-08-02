@@ -15,6 +15,11 @@ namespace BitBucket.REST.API.Helpers
             return $"repositories/{login}";
         }
 
+        public static string Teams(string role = "member")
+        {
+            return $"teams?role={role}";
+        }
+
         public static string Branches(string login, string repoName)
         {
             return $"repositories/{login}/{repoName}/refs/branches";
@@ -34,7 +39,12 @@ namespace BitBucket.REST.API.Helpers
         {
             return $"repositories/{username}/{repository}/pullrequests/{id}";
         }
-    
+
+        public static string PullRequestDiff(string username, string repository, long id)
+        {
+            return $"repositories/{username}/{repository}/pullrequests/{id}/diff";
+        }
+
         public static string User()
         {
             return "user";

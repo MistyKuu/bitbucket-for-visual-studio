@@ -16,6 +16,7 @@ namespace BitBucket.REST.API
             RepositoriesClient = new RepositoriesClient(Client, Connection);
             UserClient = new UserClient(Client, Connection);
             PullRequestsClient = new PullRequestsClient(Client, Connection);
+            TeamsClient = new TeamsClient(Client, Connection);
         }
 
         public void Initialize()
@@ -28,6 +29,7 @@ namespace BitBucket.REST.API
             return "bitbucket.org";
         }
 
+        public TeamsClient TeamsClient { get; private set; }
         public RepositoriesClient RepositoriesClient { get; private set; }
         public UserClient UserClient { get; private set; }
         public Connection Connection { get; private set; }

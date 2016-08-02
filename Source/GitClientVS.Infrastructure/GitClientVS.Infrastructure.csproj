@@ -98,10 +98,9 @@
     <Compile Include="Extensions\ViewModelsExtensions.cs" />
     <Compile Include="LoggerConfigurator.cs" />
     <Compile Include="Mappings\GitMappingsProfile.cs" />
+    <Compile Include="Mappings\PullRequestOptionsTypeConverter.cs" />
     <Compile Include="Mappings\PullRequestTypeConverter.cs" />
     <Compile Include="Mappings\RepositoryTypeConverter.cs" />
-    <Compile Include="Mappings\ReversePullRequestTypeConverter.cs" />
-    <Compile Include="Mappings\ReverseRepositoryTypeConverter.cs" />
     <Compile Include="PageIds.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
