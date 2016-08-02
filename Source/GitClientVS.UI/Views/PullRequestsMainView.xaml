@@ -34,7 +34,7 @@
                     </Grid.RowDefinitions>
 
                     <controls1:CustomizedListItem
-                    Created="{Binding CreationDate}"
+                    Created="{Binding Updated}"
                     Title="{Binding Title}"
                     Sender="{Binding Author.DisplayName}"
                     Image="{Binding Author.Links.Avatar.Href}"

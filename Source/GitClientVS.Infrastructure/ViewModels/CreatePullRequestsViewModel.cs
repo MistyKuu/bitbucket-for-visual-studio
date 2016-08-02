@@ -32,6 +32,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private GitBranch _destinationBranch;
         private string _description;
         private string _title;
+        private bool _closeSourceBranch;
 
 
         public string ErrorMessage
@@ -74,6 +75,13 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _title, value); }
         }
 
+        [Required]
+        public bool CloseSourceBranch
+        {
+            get { return _closeSourceBranch; }
+            set { this.RaiseAndSetIfChanged(ref _closeSourceBranch, value); }
+        }
+
         public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
         public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
 
@@ -92,6 +100,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _gitService = gitService;
             _pageNavigationService = pageNavigationService;
+            CloseSourceBranch = false;
         }
 
         public void InitializeCommands()
@@ -106,12 +115,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
 
-
         private async Task CreateNewPullRequest()
         {
             // var currentRepo = (_gitService.GetActiveRepository()).Name; todo real repo
             var currentRepo = "test";
-            var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.Name, DestinationBranch.Name);
+            var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.Name, DestinationBranch.Name)
+            {
+                CloseSourceBranch = CloseSourceBranch
+            };
             await _gitClientService.CreatePullRequest(gitPullRequest, currentRepo);
         }
 

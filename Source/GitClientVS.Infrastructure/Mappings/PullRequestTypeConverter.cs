@@ -16,8 +16,10 @@ namespace GitClientVS.Infrastructure.Mappings
             {
                 Id = source.Id.ToString(),
                 Author = source.Author.MapTo<GitUser>(),
-                CreationDate = DateTime.Parse(source.CreatedOn).ToString("F"), // TODO PARSE WON"T WORK WITH ALL CULTURES FIX
-                Status = source.State.MapTo<GitPullRequestStatus>()
+                Status = source.State.MapTo<GitPullRequestStatus>(),
+                Created = DateTime.Parse(source.CreatedOn),
+                Updated = DateTime.Parse(source.UpdatedOn),  //TODO PARSE WON"T WORK WITH ALL CULTURES FIX
+                CloseSourceBranch = source.CloseSourceBranch
             };
         }
     }
@@ -45,7 +47,8 @@ namespace GitClientVS.Infrastructure.Mappings
                         Name = source.DestinationBranch
                     }
                 },
-                State = source.Status.MapTo<PullRequestOptions>()
+                State = source.Status.MapTo<PullRequestOptions>(),
+                CloseSourceBranch = source.CloseSourceBranch
             };
         }
     }
