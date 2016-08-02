@@ -62,6 +62,23 @@ namespace GitClientVS.Services
             return repositories.Values.MapTo<List<GitRemoteRepository>>();
         }
 
+        public async Task<IEnumerable<GitRemoteRepository>> GetAllRepositories()
+        {
+            var allRepositories = new List<GitRemoteRepository>();
+
+            var userRepositories = await _bitbucketClient.RepositoriesClient.GetRepositories();
+            allRepositories.AddRange(userRepositories.Values.MapTo<List<GitRemoteRepository>>());
+
+            var teams = await _bitbucketClient.TeamsClient.GetTeams();
+            foreach (var team in teams.Values)
+            {
+                var teamRepositories = await _bitbucketClient.RepositoriesClient.GetRepositories(team.Username);
+                allRepositories.AddRange(teamRepositories.Values.MapTo<List<GitRemoteRepository>>());
+            }
+
+            return allRepositories;
+        }
+
         public async Task<string> GetPullRequestDiff(string repositoryName, long id)
         {
             return await _bitbucketClient.PullRequestsClient.GetPullRequestDiff(repositoryName, id);

@@ -38,7 +38,9 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+                        <TextBlock Grid.Column="1">
+                             <Run Text="{Binding Owner}"/><Run Text="/"/><Run Text="{Binding Name}"/>
+                        </TextBlock>
                     </Grid>
                 </DataTemplate>
             </Grid.Resources>
