@@ -65,6 +65,8 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AttachedProperties\AttachableForStyleBehavior.cs" />
+    <Compile Include="AttachedProperties\SetErrorTemplateAfterTouchBehavior.cs" />
     <Compile Include="Bindings\ValidatedBinding.cs" />
     <Compile Include="Controls\CustomizedListItem.xaml.cs">
       <DependentUpon>CustomizedListItem.xaml</DependentUpon>
@@ -215,9 +217,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AttachedProperties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Resources\Entypo.ttf" />

@@ -14,6 +14,9 @@ namespace GitClientVS.UI.Converters
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+                return null;
+
             return ((bool)value) ? Visibility.Visible : Visibility.Collapsed;
         }
 

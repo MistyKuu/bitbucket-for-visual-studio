@@ -12,6 +12,8 @@
              xmlns:ui="clr-namespace:GitClientVS.UI"
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              xmlns:views="clr-namespace:GitClientVS.UI.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModels:CreatePullRequestsViewModel,IsDesignTimeCreatable=False}" 
@@ -77,7 +79,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="{x:Static ui:Resources.Title}"/>
-                <TextBox Grid.Row="1" Text="{bindings:ValidatedBinding Title}"/>
+                <TextBox Grid.Row="1" Text="{bindings:ValidatedBinding Title}" />
                 <TextBlock Grid.Row="2" Text="{x:Static ui:Resources.Description}"/>
                 <TextBox Grid.Row="3" Text="{bindings:ValidatedBinding Description}" AcceptsReturn="True" MinLines="3"/>
                 <CheckBox Grid.Row="4" IsChecked="{Binding CloseSourceBranch,Mode=TwoWay}" Content="Close Source Branch?"/>
