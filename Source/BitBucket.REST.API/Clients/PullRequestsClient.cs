@@ -31,6 +31,19 @@ namespace BitBucket.REST.API.Clients
             return response.Data;
         }
 
+        public async Task<string> GetPullRequestDiff(string repositoryName, long id)
+        {
+            return await GetPullRequestDiff(repositoryName, Connection.Credentials.Login, id);
+        }
+
+        public async Task<string> GetPullRequestDiff(string repositoryName, string owner, long id)
+        {
+            var url = ApiUrls.PullRequestDiff(owner, repositoryName, id);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await RestClient.ExecuteTaskAsync<string>(request);
+            return response.Data;
+        }
+
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequests(string repositoryName, PullRequestOptions option)
         {
             var url = ApiUrls.PullRequests(Connection.Credentials.Login, repositoryName);

@@ -62,6 +62,15 @@ namespace GitClientVS.Services
             return repositories.Values.MapTo<List<GitRemoteRepository>>();
         }
 
+        public async Task<string> GetPullRequestDiff(string repositoryName, long id)
+        {
+            return await _bitbucketClient.PullRequestsClient.GetPullRequestDiff(repositoryName, id);
+        }
+
+        public async Task<string> GetPullRequestDiff(string repositoryName, string ownerName, long id)
+        {
+            return await _bitbucketClient.PullRequestsClient.GetPullRequestDiff(repositoryName, ownerName, id);
+        }
 
         public bool IsOriginRepo(GitRemoteRepository gitRemoteRepository)
         {

@@ -31,7 +31,7 @@
     </controls:MetroWindow.Resources>
 
     
-    <Grid Margin="20,20,20,0">
+    <Grid Margin="20">
         <Grid.Resources>
             <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                 <Setter Property="Margin" Value="5"/>
