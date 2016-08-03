@@ -34,23 +34,32 @@ namespace GitClientVS.Infrastructure.ViewModels
     {
         private IGitClientService _gitClientService;
         private IGitService _gitService;
+        private readonly IUserInformationService _userInformationService;
         private ReactiveCommand<Unit> _publishRepositoryCommand;
+        private ReactiveCommand<Unit> _initializeCommand;
         private string _repositoryName;
         private string _description;
         private bool _isPrivate;
         private string _errorMessage;
         private bool _isLoading;
+        private List<string> _owners;
+        private string _selectedOwner;
+
         public ICommand PublishRepositoryCommand => _publishRepositoryCommand;
+        public ICommand InitializeCommand => _initializeCommand;
+
 
         [ImportingConstructor]
         public PublishSectionViewModel(
             IGitClientService gitClientService,
             IGitService gitService,
-            IFileService fileService
+            IFileService fileService,
+            IUserInformationService userInformationService
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
+            _userInformationService = userInformationService;
         }
 
         [Required]
@@ -90,20 +99,38 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
         }
 
-        //public object Owners
-        //{
-        //    get { throw new NotImplementedException(); }
-        //}
+        public List<string> Owners
+        {
+            get { return _owners; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _owners, value);
+            }
+        }
 
-        //public object Owner
-        //{
-        //    get { throw new NotImplementedException(); }
-        //}
+        [Required]
+        public string SelectedOwner
+        {
+            get { return _selectedOwner; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedOwner, value);
+            }
+        }
 
 
         public void InitializeCommands()
         {
             _publishRepositoryCommand = ReactiveCommand.CreateAsyncTask(CanPublishRepository(), _ => PublishRepository());
+            _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => CreateOwners());
+        }
+
+        private async Task CreateOwners()
+        {
+            var teamNames = (await _gitClientService.GetTeams()).Select(x => x.Name).ToList();
+            teamNames.Insert(0, _userInformationService.ConnectionData.UserName);
+            Owners = teamNames;
+            SelectedOwner = Owners.FirstOrDefault();
         }
 
         private async Task PublishRepository()
@@ -112,7 +139,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 Name = RepositoryName,
                 Description = Description,
-                IsPrivate = IsPrivate
+                IsPrivate = IsPrivate,
+                Owner = SelectedOwner
             };
 
             var remoteRepo = await _gitClientService.CreateRepositoryAsync(gitRemoteRepository);
@@ -129,8 +157,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             return IsObjectValid();
         }
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _publishRepositoryCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _publishRepositoryCommand };
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _publishRepositoryCommand, _initializeCommand };
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _publishRepositoryCommand, _initializeCommand };
 
 
     }

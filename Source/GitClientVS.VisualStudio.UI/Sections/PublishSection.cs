@@ -21,6 +21,7 @@ namespace GitClientVS.VisualStudio.UI.Sections
     public class PublishSection : TeamExplorerBaseSection
     {
         private readonly IAppServiceProvider _appServiceProvider;
+        private readonly IUserInformationService _userInformationService;
         private readonly IGitWatcher _gitWatcher;
         private readonly IEventAggregatorService _eventAggregator;
         private IDisposable _obs;
@@ -32,19 +33,21 @@ namespace GitClientVS.VisualStudio.UI.Sections
             IAppServiceProvider appServiceProvider,
             IGitClientService gitClientService,
             IGitWatcher gitWatcher,
+            IUserInformationService userInformationService,
             IEventAggregatorService eventAggregator
             ) : base(view)
         {
             _appServiceProvider = appServiceProvider;
+            _userInformationService = userInformationService;
             _eventAggregator = eventAggregator;
             Title = $"{Resources.PublishSectionTitle} to {gitClientService.Origin}";
-            IsVisible = IsGitLocalRepo(gitWatcher.ActiveRepo);
-            _obs = _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(x => IsVisible = IsGitLocalRepo(x.ActiveRepository));
+            IsVisible = IsGitLocalRepoAndLoggedIn(gitWatcher.ActiveRepo);
+            _obs = _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(x => IsVisible = IsGitLocalRepoAndLoggedIn(x.ActiveRepository));
         }
 
-        private bool IsGitLocalRepo(GitRemoteRepository repo)
+        private bool IsGitLocalRepoAndLoggedIn(GitRemoteRepository repo)
         {
-            return (repo != null && string.IsNullOrEmpty(repo.CloneUrl));
+            return (repo != null && string.IsNullOrEmpty(repo.CloneUrl)) && _userInformationService.ConnectionData.IsLoggedIn;
         }
 
         public override void Initialize(object sender, SectionInitializeEventArgs e)
