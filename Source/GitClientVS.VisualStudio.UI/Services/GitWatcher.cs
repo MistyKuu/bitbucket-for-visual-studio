@@ -16,19 +16,24 @@ namespace GitClientVS.VisualStudio.UI.Services
         private readonly SynchronizationContext syncContext;
         private readonly IGitExt gitExt;
         private readonly IEventAggregatorService eventAggregatorService;
+        private readonly IGitService _gitService;
 
         [ImportingConstructor]
         public GitWatcher(
             IAppServiceProvider appServiceProvider,
-            IEventAggregatorService eventAggregatorService)
+            IEventAggregatorService eventAggregatorService,
+            IGitService gitService
+            )
         {
             syncContext = SynchronizationContext.Current;
             this.eventAggregatorService = eventAggregatorService;
+            _gitService = gitService;
             gitExt = appServiceProvider.GetService<IGitExt>();
         }
 
         public void Initialize()
         {
+            ActiveRepo = _gitService.GetActiveRepository();
             gitExt.PropertyChanged += CheckAndUpdate;
         }
 

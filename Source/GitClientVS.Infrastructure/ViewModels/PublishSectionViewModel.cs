@@ -53,12 +53,14 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitService = gitService;
         }
 
+        [Required]
         public string RepositoryName
         {
             get { return _repositoryName; }
             set { this.RaiseAndSetIfChanged(ref _repositoryName, value); }
         }
 
+        [Required]
         public string Description
         {
             get { return _description; }

@@ -24,44 +24,46 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-
     <Grid>
-        <Grid.Resources>
-            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                <Setter Property="Margin" Value="5"/>
-            </Style>
-            <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
-                <Setter Property="Margin" Value="5"/>
-            </Style>
-            <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
-                <Setter Property="Margin" Value="5"/>
-            </Style>
-            <Style TargetType="TextBox" BasedOn="{StaticResource ValidatedTextBoxStyle}">
-                <Setter Property="Margin" Value="5"/>
-            </Style>
-            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                <Setter Property="Margin" Value="5"/>
-                <Setter Property="Padding" Value="5"/>
-            </Style>
-        </Grid.Resources>
+        <controls1:ProgressBar ProgressContent="{Binding ElementName=GridContent}"/>
+        <Grid x:Name="GridContent">
+            <Grid.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+                <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource ValidatedTextBoxStyle}">
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Margin" Value="5"/>
+                    <Setter Property="Padding" Value="5"/>
+                </Style>
+            </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
-        <TextBlock Text="{x:Static ui:Resources.PublishToBitbucketText}"></TextBlock>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <ComboBox Grid.Row="1" Text="One" ItemsSource="{Binding Owners}" SelectedItem="{Binding Owner}"/>
-        <TextBox Grid.Row="2" Text="{bindings:ValidatedBinding RepositoryName}"/>
-        <TextBox Grid.Row="3" Text="{bindings:ValidatedBinding Description}" AcceptsReturn="True" MinLines="3"/>
-        <CheckBox Grid.Row="4"  Grid.Column="0" IsChecked="{Binding IsPrivate, Mode=TwoWay}" Content="{x:Static ui:Resources.IsPrivateRepo}"/>
-        <Button Grid.Row="5" Command="{Binding PublishRepositoryCommand}" HorizontalAlignment="Left" Content="{x:Static ui:Resources.Publish}"/>
-        <controls1:ErrorView Grid.Row="6"/>
+            <TextBlock Grid.Row="0" Text="{x:Static ui:Resources.PublishSectionMessage}" FontWeight="Light"/>
+
+            <ComboBox Grid.Row="1" Text="One" ItemsSource="{Binding Owners}" SelectedItem="{Binding Owner}"/>
+            <TextBox Grid.Row="2" Text="{bindings:ValidatedBinding RepositoryName}"/>
+            <TextBox Grid.Row="3" Text="{bindings:ValidatedBinding Description}" AcceptsReturn="True" MinLines="3"/>
+            <CheckBox Grid.Row="4"  Grid.Column="0" IsChecked="{Binding IsPrivate, Mode=TwoWay}" Content="{x:Static ui:Resources.IsPrivateRepo}"/>
+            <Button Grid.Row="5" Command="{Binding PublishRepositoryCommand}" HorizontalAlignment="Left" Content="{x:Static ui:Resources.Publish}"/>
+            <controls1:ErrorView Grid.Row="6"/>
+        </Grid>
     </Grid>
 </UserControl>

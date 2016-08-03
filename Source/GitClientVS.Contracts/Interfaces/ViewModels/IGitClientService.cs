@@ -10,6 +10,7 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
     public interface IGitClientService
     {
         string Title { get; }
+        string Origin { get; }
         Task LoginAsync(string login, string password);
         void Logout();
         Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync();

@@ -184,7 +184,7 @@
   <data name="PublishSectionTitle" xml:space="preserve">
     <value>Publish</value>
   </data>
-  <data name="PublishToBitbucketText" xml:space="preserve">
-    <value>abc</value>
+  <data name="PublishSectionMessage" xml:space="preserve">
+    <value>Your repo has no remote branch. Publish it to remote service.</value>
   </data>
 </root>

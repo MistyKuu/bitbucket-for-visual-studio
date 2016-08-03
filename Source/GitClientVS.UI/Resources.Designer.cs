@@ -234,20 +234,20 @@ namespace GitClientVS.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your repo has no remote branch. Publish it to remote service..
+        /// </summary>
+        public static string PublishSectionMessage {
+            get {
+                return ResourceManager.GetString("PublishSectionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Publish.
         /// </summary>
         public static string PublishSectionTitle {
             get {
                 return ResourceManager.GetString("PublishSectionTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to abc.
-        /// </summary>
-        public static string PublishToBitbucketText {
-            get {
-                return ResourceManager.GetString("PublishToBitbucketText", resourceCulture);
             }
         }
         

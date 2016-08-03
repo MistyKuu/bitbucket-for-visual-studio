@@ -33,8 +33,10 @@ namespace GitClientVS.Services
             _eventAggregator = eventAggregator;
             repositoriesNamespaces = new Dictionary<string, List<string>>();
         }
-    
-        public string Title => "Bitbucket Extension";
+
+
+        public string Origin => "BitBucket";
+        public string Title => $"{Origin} Extension";
 
         public async Task LoginAsync(string login, string password)
         {
