@@ -24,14 +24,11 @@ namespace GitClientVS.Services
         private BitbucketClient _bitbucketClient;
 
         public bool IsConnected => _bitbucketClient != null;
-        private Dictionary<String, List<String>> repositoriesNamespaces;
-
 
         [ImportingConstructor]
         public BitbucketService(IEventAggregatorService eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            repositoriesNamespaces = new Dictionary<string, List<string>>();
         }
 
 
@@ -48,14 +45,6 @@ namespace GitClientVS.Services
             var bitbucketInitializer = new BitbucketClientInitializer(connection);
             _bitbucketClient = await bitbucketInitializer.Initialize();
             OnConnectionChanged(ConnectionData.Create(login, password));
-
-            CreateRepositoriesNamespaces(login);
-        }
-
-        private void CreateRepositoriesNamespaces(string login)
-        {
-            //repositoriesNamespaces.Add(login, new List<string>());
-            //await _bitbucketClient.TeamsClient.GetTeams();
         }
 
         public async Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync()
@@ -79,6 +68,12 @@ namespace GitClientVS.Services
             }
 
             return allRepositories;
+        }
+
+        public async Task<IEnumerable<GitTeam>> GetTeams()
+        {
+            var teams = await _bitbucketClient.TeamsClient.GetTeams();
+            return teams.Values.MapTo<List<GitTeam>>();
         }
 
         public async Task<string> GetPullRequestDiff(string repositoryName, long id)

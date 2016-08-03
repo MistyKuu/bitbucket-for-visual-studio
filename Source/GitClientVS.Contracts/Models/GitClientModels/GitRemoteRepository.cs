@@ -22,6 +22,14 @@ namespace GitClientVS.Contracts.Models.GitClientModels
             
         }
 
+        public GitRemoteRepository(string name, string description, string owner, bool isPrivate)
+        {
+            Name = name;
+            Description = description;
+            Owner = owner;
+            IsPrivate = isPrivate;
+        }
+
         public GitRemoteRepository(string name, string cloneUrl)
         {
             Name = name;
