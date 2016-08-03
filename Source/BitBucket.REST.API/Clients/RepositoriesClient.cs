@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Exceptions;
@@ -41,7 +42,7 @@ namespace BitBucket.REST.API.Clients
 
         public async Task<Repository> CreateRepository(Repository repository)
         {
-            var url = ApiUrls.CreateRepository(Connection.Credentials.Login, repository.Name);
+            var url = ApiUrls.CreateRepository(Connection.Credentials.Login, repository.Name.ToLower(CultureInfo.InvariantCulture));
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(repository), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<Repository>(request);
