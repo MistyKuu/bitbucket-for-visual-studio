@@ -19,6 +19,8 @@ using System.Windows;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Infrastructure.Extensions;
 using log4net;
+using Microsoft.TeamFoundation.Controls;
+using Microsoft.TeamFoundation.Git.Controls.Extensibility;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.OLE.Interop;
@@ -89,9 +91,17 @@ namespace GitClientVS.VisualStudio.UI
             var gitWatcher = serviceProvider.GetExportedValue<IGitWatcher>();
             userService.StartListening();
             gitWatcher.Initialize();
-
             await appInitializer.Initialize();
             Logger.Info("Initialized GitClientVsPackage Extension");
+        }
+
+        private void GetIChangesExt()
+        {
+            //ITeamExplorer service = this.GetService<ITeamExplorer>(); do it somewhere
+            //var teamExplorerPage = service.NavigateToPage(new Guid(TeamExplorerPageIds.GitChanges), null);
+            //var teamExplorer = service.GetService<ITeamExplorer>();
+            //var b = service.GetService<IChangesExt2>();
+            //var uc = teamExplorerPage.GetExtensibilityService(typeof(IChangesExt));
         }
 
 

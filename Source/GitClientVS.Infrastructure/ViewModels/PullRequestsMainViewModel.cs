@@ -57,19 +57,25 @@ namespace GitClientVS.Infrastructure.ViewModels
         public PullRequestsMainViewModel(
             IGitClientService gitClientService,
             IGitService gitService,
-            IPageNavigationService pageNavigationService
+            IPageNavigationService pageNavigationService,
+            IVsTools vsTools
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _pageNavigationService = pageNavigationService;
+            _vsTools = vsTools;
         }
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), _ => LoadPullRequests());
             _goToCreateNewPullRequestCommand = ReactiveCommand.Create(Observable.Return(true));
-            _goToCreateNewPullRequestCommand.Subscribe(_ => _pageNavigationService.Navigate(PageIds.CreatePullRequestsPageId));
+            _goToCreateNewPullRequestCommand.Subscribe(_ =>
+            {
+                _vsTools.RunDiff("asd", "asd");
+                _pageNavigationService.Navigate(PageIds.CreatePullRequestsPageId);
+            });
         }
 
         private async Task LoadPullRequests()

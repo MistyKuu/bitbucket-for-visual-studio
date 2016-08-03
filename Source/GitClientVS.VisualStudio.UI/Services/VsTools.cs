@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using EnvDTE;
 using GitClientVS.Contracts.Interfaces.Services;
+using Microsoft.TeamFoundation.Controls;
+using Microsoft.TeamFoundation.Git.Controls.Extensibility;
 
 namespace GitClientVS.VisualStudio.UI.Services
 {
@@ -24,8 +26,8 @@ namespace GitClientVS.VisualStudio.UI.Services
 
         public void RunDiff(string file1, string file2)
         {
-            _dte = (DTE)_appServiceProvider.GetService(typeof(DTE));
-            _dte.ExecuteCommand("Tools.DiffFiles", $"\"{file1}\" \"{file2}\"");
+            //_dte = (DTE)_appServiceProvider.GetService(typeof(DTE));
+            //_dte.ExecuteCommand("Tools.DiffFiles", $"\"{file1}\" \"{file2}\"");
         }
     }
 }

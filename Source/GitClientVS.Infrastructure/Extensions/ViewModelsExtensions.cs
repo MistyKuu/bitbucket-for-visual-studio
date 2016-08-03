@@ -21,14 +21,7 @@ namespace GitClientVS.Infrastructure.Extensions
 
         public static void SetupLoadingCommands(this ILoadableViewModel vm)
         {
-            var res = Observable.Empty<bool>();
-            foreach (var cmd in vm.LoadingCommands)
-                res = cmd.IsExecuting.Merge(res);
-
-            res.Subscribe(x =>
-            {
-                vm.IsLoading = x;
-            });
+            vm.LoadingCommands.Select(x => x.IsExecuting).Merge().Subscribe(x => { vm.IsLoading = x; });
         }
     }
 }

@@ -24,6 +24,7 @@ namespace GitClientVS.UI.AttachedProperties
             _textBox = AssociatedObject;
             _textBox.TextChanged += _textBox_TextChanged;
             _textBox.Loaded += _textBox_Loaded;
+            _actualTemplate = Validation.GetErrorTemplate(_textBox);
         }
 
         private void _textBox_Loaded(object sender, RoutedEventArgs e)
@@ -34,8 +35,7 @@ namespace GitClientVS.UI.AttachedProperties
 
         private void _textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (_actualTemplate != null)
-                Validation.SetErrorTemplate(_textBox, _actualTemplate);
+            Validation.SetErrorTemplate(_textBox, _actualTemplate);
         }
     }
 }
