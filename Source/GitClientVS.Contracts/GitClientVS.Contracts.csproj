@@ -118,6 +118,7 @@
     <Compile Include="Models\GitClientModels\GitPullRequest.cs" />
     <Compile Include="Models\GitClientModels\GitPullRequestStatus.cs" />
     <Compile Include="Models\GitClientModels\GitRemoteRepository.cs" />
+    <Compile Include="Models\GitClientModels\GitTeam.cs" />
     <Compile Include="Models\GitClientModels\GitUser.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

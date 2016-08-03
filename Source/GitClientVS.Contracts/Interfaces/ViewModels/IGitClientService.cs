@@ -20,6 +20,8 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         Task<IEnumerable<GitPullRequest>> GetPullRequests(GitPullRequestStatus gitPullRequestStatus,
             string repositoryName);
 
+        Task<IEnumerable<GitTeam>> GetTeams();
+
         Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName);
 
         Task<string> GetPullRequestDiff(string repositoryName, string ownerName, long id);
