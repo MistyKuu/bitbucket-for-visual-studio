@@ -114,6 +114,9 @@
     <Compile Include="Views\ConnectSectionView.xaml.cs">
       <DependentUpon>ConnectSectionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PublishSectionView.xaml.cs">
+      <DependentUpon>PublishSectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PullRequestsMainView.xaml.cs">
       <DependentUpon>PullRequestsMainView.xaml</DependentUpon>
     </Compile>
@@ -211,6 +214,10 @@
     <Page Include="Views\ConnectSectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PublishSectionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\PullRequestsMainView.xaml">
       <Generator>MSBuild:Compile</Generator>

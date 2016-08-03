@@ -225,6 +225,33 @@ namespace GitClientVS.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Publish.
+        /// </summary>
+        public static string Publish {
+            get {
+                return ResourceManager.GetString("Publish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Publish.
+        /// </summary>
+        public static string PublishSectionTitle {
+            get {
+                return ResourceManager.GetString("PublishSectionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to abc.
+        /// </summary>
+        public static string PublishToBitbucketText {
+            get {
+                return ResourceManager.GetString("PublishToBitbucketText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pull Requests.
         /// </summary>
         public static string PullRequestNavigationItemTitle {

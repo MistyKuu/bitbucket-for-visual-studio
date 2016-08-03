@@ -82,6 +82,7 @@
     <Compile Include="Interfaces\Services\IGitWatcher.cs" />
     <Compile Include="Interfaces\Services\IPageNavigationService.cs" />
     <Compile Include="Interfaces\ViewModels\ICreatePullRequestsViewModel.cs" />
+    <Compile Include="Interfaces\ViewModels\IPublishSectionViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestsMainViewModel.cs" />
     <Compile Include="Interfaces\Views\ICreatePullRequestsView.cs" />
     <Compile Include="Interfaces\Views\ICreateRepositoriesDialogView.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Interfaces\ICloseable.cs" />
     <Compile Include="Interfaces\ViewModels\ICloneRepositoriesDialogViewModel.cs" />
     <Compile Include="Interfaces\Views\ICloneRepositoriesDialogView.cs" />
+    <Compile Include="Interfaces\Views\IPublishSectionView.cs" />
     <Compile Include="Interfaces\Views\IPullRequestsMainView.cs" />
     <Compile Include="Interfaces\ILoadableViewModel.cs" />
     <Compile Include="Models\ConnectionData.cs" />

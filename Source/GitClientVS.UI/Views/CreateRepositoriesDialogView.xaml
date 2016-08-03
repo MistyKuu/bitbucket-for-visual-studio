@@ -10,6 +10,7 @@
              xmlns:ui="clr-namespace:GitClientVS.UI"
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              mc:Ignorable="d" 
              Title="{x:Static ui:Resources.CreateWindowTitle}"
              Style="{DynamicResource DefaultMetroWindowStyle}"
@@ -60,7 +61,7 @@
             </Grid.RowDefinitions>
 
             <Button Command="{Binding CreateCommand}" Content="{x:Static ui:Resources.Create}"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding ErrorMessage}" Style="{StaticResource ErrorTextBlockStyle}"/>
+            <controls1:ErrorView Grid.Row="1" Grid.Column="0"/>
         </Grid>
     </Grid>
 </controls:MetroWindow>
