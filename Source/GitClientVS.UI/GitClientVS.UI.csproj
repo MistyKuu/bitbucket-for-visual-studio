@@ -234,6 +234,9 @@
     <Resource Include="Images\BitbucketWhite.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\BitbucketIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Entypo-license.txt" />
     <None Include="Resources\luki.png" />
     <Content Include="Resources\WindowsIcons-license.txt" />

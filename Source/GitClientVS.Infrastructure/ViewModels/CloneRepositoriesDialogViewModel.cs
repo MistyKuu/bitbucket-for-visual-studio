@@ -138,7 +138,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task RefreshRepositories()
         {
-            Repositories = await _gitClientService.GetUserRepositoriesAsync();
+            Repositories = await _gitClientService.GetAllRepositories();
             SelectedRepository = Repositories.FirstOrDefault();
         }
 

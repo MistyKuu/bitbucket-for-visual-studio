@@ -20,6 +20,7 @@ namespace GitClientVS.Infrastructure.Mappings
                 Created = DateTime.Parse(source.CreatedOn),
                 Updated = DateTime.Parse(source.UpdatedOn),  //TODO PARSE WON"T WORK WITH ALL CULTURES FIX
                 CloseSourceBranch = source.CloseSourceBranch
+
             };
         }
     }

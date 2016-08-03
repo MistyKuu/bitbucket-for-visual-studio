@@ -19,7 +19,8 @@ namespace GitClientVS.Infrastructure.Mappings
                 HasWiki = source.HasWiki,
                 HasIssues = source.HasIssues,
                 IsForked = (source.Parent != null),
-                CloneUrl = source.Links.Clone.First().Href
+                CloneUrl = source.Links.Clone.First().Href,
+                Owner = source.Owner.Username,
             };
         }
     }
