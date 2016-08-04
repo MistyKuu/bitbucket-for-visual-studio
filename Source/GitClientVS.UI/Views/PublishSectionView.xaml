@@ -26,7 +26,7 @@
     </UserControl.Resources>
     <Grid>
         <controls1:ProgressBar ProgressContent="{Binding ElementName=GridContent}"/>
-        <Grid x:Name="GridContent">
+        <Grid x:Name="GridContent" >
             <Grid.Resources>
                 <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Setter Property="Margin" Value="5"/>

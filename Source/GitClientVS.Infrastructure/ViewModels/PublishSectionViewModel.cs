@@ -35,6 +35,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private IGitClientService _gitClientService;
         private IGitService _gitService;
         private readonly IUserInformationService _userInformationService;
+        private readonly IEventAggregatorService _eventAggregator;
         private ReactiveCommand<Unit> _publishRepositoryCommand;
         private ReactiveCommand<Unit> _initializeCommand;
         private string _repositoryName;
@@ -54,13 +55,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             IGitClientService gitClientService,
             IGitService gitService,
             IFileService fileService,
-            IUserInformationService userInformationService
+            IUserInformationService userInformationService,
+            IEventAggregatorService eventAggregator
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _userInformationService = userInformationService;
+            _eventAggregator = eventAggregator;
         }
+
 
         [Required]
         public string RepositoryName
@@ -145,6 +149,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             var remoteRepo = await _gitClientService.CreateRepositoryAsync(gitRemoteRepository);
             _gitService.PublishRepository(remoteRepo);
+            _eventAggregator.Publish(new ActiveRepositoryChangedEvent(_gitService.GetActiveRepository()));
         }
 
         private IObservable<bool> CanPublishRepository()
