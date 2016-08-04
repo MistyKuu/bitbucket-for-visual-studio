@@ -44,6 +44,32 @@ namespace BitBucket.REST.API.Clients
             return response.Data;
         }
 
+        public async Task<IteratorBasedPage<Commit>> GetPullRequestCommits(string repositoryName, long id)
+        {
+            return await GetPullRequestCommits(repositoryName, Connection.Credentials.Login, id);
+        }
+
+        public async Task<IteratorBasedPage<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
+        {
+            var url = ApiUrls.PullRequestCommits(ownerName, repositoryName, id);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<Commit>>(request);
+            return response.Data;
+        }
+
+        public async Task<IteratorBasedPage<Comment>> GetPullRequestComments(string repositoryName, long id)
+        {
+            return await GetPullRequestComments(repositoryName, Connection.Credentials.Login, id);
+        }
+
+        public async Task<IteratorBasedPage<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
+        {
+            var url = ApiUrls.PullRequestComments(ownerName, repositoryName, id);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<Comment>>(request);
+            return response.Data;
+        }
+
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequests(string repositoryName, PullRequestOptions option)
         {
             var url = ApiUrls.PullRequests(Connection.Credentials.Login, repositoryName);

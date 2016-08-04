@@ -36,6 +36,10 @@ namespace GitClientVS.Infrastructure.Mappings
                 IsPrivate = source.IsPrivate,
                 HasIssues = source.HasIssues,
                 HasWiki = source.HasWiki,
+                Owner = new User()
+                {
+                  Username  = source.Owner
+                },
                 Links = new Links()
                 {
                     Clone = new List<Link>(new Link[]

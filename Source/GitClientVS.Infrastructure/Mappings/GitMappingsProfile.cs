@@ -17,6 +17,8 @@ namespace GitClientVS.Infrastructure.Mappings
             CreateMap<Team, GitTeam>().ConvertUsing<TeamTypeConverter>();
             CreateMap<GitTeam, Team>().ConvertUsing<ReverseTeamTypeConverter>();
 
+            CreateMap<Commit, GitCommit>();
+            CreateMap<Comment, GitComment>();
             CreateMap<Branch, GitBranch>();
             CreateMap<User, GitUser>();
             CreateMap<Links, GitLinks>();

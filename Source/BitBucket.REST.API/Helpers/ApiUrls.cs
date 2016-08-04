@@ -45,6 +45,16 @@ namespace BitBucket.REST.API.Helpers
             return $"repositories/{username}/{repository}/pullrequests/{id}/diff";
         }
 
+        public static string PullRequestCommits(string username, string repository, long id)
+        {
+            return $"repositories/{username}/{repository}/pullrequests/{id}/commits";
+        }
+
+        public static string PullRequestComments(string username, string repository, long id)
+        {
+            return $"repositories/{username}/{repository}/pullrequests/{id}/comments";
+        }
+
         public static string User()
         {
             return "user";

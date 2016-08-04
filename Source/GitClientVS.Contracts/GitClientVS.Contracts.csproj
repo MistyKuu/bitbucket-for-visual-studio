@@ -113,6 +113,9 @@
     <Compile Include="Interfaces\IViewModel.cs" />
     <Compile Include="Models\GitClientModels\GitBranch.cs" />
     <Compile Include="Models\GitClientModels\GitClientHostAddress.cs" />
+    <Compile Include="Models\GitClientModels\GitComment.cs" />
+    <Compile Include="Models\GitClientModels\GitCommentContent.cs" />
+    <Compile Include="Models\GitClientModels\GitCommit.cs" />
     <Compile Include="Models\GitClientModels\GitLink.cs" />
     <Compile Include="Models\GitClientModels\GitLinks.cs" />
     <Compile Include="Models\GitClientModels\GitPullRequest.cs" />

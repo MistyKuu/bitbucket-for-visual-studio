@@ -65,8 +65,10 @@
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Branch.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Commit.cs" />
     <Compile Include="Models\Connection.cs" />
+    <Compile Include="Models\Content.cs" />
     <Compile Include="Models\IteratorBasedPage.cs" />
     <Compile Include="Models\Link.cs" />
     <Compile Include="Models\Links.cs" />
