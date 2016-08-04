@@ -26,13 +26,13 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Margin="5" Grid.Row="0" >
-            <Run Text="Hello "/>
+
+        <TextBlock Grid.Row="1"  Margin="5" >
+            <Run Text="You are logged in as"/>
             <Run Text="{Binding ConnectionData.UserName,Mode=OneWay}" FontWeight="SemiBold"/>
-            <Run Text="!"/>
         </TextBlock>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5">
             <teamExplorer:TextLink KeyboardNavigation.TabIndex="0"  Text="{x:Static prop:Resources.Clone}" Command="{Binding OpenCloneCommand}"/>
             <Separator Style="{StaticResource VerticalSeparator}" />
             <teamExplorer:TextLink KeyboardNavigation.TabIndex="1"  Text="{x:Static prop:Resources.Create}" Command="{Binding OpenCreateCommand}"/>

@@ -11,8 +11,13 @@
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:ConnectSectionViewModel,IsDesignTimeCreatable=False}" >
 
     <Grid>
-        <local:ConnectSectionLoggedOutView Visibility="{Binding ElementName=LoggedInView,Path=Visibility,Converter={converters:NegateVisibilityConverter}}" />
-        <local:ConnectSectionLoggedInView x:Name="LoggedInView"  Visibility="{Binding ConnectionData.IsLoggedIn,Converter={converters:BoolToVisibilityConverter}}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Image Grid.Row="0" Height="45" HorizontalAlignment="Left" Source="../Images/BitbucketShortBlue.png"></Image>
+        <local:ConnectSectionLoggedOutView Grid.Row="1" Visibility="{Binding ElementName=LoggedInView,Path=Visibility,Converter={converters:NegateVisibilityConverter}}" />
+        <local:ConnectSectionLoggedInView Grid.Row="1" x:Name="LoggedInView"  Visibility="{Binding ConnectionData.IsLoggedIn,Converter={converters:BoolToVisibilityConverter}}"/>
     </Grid>
 </UserControl>
 
