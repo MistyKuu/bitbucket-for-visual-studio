@@ -23,6 +23,11 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
 
         Task<IEnumerable<GitTeam>> GetTeams();
 
+        Task<IEnumerable<GitCommit>> GetPullRequestCommits(string repositoryName, string ownerName, long id);
+        Task<IEnumerable<GitCommit>> GetPullRequestCommits(string repositoryName, long id);
+        Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, string ownerName, long id);
+        Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, long id);
+
         Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName);
 
         Task<string> GetPullRequestDiff(string repositoryName, string ownerName, long id);

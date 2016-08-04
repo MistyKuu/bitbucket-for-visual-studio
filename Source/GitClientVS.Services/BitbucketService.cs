@@ -155,5 +155,29 @@ namespace GitClientVS.Services
         {
             _eventAggregator.Publish(new ConnectionChangedEvent(connectionData));
         }
+
+        public async Task<IEnumerable<GitCommit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
+        {
+            var commits = await _bitbucketClient.PullRequestsClient.GetPullRequestCommits(repositoryName, ownerName, id);
+            return commits.Values.MapTo<List<GitCommit>>();
+        }
+
+        public async Task<IEnumerable<GitCommit>> GetPullRequestCommits(string repositoryName, long id)
+        {
+            var commits = await _bitbucketClient.PullRequestsClient.GetPullRequestCommits(repositoryName, id);
+            return commits.Values.MapTo<List<GitCommit>>();
+        }
+
+        public async Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
+        {
+            var commits = await _bitbucketClient.PullRequestsClient.GetPullRequestComments(repositoryName, ownerName, id);
+            return commits.Values.MapTo<List<GitComment>>();
+        }
+
+        public async Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, long id)
+        {
+            var commits = await _bitbucketClient.PullRequestsClient.GetPullRequestComments(repositoryName, id);
+            return commits.Values.MapTo<List<GitComment>>();
+        }
     }
 }
