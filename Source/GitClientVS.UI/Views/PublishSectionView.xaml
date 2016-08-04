@@ -58,9 +58,9 @@
 
             <TextBlock Grid.Row="0" Text="{x:Static ui:Resources.PublishSectionMessage}" FontWeight="Light"/>
 
-            <ComboBox Grid.Row="1" Text="One" ItemsSource="{Binding Owners}" SelectedItem="{Binding SelectedOwner,Mode=TwoWay}"/>
-            <TextBox Grid.Row="2" Text="{bindings:ValidatedBinding RepositoryName}"/>
-            <TextBox Grid.Row="3" Text="{bindings:ValidatedBinding Description}" AcceptsReturn="True" MinLines="3"/>
+            <ComboBox Grid.Row="1" Text="One" ItemsSource="{Binding Owners}" SelectedItem="{Binding SelectedOwner,Mode=TwoWay}" />
+            <TextBox Grid.Row="2" Text="{bindings:ValidatedBinding RepositoryName}" controls:TextBoxHelper.Watermark="Repository name"/>
+            <TextBox Grid.Row="3" Text="{bindings:ValidatedBinding Description}" controls:TextBoxHelper.Watermark="Description" AcceptsReturn="True" MinLines="3"/>
             <CheckBox Grid.Row="4"  Grid.Column="0" IsChecked="{Binding IsPrivate, Mode=TwoWay}" Content="{x:Static ui:Resources.IsPrivateRepo}"/>
             <Button Grid.Row="5" Command="{Binding PublishRepositoryCommand}" HorizontalAlignment="Left" Content="{x:Static ui:Resources.Publish}"/>
             <controls1:ErrorView Grid.Row="6"/>
