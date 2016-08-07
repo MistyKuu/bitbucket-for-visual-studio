@@ -12,6 +12,7 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
+using ParseDiff;
 using ReactiveUI;
 
 namespace GitClientVS.Infrastructure.ViewModels
@@ -27,6 +28,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<Unit> _initializeCommand;
         private IEnumerable<GitCommit> _commits;
         private IEnumerable<GitComment> _comments;
+        private IEnumerable<FileDiff> _fileDiffs;
 
         [ImportingConstructor]
         public PullRequestsDetailViewModel(
@@ -56,12 +58,20 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _commits, value); }
         }
 
+        public IEnumerable<FileDiff> FileDiffs
+        {
+            get { return _fileDiffs; }
+            set { this.RaiseAndSetIfChanged(ref _fileDiffs, value); }
+        }
+
         private async Task LoadPullRequestData(GitPullRequest pr)
         {
-            var id = int.Parse(pr.Id); 
+            var id = int.Parse(pr.Id);
             var currentRepository = _gitService.GetActiveRepository();
             Commits = await _gitClientService.GetPullRequestCommits("django-piston", "jespern", id);
             Comments = await _gitClientService.GetPullRequestComments("django-piston", "jespern", id);
+            var diff = await _gitClientService.GetPullRequestDiff("django-piston", "jespern", id);
+            FileDiffs = Diff.Parse(diff, Environment.NewLine);
         }
 
 

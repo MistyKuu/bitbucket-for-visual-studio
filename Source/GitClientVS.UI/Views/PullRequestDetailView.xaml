@@ -24,7 +24,7 @@
 
 
             <DataTemplate x:Key="FilesChangedTemplate">
-                <TextBlock Text="{Binding Path}"/>
+                <TextBlock Text="{Binding From}"/>
             </DataTemplate>
             <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">
                 <Grid>
@@ -66,26 +66,30 @@
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
-    
-    <Grid >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Grid>
+        <controls1:ProgressBar ProgressContent="{Binding ElementName=PrContent}"/>
+        <Grid x:Name="PrContent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <controls:MetroAnimatedTabControl Margin="20">
-            <controls:MetroTabItem Header="{Binding FilesChanged.Count}" HeaderStringFormat="{}Files Changed ({0})" >
-                <ListBox ItemsSource="{Binding FilesChanged}" ItemTemplate="{StaticResource FilesChangedTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
-            </controls:MetroTabItem>
-            <controls:MetroTabItem Header="{Binding Commits.Count}" HeaderStringFormat="{}Commits ({0})">
-                <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
-            </controls:MetroTabItem>
-            <controls:MetroTabItem Header="{Binding Comments.Count}" HeaderStringFormat="{}Comments ({0})">
-                <ListBox ItemsSource="{Binding Comments}" ItemTemplate="{StaticResource CommentsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
-            </controls:MetroTabItem>
-        </controls:MetroAnimatedTabControl>
+            <controls:MetroAnimatedTabControl Margin="20" >
 
-        <controls1:ErrorView Grid.Row="1"/>
+                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15"  Header="{Binding FilesChanged.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
+                    <ListBox ItemsSource="{Binding FilesChanged}" ItemTemplate="{StaticResource FilesChangedTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                </controls:MetroTabItem>
+                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
+                    <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                </controls:MetroTabItem>
+                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15" Header="{Binding Comments.Count,FallbackValue=0}" HeaderStringFormat="{}Comments ({0})">
+                    <ListBox ItemsSource="{Binding Comments}" ItemTemplate="{StaticResource CommentsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                </controls:MetroTabItem>
+            </controls:MetroAnimatedTabControl>
+
+            <controls1:ErrorView Grid.Row="1"/>
+        </Grid>
     </Grid>
+
 </UserControl>
