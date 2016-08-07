@@ -24,6 +24,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IPageNavigationService _pageNavigationService;
         private readonly IVsTools _vsTools;
         private ReactiveCommand<Unit> _initializeCommand;
+        private ReactiveCommand<object> _goToDetailsCommand;
         private bool _isLoading;
         private IEnumerable<GitPullRequest> _gitPullRequests;
         private string _errorMessage;
@@ -51,31 +52,30 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         public ICommand InitializeCommand => _initializeCommand;
+        public ICommand GoToDetailsCommand => _goToDetailsCommand;
         public ICommand GotoCreateNewPullRequestCommand => _goToCreateNewPullRequestCommand;
+
 
         [ImportingConstructor]
         public PullRequestsMainViewModel(
             IGitClientService gitClientService,
             IGitService gitService,
-            IPageNavigationService pageNavigationService,
-            IVsTools vsTools
+            IPageNavigationService pageNavigationService
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _pageNavigationService = pageNavigationService;
-            _vsTools = vsTools;
         }
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), _ => LoadPullRequests());
             _goToCreateNewPullRequestCommand = ReactiveCommand.Create(Observable.Return(true));
-            _goToCreateNewPullRequestCommand.Subscribe(_ =>
-            {
-                _vsTools.RunDiff("asd", "asd");
-                _pageNavigationService.Navigate(PageIds.CreatePullRequestsPageId);
-            });
+            _goToCreateNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.Navigate(PageIds.CreatePullRequestsPageId); });
+
+            _goToDetailsCommand = ReactiveCommand.Create(Observable.Return(true));
+            _goToDetailsCommand.Subscribe(x => { _pageNavigationService.Navigate(PageIds.PullRequestsDetailPageId, x); });
         }
 
         private async Task LoadPullRequests()

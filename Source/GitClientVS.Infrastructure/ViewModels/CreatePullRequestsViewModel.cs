@@ -95,7 +95,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand CreateNewPullRequestCommand => _createNewPullRequestCommand;
 
         [ImportingConstructor]
-        public CreatePullRequestsViewModel(IGitClientService gitClientService, IGitService gitService, IPageNavigationService pageNavigationService)
+        public CreatePullRequestsViewModel(
+            IGitClientService gitClientService,
+            IGitService gitService, 
+            IPageNavigationService pageNavigationService
+            )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;

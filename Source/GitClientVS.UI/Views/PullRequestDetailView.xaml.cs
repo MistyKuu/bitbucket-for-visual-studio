@@ -8,11 +8,20 @@ using GitClientVS.Contracts.Interfaces.Views;
 
 namespace GitClientVS.UI.Views
 {
-    public partial class PullRequestDetailView : UserControl
+    [Export(typeof(IPullRequestDetailView))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public partial class PullRequestDetailView : UserControl, IPullRequestDetailView
     {
-        public PullRequestDetailView()
+        private readonly IPullRequestsDetailViewModel _detailsViewModel;
+
+        [ImportingConstructor]
+        public PullRequestDetailView(IPullRequestsDetailViewModel detailsViewModel)
         {
             InitializeComponent();
+            _detailsViewModel = detailsViewModel;
+            DataContext = _detailsViewModel;
         }
+
+        public ICommand InitializeCommand => _detailsViewModel.InitializeCommand;
     }
 }

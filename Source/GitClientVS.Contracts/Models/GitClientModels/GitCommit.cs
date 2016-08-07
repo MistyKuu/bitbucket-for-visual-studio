@@ -1,4 +1,6 @@
-﻿namespace GitClientVS.Contracts.Models.GitClientModels
+﻿using System;
+
+namespace GitClientVS.Contracts.Models.GitClientModels
 {
     public class GitCommit
     {
@@ -6,6 +8,8 @@
 
         public string Message { get; set; }
 
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
+
+        public GitUser Author { get; set; }
     }
 }

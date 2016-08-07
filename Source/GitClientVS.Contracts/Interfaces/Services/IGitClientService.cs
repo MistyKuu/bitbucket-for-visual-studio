@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GitClientVS.Contracts.Models.GitClientModels;
 
-namespace GitClientVS.Contracts.Interfaces.ViewModels
+namespace GitClientVS.Contracts.Interfaces.Services
 {
     public interface IGitClientService
     {

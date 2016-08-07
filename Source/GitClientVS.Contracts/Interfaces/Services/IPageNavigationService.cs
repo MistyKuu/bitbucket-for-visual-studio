@@ -2,7 +2,7 @@
 {
     public interface IPageNavigationService
     {
-        void Navigate(string pageId);
         void NavigateBack();
+        void Navigate(string pageId, object parameter = null);
     }
 }

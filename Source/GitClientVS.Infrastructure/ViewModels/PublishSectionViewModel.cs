@@ -127,6 +127,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _publishRepositoryCommand = ReactiveCommand.CreateAsyncTask(CanPublishRepository(), _ => PublishRepository());
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => CreateOwners());
+            _publishRepositoryCommand.Subscribe(_ => _eventAggregator.Publish(new ActiveRepositoryChangedEvent(_gitService.GetActiveRepository())));
         }
 
         private async Task CreateOwners()
@@ -149,7 +150,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             var remoteRepo = await _gitClientService.CreateRepositoryAsync(gitRemoteRepository);
             _gitService.PublishRepository(remoteRepo);
-            _eventAggregator.Publish(new ActiveRepositoryChangedEvent(_gitService.GetActiveRepository()));
         }
 
         private IObservable<bool> CanPublishRepository()

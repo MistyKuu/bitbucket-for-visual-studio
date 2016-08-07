@@ -13,17 +13,20 @@
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance viewModels:CreatePullRequestsViewModel,IsDesignTimeCreatable=False}" 
+             d:DataContext="{d:DesignInstance viewModels:PullRequestsDetailViewModel,IsDesignTimeCreatable=False}" 
              >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+
             <DataTemplate x:Key="FilesChangedTemplate">
                 <TextBlock Text="{Binding Path}"/>
             </DataTemplate>
-            <DataTemplate x:Key="CommitsTemplate" >
+            <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -31,30 +34,58 @@
                     </Grid.RowDefinitions>
 
                     <controls1:CustomizedListItem
-                    Date="{Binding Updated}"
-                    Title="{Binding Title}"
+                    Date="{Binding Date}"
+                    Title="{Binding Message}"
+                    DateSeparator=" - commited on"
                     Sender="{Binding Author.DisplayName}"
                     Image="{Binding Author.Links.Avatar.Href}"
+                    Margin="0,10"
+                    TextWrapping="Wrap"
                     />
                     <Separator Grid.Row="1"/>
                 </Grid>
             </DataTemplate>
-            <DataTemplate x:Key="CommentsTemplate" >
-                <TextBlock Text="{Binding Text}"/>
+            <DataTemplate x:Key="CommentsTemplate" DataType="gitClientModels:GitComment">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <controls1:CustomizedListItem
+                    Date="{Binding CreatedOn}"
+                    Title="{Binding Content.Raw}"
+                    DateSeparator=" - sent on"
+                    Sender="{Binding User.DisplayName}"
+                    Image="{Binding User.Links.Avatar.Href}"
+                    Margin="0,10"
+                    TextWrapping="Wrap"
+                    />
+                    <Separator Grid.Row="1"/>
+                </Grid>
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <Expander Header="Files Changed">
-                <ListBox ItemsSource="{Binding FilesChanged}" ItemTemplate="{StaticResource FilesChangedTemplate}"/>
-            </Expander>
-            <Expander Header="Commits">
-                <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}"/>
-            </Expander>
-            <Expander Header="Comments">
-                <ListBox ItemsSource="{Binding Comments}" ItemTemplate="{StaticResource CommentsTemplate}"/>
-            </Expander>
-        </StackPanel>
+    
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <controls:MetroAnimatedTabControl Margin="20">
+            <controls:MetroTabItem Header="{Binding FilesChanged.Count}" HeaderStringFormat="{}Files Changed ({0})" >
+                <ListBox ItemsSource="{Binding FilesChanged}" ItemTemplate="{StaticResource FilesChangedTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+            </controls:MetroTabItem>
+            <controls:MetroTabItem Header="{Binding Commits.Count}" HeaderStringFormat="{}Commits ({0})">
+                <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+            </controls:MetroTabItem>
+            <controls:MetroTabItem Header="{Binding Comments.Count}" HeaderStringFormat="{}Comments ({0})">
+                <ListBox ItemsSource="{Binding Comments}" ItemTemplate="{StaticResource CommentsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+            </controls:MetroTabItem>
+        </controls:MetroAnimatedTabControl>
+
+        <controls1:ErrorView Grid.Row="1"/>
     </Grid>
 </UserControl>

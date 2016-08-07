@@ -12,8 +12,10 @@
              xmlns:ui="clr-namespace:GitClientVS.UI"
              xmlns:teamExplorer="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;assembly=Microsoft.TeamFoundation.Controls"
              xmlns:infrastructure="clr-namespace:GitClientVS.Infrastructure;assembly=GitClientVS.Infrastructure"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="PrView"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsMainViewModel,IsDesignTimeCreatable=False}" 
              >
     <UserControl.Resources>
@@ -35,10 +37,16 @@
 
                     <controls1:CustomizedListItem
                     Date="{Binding Updated}"
+                    DateSeparator=" - updated on"
                     Title="{Binding Title}"
                     Sender="{Binding Author.DisplayName}"
                     Image="{Binding Author.Links.Avatar.Href}"
                     Margin="0,10"
+                    DetailsCommand="{Binding ElementName=PrView,Path=DataContext.GoToDetailsCommand}"
+                    DetailsCommandParameter="{Binding}"
+                    TextWrapping="NoWrap"
+                    TextTrimming="WordEllipsis"
+                    GoToLink="{Binding Url}"
                     />
                     <Separator Grid.Row="1"/>
                 </Grid>
@@ -65,7 +73,10 @@
         <controls1:ProgressBar Grid.Row="1" ProgressContent="{Binding ElementName=PullRequests}"/>
 
         <Grid Grid.Row="1" Margin="20" x:Name="PullRequests">
-            <ListBox ItemsSource="{Binding GitPullRequests}" ItemTemplate="{StaticResource PullRequestTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+            <ListBox  ItemsSource="{Binding GitPullRequests}"
+                     ItemTemplate="{StaticResource PullRequestTemplate}"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     />
         </Grid>
 
         <controls1:ErrorView Grid.Row="1"/>

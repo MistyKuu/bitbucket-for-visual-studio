@@ -252,6 +252,15 @@ namespace GitClientVS.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pull Request Details -.
+        /// </summary>
+        public static string PullRequestDetailsPageTitle {
+            get {
+                return ResourceManager.GetString("PullRequestDetailsPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pull Requests.
         /// </summary>
         public static string PullRequestNavigationItemTitle {

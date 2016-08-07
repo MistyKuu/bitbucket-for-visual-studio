@@ -21,11 +21,10 @@ namespace GitClientVS.VisualStudio.UI.Services
             _appServiceProvider = appServiceProvider;
         }
 
-        public void Navigate(string pageId)
+        public void Navigate(string pageId, object parameter = null)
         {
             ITeamExplorer service = _appServiceProvider.GetService<ITeamExplorer>();
-            service?.NavigateToPage(new Guid(pageId), null);
-
+            service?.NavigateToPage(new Guid(pageId), parameter);
         }
 
         public void NavigateBack()

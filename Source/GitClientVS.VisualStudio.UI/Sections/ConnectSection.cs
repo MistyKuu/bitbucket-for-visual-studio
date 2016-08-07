@@ -27,6 +27,7 @@ using Reactive.EventAggregator;
 using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.Services;
 using log4net;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace GitClientVS.VisualStudio.UI.Sections
 {
@@ -56,7 +57,6 @@ namespace GitClientVS.VisualStudio.UI.Sections
         {
             _appServiceProvider.GitServiceProvider = ServiceProvider = e.ServiceProvider;
             _section = GetSection(TeamExplorerConnectionsSectionId);
-
             base.Initialize(sender, e);
         }
 

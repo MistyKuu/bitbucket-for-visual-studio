@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
@@ -23,7 +24,7 @@
             </Grid.RowDefinitions>
 
             <StackPanel  Grid.Column="0" VerticalAlignment="Center">
-                <Image Width="30" Height="30" HorizontalAlignment="Center"  Source="{Binding ElementName=UserControl,Path=Image}"  VerticalAlignment="Center"/>
+                <Image Width="30" Height="30" HorizontalAlignment="Center"  Source="{Binding Image}"  VerticalAlignment="Center"/>
             </StackPanel>
 
             <Grid Grid.Column="2">
@@ -33,13 +34,26 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" FontSize="13"  HorizontalAlignment="Left" Text="{Binding ElementName=UserControl,Path=Title}" TextWrapping="NoWrap" TextTrimming="WordEllipsis" />
-                <TextBlock Grid.Row="1" TextWrapping="Wrap" FontSize="10" FontWeight="Light">
-                     <Run  Text="{Binding ElementName=UserControl,Path=Sender}" />
-                     <Run  Text=" - updated on" />
-                     <Run  Text="{Binding ElementName=UserControl,Path=Date}"/>`
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" FontSize="13"  Grid.ColumnSpan="2"
+                           HorizontalAlignment="Left"
+                           Text="{Binding Title}" 
+                           TextWrapping="{Binding TextWrapping}"
+                           TextTrimming="{Binding TextTrimming}"
+                           />
+                <TextBlock Grid.Column="0" Grid.Row="1" TextWrapping="Wrap" FontSize="11" FontWeight="Light">
+                     <Run  Text="{Binding Sender}" />
+                     <Run  Text="{Binding DateSeparator}" />
+                     <Run  Text="{Binding Date}"/>`
                 </TextBlock>
 
+                <Button Content="->" Grid.Row="1" Grid.Column="1" Visibility="{Binding GoToLink,Converter={converters:NullToNonVisibilityConverter}}"
+                        HorizontalAlignment="Right" 
+                        Click="NavigateButton_OnClick"/>
             </Grid>
         </Grid>
     </Grid>

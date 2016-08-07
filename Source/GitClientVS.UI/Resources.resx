@@ -187,4 +187,7 @@
   <data name="PublishSectionMessage" xml:space="preserve">
     <value>Your repo has no remote branch. Publish it to remote service.</value>
   </data>
+  <data name="PullRequestDetailsPageTitle" xml:space="preserve">
+    <value>Pull Request Details -</value>
+  </data>
 </root>

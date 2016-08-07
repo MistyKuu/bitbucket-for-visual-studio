@@ -83,6 +83,8 @@
     <Compile Include="Interfaces\Services\IPageNavigationService.cs" />
     <Compile Include="Interfaces\ViewModels\ICreatePullRequestsViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPublishSectionViewModel.cs" />
+    <Compile Include="Interfaces\ViewModels\IPullRequestDetailView.cs" />
+    <Compile Include="Interfaces\ViewModels\IPullRequestsDetailViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestsMainViewModel.cs" />
     <Compile Include="Interfaces\Views\ICreatePullRequestsView.cs" />
     <Compile Include="Interfaces\Views\ICreateRepositoriesDialogView.cs" />
@@ -104,7 +106,7 @@
     <Compile Include="Interfaces\Views\IPullRequestsMainView.cs" />
     <Compile Include="Interfaces\ILoadableViewModel.cs" />
     <Compile Include="Models\ConnectionData.cs" />
-    <Compile Include="Interfaces\ViewModels\IGitClientService.cs" />
+    <Compile Include="Interfaces\Services\IGitClientService.cs" />
     <Compile Include="Interfaces\ViewModels\IConnectSectionViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\ILoginDialogViewModel.cs" />
     <Compile Include="Interfaces\Views\IConnectSectionView.cs" />
