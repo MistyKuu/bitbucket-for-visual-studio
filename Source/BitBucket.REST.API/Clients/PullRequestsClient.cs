@@ -40,8 +40,8 @@ namespace BitBucket.REST.API.Clients
         {
             var url = ApiUrls.PullRequestDiff(owner, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.GET);
-            var response = await RestClient.ExecuteTaskAsync<string>(request);
-            return response.Data;
+            var response = await RestClient.ExecuteTaskAsync(request);
+            return response.Content;
         }
 
         public async Task<IteratorBasedPage<Commit>> GetPullRequestCommits(string repositoryName, long id)
