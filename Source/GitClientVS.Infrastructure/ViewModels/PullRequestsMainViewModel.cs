@@ -30,7 +30,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private List<GitPullRequest> _filteredGitPullRequests;
         private string _errorMessage;
         private ReactiveCommand<object> _goToCreateNewPullRequestCommand;
-        private ReactiveCommand<object> _filterPullRequests;
 
         private List<GitUser> _authors;
         private GitUser _selectedAuthor;
@@ -54,7 +53,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedStatus, value);
-                Filter();
             }
         }
 
@@ -88,7 +86,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand GoToDetailsCommand => _goToDetailsCommand;
         public ICommand GotoCreateNewPullRequestCommand => _goToCreateNewPullRequestCommand;
-        public ICommand FilterPullRequestsCommand => _filterPullRequests;
 
 
         [ImportingConstructor]
@@ -103,6 +100,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _pageNavigationService = pageNavigationService;
             _authors = new List<GitUser>();
             _filteredGitPullRequests = new List<GitPullRequest>();
+            this.WhenAnyValue(x => x.SelectedStatus).Subscribe(_ => Filter());
             SelectedStatus = GitPullRequestStatus.Open;
         }
 
@@ -111,9 +109,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), _ => LoadPullRequests());
             _goToCreateNewPullRequestCommand = ReactiveCommand.Create(Observable.Return(true));
             _goToCreateNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.Navigate(PageIds.CreatePullRequestsPageId); });
-
-            //_filterPullRequests = ReactiveCommand.Create(Observable.Return(true));
-           // _filterPullRequests.Subscribe(_ => Filter());
 
             _goToDetailsCommand = ReactiveCommand.Create(Observable.Return(true));
             _goToDetailsCommand.Subscribe(x => { _pageNavigationService.Navigate(PageIds.PullRequestsDetailPageId, x); });
