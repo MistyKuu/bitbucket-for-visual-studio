@@ -21,7 +21,7 @@ namespace GitClientVS.Infrastructure.Mappings
                 Created = TimeConverter.GetDate(source.CreatedOn),
                 Updated = TimeConverter.GetDate(source.UpdatedOn),
                 CloseSourceBranch = source.CloseSourceBranch,
-                Url = source.Links.Self.Href
+                Url = source.Links.Html.Href
             };
         }
     }

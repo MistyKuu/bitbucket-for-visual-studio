@@ -20,6 +20,9 @@ namespace BitBucket.REST.API.Models
         [JsonProperty(PropertyName = "avatar")]
         public Link Avatar { get; set; }
 
+        [JsonProperty(PropertyName = "html")]
+        public Link Html { get; set; }
+
         [JsonProperty(PropertyName = "following")]
         public Link Following { get; set; }
 
