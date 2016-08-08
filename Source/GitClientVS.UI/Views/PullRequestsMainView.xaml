@@ -13,6 +13,7 @@
              xmlns:teamExplorer="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;assembly=Microsoft.TeamFoundation.Controls"
              xmlns:infrastructure="clr-namespace:GitClientVS.Infrastructure;assembly=GitClientVS.Infrastructure"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:extensions="clr-namespace:GitClientVS.UI.Extensions"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PrView"
@@ -64,6 +65,13 @@
 
             <Separator Style="{StaticResource VerticalSeparator}" />
 
+            <ComboBox DisplayMemberPath="DisplayName"
+          ItemsSource="{extensions:EnumToItemsSource {x:Type gitClientModels:GitPullRequestStatus}}"
+          SelectedValue="{Binding SelectedStatus}"
+          SelectedValuePath="Value" 
+                
+                />
+            
             <teamExplorer:DropDownLink 
                 KeyboardNavigation.TabIndex="1" 
                 Text="{x:Static ui:Resources.Actions}" />
@@ -74,7 +82,7 @@
 
         <Grid Grid.Row="1" Margin="20" x:Name="PullRequests">
 
-            <ListBox ItemsSource="{Binding GitPullRequests}" 
+            <ListBox ItemsSource="{Binding FilteredGitPullRequests}" 
                      ItemTemplate="{StaticResource PullRequestTemplate}"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                        

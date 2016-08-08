@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,6 +31,29 @@ namespace BitBucket.REST.API.Wrappers
             var response = await base.ExecuteTaskAsync<T>(request);
             this.CheckResponseStatusCode<T>(response);
             return response;
+        }
+
+        public async Task<IteratorBasedPage<T>> GetAllPages<T>(string url)
+        {
+            var result = new IteratorBasedPage<T>()
+            {
+                Values = new List<T>()
+            };
+            IRestResponse<IteratorBasedPage<T>> response;
+            var pageNumber = 1;
+            do
+            {
+                var request = new BitbucketRestRequest(url, Method.GET);
+                request.AddQueryParameter("page", pageNumber.ToString());
+                response = await this.ExecuteTaskAsync<IteratorBasedPage<T>>(request);
+                if (response.Data.Values != null)
+                {
+                    result.Values.AddRange(response.Data.Values);
+                }
+                pageNumber++;
+            } while (response.Data != null && response.Data.Next != null);
+
+            return result;
         }
 
 

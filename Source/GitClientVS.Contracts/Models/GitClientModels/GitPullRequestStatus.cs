@@ -2,8 +2,8 @@
 {
     public enum GitPullRequestStatus
     {
-        Merged,
         Open,
+        Merged,
         Declined,
         Supersend
     }

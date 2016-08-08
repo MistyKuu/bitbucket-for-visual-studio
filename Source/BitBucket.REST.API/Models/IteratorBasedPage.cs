@@ -5,7 +5,7 @@ namespace BitBucket.REST.API.Models
 {
     public class IteratorBasedPage<T>
     {
-        [JsonProperty(PropertyName = "page_len")]
+        [JsonProperty(PropertyName = "pagelen")]
         public int? PageLen { get; set; }
 
         [JsonProperty(PropertyName = "next")]

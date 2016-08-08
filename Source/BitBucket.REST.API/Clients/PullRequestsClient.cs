@@ -26,9 +26,7 @@ namespace BitBucket.REST.API.Clients
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequests(string repositoryName, string ownerName)
         {
             var url = ApiUrls.PullRequests(ownerName, repositoryName);
-            var request = new BitbucketRestRequest(url, Method.GET);
-            var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<PullRequest>>(request);
-            return response.Data;
+            return await RestClient.GetAllPages<PullRequest>(url);
         }
 
         public async Task<string> GetPullRequestDiff(string repositoryName, long id)

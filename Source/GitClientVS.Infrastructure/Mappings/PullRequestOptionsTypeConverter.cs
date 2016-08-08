@@ -26,7 +26,7 @@ namespace GitClientVS.Infrastructure.Mappings
         }
     }
 
-    public class ReversePullRequestOptionsTypeConverter
+    public class ReversePullRequestOptionsTypeConverter : ITypeConverter<GitPullRequestStatus, PullRequestOptions>
     {
         public PullRequestOptions Convert(GitPullRequestStatus source, PullRequestOptions destination, ResolutionContext context)
         {

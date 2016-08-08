@@ -16,6 +16,9 @@ namespace GitClientVS.Infrastructure.Mappings
             CreateMap<GitPullRequest, PullRequest>().ConvertUsing<ReversePullRequestTypeConverter>();
             CreateMap<PullRequest, GitPullRequest>().ConvertUsing<PullRequestTypeConverter>();
 
+            CreateMap<PullRequestOptions, GitPullRequestStatus>().ConvertUsing<PullRequestOptionsTypeConverter>();
+            CreateMap<GitPullRequestStatus, PullRequestOptions>().ConvertUsing<ReversePullRequestOptionsTypeConverter>();
+
             CreateMap<Team, GitTeam>().ConvertUsing<TeamTypeConverter>();
             CreateMap<GitTeam, Team>().ConvertUsing<ReverseTeamTypeConverter>();
 

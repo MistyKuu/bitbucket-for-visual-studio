@@ -32,7 +32,7 @@ namespace BitBucket.REST.API.Helpers
 
         public static string PullRequests(string username, string repository)
         {
-            return $"repositories/{username}/{repository}/pullrequests";
+            return $"repositories/{username}/{repository}/pullrequests?state=ALL";
         }
 
         public static string PullRequest(string username, string repository, long id)

@@ -52,8 +52,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
         }
 
-
-
         public string ErrorMessage
         {
             get { return _errorMessage; }
@@ -120,8 +118,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             if (result.IsSuccess)
                 ClonePath = result.Data;
         }
-
-
 
         private async Task Clone()
         {
