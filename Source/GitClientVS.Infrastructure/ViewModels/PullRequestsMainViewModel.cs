@@ -65,7 +65,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         public List<GitUser> Authors
         {
             get { return _authors; }
-            set { this.RaiseAndSetIfChanged(ref _authors, value);  }
+            set { this.RaiseAndSetIfChanged(ref _authors, value); }
         }
 
         public string ErrorMessage
@@ -98,10 +98,18 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _gitService = gitService;
             _pageNavigationService = pageNavigationService;
-            _authors = new List<GitUser>();
             _filteredGitPullRequests = new List<GitPullRequest>();
-            this.WhenAnyValue(x => x.SelectedStatus).Subscribe(_ => Filter());
+            SetupObservables();
+
             SelectedStatus = GitPullRequestStatus.Open;
+            Authors = new List<GitUser>();
+        }
+
+        private void SetupObservables()
+        {
+            this.WhenAnyValue(x => x.SelectedStatus).Subscribe(_ => Filter());
+            this.WhenAnyValue(x => x.GitPullRequests).Where(x => x != null).Subscribe(_ => Authors = GitPullRequests.Select(x => x.Author).ToList());
+            _initializeCommand.Subscribe(_ => { Filter(); });
         }
 
         public void InitializeCommands()
@@ -117,27 +125,16 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task LoadPullRequests()
         {
             GitPullRequests = await _gitClientService.GetPullRequests("django-piston", "jespern");
-            foreach (var gitPullRequest in GitPullRequests)
-            {
-                _authors.Add(gitPullRequest.Author);
-            }
-            Filter();
         }
 
         private void Filter()
         {
-            if (GitPullRequests != null)
-            {
-                FilteredGitPullRequests =
-            GitPullRequests.Where(pullRequest => pullRequest.Status == SelectedStatus).ToList();
-            }
+            FilteredGitPullRequests = GitPullRequests.Where(pullRequest => pullRequest.Status == SelectedStatus).ToList();
         }
 
         private IObservable<bool> CanLoadPullRequests()
         {
             return Observable.Return(true);
         }
-
-
     }
 }
