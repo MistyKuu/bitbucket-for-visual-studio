@@ -115,7 +115,8 @@ namespace GitClientVS.VisualStudio.UI
             "GitClientVS.Services",
             "GitClientVS.UI",
             "GitClientVS.VisualStudio.UI",
-            "MahApps.Metro"
+            "MahApps.Metro",
+            "WpfControls"
         };
 
 

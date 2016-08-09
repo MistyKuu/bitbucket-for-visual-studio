@@ -11,7 +11,10 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
+using GitClientVS.Infrastructure.Utils;
 using ReactiveUI;
+using WpfControls;
+using SuggestionProvider = WpfControls.SuggestionProvider;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
@@ -34,6 +37,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private List<GitUser> _authors;
         private GitUser _selectedAuthor;
         private GitPullRequestStatus _selectedStatus;
+        private string _authorFilter;
 
         public IEnumerable<GitPullRequest> GitPullRequests
         {
@@ -87,6 +91,16 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand GoToDetailsCommand => _goToDetailsCommand;
         public ICommand GotoCreateNewPullRequestCommand => _goToCreateNewPullRequestCommand;
 
+        public ISuggestionProvider AuthorProvider
+        {
+            get
+            {
+                return new SuggestionProvider(x => Authors.Where(
+                    y => y.DisplayName.Contains(x, StringComparison.InvariantCultureIgnoreCase) || y.Username.Contains(x, StringComparison.InvariantCultureIgnoreCase)));
+            }
+        }
+
+
 
         [ImportingConstructor]
         public PullRequestsMainViewModel(
@@ -108,6 +122,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void SetupObservables()
         {
             this.WhenAnyValue(x => x.SelectedStatus).Subscribe(_ => Filter());
+            this.WhenAnyValue(x => x.SelectedAuthor).Subscribe(_ => Filter());
             this.WhenAnyValue(x => x.GitPullRequests).Where(x => x != null).Subscribe(_ => Authors = GitPullRequests.Select(x => x.Author).ToList());
             _initializeCommand.Subscribe(_ => { Filter(); });
         }
@@ -127,9 +142,20 @@ namespace GitClientVS.Infrastructure.ViewModels
             GitPullRequests = await _gitClientService.GetPullRequests("django-piston", "jespern");
         }
 
+        private bool CanRunFilter()
+        {
+            return GitPullRequests != null;
+        }
+
         private void Filter()
         {
-            FilteredGitPullRequests = GitPullRequests.Where(pullRequest => pullRequest.Status == SelectedStatus).ToList();
+            if (!CanRunFilter())
+                return;
+
+            FilteredGitPullRequests = GitPullRequests
+                .Where(pullRequest => pullRequest.Status == SelectedStatus)
+                .Where(pullRequest => SelectedAuthor == null || pullRequest.Author.Username == SelectedAuthor.Username)
+                .ToList();
         }
 
         private IObservable<bool> CanLoadPullRequests()

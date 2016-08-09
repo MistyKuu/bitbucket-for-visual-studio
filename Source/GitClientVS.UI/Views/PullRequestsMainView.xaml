@@ -14,6 +14,7 @@
              xmlns:infrastructure="clr-namespace:GitClientVS.Infrastructure;assembly=GitClientVS.Infrastructure"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:extensions="clr-namespace:GitClientVS.UI.Extensions"
+             xmlns:wpfControls="http://wpfcontrols.com/"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PrView"
@@ -58,24 +59,55 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Margin="5">
-            <teamExplorer:TextLink  Command="{Binding GotoCreateNewPullRequestCommand}"
-            KeyboardNavigation.TabIndex="0" 
-            Text="{x:Static ui:Resources.CreatePullRequest}"/>
+        <Grid Margin="5">
 
-            <Separator Style="{StaticResource VerticalSeparator}" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <ComboBox DisplayMemberPath="DisplayName"
+            <Button Grid.Column="0"  Command="{Binding GotoCreateNewPullRequestCommand}" >
+                <Rectangle Width="15" Height="15">
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+
+            <Separator Grid.Column="1" Style="{StaticResource VerticalSeparator}" />
+
+            <ComboBox Grid.Column="2" DisplayMemberPath="DisplayName"
           ItemsSource="{extensions:EnumToItemsSource {x:Type gitClientModels:GitPullRequestStatus}}"
           SelectedValue="{Binding SelectedStatus}"
           SelectedValuePath="Value" 
                 
                 />
-            
-            <teamExplorer:DropDownLink 
-                KeyboardNavigation.TabIndex="1" 
-                Text="{x:Static ui:Resources.Actions}" />
-        </StackPanel>
+
+            <wpfControls:AutoCompleteTextBox 
+                Margin="5,0"
+                Grid.Column="3" 
+                SelectedItem="{Binding SelectedAuthor,Mode=TwoWay}"  
+                Provider="{Binding AuthorProvider}"
+                DisplayMember="DisplayName"
+                Watermark="Filter by Author"
+                IconPlacement="Right"
+                >
+                <wpfControls:AutoCompleteTextBox.ItemTemplate>
+                    <DataTemplate DataType="gitClientModels:GitUser">
+                        <TextBlock Text="{Binding DisplayName}"/>
+                    </DataTemplate>
+                </wpfControls:AutoCompleteTextBox.ItemTemplate>
+                <wpfControls:AutoCompleteTextBox.Icon>
+                    <Rectangle Width="15" Height="15">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_magnify_browse}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </wpfControls:AutoCompleteTextBox.Icon>
+            </wpfControls:AutoCompleteTextBox>
+        </Grid>
 
 
         <controls1:ProgressBar Grid.Row="1" ProgressContent="{Binding ElementName=PullRequests}"/>
