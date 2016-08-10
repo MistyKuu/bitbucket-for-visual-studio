@@ -26,6 +26,7 @@ using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Win32;
 using IServiceProvider = System.IServiceProvider;
 
@@ -93,6 +94,7 @@ namespace GitClientVS.VisualStudio.UI
             gitWatcher.Initialize();
             await appInitializer.Initialize();
             Logger.Info("Initialized GitClientVsPackage Extension");
+
         }
 
         private void GetIChangesExt()

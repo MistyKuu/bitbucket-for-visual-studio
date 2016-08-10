@@ -77,8 +77,8 @@
 
             <controls:MetroAnimatedTabControl Margin="20" >
 
-                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15"  Header="{Binding FilesChanged.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
-                    <ListBox ItemsSource="{Binding FilesChanged}" ItemTemplate="{StaticResource FilesChangedTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
+                    <ListBox ItemsSource="{Binding FileDiffs}" ItemTemplate="{StaticResource FilesChangedTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
                     <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
