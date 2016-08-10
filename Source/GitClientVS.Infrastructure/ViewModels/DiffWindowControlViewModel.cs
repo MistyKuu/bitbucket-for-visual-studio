@@ -20,6 +20,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<Unit> _initializeCommand;
         private string _errorMessage;
         private bool _isLoading;
+        private FileDiff _fileDiff;
 
         public ICommand InitializeCommand => _initializeCommand;
 
@@ -36,6 +37,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
         }
 
+        public FileDiff FileDiff
+        {
+            get { return _fileDiff; }
+            set { this.RaiseAndSetIfChanged(ref _fileDiff, value); }
+        }
+
         public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand };
         public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand };
 
@@ -46,7 +53,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task ShowFileDiff(FileDiff fileDiff)
         {
-
+            FileDiff = fileDiff;
         }
     }
 }

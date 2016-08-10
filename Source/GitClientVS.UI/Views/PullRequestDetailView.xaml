@@ -13,6 +13,7 @@
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="PqDetailView"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsDetailViewModel,IsDesignTimeCreatable=False}" 
              >
     <UserControl.Resources>
@@ -24,7 +25,7 @@
 
 
             <DataTemplate x:Key="FilesChangedTemplate">
-                <TextBlock Text="{Binding From}"/>
+                <Button Content="{Binding From}" Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">
                 <Grid>
@@ -90,8 +91,6 @@
             </controls:MetroAnimatedTabControl>
 
             <controls1:ErrorView Grid.Row="1"/>
-            
-            <Button Content="test" Command="{Binding ShowDiffCommand}"/>
         </Grid>
     </Grid>
 

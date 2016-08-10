@@ -5,12 +5,14 @@
 //------------------------------------------------------------------------------
 
 using System.ComponentModel.Composition;
+using System.Reactive.Linq;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.Infrastructure.ViewModels;
 using GitClientVS.UI.Views;
 using Microsoft.VisualStudio.ComponentModelHost;
+using ReactiveUI;
 
 namespace GitClientVS.VisualStudio.UI.Window
 {
@@ -35,12 +37,15 @@ namespace GitClientVS.VisualStudio.UI.Window
         /// <summary>
         /// Initializes a new instance of the <see cref="DiffWindow"/> class.
         /// </summary>
-      
+
         public DiffWindow() : base(null)
         {
-            this.Caption = "DiffWindow";
+            Caption = "Diff";
 
-            Content = new DiffWindowControl(new DiffWindowControlViewModel());
+            var vm = new DiffWindowControlViewModel();
+            vm.WhenAnyValue(x => x.FileDiff).Where(x => x != null).Subscribe(x => Caption = $"Diff ({x.From})");
+
+            Content = new DiffWindowControl(vm);
         }
     }
 }
