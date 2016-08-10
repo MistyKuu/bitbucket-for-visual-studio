@@ -13,6 +13,7 @@
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="PqDetailView"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsDetailViewModel,IsDesignTimeCreatable=False}" 
              >
     <UserControl.Resources>
@@ -24,7 +25,7 @@
 
 
             <DataTemplate x:Key="FilesChangedTemplate">
-                <TextBlock Text="{Binding From}"/>
+                <Button Content="{Binding From}" Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">
                 <Grid>
@@ -73,12 +74,13 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <controls:MetroAnimatedTabControl Margin="20" >
 
-                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15"  Header="{Binding FilesChanged.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
-                    <ListBox ItemsSource="{Binding FilesChanged}" ItemTemplate="{StaticResource FilesChangedTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
+                    <ListBox ItemsSource="{Binding FileDiffs}" ItemTemplate="{StaticResource FilesChangedTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
                     <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>

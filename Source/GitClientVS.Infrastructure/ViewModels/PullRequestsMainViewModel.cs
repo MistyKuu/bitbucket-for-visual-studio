@@ -25,7 +25,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IPageNavigationService _pageNavigationService;
-        private readonly IVsTools _vsTools;
         private ReactiveCommand<Unit> _initializeCommand;
         private ReactiveCommand<object> _goToDetailsCommand;
         private bool _isLoading;
@@ -37,7 +36,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private List<GitUser> _authors;
         private GitUser _selectedAuthor;
         private GitPullRequestStatus _selectedStatus;
-        private string _authorFilter;
 
         public IEnumerable<GitPullRequest> GitPullRequests
         {

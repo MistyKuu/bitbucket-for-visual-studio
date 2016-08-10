@@ -34,6 +34,9 @@
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ParseDiff">
+      <HintPath>..\..\AssemblyReferences\ParseDiff.dll</HintPath>
+    </Reference>
     <Reference Include="ReactiveUI, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\reactiveui-core.6.5.0\lib\Net45\ReactiveUI.dll</HintPath>
       <Private>True</Private>
@@ -78,10 +81,13 @@
     </Compile>
     <Compile Include="Interfaces\IViewModelWithCommands.cs" />
     <Compile Include="Interfaces\IViewModelWithErrorMessage.cs" />
+    <Compile Include="Interfaces\Services\ICommandsService.cs" />
+    <Compile Include="Interfaces\Services\IDiffFileParser.cs" />
     <Compile Include="Interfaces\Services\IVsTools.cs" />
     <Compile Include="Interfaces\Services\IGitWatcher.cs" />
     <Compile Include="Interfaces\Services\IPageNavigationService.cs" />
     <Compile Include="Interfaces\ViewModels\ICreatePullRequestsViewModel.cs" />
+    <Compile Include="Interfaces\ViewModels\IDiffWindowControlViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPublishSectionViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestDetailView.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestsDetailViewModel.cs" />
@@ -102,6 +108,7 @@
     <Compile Include="Interfaces\ICloseable.cs" />
     <Compile Include="Interfaces\ViewModels\ICloneRepositoriesDialogViewModel.cs" />
     <Compile Include="Interfaces\Views\ICloneRepositoriesDialogView.cs" />
+    <Compile Include="Interfaces\Views\IDiffWindowControl.cs" />
     <Compile Include="Interfaces\Views\IPublishSectionView.cs" />
     <Compile Include="Interfaces\Views\IPullRequestsMainView.cs" />
     <Compile Include="Interfaces\ILoadableViewModel.cs" />

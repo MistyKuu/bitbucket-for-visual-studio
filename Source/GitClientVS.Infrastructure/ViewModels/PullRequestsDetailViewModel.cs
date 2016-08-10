@@ -23,27 +23,42 @@ namespace GitClientVS.Infrastructure.ViewModels
     {
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
+        private readonly ICommandsService _commandsService;
+        private readonly IDiffFileParser _diffFileParser;
         private string _errorMessage;
         private bool _isLoading;
         private ReactiveCommand<Unit> _initializeCommand;
         private IEnumerable<GitCommit> _commits;
         private IEnumerable<GitComment> _comments;
+        private ReactiveCommand<Unit> _showDiffCommand;
         private IEnumerable<FileDiff> _fileDiffs;
 
         [ImportingConstructor]
         public PullRequestsDetailViewModel(
             IGitClientService gitClientService,
-            IGitService gitService)
+            IGitService gitService,
+            ICommandsService commandsService,
+            IDiffFileParser diffFileParser
+            )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
+            _commandsService = commandsService;
+            _diffFileParser = diffFileParser;
         }
 
         public ICommand InitializeCommand => _initializeCommand;
+        public ICommand ShowDiffCommand => _showDiffCommand;
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((GitPullRequest)x));
+            _showDiffCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), (x) => ShowDiff((FileDiff)x));
+        }
+
+        private async Task ShowDiff(FileDiff diff)
+        {
+            _commandsService.ShowDiffWindow(diff);
         }
 
         public IEnumerable<GitComment> Comments
@@ -71,17 +86,20 @@ namespace GitClientVS.Infrastructure.ViewModels
             Commits = await _gitClientService.GetPullRequestCommits("django-piston", "jespern", id);
             Comments = await _gitClientService.GetPullRequestComments("django-piston", "jespern", id);
             var diff = await _gitClientService.GetPullRequestDiff("django-piston", "jespern", id);
-            FileDiffs = Diff.Parse(diff, Environment.NewLine);
+            FileDiffs = _diffFileParser.Parse(diff).ToList();
         }
 
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand };
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _showDiffCommand };
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _showDiffCommand };
 
         public string ErrorMessage
         {
             get { return _errorMessage; }
-            set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _errorMessage, value);
+            }
         }
 
         public bool IsLoading
@@ -89,5 +107,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _isLoading; }
             set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
         }
+
     }
 }
