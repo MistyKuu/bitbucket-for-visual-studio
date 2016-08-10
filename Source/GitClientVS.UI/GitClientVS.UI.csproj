@@ -41,6 +41,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AssemblyReferences\VS2015\Microsoft.VisualStudio.Shell.11.0.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -86,6 +87,7 @@
     <Compile Include="Converters\NegateVisibilityConverter.cs" />
     <Compile Include="Converters\NullToNonVisibilityConverter.cs" />
     <Compile Include="Extensions\EnumToItemsSource.cs" />
+    <Compile Include="Helpers\VSHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
