@@ -35,7 +35,7 @@ namespace GitClientVS.VisualStudio.UI
 
         public async Task Initialize()
         {
-            LoggerConfigurator.Setup(); // TODO this needs to be set in the entry point like package
+            LoggerConfigurator.Setup(); 
             var result = _storageService.LoadUserData();
            
             Mapper.Initialize(cfg =>

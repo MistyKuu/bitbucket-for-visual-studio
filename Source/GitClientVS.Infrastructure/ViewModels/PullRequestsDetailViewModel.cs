@@ -22,26 +22,38 @@ namespace GitClientVS.Infrastructure.ViewModels
     {
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
+        private readonly ICommandsService _commandsService;
         private string _errorMessage;
         private bool _isLoading;
         private ReactiveCommand<Unit> _initializeCommand;
         private IEnumerable<GitCommit> _commits;
         private IEnumerable<GitComment> _comments;
+        private ReactiveCommand<Unit> _showDiffCommand;
 
         [ImportingConstructor]
         public PullRequestsDetailViewModel(
             IGitClientService gitClientService,
-            IGitService gitService)
+            IGitService gitService,
+            ICommandsService commandsService
+            )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
+            _commandsService = commandsService;
         }
 
         public ICommand InitializeCommand => _initializeCommand;
+        public ICommand ShowDiffCommand => _showDiffCommand;
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((GitPullRequest)x));
+            _showDiffCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), (x) => ShowDiff());
+        }
+
+        private async Task ShowDiff()
+        {
+            _commandsService.ShowDiffWindow(Guid.NewGuid());
         }
 
         public IEnumerable<GitComment> Comments
@@ -73,13 +85,16 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand };
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _showDiffCommand };
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _showDiffCommand };
 
         public string ErrorMessage
         {
             get { return _errorMessage; }
-            set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _errorMessage, value);
+            }
         }
 
         public bool IsLoading
@@ -87,5 +102,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _isLoading; }
             set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
         }
+
     }
 }

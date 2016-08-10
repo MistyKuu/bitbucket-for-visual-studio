@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Infrastructure.Extensions;
+using GitClientVS.VisualStudio.UI.Window;
 using log4net;
 using Microsoft.TeamFoundation.Controls;
 using Microsoft.TeamFoundation.Git.Controls.Extensibility;
@@ -55,6 +56,8 @@ namespace GitClientVS.VisualStudio.UI
     [Guid(GitClientVSPackage.PackageGuidString)]
     [ProvideAutoLoad(GitExtensionsId)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
+    [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideToolWindow(typeof(DiffWindow), Style = VsDockStyle.MDI, Orientation = ToolWindowOrientation.Left, MultiInstances = true, Transient = true)]
     public sealed class GitClientVSPackage : Package
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -90,22 +93,14 @@ namespace GitClientVS.VisualStudio.UI
             var appInitializer = serviceProvider.GetExportedValue<IAppInitializer>();
             var userService = serviceProvider.GetExportedValue<IUserInformationService>();
             var gitWatcher = serviceProvider.GetExportedValue<IGitWatcher>();
+            var commandsService = serviceProvider.GetExportedValue<ICommandsService>();
+            commandsService.Initialize(this);
             userService.StartListening();
             gitWatcher.Initialize();
             await appInitializer.Initialize();
             Logger.Info("Initialized GitClientVsPackage Extension");
 
         }
-
-        private void GetIChangesExt()
-        {
-            //ITeamExplorer service = this.GetService<ITeamExplorer>(); do it somewhere
-            //var teamExplorerPage = service.NavigateToPage(new Guid(TeamExplorerPageIds.GitChanges), null);
-            //var teamExplorer = service.GetService<ITeamExplorer>();
-            //var b = service.GetService<IChangesExt2>();
-            //var uc = teamExplorerPage.GetExtensibilityService(typeof(IChangesExt));
-        }
-
 
         #region JustInCaseLoadingAssemblies
 

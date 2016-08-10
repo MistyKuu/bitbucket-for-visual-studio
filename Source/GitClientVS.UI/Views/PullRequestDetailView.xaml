@@ -73,6 +73,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <controls:MetroAnimatedTabControl Margin="20" >
@@ -89,6 +90,8 @@
             </controls:MetroAnimatedTabControl>
 
             <controls1:ErrorView Grid.Row="1"/>
+            
+            <Button Content="test" Command="{Binding ShowDiffCommand}"/>
         </Grid>
     </Grid>
 
