@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AvalonEdit.5.0.3\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.2.4.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MahApps.Metro.1.2.4.0\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
@@ -40,10 +44,6 @@
     <Reference Include="Microsoft.VisualStudio.Shell.11.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AssemblyReferences\VS2015\Microsoft.VisualStudio.Shell.11.0.dll</HintPath>
-    </Reference>
-    <Reference Include="ParseDiff, Version=1.0.16222.2207, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\AssemblyReferences\ParseDiff.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -78,6 +78,9 @@
     <Compile Include="Bindings\ValidatedBinding.cs" />
     <Compile Include="Controls\CustomizedListItem.xaml.cs">
       <DependentUpon>CustomizedListItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DiffControl.xaml.cs">
+      <DependentUpon>DiffControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProgressBar.xaml.cs">
       <DependentUpon>ProgressBar.xaml</DependentUpon>
@@ -143,6 +146,10 @@
       <Project>{cfa26063-e6bd-4189-9e20-13be59ebaf67}</Project>
       <Name>GitClientVS.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ParseDiff\ParseDiff.csproj">
+      <Project>{65672e92-c353-4d21-a098-6a5beb42cdf4}</Project>
+      <Name>ParseDiff</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -153,6 +160,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\CustomizedListItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\DiffControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

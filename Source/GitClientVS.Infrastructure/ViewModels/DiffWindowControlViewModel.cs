@@ -22,6 +22,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _isLoading;
         private FileDiff _fileDiff;
 
+     
+
         public ICommand InitializeCommand => _initializeCommand;
 
         public string ErrorMessage
@@ -30,6 +32,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
+       
 
         public bool IsLoading
         {

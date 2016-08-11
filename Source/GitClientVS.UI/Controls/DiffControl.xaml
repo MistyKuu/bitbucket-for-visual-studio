@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="GitClientVS.UI.Controls.DiffControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+             xmlns:diffControl="clr-namespace:ParseDiff.DiffControl;assembly=ParseDiff"
+             xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" x:Name="CurrentControl">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="ChunkTemplate">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <avalonedit:TextEditor diffControl:AvalonEditBehaviour.TextBinding="{Binding Text}" 
+                                           diffControl:AvalonEditBehaviour.IsDiffEditor="True"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalScrollBarVisibility="Hidden"
+                                           HorizontalScrollBarVisibility="Hidden"
+                                            FontFamily="Consolas"
+                                            SyntaxHighlighting="{Binding ElementName=CurrentControl,Path=HighLightStyle}"
+                                            FontSize="10pt" 
+                                        >
+                    </avalonedit:TextEditor>
+
+                    <Separator Margin="0,10" Grid.Row="1"/>
+                </Grid>
+
+            </DataTemplate>
+        </Grid.Resources>
+        
+        
+        <ItemsControl ItemsSource="{Binding FileDiff.Chunks}" ItemTemplate="{StaticResource ChunkTemplate}">
+            <ItemsControl.Resources>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ItemsControl.Resources>
+        </ItemsControl>
+    </Grid>
+</UserControl>
