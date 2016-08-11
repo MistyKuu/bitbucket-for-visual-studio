@@ -11,6 +11,8 @@
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              xmlns:ui="clr-namespace:GitClientVS.UI"
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
+             xmlns:models="clr-namespace:GitClientVS.Contracts.Models;assembly=GitClientVS.Contracts"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PqDetailView"
@@ -77,10 +79,106 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
+         
             <controls:MetroAnimatedTabControl Margin="20" >
 
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
-                    <ListBox ItemsSource="{Binding FileDiffs}" ItemTemplate="{StaticResource FilesChangedTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                    <StackPanel>
+                        <ListBox ItemsSource="{Binding FileDiffs}" ItemTemplate="{StaticResource FilesChangedTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                        <TreeView ItemsSource="{Binding FilesTree}" x:Name="ResourcesTree" Margin="0,4,0,0">
+                            <TreeView.Resources>
+                                <HierarchicalDataTemplate DataType="{x:Type models:TreeDirectory}" ItemsSource="{Binding Files}">
+                                    <TextBlock>
+                                        <!--<TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding FileDiff}" Value="{x:Null}">
+                                                        <Setter Property="IsHitTestVisible" Value="False"></Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>-->
+                                        <Hyperlink Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" TextDecorations="None" Foreground="Black">
+                                              <TextBlock Text="{Binding Path=Name}"/>
+                                        </Hyperlink>
+                                        <!--<TextBlock.InputBindings>
+                                            <MouseBinding Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" MouseAction="LeftClick" />
+                                        </TextBlock.InputBindings>-->
+                                    </TextBlock>
+                                </HierarchicalDataTemplate>
+
+                                <DataTemplate DataType="{x:Type models:TreeFile}" >
+                                    <TextBlock>
+                                        <!--<TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding FileDiff}" Value="{x:Null}">
+                                                        <Setter Property="IsHitTestVisible" Value="False"></Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>-->
+                                        <Hyperlink Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" TextDecorations="None" Foreground="Black">
+                                              <TextBlock Text="{Binding Path=Name}"/>
+                                        </Hyperlink>
+                                        <!--<TextBlock.InputBindings>
+                                            <MouseBinding Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" MouseAction="LeftClick" />
+                                        </TextBlock.InputBindings>-->
+                                    </TextBlock>
+                                </DataTemplate>
+                            </TreeView.Resources>
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="TreeViewItem">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding FileDiff}" Value="{x:Null}">
+                                            <Setter Property="IsSelected" Value="False"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+                            <!--<TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate DataType="{x:Type models:TreeDirectory}" ItemsSource="{Binding Files}">
+                                    <TextBlock>
+                                        --><!--<TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding FileDiff}" Value="{x:Null}">
+                                                        <Setter Property="IsHitTestVisible" Value="False"></Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>--><!--
+                                        <Hyperlink Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" TextDecorations="None" Foreground="Black">
+                                              <TextBlock Text="{Binding Path=Name}"/>
+                                        </Hyperlink>
+                                        --><!--<TextBlock.InputBindings>
+                                            <MouseBinding Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" MouseAction="LeftClick" />
+                                        </TextBlock.InputBindings>--><!--
+                                    </TextBlock>
+                                </HierarchicalDataTemplate>
+                                
+                                <DataTemplate DataType="{x:Type models:TreeFile}" >
+                                    <TextBlock>
+                                        --><!--<TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding FileDiff}" Value="{x:Null}">
+                                                        <Setter Property="IsHitTestVisible" Value="False"></Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>--><!--
+                                        <Hyperlink Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" TextDecorations="None" Foreground="Black">
+                                              <TextBlock Text="{Binding Path=Name}"/>
+                                        </Hyperlink>
+                                        --><!--<TextBlock.InputBindings>
+                                            <MouseBinding Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" MouseAction="LeftClick" />
+                                        </TextBlock.InputBindings>--><!--
+                                    </TextBlock>
+                                </DataTemplate>
+                            </TreeView.ItemTemplate>-->
+                        </TreeView>
+                    </StackPanel>
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
                     <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>

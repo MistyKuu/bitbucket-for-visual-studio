@@ -112,6 +112,8 @@
     <Compile Include="Interfaces\Views\IPublishSectionView.cs" />
     <Compile Include="Interfaces\Views\IPullRequestsMainView.cs" />
     <Compile Include="Interfaces\ILoadableViewModel.cs" />
+    <Compile Include="Models\TreeDirectory.cs" />
+    <Compile Include="Models\TreeFile.cs" />
     <Compile Include="Models\ConnectionData.cs" />
     <Compile Include="Interfaces\Services\IGitClientService.cs" />
     <Compile Include="Interfaces\ViewModels\IConnectSectionViewModel.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="Models\GitClientModels\GitRemoteRepository.cs" />
     <Compile Include="Models\GitClientModels\GitTeam.cs" />
     <Compile Include="Models\GitClientModels\GitUser.cs" />
+    <Compile Include="Models\ITreeFile.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

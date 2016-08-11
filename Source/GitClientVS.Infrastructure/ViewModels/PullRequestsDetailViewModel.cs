@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
+using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
 using ParseDiff;
@@ -32,6 +33,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private IEnumerable<GitComment> _comments;
         private ReactiveCommand<Unit> _showDiffCommand;
         private IEnumerable<FileDiff> _fileDiffs;
+        private List<ITreeFile> _filesTree;
 
         [ImportingConstructor]
         public PullRequestsDetailViewModel(
@@ -79,6 +81,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _fileDiffs, value); }
         }
 
+        public List<ITreeFile> FilesTree
+        {
+            get { return _filesTree; }
+            set { this.RaiseAndSetIfChanged(ref _filesTree, value); }
+        }
+
         private async Task LoadPullRequestData(GitPullRequest pr)
         {
             var id = int.Parse(pr.Id);
@@ -87,6 +95,45 @@ namespace GitClientVS.Infrastructure.ViewModels
             Comments = await _gitClientService.GetPullRequestComments("django-piston", "jespern", id);
             var diff = await _gitClientService.GetPullRequestDiff("django-piston", "jespern", id);
             FileDiffs = _diffFileParser.Parse(diff).ToList();
+            CreateFileTree(FileDiffs.ToList());
+        }
+
+        public void CreateFileTree(List<FileDiff> fileDiffs, string rootFileName = "test", char separator = '/')
+        {
+            var entryFile = new TreeFile(rootFileName);
+
+            foreach (var fileDiff in fileDiffs.Where(x => !string.IsNullOrEmpty(x.From.Trim())))
+            {
+                ITreeFile currentFile = entryFile;
+                var pathChunks = fileDiff.From.Split(separator);
+                var lastItem = pathChunks.Last();
+                foreach (var pathChunk in pathChunks)
+                {
+                    var tmp = currentFile.Files.Where(x => x.Name.Equals(pathChunk));
+                    if (tmp.Count() > 0)
+                    {
+                        currentFile = tmp.Single();
+                    }
+                    else
+                    {
+                        ITreeFile newItem;
+                        if (lastItem.Equals(pathChunk))
+                        {
+                            newItem = new TreeFile(pathChunk, fileDiff);
+                        }
+                        else
+                        {
+                            newItem = new TreeDirectory(pathChunk);
+                        }
+                       
+                        currentFile.Files.Add(newItem);
+                        currentFile = newItem;
+                    }
+                }
+            }
+
+           
+            FilesTree = entryFile.Files;
         }
 
 
