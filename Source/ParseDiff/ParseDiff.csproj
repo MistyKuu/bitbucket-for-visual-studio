@@ -55,7 +55,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyVersionInfo.cs" />
     <Compile Include="Diff.cs" />
     <Compile Include="DiffControl\AvalonEditBehaviour.cs" />
     <Compile Include="DiffControl\DiffLineBackgroundRenderer.cs" />
@@ -70,9 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="GenerateAssemblyVersionInfo.targets" />
     <None Include="packages.config" />
-    <None Include="ParseDiff.nuspec" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
