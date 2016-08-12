@@ -100,11 +100,12 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public void CreateFileTree(List<FileDiff> fileDiffs, string rootFileName = "test", char separator = '/')
         {
-            var entryFile = new TreeFile(rootFileName);
+            var entryFile = new TreeDirectory(rootFileName);
 
             foreach (var fileDiff in fileDiffs.Where(x => !string.IsNullOrEmpty(x.From.Trim())))
             {
                 ITreeFile currentFile = entryFile;
+                
                 var pathChunks = fileDiff.From.Split(separator);
                 var lastItem = pathChunks.Last();
                 foreach (var pathChunk in pathChunks)

@@ -90,7 +90,9 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\NegateVisibilityConverter.cs" />
     <Compile Include="Converters\NullToNonVisibilityConverter.cs" />
+    <Compile Include="Converters\TreeViewFolderIconConverter.cs" />
     <Compile Include="Extensions\EnumToItemsSource.cs" />
+    <Compile Include="Helpers\TreeViewHelpers.cs" />
     <Compile Include="Helpers\VSHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -260,6 +262,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\BitbucketShortBlue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Folder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\FolderOpen.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\File.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Content Include="Resources\Entypo-license.txt" />
