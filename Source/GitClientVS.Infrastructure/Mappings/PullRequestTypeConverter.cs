@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using BitBucket.REST.API.Helpers;
 using BitBucket.REST.API.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
@@ -13,15 +15,21 @@ namespace GitClientVS.Infrastructure.Mappings
     {
         public GitPullRequest Convert(PullRequest source, GitPullRequest destination, ResolutionContext context)
         {
+            Dictionary<string, bool> reviewers = new Dictionary<string, bool>();
+            foreach (var reviewer in source.Reviewers)
+            {
+                reviewers.Add(reviewer.Username, ApiHelpers.GetApproveStatus(reviewer.Username, source.Participants));
+            }
             return new GitPullRequest(source.Title, source.Description, source.Source.Branch.Name, source.Destination.Branch.Name)
             {
-                Id = source.Id.ToString(),
+                Id = source.Id,
                 Author = source.Author.MapTo<GitUser>(),
                 Status = source.State.MapTo<GitPullRequestStatus>(),
                 Created = TimeConverter.GetDate(source.CreatedOn),
                 Updated = TimeConverter.GetDate(source.UpdatedOn),
                 CloseSourceBranch = source.CloseSourceBranch,
-                Url = source.Links.Html.Href
+                Url = source.Links.Html.Href,
+                Reviewers = reviewers
             };
         }
     }

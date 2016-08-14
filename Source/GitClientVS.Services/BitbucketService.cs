@@ -114,22 +114,8 @@ namespace GitClientVS.Services
         }
 
         public async Task<IEnumerable<GitPullRequest>> GetPullRequests(GitPullRequestStatus gitPullRequestStatus, string repositoryName)
-        {
-            PullRequestOptions option = PullRequestOptions.OPEN;
-            if (gitPullRequestStatus == GitPullRequestStatus.Declined)
-            {
-                option = PullRequestOptions.DECLINED;
-            }
-            else if (gitPullRequestStatus == GitPullRequestStatus.Merged)
-            {
-                option = PullRequestOptions.MERGED;
-            }
-            else if (gitPullRequestStatus == GitPullRequestStatus.Open)
-            {
-                option = PullRequestOptions.OPEN;
-            }
-            // todo: how better   
-            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests(repositoryName, option);
+        {  
+            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests(repositoryName, gitPullRequestStatus.MapTo<PullRequestOptions>());
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
 
@@ -137,6 +123,17 @@ namespace GitClientVS.Services
         {
             var repositories = await _bitbucketClient.RepositoriesClient.GetBranches(repoName);
             return repositories.Values.MapTo<List<GitBranch>>();
+        }
+
+        public async Task<bool> ApprovePullRequest(string ownerName, string repositoryName, long id)
+        {
+            var result = await _bitbucketClient.PullRequestsClient.ApprovePullRequest(repositoryName, ownerName, id);
+            return (result != null && result.Approved);
+        }
+
+        public async Task DisapprovePullRequest(string ownerName, string repositoryName, long id)
+        {
+            await _bitbucketClient.PullRequestsClient.DisapprovePullRequest(repositoryName, ownerName, id);
         }
 
         public async Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName)

@@ -40,6 +40,11 @@ namespace BitBucket.REST.API.Helpers
             return $"repositories/{username}/{repository}/pullrequests/{id}";
         }
 
+        public static string PullRequestApprove(string username, string repository, long id)
+        {
+            return $"repositories/{username}/{repository}/pullrequests/{id}/approve";
+        }
+
         public static string PullRequestDiff(string username, string repository, long id)
         {
             return $"repositories/{username}/{repository}/pullrequests/{id}/diff";
