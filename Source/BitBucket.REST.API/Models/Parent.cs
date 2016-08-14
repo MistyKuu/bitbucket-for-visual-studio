@@ -12,5 +12,8 @@ namespace BitBucket.REST.API.Models
 
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
+
+        [JsonProperty(PropertyName = "id")]
+        public long Id { get; set; }
     }
 }

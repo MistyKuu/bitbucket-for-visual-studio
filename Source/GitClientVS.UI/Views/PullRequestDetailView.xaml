@@ -158,7 +158,18 @@
                     <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15" Header="{Binding Comments.Count,FallbackValue=0}" HeaderStringFormat="{}Comments ({0})">
-                    <ListBox ItemsSource="{Binding Comments}" ItemTemplate="{StaticResource CommentsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                    <TreeView ItemsSource="{Binding CommentTree}" x:Name="CommentsTree" Margin="0,4,0,0" >
+                        <TreeView.Resources>
+                            <HierarchicalDataTemplate DataType="{x:Type models:CommentTree}" ItemsSource="{Binding Comments}">
+                                <StackPanel Orientation="Horizontal" Margin="2">
+                                    <Border BorderThickness="1" BorderBrush="Black">
+                                        <TextBlock Text="{Binding Comment.Content.Raw}" Margin="5,0"/>
+                                    </Border>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.Resources>
+                    </TreeView>
+
                 </controls:MetroTabItem>
             </controls:MetroAnimatedTabControl>
 

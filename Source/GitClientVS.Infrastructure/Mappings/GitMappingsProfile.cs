@@ -26,6 +26,9 @@ namespace GitClientVS.Infrastructure.Mappings
                 .ForMember(dto => dto.Date, e => e.MapFrom(o => TimeConverter.GetDate(o.Date)))
                 .ForMember(dto => dto.Author, e => e.MapFrom(o => o.Author.User));
 
+            // todo: make a general parent
+            CreateMap<Parent, GitCommentParent>();
+
             CreateMap<Comment, GitComment>()
                 .ForMember(dto => dto.CreatedOn, e => e.MapFrom(o => TimeConverter.GetDate(o.CreatedOn)))
                 .ForMember(dto => dto.UpdatedOn, e => e.MapFrom(o => TimeConverter.GetDate(o.UpdatedOn)));

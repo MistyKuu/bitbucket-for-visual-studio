@@ -16,5 +16,11 @@ namespace BitBucket.REST.API.Models
         [JsonProperty(PropertyName = "updated_on")]
         public string UpdatedOn { get; set; }
 
+        [JsonProperty(PropertyName = "parent")]
+        public Parent Parent { get; set; }
+
+        [JsonProperty(PropertyName = "id")]
+        public long Id { get; set; }
+
     }
 }

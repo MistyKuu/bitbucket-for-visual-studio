@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -34,6 +36,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<Unit> _showDiffCommand;
         private IEnumerable<FileDiff> _fileDiffs;
         private List<ITreeFile> _filesTree;
+        private List<ICommentTree> _commentTree;
 
         [ImportingConstructor]
         public PullRequestsDetailViewModel(
@@ -81,6 +84,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _fileDiffs, value); }
         }
 
+        public List<ICommentTree> CommentTree
+        {
+            get { return _commentTree; }
+            set { this.RaiseAndSetIfChanged(ref _commentTree, value); }
+        }
+
         public List<ITreeFile> FilesTree
         {
             get { return _filesTree; }
@@ -96,7 +105,108 @@ namespace GitClientVS.Infrastructure.ViewModels
             var diff = await _gitClientService.GetPullRequestDiff("atlassian-rest", "atlassian", id);
             FileDiffs = _diffFileParser.Parse(diff).ToList();
             CreateFileTree(FileDiffs.ToList());
+            CreateCommentTree(Comments.ToList());
         }
+
+        public void CreateCommentTree(List<GitComment> gitComments)
+        {
+            Dictionary<long, GitComment> searchableGitComments = new Dictionary<long, GitComment>();
+            foreach (var comment in gitComments)
+            {
+                searchableGitComments.Add(comment.Id, comment);
+            }
+
+            Dictionary<int, List<ObjectTree>> result = new Dictionary<int, List<ObjectTree>>();
+
+            var separator = '/';
+            var maxLevel = 0;
+            foreach (var comment in gitComments)
+            {
+                var level = 0;
+                List<long> ids = new List<long>();
+                StringBuilder path = new StringBuilder();
+
+                ids.Add(comment.Id);
+               // path.Append(comment.Id);
+
+              
+                var tmpComment = comment;
+                while (tmpComment.Parent != null)
+                {
+                   // path.Append(separator);
+                    ids.Add(tmpComment.Parent.Id);
+                   // path.Append(tmpComment.Parent.Id);
+                    level++;
+
+                    tmpComment = searchableGitComments[tmpComment.Parent.Id];
+                }
+
+                if (!result.ContainsKey(level))
+                {
+                    result[level] = new List<ObjectTree>();
+                    if (level > maxLevel)
+                    {
+                        maxLevel = level;
+                    }
+                }
+
+                for (var pathIndex = ids.Count - 1; pathIndex > -1; pathIndex -= 1)
+                {
+                    path.Append(ids[pathIndex]);
+
+                    if (pathIndex > 0)
+                    {
+                        path.Append(separator);
+                    }
+                }
+
+                result[level].Add(new ObjectTree(path.ToString(), new GitComment()
+                {
+                    Content = comment.Content,
+                    CreatedOn = comment.CreatedOn,
+                    Id = comment.Id,
+                    Parent = comment.Parent,
+                    User = comment.User,
+                    UpdatedOn = comment.UpdatedOn
+                }));
+            }
+
+
+
+            ICommentTree entryComment = new CommentTree();
+            for (var i = 0; i < maxLevel; i++)
+            {
+                List<ObjectTree> preparedComments = result[i];
+             
+                foreach (var objectTree in preparedComments)
+                {
+
+                    ICommentTree currentComment = entryComment;
+                    var pathChunks = objectTree.Path.Split(separator);
+                 
+                    foreach (var pathChunk in pathChunks)
+                    {
+                        var tmp = currentComment.Comments.Where(x => x.Comment.Id.Equals(long.Parse(pathChunk)));
+                        if (tmp.Count() > 0)
+                        {
+                            currentComment = tmp.Single();
+                        }
+                        else
+                        {
+                            ICommentTree newItem = new CommentTree(objectTree.GitComment);
+                            currentComment.Comments.Add(newItem);
+                            currentComment = newItem;
+                        }
+                    }
+
+                }
+            }
+
+            CommentTree = entryComment.Comments;
+
+        }
+
+  
 
         public void CreateFileTree(List<FileDiff> fileDiffs, string rootFileName = "test", char separator = '/')
         {
