@@ -43,7 +43,8 @@
         </Grid.Resources>
 
 
-        <TextBlock Visibility="Collapsed" x:Name="Tb"/>
+        <TextBlock Visibility="Collapsed" x:Name="Tb"/> 
+        <!--TODO A HACK TO USE TB FOREGROUND-->
 
         <ScrollViewer PreviewMouseWheel="UIElement_OnPreviewMouseWheel">
             <ItemsControl ItemsSource="{Binding FileDiff.Chunks}" ItemTemplate="{StaticResource ChunkTemplate}">
