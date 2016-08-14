@@ -15,6 +15,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:parseDiff="clr-namespace:ParseDiff;assembly=ParseDiff"
              xmlns:helpers="clr-namespace:GitClientVS.UI.Helpers"
+             xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PqDetailView"
@@ -81,118 +82,80 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-         
+
             <controls:MetroAnimatedTabControl Margin="20" >
 
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
-                    <StackPanel>
-                        <ListBox ItemsSource="{Binding FileDiffs}" ItemTemplate="{StaticResource FilesChangedTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
-                        <TreeView ItemsSource="{Binding FilesTree}" x:Name="FilesTree" Margin="0,4,0,0">
-                            <!--<TreeView.ItemContainerStyle>
-                                <Style TargetType="{x:Type TreeViewItem}">
-                                    <Style.Triggers>
-                                         Selected and has focus 
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="White" />
-                                        </Trigger>
-                                        <Trigger Property="helpers:TreeViewHelpers.IsMouseDirectlyOverItem" Value="True">
-                                            <Setter Property="Background">
-                                                <Setter.Value>
-                                                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                                                        <GradientStop Color="#FFFAFBFD" Offset="0"/>
-                                                        <GradientStop Color="#FFEBF3FD" Offset="1"/>
-                                                    </LinearGradientBrush>
-                                                </Setter.Value>
-                                            </Setter>
-                                            <Setter Property="BorderBrush" Value="#B8D6FB"/>
-                                        </Trigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected" Value="True"/>
-                                                <Condition Property="IsSelectionActive" Value="False"/>
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background" Value="White" />
-                                        </MultiTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TreeView.ItemContainerStyle>-->
-                            
-                            <TreeView.Resources>
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                                  Color="Transparent" />
-                                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                                  Color="Black" />
-                                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                  Color="Transparent" />
-                                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
-                                  Color="Black" />  
-                                <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
-                                  
-                                     <Style.Triggers>
-                                       
-                                        <!--<MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding GetTreeType}" Value="{x:Type models:TreeDirectory}"/>
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="true" />
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter Property="Background" Value="Red"></Setter>
-                                        </MultiDataTrigger>-->
-                                        <DataTrigger Binding="{Binding GetTreeType}" Value="{x:Type models:TreeDirectory}">
-                                            <Setter Property="Background" Value="Transparent" />
-                                            <Setter Property="Focusable" Value="False"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                                <HierarchicalDataTemplate DataType="{x:Type models:TreeDirectory}" ItemsSource="{Binding Files}">
-                                    <StackPanel Orientation="Horizontal" Margin="2">
-                                        <Image Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}, Path=IsExpanded, Converter={converters:TreeViewFolderIconConverter}}"
-                                               Width="16"
-                                               Height="16"
-                                               SnapsToDevicePixels="True"
-                                               />         
-                                        <TextBlock Text="{Binding Path=Name}" Margin="5,0"/>
-                                    </StackPanel>
-                                </HierarchicalDataTemplate>
-                               
-                                <DataTemplate DataType="{x:Type models:TreeFile}" >
-                                    <StackPanel Orientation="Horizontal" Margin="2">
-                                        <Image Source="../Images/File.png"
+
+                    <TreeView ItemsSource="{Binding FilesTree}" x:Name="FilesTree" Margin="0,4,0,0" >
+                        <TreeView.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"  Color="LightBlue" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="LightBlue" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />
+
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay}"/>
+                                <Setter Property="IsSelected" Value="{Binding IsSelected,Mode=TwoWay}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding GetTreeType}" Value="{x:Type models:TreeDirectory}">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Focusable" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                            <HierarchicalDataTemplate DataType="{x:Type models:TreeDirectory}" ItemsSource="{Binding Files}">
+                                <StackPanel Orientation="Horizontal" Margin="2">
+                                    <Image Source="{Binding IsExpanded, Converter={converters:TreeViewFolderIconConverter}}"
                                                Width="16"
                                                Height="16"
                                                SnapsToDevicePixels="True"
                                                />
-                                        <TextBlock Margin="5,0">
-                                            <Hyperlink Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" TextDecorations="None" Foreground="Black">
+                                    <TextBlock Text="{Binding Path=Name}" Margin="5,0"/>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+
+                            <DataTemplate DataType="{x:Type models:TreeFile}" >
+                                <StackPanel Orientation="Horizontal" Margin="2">
+                                    <Image Source="../Images/File.png"
+                                               Width="16"
+                                               Height="16"
+                                               SnapsToDevicePixels="True"
+                                               />
+                                    <TextBlock Margin="5,0">
+                                            <Hyperlink 
+                                                attachedProperties:SelectTreeViewAfterItemClickBehavior.TreeViewItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}"
+                                                Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" TextDecorations="None" Foreground="Black">
                                                   <TextBlock Text="{Binding Path=Name}">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsAdded}" Value="True">
-                                                                    <Setter Property="Foreground" Value="Green" />
-                                                                    <Setter Property="FontWeight" Value="Bold" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding IsRemoved}" Value="True">
-                                                                    <Setter Property="Foreground" Value="Red" />
-                                                                    <Setter Property="FontWeight" Value="Bold" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsAdded}" Value="True">
+                                                                <Setter Property="Foreground" Value="Green" />
+                                                                <Setter Property="FontWeight" Value="Bold" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsRemoved}" Value="True">
+                                                                <Setter Property="Foreground" Value="Red" />
+                                                                <Setter Property="FontWeight" Value="Bold" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
                                                   </TextBlock>
                                             </Hyperlink>
                                         </TextBlock>
-                                        <TextBlock Margin="5,0" FontWeight="Bold" Foreground="Green">
-                                            <Run Text="+"/><Run Text="{Binding Added}"/>  
-                                        </TextBlock>
-                                        <TextBlock FontWeight="Bold" Foreground="Red">
+                                    <TextBlock Margin="5,0" FontWeight="Bold" Foreground="Green">
+                                            <Run Text="+"/><Run Text="{Binding Added}"/>
+                                    </TextBlock>
+                                    <TextBlock FontWeight="Bold" Foreground="Red">
                                             <Run Text="-"/><Run Text="{Binding Removed}"/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </TreeView.Resources>
-    
-                        </TreeView>
-                    </StackPanel>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </TreeView.Resources>
+                    </TreeView>
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
                     <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>

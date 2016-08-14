@@ -13,6 +13,7 @@ namespace GitClientVS.Contracts.Models
         public bool IsAdded { get; set; }
         public bool IsRemoved { get; set; }
         public Type GetTreeType { get { return this.GetType(); } }
+        public bool IsExpanded { get; set; }
         public bool IsSelectable { get; set; }
         public long Added { get; set; }
         public long Removed { get; set; }
