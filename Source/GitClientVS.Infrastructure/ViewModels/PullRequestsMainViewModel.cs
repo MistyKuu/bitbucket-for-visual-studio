@@ -137,7 +137,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadPullRequests()
         {
-            GitPullRequests = await _gitClientService.GetPullRequests("django-piston", "jespern");
+            GitPullRequests = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian");
         }
 
         private bool CanRunFilter()

@@ -91,9 +91,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var id = pr.Id;
             var currentRepository = _gitService.GetActiveRepository();
-            Commits = await _gitClientService.GetPullRequestCommits("django-piston", "jespern", id);
-            Comments = await _gitClientService.GetPullRequestComments("django-piston", "jespern", id);
-            var diff = await _gitClientService.GetPullRequestDiff("django-piston", "jespern", id);
+            Commits = await _gitClientService.GetPullRequestCommits("atlassian-rest", "atlassian", id);
+            Comments = await _gitClientService.GetPullRequestComments("atlassian-rest", "atlassian", id);
+            var diff = await _gitClientService.GetPullRequestDiff("atlassian-rest", "atlassian", id);
             FileDiffs = _diffFileParser.Parse(diff).ToList();
             CreateFileTree(FileDiffs.ToList());
         }
