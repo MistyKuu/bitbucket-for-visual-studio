@@ -34,6 +34,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<Unit> _showDiffCommand;
         private IEnumerable<FileDiff> _fileDiffs;
         private List<ITreeFile> _filesTree;
+        private string _title;
+        private string _description;
+        private GitPullRequest _pullRequest;
 
         [ImportingConstructor]
         public PullRequestsDetailViewModel(
@@ -87,8 +90,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _filesTree, value); }
         }
 
+        public GitPullRequest PullRequest
+        {
+            get { return _pullRequest; }
+            set { this.RaiseAndSetIfChanged(ref _pullRequest, value); }
+        }
+
+
         private async Task LoadPullRequestData(GitPullRequest pr)
         {
+            PullRequest = pr;
             var id = pr.Id;
             var currentRepository = _gitService.GetActiveRepository();
             Commits = await _gitClientService.GetPullRequestCommits("django-piston", "jespern", id);

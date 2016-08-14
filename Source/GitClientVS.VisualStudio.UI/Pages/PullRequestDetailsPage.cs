@@ -25,8 +25,11 @@ namespace GitClientVS.VisualStudio.UI.Pages
         public override void Initialize(object sender, PageInitializeEventArgs e)
         {
             var gitPullRequest = (GitPullRequest)e.Context;
-            Title += $" #{gitPullRequest.Id}";
-            _view.InitializeCommand.Execute(gitPullRequest);
+            if (gitPullRequest != null)
+            {
+                Title += $" #{gitPullRequest.Id}";
+                _view.InitializeCommand.Execute(gitPullRequest);
+            }
         }
     }
 }

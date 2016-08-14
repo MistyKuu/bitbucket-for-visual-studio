@@ -69,20 +69,25 @@
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid  Margin="20" >
         <controls1:ProgressBar ProgressContent="{Binding ElementName=PrContent}"/>
+
         <Grid x:Name="PrContent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
+            <TextBlock Grid.Row="0" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontSize="15" Margin="5"/>
+            <TextBlock Grid.Row="1" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" FontSize="13" FontWeight="Light" Margin="5"/>
 
-            <controls:MetroAnimatedTabControl Margin="20" >
+            <Separator Grid.Row="2"/>
 
-                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
+            <controls:MetroAnimatedTabControl Grid.Row="3">
+
+                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
 
                     <TreeView ItemsSource="{Binding FilesTree}" x:Name="FilesTree" Margin="0,4,0,0" >
                         <TreeView.Resources>
@@ -154,10 +159,10 @@
                         </TreeView.Resources>
                     </TreeView>
                 </controls:MetroTabItem>
-                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
+                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
                     <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
                 </controls:MetroTabItem>
-                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15" Header="{Binding Comments.Count,FallbackValue=0}" HeaderStringFormat="{}Comments ({0})">
+                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Comments.Count,FallbackValue=0}" HeaderStringFormat="{}Comments ({0})">
                     <ListBox ItemsSource="{Binding Comments}" ItemTemplate="{StaticResource CommentsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
                 </controls:MetroTabItem>
             </controls:MetroAnimatedTabControl>
