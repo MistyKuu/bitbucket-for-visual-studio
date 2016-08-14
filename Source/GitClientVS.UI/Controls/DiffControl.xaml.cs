@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ParseDiff;
 
 namespace GitClientVS.UI.Controls
@@ -62,6 +63,13 @@ namespace GitClientVS.UI.Controls
         {
             InitializeComponent();
             (this.Content as FrameworkElement).DataContext = this;
+        }
+
+        private void UIElement_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }

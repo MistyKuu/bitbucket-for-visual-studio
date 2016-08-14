@@ -15,6 +15,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+
     <Grid>
         <Grid.Resources>
             <DataTemplate x:Key="ChunkTemplate">
@@ -23,8 +24,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-
-                    <avalonedit:TextEditor diffControl:AvalonEditBehaviour.TextBinding="{Binding Text}" 
+                    <avalonedit:TextEditor x:Name="TextEditor" diffControl:AvalonEditBehaviour.TextBinding="{Binding Text}" 
                                            diffControl:AvalonEditBehaviour.IsDiffEditor="True"
                                            HorizontalAlignment="Stretch"
                                            VerticalScrollBarVisibility="Hidden"
@@ -32,6 +32,7 @@
                                             FontFamily="Consolas"
                                             SyntaxHighlighting="{Binding ElementName=CurrentControl,Path=HighLightStyle}"
                                             FontSize="10pt" 
+                                           Foreground="{Binding ElementName=Tb,Path=Foreground}"
                                         >
                     </avalonedit:TextEditor>
 
@@ -40,16 +41,20 @@
 
             </DataTemplate>
         </Grid.Resources>
-        
-        
-        <ItemsControl ItemsSource="{Binding FileDiff.Chunks}" ItemTemplate="{StaticResource ChunkTemplate}">
-            <ItemsControl.Resources>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                </Style>
-            </ItemsControl.Resources>
-        </ItemsControl>
+
+
+        <TextBlock Visibility="Collapsed" x:Name="Tb"/>
+
+        <ScrollViewer PreviewMouseWheel="UIElement_OnPreviewMouseWheel">
+            <ItemsControl ItemsSource="{Binding FileDiff.Chunks}" ItemTemplate="{StaticResource ChunkTemplate}">
+                <ItemsControl.Resources>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ItemsControl.Resources>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>
