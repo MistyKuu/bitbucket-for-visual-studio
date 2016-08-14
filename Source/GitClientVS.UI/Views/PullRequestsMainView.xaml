@@ -113,7 +113,10 @@
         <controls1:ProgressBar Grid.Row="1" ProgressContent="{Binding ElementName=PullRequests}"/>
 
         <Grid Grid.Row="1" Margin="20" x:Name="PullRequests">
-            <ListBox ItemsSource="{Binding FilteredGitPullRequests}" 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ListBox x:Name="Lb" ItemsSource="{Binding FilteredGitPullRequests}" PreviewMouseWheel="Lb_OnPreviewMouseWheel"
                      ItemTemplate="{StaticResource PullRequestTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                      />
         </Grid>
