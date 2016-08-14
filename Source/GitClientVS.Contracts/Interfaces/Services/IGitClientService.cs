@@ -30,6 +30,9 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<string> GetPullRequestDiff(string repositoryName, string ownerName, long id);
         Task<string> GetPullRequestDiff(string repositoryName, long id);
 
+        Task DisapprovePullRequest(string ownerName, string repositoryName, long id);
+        Task<bool> ApprovePullRequest(string ownerName, string repositoryName, long id);
+
         bool IsOriginRepo(GitRemoteRepository gitRemoteRepository);
 
         Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName);

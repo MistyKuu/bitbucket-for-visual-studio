@@ -89,7 +89,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadPullRequestData(GitPullRequest pr)
         {
-            var id = int.Parse(pr.Id);
+            var id = pr.Id;
             var currentRepository = _gitService.GetActiveRepository();
             Commits = await _gitClientService.GetPullRequestCommits("django-piston", "jespern", id);
             Comments = await _gitClientService.GetPullRequestComments("django-piston", "jespern", id);

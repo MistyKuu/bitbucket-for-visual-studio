@@ -62,6 +62,7 @@
     <Compile Include="Clients\TeamsClient.cs" />
     <Compile Include="Clients\UserClient.cs" />
     <Compile Include="Exceptions\AuthorizationException.cs" />
+    <Compile Include="Helpers\ApiHelpers.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Branch.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Models\Link.cs" />
     <Compile Include="Models\Links.cs" />
     <Compile Include="Models\Parent.cs" />
+    <Compile Include="Models\Participant.cs" />
     <Compile Include="Models\PullRequest.cs" />
     <Compile Include="Models\PullRequestOptions.cs" />
     <Compile Include="Models\Repository.cs" />

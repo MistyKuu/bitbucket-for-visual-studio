@@ -42,6 +42,31 @@ namespace BitBucket.REST.API.Clients
             return response.Content;
         }
 
+        public async Task<Participant> ApprovePullRequest(string repositoryName, long id)
+        {
+            return await ApprovePullRequest(repositoryName, Connection.Credentials.Login, id);
+        }
+
+        public async Task<Participant> ApprovePullRequest(string repositoryName, string ownerName, long id)
+        {
+            var url = ApiUrls.PullRequestApprove(ownerName, repositoryName, id);
+            var request = new BitbucketRestRequest(url, Method.POST);
+            var response = await RestClient.ExecuteTaskAsync<Participant>(request);
+            return response.Data;
+        }
+
+        public async Task DisapprovePullRequest(string repositoryName, long id)
+        {
+            await DisapprovePullRequest(repositoryName, Connection.Credentials.Login, id);
+        }
+
+        public async Task DisapprovePullRequest(string repositoryName, string ownerName, long id)
+        {
+            var url = ApiUrls.PullRequestApprove(ownerName, repositoryName, id);
+            var request = new BitbucketRestRequest(url, Method.DELETE);
+            await RestClient.ExecuteTaskAsync(request);
+        }
+
         public async Task<IteratorBasedPage<Commit>> GetPullRequestCommits(string repositoryName, long id)
         {
             return await GetPullRequestCommits(repositoryName, Connection.Credentials.Login, id);

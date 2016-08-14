@@ -49,6 +49,13 @@ namespace BitBucket.REST.API.Models
         public object MergeCommit { get; set; }
 
         [JsonProperty(PropertyName = "id")]
-        public int? Id { get; set; }
+        public long Id { get; set; }
+
+        [JsonProperty(PropertyName = "reviewers")]
+        public List<UserShort> Reviewers { get; set; }
+
+        [JsonProperty(PropertyName = "participants")]
+        public List<Participant> Participants { get; set; }
+
     }
 }
