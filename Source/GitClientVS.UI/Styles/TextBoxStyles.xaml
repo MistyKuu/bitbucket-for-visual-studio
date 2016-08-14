@@ -9,33 +9,30 @@
     <ResourceDictionary.MergedDictionaries>
         <styles:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
-    
-    
-    <Style x:Key="ValidatedTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-        <Setter Property="controls:TextBoxHelper.ClearTextButton" Value="True"/>
-        <Setter Property="attachedProperties:SetErrorTemplateAfterTouchBehavior.IsEnabledForStyle" Value="True"/>
-
-        <Setter Property="Validation.ErrorTemplate">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Grid>
-                        <Border 
+    <ControlTemplate x:Key="ErrorDataTemplate">
+        <Grid>
+            <Border 
                             BorderBrush="#FFCB2E2E" 
                             BorderThickness="1"
                             Background="#11FF0000"
                             IsHitTestVisible="False" 
                             x:Name="errorBorder"
                             />
-                        <AdornedElementPlaceholder x:Name="placeholder" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+            <AdornedElementPlaceholder x:Name="placeholder" />
+        </Grid>
+    </ControlTemplate>
+
+
+    <Style x:Key="ValidatedTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="controls:TextBoxHelper.ClearTextButton" Value="True"/>
+        <Setter Property="attachedProperties:SetErrorTemplateAfterTouchBehavior.IsEnabledForStyle" Value="True"/>
+
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorDataTemplate}"/>
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="True">
                 <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
             </Trigger>
         </Style.Triggers>
     </Style>
+
 </ResourceDictionary>

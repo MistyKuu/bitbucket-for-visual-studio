@@ -77,6 +77,7 @@
     <Compile Include="AttachedProperties\AttachableForStyleBehavior.cs" />
     <Compile Include="AttachedProperties\SelectTreeViewAfterItemClickBehavior.cs" />
     <Compile Include="AttachedProperties\SetErrorTemplateAfterTouchBehavior.cs" />
+    <Compile Include="Bindings\PasswordHelper.cs" />
     <Compile Include="Bindings\ValidatedBinding.cs" />
     <Compile Include="Controls\CustomizedListItem.xaml.cs">
       <DependentUpon>CustomizedListItem.xaml</DependentUpon>
