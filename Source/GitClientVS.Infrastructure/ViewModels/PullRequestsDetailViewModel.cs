@@ -105,7 +105,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             foreach (var fileDiff in fileDiffs.Where(x => !string.IsNullOrEmpty(x.From.Trim())))
             {
                 ITreeFile currentFile = entryFile;
-                
+
                 var pathChunks = fileDiff.From.Split(separator);
                 var lastItem = pathChunks.Last();
                 foreach (var pathChunk in pathChunks)
@@ -126,15 +126,27 @@ namespace GitClientVS.Infrastructure.ViewModels
                         {
                             newItem = new TreeDirectory(pathChunk);
                         }
-                       
+
                         currentFile.Files.Add(newItem);
                         currentFile = newItem;
                     }
                 }
             }
 
-           
+
             FilesTree = entryFile.Files;
+            ExpandTree(FilesTree);
+        }
+
+        private void ExpandTree(List<ITreeFile> files)
+        {
+            foreach (var treeFile in files)
+            {
+                if (treeFile.Files.Any())
+                    ExpandTree(treeFile.Files);
+
+                treeFile.IsExpanded = true;
+            }
         }
 
 

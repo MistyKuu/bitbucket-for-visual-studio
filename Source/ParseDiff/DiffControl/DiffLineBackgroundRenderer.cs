@@ -33,7 +33,7 @@ namespace ParseDiff.DiffControl
 
             var chunk = (ChunkDiff)textView.DataContext;
 
-            foreach (var v in textView.VisualLines)
+            foreach (VisualLine v in textView.VisualLines)
             {
                 var rc = BackgroundGeometryBuilder.GetRectsFromVisualSegment(textView, v, 0, 1000).First();
                 // NB: This lookup to fetch the doc line number isn't great, we could

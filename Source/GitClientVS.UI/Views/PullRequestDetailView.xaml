@@ -29,9 +29,6 @@
             </ResourceDictionary.MergedDictionaries>
 
 
-            <DataTemplate x:Key="FilesChangedTemplate">
-                <Button Content="{Binding From}" Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding}"/>
-            </DataTemplate>
             <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -94,7 +91,7 @@
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="LightBlue" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />
 
-                            <Style TargetType="{x:Type TreeViewItem}">
+                            <Style TargetType="{x:Type TreeViewItem}" >
                                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                 <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay}"/>
@@ -127,7 +124,7 @@
                                     <TextBlock Margin="5,0">
                                             <Hyperlink 
                                                 attachedProperties:SelectTreeViewAfterItemClickBehavior.TreeViewItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}"
-                                                Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" TextDecorations="None" Foreground="Black">
+                                                Command="{Binding ElementName=PqDetailView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" TextDecorations="None">
                                                   <TextBlock Text="{Binding Path=Name}">
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">

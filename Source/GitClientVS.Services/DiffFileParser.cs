@@ -30,7 +30,7 @@ namespace GitClientVS.Services
                         if (change.Type == LineChangeType.Add)
                             change.NewIndex = change.Index;
                         else if (change.Type == LineChangeType.Delete)
-                            change.NewIndex = change.Index;
+                            change.OldIndex = change.Index;
                     }
                 }
                 else if (fileDiff.Type == FileChangeType.Add)

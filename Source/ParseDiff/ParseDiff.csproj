@@ -58,6 +58,7 @@
     <Compile Include="Diff.cs" />
     <Compile Include="DiffControl\AvalonEditBehaviour.cs" />
     <Compile Include="DiffControl\DiffLineBackgroundRenderer.cs" />
+    <Compile Include="DiffControl\DiffLineColorizer.cs" />
     <Compile Include="DiffControl\TwoColumnMargin.cs" />
     <Compile Include="DiffParser.cs" />
     <Compile Include="LineChangeType.cs" />

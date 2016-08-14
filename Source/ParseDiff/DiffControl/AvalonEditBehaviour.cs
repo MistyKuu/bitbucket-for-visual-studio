@@ -22,6 +22,7 @@ namespace ParseDiff.DiffControl
         {
             TextEditor textEditor = d as TextEditor;
             textEditor.TextArea.TextView.BackgroundRenderers.Add(new DiffLineBackgroundRenderer());
+            textEditor.TextArea.TextView.LineTransformers.Add(new DiffLineColorizer((ChunkDiff)textEditor.DataContext));
             textEditor.TextArea.LeftMargins.Add(new TwoColumnMargin());
             textEditor.TextArea.LeftMargins.Add(DottedLineMargin.Create());
         }
