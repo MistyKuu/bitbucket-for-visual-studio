@@ -83,6 +83,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AttachedProperties\AttachableForStyleBehavior.cs" />
+    <Compile Include="AttachedProperties\HandleMouseWheelInParentBehaviour.cs" />
     <Compile Include="AttachedProperties\SelectTreeViewAfterItemClickBehavior.cs" />
     <Compile Include="AttachedProperties\SetErrorTemplateAfterTouchBehavior.cs" />
     <Compile Include="Bindings\PasswordHelper.cs" />

@@ -27,6 +27,13 @@ namespace GitClientVS.UI.AttachedProperties
             _actualTemplate = Validation.GetErrorTemplate(_textBox);
         }
 
+        protected override void OnDetaching()
+        {
+            base.OnDetaching();
+            _textBox.TextChanged -= _textBox_TextChanged;
+            _textBox.Loaded -= _textBox_Loaded;
+        }
+
         private void _textBox_Loaded(object sender, RoutedEventArgs e)
         {
             _actualTemplate = Validation.GetErrorTemplate(_textBox);

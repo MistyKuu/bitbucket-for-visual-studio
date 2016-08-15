@@ -17,7 +17,6 @@ namespace GitClientVS.UI.Views
     public partial class PullRequestsMainView : UserControl, IPullRequestsMainView
     {
         private readonly IPullRequestsMainViewModel _vm;
-        private ScrollViewer _sv;
 
         [ImportingConstructor]
         public PullRequestsMainView(IPullRequestsMainViewModel vm)
@@ -31,19 +30,6 @@ namespace GitClientVS.UI.Views
         private void PullRequestsMainViewView_Loaded(object sender, EventArgs e)
         {
             _vm.InitializeCommand.Execute(null);
-        }
-
-        private void Lb_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            if (!e.Handled)
-            {
-                e.Handled = true;
-                var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
-                eventArg.RoutedEvent = UIElement.MouseWheelEvent;
-                eventArg.Source = sender;
-                var parent = ((Control)sender).Parent as UIElement;
-                parent.RaiseEvent(eventArg);
-            }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 
@@ -22,6 +23,10 @@ namespace GitClientVS.UI.Views
             DataContext = _detailsViewModel;
         }
 
+
         public ICommand InitializeCommand => _detailsViewModel.InitializeCommand;
+
     }
+
+
 }

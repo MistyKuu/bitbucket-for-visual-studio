@@ -20,6 +20,7 @@ namespace GitClientVS.VisualStudio.UI.Pages
             Title = Resources.PullRequestDetailsPageTitle;
             _view = view;
             PageContent = view;
+            
         }
 
         public override void Initialize(object sender, PageInitializeEventArgs e)

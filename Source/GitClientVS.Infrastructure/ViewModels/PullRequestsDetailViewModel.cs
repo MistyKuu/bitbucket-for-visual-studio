@@ -40,6 +40,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _title;
         private string _description;
         private GitPullRequest _pullRequest;
+        private ReactiveCommand<object> _expandMainSectionCommand;
+        private bool _isMainSectionExpanded;
+        private string _mainSectionCommandText;
 
         [ImportingConstructor]
         public PullRequestsDetailViewModel(
@@ -53,20 +56,36 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitService = gitService;
             _commandsService = commandsService;
             _diffFileParser = diffFileParser;
+            this.WhenAnyValue(x => x.IsMainSectionExpanded).Subscribe(_ => MainSectionCommandText = IsMainSectionExpanded ? "Hide" : "Expand");
         }
 
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand ShowDiffCommand => _showDiffCommand;
+        public ICommand ExpandMainSectionCommand => _expandMainSectionCommand;
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((GitPullRequest)x));
             _showDiffCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), (x) => ShowDiff((FileDiff)x));
+            _expandMainSectionCommand = ReactiveCommand.Create(Observable.Return(true));
+            _expandMainSectionCommand.Subscribe(_ => IsMainSectionExpanded = !IsMainSectionExpanded);
         }
 
         private async Task ShowDiff(FileDiff diff)
         {
             _commandsService.ShowDiffWindow(diff);
+        }
+
+        public bool IsMainSectionExpanded
+        {
+            get { return _isMainSectionExpanded; }
+            set { this.RaiseAndSetIfChanged(ref _isMainSectionExpanded, value); }
+        }
+
+        public string MainSectionCommandText
+        {
+            get { return _mainSectionCommandText; }
+            set { this.RaiseAndSetIfChanged(ref _mainSectionCommandText, value); }
         }
 
         public IEnumerable<GitComment> Comments
@@ -209,7 +228,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         }
 
-  
+
 
         public void CreateFileTree(List<FileDiff> fileDiffs, string rootFileName = "test", char separator = '/')
         {

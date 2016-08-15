@@ -15,6 +15,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:extensions="clr-namespace:GitClientVS.UI.Extensions"
              xmlns:wpfControls="http://wpfcontrols.com/"
+             xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PrView"
@@ -116,7 +117,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ListBox x:Name="Lb" ItemsSource="{Binding FilteredGitPullRequests}" PreviewMouseWheel="Lb_OnPreviewMouseWheel"
+            <ListBox x:Name="Lb" ItemsSource="{Binding FilteredGitPullRequests}" attachedProperties:HandleMouseWheelInParentBehaviour.IsRedirectEnabled="True"
                      ItemTemplate="{StaticResource PullRequestTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                      />
         </Grid>
