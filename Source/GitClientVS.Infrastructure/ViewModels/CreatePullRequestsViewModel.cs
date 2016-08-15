@@ -121,8 +121,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CreateNewPullRequest()
         {
-            // var currentRepo = (_gitService.GetActiveRepository()).Name; todo real repo
-            var currentRepo = "test";
+            var currentRepo = (_gitService.GetActiveRepository()).Name;
             var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.Name, DestinationBranch.Name)
             {
                 CloseSourceBranch = CloseSourceBranch
@@ -132,8 +131,8 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadBranches()
         {
-            Branches = (await _gitClientService.GetBranches("test")).ToList(); //todo real repo
-            SourceBranch = Branches.FirstOrDefault();
+            Branches = (await _gitClientService.GetBranches(_gitService.GetActiveRepository().Name)).ToList();
+            SourceBranch = Branches.FirstOrDefault(); // TODO active branch
             DestinationBranch = Branches.FirstOrDefault();
         }
 

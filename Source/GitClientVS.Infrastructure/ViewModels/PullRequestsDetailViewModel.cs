@@ -37,6 +37,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         private IEnumerable<FileDiff> _fileDiffs;
         private List<ITreeFile> _filesTree;
         private List<ICommentTree> _commentTree;
+        private string _title;
+        private string _description;
+        private GitPullRequest _pullRequest;
 
         [ImportingConstructor]
         public PullRequestsDetailViewModel(
@@ -96,8 +99,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _filesTree, value); }
         }
 
+        public GitPullRequest PullRequest
+        {
+            get { return _pullRequest; }
+            set { this.RaiseAndSetIfChanged(ref _pullRequest, value); }
+        }
+
+
         private async Task LoadPullRequestData(GitPullRequest pr)
         {
+            PullRequest = pr;
             var id = pr.Id;
             var currentRepository = _gitService.GetActiveRepository();
             Commits = await _gitClientService.GetPullRequestCommits("atlassian-rest", "atlassian", id);
@@ -127,15 +138,10 @@ namespace GitClientVS.Infrastructure.ViewModels
                 StringBuilder path = new StringBuilder();
 
                 ids.Add(comment.Id);
-               // path.Append(comment.Id);
-
-              
                 var tmpComment = comment;
                 while (tmpComment.Parent != null)
                 {
-                   // path.Append(separator);
                     ids.Add(tmpComment.Parent.Id);
-                   // path.Append(tmpComment.Parent.Id);
                     level++;
 
                     tmpComment = searchableGitComments[tmpComment.Parent.Id];
@@ -177,13 +183,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             for (var i = 0; i < maxLevel; i++)
             {
                 List<ObjectTree> preparedComments = result[i];
-             
                 foreach (var objectTree in preparedComments)
                 {
-
                     ICommentTree currentComment = entryComment;
                     var pathChunks = objectTree.Path.Split(separator);
-                 
                     foreach (var pathChunk in pathChunks)
                     {
                         var tmp = currentComment.Comments.Where(x => x.Comment.Id.Equals(long.Parse(pathChunk)));

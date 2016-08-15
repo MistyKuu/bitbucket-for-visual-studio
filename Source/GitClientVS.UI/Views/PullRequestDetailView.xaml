@@ -16,6 +16,7 @@
              xmlns:parseDiff="clr-namespace:ParseDiff;assembly=ParseDiff"
              xmlns:helpers="clr-namespace:GitClientVS.UI.Helpers"
              xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
+             xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PqDetailView"
@@ -69,20 +70,25 @@
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid  Margin="20" >
         <controls1:ProgressBar ProgressContent="{Binding ElementName=PrContent}"/>
+
         <Grid x:Name="PrContent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
+            <TextBlock Grid.Row="0" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontSize="15" Margin="5"/>
+            <TextBlock Grid.Row="1" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" FontSize="13" FontWeight="Light" Margin="5"/>
 
-            <controls:MetroAnimatedTabControl Margin="20" >
+            <Separator Grid.Row="2"/>
 
-                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
+            <controls:MetroAnimatedTabControl Grid.Row="3">
+
+                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
 
                     <TreeView ItemsSource="{Binding FilesTree}" x:Name="FilesTree" Margin="0,4,0,0" >
                         <TreeView.Resources>
@@ -154,22 +160,32 @@
                         </TreeView.Resources>
                     </TreeView>
                 </controls:MetroTabItem>
-                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
+                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
                     <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
                 </controls:MetroTabItem>
-                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="15" Header="{Binding Comments.Count,FallbackValue=0}" HeaderStringFormat="{}Comments ({0})">
-                    <TreeView ItemsSource="{Binding CommentTree}" x:Name="CommentsTree" Margin="0,4,0,0" >
+                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Comments.Count,FallbackValue=0}"  HeaderStringFormat="{}Comments ({0})">
+                    <TreeView  ItemsSource="{Binding CommentTree}" x:Name="CommentsTree" Margin="0,4,0,0" >
                         <TreeView.Resources>
+                            <Style TargetType="{x:Type TreeViewItem}" >
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay}"/>
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Focusable" Value="False"/>
+                            </Style>
                             <HierarchicalDataTemplate DataType="{x:Type models:CommentTree}" ItemsSource="{Binding Comments}">
-                                <StackPanel Orientation="Horizontal" Margin="2">
-                                    <Border BorderThickness="1" BorderBrush="Black">
-                                        <TextBlock Text="{Binding Comment.Content.Raw}" Margin="5,0"/>
-                                    </Border>
-                                </StackPanel>
+                                <Border BorderThickness="0,1,0,0" BorderBrush="Gray">
+                                    <StackPanel Orientation="Vertical" Margin="0,5,0,5">
+                                        <TextBlock HorizontalAlignment="Stretch" Text="{Binding Comment.User.Username}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
+
+                                        <wpf:HtmlPanel  Text="{Binding Comment.Content.Html}" Margin="5,0"/>
+
+                                        <TextBlock HorizontalAlignment="Stretch" Margin="0,5,0,0" Text="{Binding Comment.CreatedOn}" Foreground="Gray"></TextBlock>
+                                    </StackPanel>
+                                </Border>
                             </HierarchicalDataTemplate>
                         </TreeView.Resources>
                     </TreeView>
-
                 </controls:MetroTabItem>
             </controls:MetroAnimatedTabControl>
 

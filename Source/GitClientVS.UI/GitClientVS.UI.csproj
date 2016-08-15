@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlRenderer, Version=1.5.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\HtmlRenderer.Core.1.5.0.5\lib\net45\HtmlRenderer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlRenderer.WPF, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\HtmlRenderer.WPF.1.5.0.6\lib\net45\HtmlRenderer.WPF.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>..\..\packages\AvalonEdit.5.0.3\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
       <Private>True</Private>
@@ -77,6 +85,7 @@
     <Compile Include="AttachedProperties\AttachableForStyleBehavior.cs" />
     <Compile Include="AttachedProperties\SelectTreeViewAfterItemClickBehavior.cs" />
     <Compile Include="AttachedProperties\SetErrorTemplateAfterTouchBehavior.cs" />
+    <Compile Include="Bindings\PasswordHelper.cs" />
     <Compile Include="Bindings\ValidatedBinding.cs" />
     <Compile Include="Controls\CustomizedListItem.xaml.cs">
       <DependentUpon>CustomizedListItem.xaml</DependentUpon>

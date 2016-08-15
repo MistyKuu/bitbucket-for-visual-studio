@@ -7,7 +7,7 @@ namespace GitClientVS.Contracts.Models
     {
         public List<ICommentTree> Comments { get; set; }
         public GitComment Comment { get; set; }
-        public string Content { get; set; }
+        public bool IsExpanded { get; set; }
 
         public CommentTree()
         {
@@ -18,12 +18,7 @@ namespace GitClientVS.Contracts.Models
         {
             Comment = comment;
             Comments = new List<ICommentTree>();
-        }
-
-        public CommentTree(string content)
-        {
-            Content = content;
-            Comments = new List<ICommentTree>();
+            IsExpanded = true;
         }
     }
 }

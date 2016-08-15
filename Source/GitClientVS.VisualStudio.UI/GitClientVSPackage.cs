@@ -115,7 +115,9 @@ namespace GitClientVS.VisualStudio.UI
             "MahApps.Metro",
             "WpfControls",
             "ICSharpCode.AvalonEdit",
-            "ParseDiff"
+            "ParseDiff",
+            "HtmlRenderer",
+            "HtmlRenderer.WPF"
         };
 
 
