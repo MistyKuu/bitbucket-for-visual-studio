@@ -87,7 +87,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid x:Name="MainSectionGrid" Height="300">
+            <Grid x:Name="MainSectionGrid">
                 <Grid.Style>
                     <Style TargetType="Grid">
                         <Style.Triggers>

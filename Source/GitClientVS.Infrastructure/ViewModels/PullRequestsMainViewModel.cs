@@ -167,7 +167,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private IObservable<bool> CanLoadPullRequests()
         {
-            return Observable.Return(true);
+            return this.WhenAnyValue(x => x.IsLoading).Select(x => !IsLoading);
         }
     }
 }
