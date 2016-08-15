@@ -70,6 +70,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -81,9 +82,17 @@
                 </Rectangle>
             </Button>
 
-            <Separator Grid.Column="1" Style="{StaticResource VerticalSeparator}" />
+            <Button Grid.Column="1"  Command="{Binding InitializeCommand}" >
+                <Rectangle Width="15" Height="15">
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_refresh}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
 
-            <ComboBox Grid.Column="2" DisplayMemberPath="DisplayName"
+            <Separator Grid.Column="2" Style="{StaticResource VerticalSeparator}" />
+
+            <ComboBox Grid.Column="3" DisplayMemberPath="DisplayName"
           ItemsSource="{extensions:EnumToItemsSource {x:Type gitClientModels:GitPullRequestStatus}}"
           SelectedValue="{Binding SelectedStatus}"
           SelectedValuePath="Value" 
@@ -92,7 +101,7 @@
 
             <wpfControls:AutoCompleteTextBox 
                 Margin="5,0"
-                Grid.Column="3" 
+                Grid.Column="4" 
                 SelectedItem="{Binding SelectedAuthor,Mode=TwoWay}"  
                 Provider="{Binding AuthorProvider}"
                 DisplayMember="DisplayName"

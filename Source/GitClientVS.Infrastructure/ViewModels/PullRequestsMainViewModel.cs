@@ -105,6 +105,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
         }
 
+   
 
 
         [ImportingConstructor]
@@ -146,7 +147,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task LoadPullRequests()
         {
             var requests = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian");
-            GitPullRequests.AddRange(requests);
+            GitPullRequests = new ReactiveList<GitPullRequest>(requests);
         }
 
         private bool CanRunFilter()
