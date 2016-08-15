@@ -37,9 +37,9 @@ namespace GitClientVS.UI.AttachedProperties
             if (sv != null)
             {
                 if (DisableHorizontal)
-                    sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                    sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 if (DisableVertical)
-                    sv.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                    sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
             }
         }
     }
