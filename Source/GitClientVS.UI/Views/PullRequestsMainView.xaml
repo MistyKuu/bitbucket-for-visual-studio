@@ -50,8 +50,6 @@
                     Sender="{Binding Author.DisplayName}"
                     Image="{Binding Author.Links.Avatar.Href}"
                     Margin="0,10"
-                    DetailsCommand="{Binding ElementName=PrView,Path=DataContext.GoToDetailsCommand}"
-                    DetailsCommandParameter="{Binding}"
                     TextWrapping="NoWrap"
                     TextTrimming="WordEllipsis"
                     GoToLink="{Binding Url}"
@@ -116,6 +114,7 @@
         
         <ListBox Height="500" Grid.Row="1" Margin="20" x:Name="PullRequests"
                  ItemsSource="{Binding FilteredGitPullRequests}"
+                 SelectedItem="{Binding SelectedPullRequest, Mode=TwoWay}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ItemTemplate="{StaticResource PullRequestTemplate}"
                      />

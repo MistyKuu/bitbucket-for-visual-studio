@@ -57,7 +57,7 @@
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <ComboBox SelectedItem="{bindings:ValidatedBinding SourceBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name" IsHitTestVisible="False"/>
+                <ComboBox SelectedItem="{bindings:ValidatedBinding SourceBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name" IsEnabled="False"/>
                 <Rectangle Fill="Black">
                     <Rectangle.OpacityMask>
                         <VisualBrush Visual="{StaticResource appbar_add}" Stretch="Fill" />
