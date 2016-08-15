@@ -87,12 +87,12 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid x:Name="MainSectionGrid" >
+            <Grid x:Name="MainSectionGrid" Height="300">
                 <Grid.Style>
                     <Style TargetType="Grid">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsMainSectionExpanded}" Value="False">
-                                <Setter Property="MaxHeight" Value="300"/>
+                                <Setter Property="MaxHeight" Value="100"/>
                             </DataTrigger>
 
                         </Style.Triggers>
@@ -104,7 +104,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontSize="15" Margin="5"/>
-                <TextBlock Grid.Row="1" Text="{Binding PullRequest.Description}"  TextWrapping="Wrap" FontSize="13" FontWeight="Light" Margin="5"/>
+                <TextBlock VerticalAlignment="Top" Grid.Row="1" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" TextTrimming="WordEllipsis" FontSize="13" FontWeight="Light" Margin="5"/>
             </Grid>
 
 
@@ -115,7 +115,7 @@
 
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
 
-                    <TreeView ItemsSource="{Binding FilesTree}" x:Name="FilesTree" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <TreeView ItemsSource="{Binding FilesTree}" x:Name="FilesTree" Margin="0,4,0,0" >
                         <TreeView.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"  Color="LightBlue" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />

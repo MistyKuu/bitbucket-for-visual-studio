@@ -117,7 +117,8 @@ namespace GitClientVS.VisualStudio.UI
             "ICSharpCode.AvalonEdit",
             "ParseDiff",
             "HtmlRenderer",
-            "HtmlRenderer.WPF"
+            "HtmlRenderer.WPF",
+            "System.Windows.Interactivity"
         };
 
 

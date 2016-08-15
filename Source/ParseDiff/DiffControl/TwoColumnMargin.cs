@@ -13,8 +13,8 @@ namespace ParseDiff.DiffControl
         private double _emSize;
         private Typeface _typeface;
         private Brush _brush;
-        private int _maxFrom;
-        private int _maxTo;
+        private int _maxFrom = 2;
+        private int _maxTo = 2;
         private FormattedText _maxFromText;
         private const int _margin = 10;
 
@@ -26,13 +26,24 @@ namespace ParseDiff.DiffControl
 
             var chunk = DataContext as ChunkDiff;
 
-            _maxFrom = chunk.Changes.Where(x => x.OldIndex != null).Select(x => " " + x.OldIndex.ToString()).Max(x => x.Length);
-            _maxTo = chunk.Changes.Where(x => x.OldIndex != null).Select(x => x.NewIndex.ToString() + " ").Max(x => x.Length);
-            _maxFromText = CreateText(new string('c', _maxFrom));
+            SetMaxes(chunk);
 
             FormattedText text = CreateText(new string('c', _maxFrom + _maxTo));
 
             return new Size(text.Width + _margin, 0);
+        }
+
+        private void SetMaxes(ChunkDiff chunk)
+        {
+            var oldIndexes = chunk.Changes.Where(x => x.OldIndex != null).ToList();
+            var newIndexes = chunk.Changes.Where(x => x.NewIndex != null).ToList();
+
+            if (oldIndexes.Any())
+                _maxFrom = oldIndexes.Select(x => " " + x.OldIndex.ToString()).Max(x => x.Length);
+            if (newIndexes.Any())
+                _maxTo = newIndexes.Select(x => x.NewIndex.ToString() + " ").Max(x => x.Length);
+
+            _maxFromText = CreateText(new string('c', _maxFrom));
         }
 
 
