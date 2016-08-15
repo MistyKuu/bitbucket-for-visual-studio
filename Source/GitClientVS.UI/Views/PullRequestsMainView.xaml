@@ -30,6 +30,11 @@
     </UserControl.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <Grid.Resources>
             <DataTemplate x:Key="PullRequestTemplate" DataType="gitClientModels:GitPullRequest">
                 <Grid>
@@ -56,10 +61,6 @@
             </DataTemplate>
         </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
         <Grid Margin="5">
 
             <Grid.ColumnDefinitions>
@@ -112,15 +113,14 @@
 
 
         <controls1:ProgressBar Grid.Row="1" ProgressContent="{Binding ElementName=PullRequests}"/>
-
-        <Grid Grid.Row="1" Margin="20" x:Name="PullRequests">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <ListBox x:Name="Lb" ItemsSource="{Binding FilteredGitPullRequests}" attachedProperties:HandleMouseWheelInParentBehaviour.IsRedirectEnabled="True"
-                     ItemTemplate="{StaticResource PullRequestTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+        
+        <ListBox Height="500" Grid.Row="1" Margin="20" x:Name="PullRequests"
+                 ItemsSource="{Binding FilteredGitPullRequests}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ItemTemplate="{StaticResource PullRequestTemplate}"
                      />
-        </Grid>
+        
+        <!--TODO CHANGE FIXED HEIGHT-->
 
         <controls1:ErrorView Grid.Row="1"/>
     </Grid>

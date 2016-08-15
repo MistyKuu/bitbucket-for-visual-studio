@@ -7,4 +7,7 @@
         <Setter Property="Topmost" Value="True"/>
         <Setter Property="ResizeMode" Value="NoResize"/>
     </Style>
+    <ControlTemplate x:Key="NoScrollTemplate" >
+        <ItemsPresenter />
+    </ControlTemplate>
 </ResourceDictionary>

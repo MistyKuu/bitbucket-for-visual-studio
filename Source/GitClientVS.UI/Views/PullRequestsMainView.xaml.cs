@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.UI.Helpers;
 
 namespace GitClientVS.UI.Views
 {

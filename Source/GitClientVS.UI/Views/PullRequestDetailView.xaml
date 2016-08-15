@@ -86,9 +86,6 @@
                 <Grid.Style>
                     <Style TargetType="Grid">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsMainSectionExpanded}" Value="True">
-                                <Setter Property="MaxHeight" Value="2000"/> <!--TODO FIX TO INFINITY-->
-                            </DataTrigger>
                             <DataTrigger Binding="{Binding IsMainSectionExpanded}" Value="False">
                                 <Setter Property="MaxHeight" Value="300"/>
                             </DataTrigger>
@@ -103,14 +100,17 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontSize="15" Margin="5"/>
-                <TextBlock Grid.Row="1" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" FontSize="13" FontWeight="Light" Margin="5"/>
+                <TextBlock Grid.Row="1" Text="{Binding PullRequest.Description}" 
+                           TextWrapping="Wrap"
+                           TextTrimming="WordEllipsis" FontSize="13" FontWeight="Light" Margin="5"/>
             </Grid>
 
 
             <teamExplorer:TextLink Grid.Row="1"  Command="{Binding ExpandMainSectionCommand}" Text="{Binding MainSectionCommandText}" HorizontalAlignment="Right"/>
             <Separator Grid.Row="2"/>
 
-            <controls:MetroAnimatedTabControl Grid.Row="3" attachedProperties:HandleMouseWheelInParentBehaviour.IsRedirectEnabled="True">
+            <controls:MetroAnimatedTabControl Grid.Row="3" Height="400">
+                <!--TODO CHANGE FIXED HEIGHT-->
 
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
 
