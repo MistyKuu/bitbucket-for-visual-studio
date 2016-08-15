@@ -100,12 +100,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get
             {
-                return new SuggestionProvider(x => Authors.Where(
-                    y => y.DisplayName.Contains(x, StringComparison.InvariantCultureIgnoreCase) || y.Username.Contains(x, StringComparison.InvariantCultureIgnoreCase)));
+                return new SuggestionProvider(x => Authors.Where(y =>
+                (y.DisplayName != null && y.DisplayName.Contains(x, StringComparison.InvariantCultureIgnoreCase)) ||
+                (y.Username != null && y.Username.Contains(x, StringComparison.InvariantCultureIgnoreCase))));
             }
         }
 
-   
+
 
 
         [ImportingConstructor]
