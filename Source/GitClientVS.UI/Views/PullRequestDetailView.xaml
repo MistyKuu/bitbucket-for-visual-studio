@@ -18,11 +18,16 @@
              xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
              xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
              xmlns:teamExplorer="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;assembly=Microsoft.TeamFoundation.Controls"
+             xmlns:framework="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer.Framework;assembly=Microsoft.TeamFoundation.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PqDetailView"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsDetailViewModel,IsDesignTimeCreatable=False}" 
+             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type framework:PageControl}},Path=ActualHeight}"
              >
+    <i:Interaction.Behaviors>
+        <attachedProperties:DisableParentScrollViewerBehavior DisableVertical="True"/>
+    </i:Interaction.Behaviors>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -89,7 +94,7 @@
                             <DataTrigger Binding="{Binding IsMainSectionExpanded}" Value="False">
                                 <Setter Property="MaxHeight" Value="300"/>
                             </DataTrigger>
-                            
+
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
@@ -107,11 +112,10 @@
             <Separator Grid.Row="2"/>
 
             <controls:MetroAnimatedTabControl Grid.Row="3" >
-                <!--TODO CHANGE FIXED HEIGHT-->
 
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
 
-                    <TreeView ItemsSource="{Binding FilesTree}" x:Name="FilesTree" Margin="0,4,0,0" >
+                    <TreeView ItemsSource="{Binding FilesTree}" x:Name="FilesTree" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <TreeView.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"  Color="LightBlue" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
@@ -186,7 +190,7 @@
                              />
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Comments.Count,FallbackValue=0}"  HeaderStringFormat="{}Comments ({0})">
-                    <TreeView  ItemsSource="{Binding CommentTree}" x:Name="CommentsTree" Margin="0,4,0,0" >
+                    <TreeView  ItemsSource="{Binding CommentTree}" x:Name="CommentsTree" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <TreeView.Resources>
                             <Style TargetType="{x:Type TreeViewItem}" >
                                 <Setter Property="HorizontalAlignment" Value="Stretch"/>

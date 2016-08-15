@@ -16,11 +16,16 @@
              xmlns:extensions="clr-namespace:GitClientVS.UI.Extensions"
              xmlns:wpfControls="http://wpfcontrols.com/"
              xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
+             xmlns:framework="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer.Framework;assembly=Microsoft.TeamFoundation.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PrView"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsMainViewModel,IsDesignTimeCreatable=False}" 
+             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type framework:PageControl}},Path=ActualHeight}"
              >
+    <i:Interaction.Behaviors>
+        <attachedProperties:DisableParentScrollViewerBehavior DisableVertical="True"/>
+    </i:Interaction.Behaviors>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -112,14 +117,12 @@
 
         <controls1:ProgressBar Grid.Row="1" ProgressContent="{Binding ElementName=PullRequests}"/>
         
-        <ListBox Height="500" Grid.Row="1" Margin="20" x:Name="PullRequests"
+        <ListBox Grid.Row="1" Margin="20" x:Name="PullRequests"
                  ItemsSource="{Binding FilteredGitPullRequests}"
                  SelectedItem="{Binding SelectedPullRequest, Mode=TwoWay}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ItemTemplate="{StaticResource PullRequestTemplate}"
                      />
-        
-        <!--TODO CHANGE FIXED HEIGHT-->
 
         <controls1:ErrorView Grid.Row="1"/>
     </Grid>

@@ -23,6 +23,7 @@ namespace GitClientVS.UI.Views
             DataContext = _detailsViewModel;
         }
 
+
         public ICommand InitializeCommand => _detailsViewModel.InitializeCommand;
     }
 

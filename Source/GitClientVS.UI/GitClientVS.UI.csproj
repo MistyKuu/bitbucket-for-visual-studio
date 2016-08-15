@@ -83,6 +83,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AttachedProperties\AttachableForStyleBehavior.cs" />
+    <Compile Include="AttachedProperties\DisableParentScrollViewerBehavior.cs" />
     <Compile Include="AttachedProperties\HandleMouseWheelInParentBehaviour.cs" />
     <Compile Include="AttachedProperties\SelectTreeViewAfterItemClickBehavior.cs" />
     <Compile Include="AttachedProperties\SetErrorTemplateAfterTouchBehavior.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\NegateVisibilityConverter.cs" />
     <Compile Include="Converters\NullToNonVisibilityConverter.cs" />
+    <Compile Include="Converters\SubstractConverter.cs" />
     <Compile Include="Converters\TreeViewFolderIconConverter.cs" />
     <Compile Include="Extensions\EnumToItemsSource.cs" />
     <Compile Include="Helpers\TreeViewHelpers.cs" />
