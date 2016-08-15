@@ -129,9 +129,15 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private void SetupObservables()
         {
-            this.WhenAny(x => x.SelectedStatus, x => SelectedAuthor).Subscribe(_ => Filter());
+            this.WhenAnyValue(x => x.SelectedStatus, x => x.SelectedAuthor).Subscribe(_ => Filter());
+
             _initializeCommand.Subscribe(_ => { Filter(); });
-            this.WhenAnyValue(x => x.GitPullRequests).Where(x => x != null).Subscribe(_ => Authors = GitPullRequests.Select(x => x.Author).ToList());
+            this.WhenAnyValue(x => x.GitPullRequests).Where(x => x != null).Subscribe(_ => Authors = GitPullRequests
+                                                                                                    .Select(x => x.Author)
+                                                                                                    .Where(x => x != null)
+                                                                                                    .DistinctBy(x => x.Username)
+                                                                                                    .ToList());
+
             this.WhenAnyValue(x => x.SelectedPullRequest).Where(x => x != null).Subscribe(_ => _goToDetailsCommand.Execute(SelectedPullRequest));
         }
 
@@ -161,9 +167,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             if (!CanRunFilter())
                 return;
 
-            FilteredGitPullRequests = new ReactiveList<GitPullRequest>(GitPullRequests
+            FilteredGitPullRequests = new ReactiveList<GitPullRequest>(
+                GitPullRequests
                 .Where(pullRequest => pullRequest.Status == SelectedStatus)
-                .Where(pullRequest => SelectedAuthor == null || pullRequest.Author.Username == SelectedAuthor.Username));
+                .Where(pullRequest => SelectedAuthor == null || (pullRequest.Author != null && pullRequest.Author.Username == SelectedAuthor.Username)));
         }
 
         private IObservable<bool> CanLoadPullRequests()
