@@ -32,6 +32,7 @@
                                             FontFamily="Consolas"
                                             SyntaxHighlighting="{Binding ElementName=CurrentControl,Path=HighLightStyle}"
                                             FontSize="10pt" 
+                                           IsReadOnly="True"
                                            Foreground="{Binding ElementName=Tb,Path=Foreground}"
                                         >
                     </avalonedit:TextEditor>
@@ -43,7 +44,7 @@
         </Grid.Resources>
 
 
-        <TextBlock Visibility="Collapsed" x:Name="Tb"/> 
+        <TextBlock Visibility="Collapsed" x:Name="Tb"/>
         <!--TODO A HACK TO USE TB FOREGROUND-->
 
         <ScrollViewer PreviewMouseWheel="UIElement_OnPreviewMouseWheel">

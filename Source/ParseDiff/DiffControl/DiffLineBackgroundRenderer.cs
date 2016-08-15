@@ -41,6 +41,7 @@ namespace ParseDiff.DiffControl
                 var linenum = v.FirstDocumentLine.LineNumber - 1;
                 if (linenum >= chunk.Changes.Count) continue;
 
+
                 var diffLine = chunk.Changes[linenum];
 
                 if (diffLine.Type == LineChangeType.Normal) continue;
