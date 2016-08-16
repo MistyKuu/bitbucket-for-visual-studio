@@ -26,13 +26,14 @@
                     </Grid.RowDefinitions>
                     <avalonedit:TextEditor x:Name="TextEditorControl" diffControl:AvalonEditBehaviour.TextBinding="{Binding Text}" 
                                            diffControl:AvalonEditBehaviour.IsDiffEditor="True"
+                                           diffControl:AvalonEditBehaviour.FileDiff="{Binding ElementName=CurrentControl,Path=FileDiff}"
+                                           diffControl:AvalonEditBehaviour.TextForeground="{Binding ElementName=Tb,Path=Foreground}"
                                            HorizontalAlignment="Stretch"
                                            VerticalScrollBarVisibility="Hidden"
                                            HorizontalScrollBarVisibility="Hidden"
                                            FontFamily="Consolas"
                                            FontSize="10pt" 
                                            IsReadOnly="True"
-                                           Loaded="TextEditorControl_OnLoaded"
                                            Foreground="{Binding ElementName=Tb,Path=Foreground}"
                                         >
                     </avalonedit:TextEditor>

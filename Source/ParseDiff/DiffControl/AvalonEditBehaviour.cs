@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Editing;
 
@@ -6,6 +10,57 @@ namespace ParseDiff.DiffControl
 {
     public sealed class AvalonEditBehaviour : DependencyObject
     {
+
+        private static SolidColorBrush _darkAddedBackground = new SolidColorBrush(Color.FromRgb(97, 220, 86));
+        private static SolidColorBrush _darkRemovedBackground = new SolidColorBrush(Color.FromRgb(243, 0, 0));
+
+        private static SolidColorBrush _lightAddedBackground = new SolidColorBrush(Color.FromRgb(0xdd, 0xff, 0xdd));
+        private static SolidColorBrush _lightRemovedBackground = new SolidColorBrush(Color.FromRgb(0xff, 0xdd, 0xdd));
+
+        private static readonly Dictionary<string, string> HighlightMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            ["cshtml"] = "ASP / XHTML",
+            ["html"] = "HTML",
+            ["js"] = "JavaScript",
+            ["xml"] = "XML",
+            ["vb"] = "VB.NET",
+            ["cs"] = "C#",
+            ["cpp"] = "C++",
+            ["java"] = "Java",
+            ["php"] = "PHP",
+            ["patch"] = "Patch",
+            ["text"] = "TeX"
+        };
+
+        private static string HighLightStyle(FileDiff fileDiff)
+        {
+            if (fileDiff == null)
+                return HighlightMappings["xml"];
+
+            var splitted = fileDiff.From.Split('.');
+            if (splitted.Length < 2)
+                return HighlightMappings["xml"];
+
+            var ext = splitted.Last();
+
+            if (HighlightMappings.ContainsKey(ext))
+                return HighlightMappings[ext];
+
+            return HighlightMappings["xml"];
+        }
+
+        public static Brush GetTextForeground(DependencyObject obj)
+        {
+            return (Brush)obj.GetValue(TextForegroundProperty);
+        }
+        public static void SetTextForeground(DependencyObject obj, Brush value)
+        {
+            obj.SetValue(TextForegroundProperty, value);
+        }
+        // Using a DependencyProperty as the backing store for TextBindingChanged. This enables animation, styling, binding, etc...  
+        public static readonly DependencyProperty TextForegroundProperty =
+        DependencyProperty.RegisterAttached("TextForeground", typeof(Brush), typeof(AvalonEditBehaviour), new PropertyMetadata(Brushes.Black, TextForegroundChanged));
+
         public static bool GetIsDiffEditor(DependencyObject obj)
         {
             return (bool)obj.GetValue(IsDiffEditorProperty);
@@ -16,17 +71,64 @@ namespace ParseDiff.DiffControl
         }
         // Using a DependencyProperty as the backing store for TextBindingChanged. This enables animation, styling, binding, etc...  
         public static readonly DependencyProperty IsDiffEditorProperty =
-        DependencyProperty.RegisterAttached("IsDiffEditor", typeof(bool), typeof(AvalonEditBehaviour), new PropertyMetadata(false, RendererChanged));
+        DependencyProperty.RegisterAttached("IsDiffEditor", typeof(bool), typeof(AvalonEditBehaviour), new PropertyMetadata(false, BehaviourAttached));
 
-        private static void RendererChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public static FileDiff GetFileDiff(DependencyObject obj)
+        {
+            return (FileDiff)obj.GetValue(FileDiffProperty);
+        }
+        public static void SetFileDiff(DependencyObject obj, FileDiff value)
+        {
+            obj.SetValue(FileDiffProperty, value);
+        }
+        // Using a DependencyProperty as the backing store for TextBindingChanged. This enables animation, styling, binding, etc...  
+        public static readonly DependencyProperty FileDiffProperty =
+        DependencyProperty.RegisterAttached("FileDiff", typeof(FileDiff), typeof(AvalonEditBehaviour), new PropertyMetadata(null, FileDiffChanged));
+
+        private static void TextForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             TextEditor textEditor = d as TextEditor;
-            textEditor.TextArea.TextView.BackgroundRenderers.Add(new DiffLineBackgroundRenderer());
-            textEditor.TextArea.TextView.LineTransformers.Add(new DiffLineColorizer((ChunkDiff)textEditor.DataContext));
-            textEditor.TextArea.LeftMargins.Add(new TwoColumnMargin());
-            textEditor.TextArea.LeftMargins.Add(DottedLineMargin.Create());
+            textEditor.TextArea.TextView.BackgroundRenderers.Clear();
+            ChangeBackgroundRenderer(textEditor, GetTextForeground(textEditor));
         }
 
+        private static void FileDiffChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            TextEditor textEditor = d as TextEditor;
+            textEditor.SyntaxHighlighting = ICSharpCode.AvalonEdit.Highlighting.HighlightingManager.Instance.GetDefinition(HighLightStyle((FileDiff)e.NewValue));
+        }
+
+        private static void BehaviourAttached(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            TextEditor textEditor = d as TextEditor;
+           // textEditor.TextArea.TextView.LineTransformers.Add(new DiffLineColorizer((ChunkDiff)textEditor.DataContext));
+            textEditor.TextArea.LeftMargins.Add(new TwoColumnMargin());
+            textEditor.TextArea.LeftMargins.Add(DottedLineMargin.Create());
+            ChangeBackgroundRenderer(textEditor, GetTextForeground(textEditor));
+        }
+
+
+        private static void ChangeBackgroundRenderer(TextEditor textEditor, Brush textForeground)
+        {
+            var diffBackgroundRenderer = textEditor.TextArea.TextView.BackgroundRenderers.FirstOrDefault(x => x.GetType() == typeof(DiffLineBackgroundRenderer));
+            if (diffBackgroundRenderer != null)
+                textEditor.TextArea.TextView.BackgroundRenderers.Remove(diffBackgroundRenderer);
+
+            SolidColorBrush addedBg;
+            SolidColorBrush removedBg;
+
+            if (textForeground.ToString().Equals("#FF000000")) // TODO sick stupid but no time now xd
+            {
+                addedBg = _lightAddedBackground;
+                removedBg = _lightRemovedBackground;
+            }
+            else
+            {
+                addedBg = _darkAddedBackground;
+                removedBg = _darkRemovedBackground;
+            }
+            textEditor.TextArea.TextView.BackgroundRenderers.Add(new DiffLineBackgroundRenderer(addedBg, removedBg));
+        }
 
         public static string GetTextBinding(DependencyObject obj)
         {

@@ -10,6 +10,8 @@ using System.Windows;
 using System.Windows.Controls;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.UI.Helpers;
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace GitClientVS.UI.Views
 {

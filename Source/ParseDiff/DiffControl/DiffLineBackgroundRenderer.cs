@@ -9,15 +9,13 @@ namespace ParseDiff.DiffControl
     {
         static Pen pen;
 
-        static SolidColorBrush removedBackground;
-        static SolidColorBrush addedBackground;
-        static SolidColorBrush headerBackground;
+        private readonly SolidColorBrush _removedBackground;
+        private readonly SolidColorBrush _addedBackground;
 
-        static DiffLineBackgroundRenderer()
-        { 
-            removedBackground = new SolidColorBrush(Color.FromRgb(0xff, 0xdd, 0xdd)); removedBackground.Freeze();
-            addedBackground = new SolidColorBrush(Color.FromRgb(0xdd, 0xff, 0xdd)); addedBackground.Freeze();
-            headerBackground = new SolidColorBrush(Color.FromRgb(0xf8, 0xf8, 0xff)); headerBackground.Freeze();
+        public DiffLineBackgroundRenderer(SolidColorBrush addedBackground, SolidColorBrush removedBackground)
+        {
+            _addedBackground = addedBackground;
+            _removedBackground = removedBackground;
 
             var blackBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0)); blackBrush.Freeze();
             pen = new Pen(blackBrush, 0.0);
@@ -50,10 +48,10 @@ namespace ParseDiff.DiffControl
                 switch (diffLine.Type)
                 {
                     case LineChangeType.Add:
-                        brush = addedBackground;
+                        brush = _addedBackground;
                         break;
                     case LineChangeType.Delete:
-                        brush = removedBackground;
+                        brush = _removedBackground;
                         break;
                 }
 
