@@ -47,6 +47,11 @@ namespace GitClientVS.VisualStudio.UI.Services
             };
         }
 
+        public string GetActiveBranchFromActiveRepository()
+        {
+            return GetRepository().Head.FriendlyName;
+        }
+
         public GitRemoteRepository GetActiveRepository()
         {
             var gitExt = _appServiceProvider.GetService<IGitExt>();
