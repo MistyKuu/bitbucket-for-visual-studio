@@ -21,10 +21,6 @@ namespace GitClientVS.Services
             {
                 if (fileDiff.Type == FileChangeType.Modified)
                 {
-                    var name = fileDiff.From; // from == to?
-                    var additions = fileDiff.Additions;
-                    var deletions = fileDiff.Deletions;
-                    
                     foreach (var change in fileDiff.Chunks.Select(chunk => chunk.Changes).SelectMany(changes => changes))
                     {
                         if (change.Type == LineChangeType.Add)
@@ -35,11 +31,13 @@ namespace GitClientVS.Services
                 }
                 else if (fileDiff.Type == FileChangeType.Add)
                 {
-
+                    foreach (var change in fileDiff.Chunks.Select(chunk => chunk.Changes).SelectMany(changes => changes))
+                        change.NewIndex = change.Index;
                 }
                 else if (fileDiff.Type == FileChangeType.Delete)
                 {
-
+                    foreach (var change in fileDiff.Chunks.Select(chunk => chunk.Changes).SelectMany(changes => changes))
+                        change.OldIndex = change.Index;
                 }
 
                 yield return fileDiff;

@@ -12,10 +12,8 @@
         <styles:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
         <styles:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Cobalt.xaml" />
         <styles:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-        <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/ButtonStyles.xaml"/>
         <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/TextBoxStyles.xaml"/>
         <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/TextBlockStyles.xaml"/>
-        <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/ButtonStyles.xaml"/>
         <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/CommonStyles.xaml"/>
 
         <!--THESE TWO LINES DETERMINES ACCENT AND BAR COLOR-->

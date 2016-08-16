@@ -15,11 +15,17 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:extensions="clr-namespace:GitClientVS.UI.Extensions"
              xmlns:wpfControls="http://wpfcontrols.com/"
+             xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
+             xmlns:framework="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer.Framework;assembly=Microsoft.TeamFoundation.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PrView"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsMainViewModel,IsDesignTimeCreatable=False}" 
+             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type framework:PageControl}},Path=ActualHeight}"
              >
+    <i:Interaction.Behaviors>
+        <attachedProperties:DisableParentScrollViewerBehavior DisableVertical="True"/>
+    </i:Interaction.Behaviors>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -29,6 +35,11 @@
     </UserControl.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <Grid.Resources>
             <DataTemplate x:Key="PullRequestTemplate" DataType="gitClientModels:GitPullRequest">
                 <Grid>
@@ -44,8 +55,6 @@
                     Sender="{Binding Author.DisplayName}"
                     Image="{Binding Author.Links.Avatar.Href}"
                     Margin="0,10"
-                    DetailsCommand="{Binding ElementName=PrView,Path=DataContext.GoToDetailsCommand}"
-                    DetailsCommandParameter="{Binding}"
                     TextWrapping="NoWrap"
                     TextTrimming="WordEllipsis"
                     GoToLink="{Binding Url}"
@@ -55,30 +64,23 @@
             </DataTemplate>
         </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
         <Grid Margin="5">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0"  Command="{Binding GotoCreateNewPullRequestCommand}" >
-                <Rectangle Width="15" Height="15">
-                    <Rectangle.Fill>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
-                    </Rectangle.Fill>
-                </Rectangle>
+            <Button Grid.Column="0"  Command="{Binding GotoCreateNewPullRequestCommand}" Margin="5,0">
+                    <Rectangle Width="15" Height="15">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
             </Button>
 
-            <Separator Grid.Column="1" Style="{StaticResource VerticalSeparator}" />
-
-            <ComboBox Grid.Column="2" DisplayMemberPath="DisplayName"
+            <ComboBox Grid.Column="1" DisplayMemberPath="DisplayName"
           ItemsSource="{extensions:EnumToItemsSource {x:Type gitClientModels:GitPullRequestStatus}}"
           SelectedValue="{Binding SelectedStatus}"
           SelectedValuePath="Value" 
@@ -87,7 +89,7 @@
 
             <wpfControls:AutoCompleteTextBox 
                 Margin="5,0"
-                Grid.Column="3" 
+                Grid.Column="2" 
                 SelectedItem="{Binding SelectedAuthor,Mode=TwoWay}"  
                 Provider="{Binding AuthorProvider}"
                 DisplayMember="DisplayName"
@@ -111,15 +113,13 @@
 
 
         <controls1:ProgressBar Grid.Row="1" ProgressContent="{Binding ElementName=PullRequests}"/>
-
-        <Grid Grid.Row="1" Margin="20" x:Name="PullRequests">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <ListBox x:Name="Lb" ItemsSource="{Binding FilteredGitPullRequests}" PreviewMouseWheel="Lb_OnPreviewMouseWheel"
-                     ItemTemplate="{StaticResource PullRequestTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+        
+        <ListBox Grid.Row="1" Margin="20" x:Name="PullRequests"
+                 ItemsSource="{Binding FilteredGitPullRequests}"
+                 SelectedItem="{Binding SelectedPullRequest, Mode=TwoWay}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ItemTemplate="{StaticResource PullRequestTemplate}"
                      />
-        </Grid>
 
         <controls1:ErrorView Grid.Row="1"/>
     </Grid>

@@ -28,16 +28,17 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<Unit> _initializeCommand;
         private ReactiveCommand<object> _goToDetailsCommand;
         private bool _isLoading;
-        private IEnumerable<GitPullRequest> _gitPullRequests;
-        private List<GitPullRequest> _filteredGitPullRequests;
+        private ReactiveList<GitPullRequest> _gitPullRequests;
+        private ReactiveList<GitPullRequest> _filteredGitPullRequests;
         private string _errorMessage;
         private ReactiveCommand<object> _goToCreateNewPullRequestCommand;
 
         private List<GitUser> _authors;
         private GitUser _selectedAuthor;
         private GitPullRequestStatus _selectedStatus;
+        private GitPullRequest _selectedPullRequest;
 
-        public IEnumerable<GitPullRequest> GitPullRequests
+        public ReactiveList<GitPullRequest> GitPullRequests
         {
             get { return _gitPullRequests; }
             set { this.RaiseAndSetIfChanged(ref _gitPullRequests, value); }
@@ -58,7 +59,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
         }
 
-        public List<GitPullRequest> FilteredGitPullRequests
+        public ReactiveList<GitPullRequest> FilteredGitPullRequests
         {
             get { return _filteredGitPullRequests; }
             set { this.RaiseAndSetIfChanged(ref _filteredGitPullRequests, value); }
@@ -68,6 +69,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get { return _authors; }
             set { this.RaiseAndSetIfChanged(ref _authors, value); }
+        }
+
+        public GitPullRequest SelectedPullRequest
+        {
+            get { return _selectedPullRequest; }
+            set { this.RaiseAndSetIfChanged(ref _selectedPullRequest, value); }
         }
 
         public string ErrorMessage
@@ -93,10 +100,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get
             {
-                return new SuggestionProvider(x => Authors.Where(
-                    y => y.DisplayName.Contains(x, StringComparison.InvariantCultureIgnoreCase) || y.Username.Contains(x, StringComparison.InvariantCultureIgnoreCase)));
+                return new SuggestionProvider(x => Authors.Where(y =>
+                (y.DisplayName != null && y.DisplayName.Contains(x, StringComparison.InvariantCultureIgnoreCase)) ||
+                (y.Username != null && y.Username.Contains(x, StringComparison.InvariantCultureIgnoreCase))));
             }
         }
+
 
 
 
@@ -110,7 +119,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _gitService = gitService;
             _pageNavigationService = pageNavigationService;
-            _filteredGitPullRequests = new List<GitPullRequest>();
+            GitPullRequests = new ReactiveList<GitPullRequest>();
+            FilteredGitPullRequests = new ReactiveList<GitPullRequest>();
             SetupObservables();
 
             SelectedStatus = GitPullRequestStatus.Open;
@@ -119,10 +129,16 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private void SetupObservables()
         {
-            this.WhenAnyValue(x => x.SelectedStatus).Subscribe(_ => Filter());
-            this.WhenAnyValue(x => x.SelectedAuthor).Subscribe(_ => Filter());
-            this.WhenAnyValue(x => x.GitPullRequests).Where(x => x != null).Subscribe(_ => Authors = GitPullRequests.Select(x => x.Author).ToList());
+            this.WhenAnyValue(x => x.SelectedStatus, x => x.SelectedAuthor).Subscribe(_ => Filter());
+
             _initializeCommand.Subscribe(_ => { Filter(); });
+            this.WhenAnyValue(x => x.GitPullRequests).Where(x => x != null).Subscribe(_ => Authors = GitPullRequests
+                                                                                                    .Select(x => x.Author)
+                                                                                                    .Where(x => x != null)
+                                                                                                    .DistinctBy(x => x.Username)
+                                                                                                    .ToList());
+
+            this.WhenAnyValue(x => x.SelectedPullRequest).Where(x => x != null).Subscribe(_ => _goToDetailsCommand.Execute(SelectedPullRequest));
         }
 
         public void InitializeCommands()
@@ -137,7 +153,8 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadPullRequests()
         {
-            GitPullRequests = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian");
+            var requests = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian");
+            GitPullRequests = new ReactiveList<GitPullRequest>(requests);
         }
 
         private bool CanRunFilter()
@@ -150,15 +167,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             if (!CanRunFilter())
                 return;
 
-            FilteredGitPullRequests = GitPullRequests
+            FilteredGitPullRequests = new ReactiveList<GitPullRequest>(
+                GitPullRequests
                 .Where(pullRequest => pullRequest.Status == SelectedStatus)
-                .Where(pullRequest => SelectedAuthor == null || pullRequest.Author.Username == SelectedAuthor.Username)
-                .ToList();
+                .Where(pullRequest => SelectedAuthor == null || (pullRequest.Author != null && pullRequest.Author.Username == SelectedAuthor.Username)));
         }
 
         private IObservable<bool> CanLoadPullRequests()
         {
-            return Observable.Return(true);
+            return this.WhenAnyValue(x => x.IsLoading).Select(x => !IsLoading);
         }
     }
 }

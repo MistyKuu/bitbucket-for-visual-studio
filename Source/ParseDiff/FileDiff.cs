@@ -7,6 +7,15 @@
 
     public class FileDiff
     {
+        private static int _id = 1;
+
+        public FileDiff()
+        {
+            Id = _id++;
+        }
+
+        public int Id { get; }
+
         public ICollection<ChunkDiff> Chunks { get; } = new List<ChunkDiff>();
 
         public int Deletions { get; internal set; }
@@ -44,7 +53,8 @@
             int oldStart, newStart;
             int oldLines, newLines;
 
-            ParserAction start = (line, m) => {
+            ParserAction start = (line, m) =>
+            {
                 file = new FileDiff();
                 files.Add(file);
 
@@ -60,39 +70,46 @@
                 }
             };
 
-            ParserAction restart = (line, m) => {
+            ParserAction restart = (line, m) =>
+            {
                 if (file == null || file.Chunks.Count != 0)
                     start(null, null);
             };
 
-            ParserAction new_file = (line, m) => {
+            ParserAction new_file = (line, m) =>
+            {
                 restart(null, null);
                 file.Type = FileChangeType.Add;
                 file.From = "/dev/null";
             };
 
-            ParserAction deleted_file = (line, m) => {
+            ParserAction deleted_file = (line, m) =>
+            {
                 restart(null, null);
                 file.Type = FileChangeType.Delete;
                 file.To = "/dev/null";
             };
 
-            ParserAction index = (line, m) => {
+            ParserAction index = (line, m) =>
+            {
                 restart(null, null);
                 file.Index = line.Split(' ').Skip(1);
             };
 
-            ParserAction from_file = (line, m) => {
+            ParserAction from_file = (line, m) =>
+            {
                 restart(null, null);
                 file.From = parseFileFallback(line);
             };
 
-            ParserAction to_file = (line, m) => {
+            ParserAction to_file = (line, m) =>
+            {
                 restart(null, null);
                 file.To = parseFileFallback(line);
             };
 
-            ParserAction chunk = (line, match) => {
+            ParserAction chunk = (line, match) =>
+            {
                 in_del = oldStart = int.Parse(match.Groups[1].Value);
                 oldLines = match.Groups[2].Success ? int.Parse(match.Groups[2].Value) : 0;
                 in_add = newStart = int.Parse(match.Groups[3].Value);
@@ -107,19 +124,22 @@
                 file.Chunks.Add(current);
             };
 
-            ParserAction del = (line, match) => {
+            ParserAction del = (line, match) =>
+            {
                 current.Changes.Add(new LineDiff(type: LineChangeType.Delete, index: in_del++, content: line));
                 file.Deletions++;
             };
 
-            ParserAction add = (line, m) => {
+            ParserAction add = (line, m) =>
+            {
                 current.Changes.Add(new LineDiff(type: LineChangeType.Add, index: in_add++, content: line));
                 file.Additions++;
             };
 
             const string noeol = "\\ No newline at end of file";
 
-            Action<string> normal = line => {
+            Action<string> normal = line =>
+            {
                 if (file == null) return;
 
                 current.Changes.Add(new LineDiff(
@@ -141,7 +161,8 @@
                     { new Regex(@"^\+"), add }
             };
 
-            Func<string, bool> parse = line => {
+            Func<string, bool> parse = line =>
+            {
                 foreach (var p in schema)
                 {
                     var m = p.Key.Match(line);
@@ -173,19 +194,19 @@
 
         private static string parseFileFallback(string s)
         {
-	        s = s.TrimStart('-', '+');
+            s = s.TrimStart('-', '+');
             s = s.Trim();
 
-	        // ignore possible time stamp
-	        var t = new Regex(@"\t.*|\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d(.\d+)?\s(\+|-)\d\d\d\d").Match(s);
+            // ignore possible time stamp
+            var t = new Regex(@"\t.*|\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d(.\d+)?\s(\+|-)\d\d\d\d").Match(s);
             if (t.Success)
             {
                 s = s.Substring(0, t.Index).Trim();
             }
 
-	        // ignore git prefixes a/ or b/
-	        return Regex.IsMatch(s, @"^(a|b)\/") 
-                ? s.Substring(2) 
+            // ignore git prefixes a/ or b/
+            return Regex.IsMatch(s, @"^(a|b)\/")
+                ? s.Substring(2)
                 : s;
         }
     }

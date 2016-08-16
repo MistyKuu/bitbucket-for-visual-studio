@@ -17,11 +17,17 @@
              xmlns:helpers="clr-namespace:GitClientVS.UI.Helpers"
              xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
              xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
+             xmlns:teamExplorer="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;assembly=Microsoft.TeamFoundation.Controls"
+             xmlns:framework="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer.Framework;assembly=Microsoft.TeamFoundation.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PqDetailView"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsDetailViewModel,IsDesignTimeCreatable=False}" 
+             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type framework:PageControl}},Path=ActualHeight}"
              >
+    <i:Interaction.Behaviors>
+        <attachedProperties:DisableParentScrollViewerBehavior DisableVertical="True"/>
+    </i:Interaction.Behaviors>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -81,12 +87,31 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontSize="15" Margin="5"/>
-            <TextBlock Grid.Row="1" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" FontSize="13" FontWeight="Light" Margin="5"/>
+            <Grid x:Name="MainSectionGrid">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsMainSectionExpanded}" Value="False">
+                                <Setter Property="MaxHeight" Value="100"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
+                <TextBlock Grid.Row="0" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontSize="15" Margin="5"/>
+                <TextBlock VerticalAlignment="Top" Grid.Row="1" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" TextTrimming="WordEllipsis" FontSize="13" FontWeight="Light" Margin="5"/>
+            </Grid>
+
+
+            <teamExplorer:TextLink x:Name="ExpandButton"  Grid.Row="1"  Command="{Binding ExpandMainSectionCommand}" Text="{Binding MainSectionCommandText}" HorizontalAlignment="Right"/>
+            
             <Separator Grid.Row="2"/>
 
-            <controls:MetroAnimatedTabControl Grid.Row="3">
+            <controls:MetroAnimatedTabControl Grid.Row="3" >
 
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
 
@@ -161,10 +186,11 @@
                     </TreeView>
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
-                    <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                    <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                             />
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Comments.Count,FallbackValue=0}"  HeaderStringFormat="{}Comments ({0})">
-                    <TreeView  ItemsSource="{Binding CommentTree}" x:Name="CommentsTree" Margin="0,4,0,0" >
+                    <TreeView  ItemsSource="{Binding CommentTree}" x:Name="CommentsTree" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <TreeView.Resources>
                             <Style TargetType="{x:Type TreeViewItem}" >
                                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
