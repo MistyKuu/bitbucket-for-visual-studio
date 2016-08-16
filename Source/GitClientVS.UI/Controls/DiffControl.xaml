@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
-             xmlns:diffControl="clr-namespace:ParseDiff.DiffControl;assembly=ParseDiff"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
+             xmlns:diffControlUtils="clr-namespace:GitClientVS.UI.Controls.DiffControlUtils"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" x:Name="CurrentControl">
     <UserControl.Resources>
@@ -24,10 +24,11 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <avalonedit:TextEditor x:Name="TextEditorControl" diffControl:AvalonEditBehaviour.TextBinding="{Binding Text}" 
-                                           diffControl:AvalonEditBehaviour.IsDiffEditor="True"
-                                           diffControl:AvalonEditBehaviour.FileDiff="{Binding ElementName=CurrentControl,Path=FileDiff}"
-                                           diffControl:AvalonEditBehaviour.TextForeground="{Binding ElementName=Tb,Path=Foreground}"
+                    <avalonedit:TextEditor x:Name="TextEditorControl" 
+                                           diffControlUtils:AvalonEditBehaviour.TextBinding="{Binding Text}" 
+                                           diffControlUtils:AvalonEditBehaviour.IsDiffEditor="True"
+                                           diffControlUtils:AvalonEditBehaviour.FileDiff="{Binding ElementName=CurrentControl,Path=FileDiff}"
+                                           diffControlUtils:AvalonEditBehaviour.Theme="{Binding ElementName=CurrentControl,Path=Theme}"
                                            HorizontalAlignment="Stretch"
                                            VerticalScrollBarVisibility="Hidden"
                                            HorizontalScrollBarVisibility="Hidden"

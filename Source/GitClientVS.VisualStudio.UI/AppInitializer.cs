@@ -9,10 +9,13 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure;
+using GitClientVS.Infrastructure.Events;
 using GitClientVS.Infrastructure.Mappings;
+using GitClientVS.UI.Helpers;
 using log4net;
 using log4net.Repository.Hierarchy;
 using Microsoft.TeamFoundation.Common.Internal;
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace GitClientVS.VisualStudio.UI
 {
@@ -35,9 +38,9 @@ namespace GitClientVS.VisualStudio.UI
 
         public async Task Initialize()
         {
-            LoggerConfigurator.Setup(); 
+            LoggerConfigurator.Setup();
             var result = _storageService.LoadUserData();
-           
+
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<GitMappingsProfile>();

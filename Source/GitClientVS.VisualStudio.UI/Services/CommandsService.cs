@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
+using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Infrastructure.ViewModels;
 using GitClientVS.VisualStudio.UI.Window;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using ReactiveUI;
 
 namespace GitClientVS.VisualStudio.UI.Services
 {
@@ -17,37 +21,47 @@ namespace GitClientVS.VisualStudio.UI.Services
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class CommandsService : ICommandsService
     {
+        private readonly ExportFactory<IDiffWindowControlViewModel> _vmFactory;
         private Package _package;
+
+        [ImportingConstructor]
+        public CommandsService(ExportFactory<IDiffWindowControlViewModel> vmFactory)
+        {
+            _vmFactory = vmFactory;
+        }
 
         public void Initialize(object package)
         {
             _package = (Package)package;
         }
 
-
-        public void ShowDiffWindow(object parameter, int? id)
+        public void ShowDiffWindow(object parameter, int id)
         {
-            ShowWindow<DiffWindow>(parameter, id);
+            var window = ShowWindow<DiffWindow>(id);
+            var vm = (DiffWindowControlViewModel)_vmFactory.CreateExport().Value; // xd
+            var view = window.Content as IView;
+            view.DataContext = vm;
+            vm.InitializeCommand.Execute(parameter);
+            var obs = vm.WhenAnyValue(x => x.FileDiff).Where(x => x != null).Subscribe(x => window.Caption = $"Diff ({x.From})");
+            var closeable = view as ICloseable;
+            if (closeable != null)
+                closeable.Closed += delegate { obs.Dispose(); };
         }
 
-        private void ShowWindow<TWindow>(object parameter = null, int? id = null)
+        private TWindow ShowWindow<TWindow>(int id = 0) where TWindow : class
         {
             if (_package == null)
                 throw new Exception("Package wasn't initialized");
 
-            var windowNumber = id ?? 0;
-
-            ToolWindowPane window = _package.FindToolWindow(typeof(TWindow), windowNumber, true);
+            ToolWindowPane window = _package.FindToolWindow(typeof(TWindow), id, true);
 
             if (window?.Frame == null)
                 throw new NotSupportedException("Cannot create window");
 
-            var view = window.Content as IView;
-            var vm = view?.DataContext as IInitializable;
-            vm?.InitializeCommand.Execute(parameter);
-
             IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
             Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
+
+            return window as TWindow;
         }
     }
 }

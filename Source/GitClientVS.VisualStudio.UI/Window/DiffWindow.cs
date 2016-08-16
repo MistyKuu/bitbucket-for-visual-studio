@@ -41,11 +41,7 @@ namespace GitClientVS.VisualStudio.UI.Window
         public DiffWindow() : base(null)
         {
             Caption = "Diff";
-
-            var vm = new DiffWindowControlViewModel();
-            vm.WhenAnyValue(x => x.FileDiff).Where(x => x != null).Subscribe(x => Caption = $"Diff ({x.From})");
-
-            Content = new DiffWindowControl(vm);
+            Content = new DiffWindowControl();
         }
     }
 }

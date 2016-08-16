@@ -26,8 +26,8 @@ namespace GitClientVS.VisualStudio.UI.Services
 
         public void RunDiff(string file1, string file2)
         {
-            //_dte = (DTE)_appServiceProvider.GetService(typeof(DTE));
-            //_dte.ExecuteCommand("Tools.DiffFiles", $"\"{file1}\" \"{file2}\"");
+            _dte = (DTE)_appServiceProvider.GetService(typeof(DTE));
+            _dte.ExecuteCommand("Tools.DiffFiles", $"\"{file1}\" \"{file2}\"");
         }
     }
 }

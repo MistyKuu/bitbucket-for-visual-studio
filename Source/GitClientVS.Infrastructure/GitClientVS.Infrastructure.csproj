@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="Events\ActiveRepositoryChangedEvent.cs" />
     <Compile Include="Events\ConnectionChangedEvent.cs" />
+    <Compile Include="Events\ThemeChangedEvent.cs" />
     <Compile Include="Extensions\ChainingExtensions.cs" />
     <Compile Include="Extensions\CommonExtensions.cs" />
     <Compile Include="Extensions\MapperExtensions.cs" />

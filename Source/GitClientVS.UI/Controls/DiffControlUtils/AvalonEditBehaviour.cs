@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using GitClientVS.Contracts.Models;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Editing;
+using ParseDiff;
 
-namespace ParseDiff.DiffControl
+namespace GitClientVS.UI.Controls.DiffControlUtils
 {
     public sealed class AvalonEditBehaviour : DependencyObject
     {
 
-        private static SolidColorBrush _darkAddedBackground = new SolidColorBrush(Color.FromRgb(97, 220, 86));
-        private static SolidColorBrush _darkRemovedBackground = new SolidColorBrush(Color.FromRgb(243, 0, 0));
+        private static readonly SolidColorBrush DarkAddedBackground = new SolidColorBrush(Color.FromRgb(3, 192, 60));
+        private static readonly SolidColorBrush DarkRemovedBackground = new SolidColorBrush(Color.FromRgb(194, 59, 34));
 
-        private static SolidColorBrush _lightAddedBackground = new SolidColorBrush(Color.FromRgb(0xdd, 0xff, 0xdd));
-        private static SolidColorBrush _lightRemovedBackground = new SolidColorBrush(Color.FromRgb(0xff, 0xdd, 0xdd));
+        private static readonly SolidColorBrush LightAddedBackground = new SolidColorBrush(Color.FromRgb(0xdd, 0xff, 0xdd));
+        private static readonly SolidColorBrush LightRemovedBackground = new SolidColorBrush(Color.FromRgb(0xff, 0xdd, 0xdd));
 
         private static readonly Dictionary<string, string> HighlightMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
         {
@@ -49,17 +51,17 @@ namespace ParseDiff.DiffControl
             return HighlightMappings["xml"];
         }
 
-        public static Brush GetTextForeground(DependencyObject obj)
+        public static Theme GetTheme(DependencyObject obj)
         {
-            return (Brush)obj.GetValue(TextForegroundProperty);
+            return (Theme)obj.GetValue(ThemeProperty);
         }
-        public static void SetTextForeground(DependencyObject obj, Brush value)
+        public static void SetTheme(DependencyObject obj, Theme value)
         {
-            obj.SetValue(TextForegroundProperty, value);
+            obj.SetValue(ThemeProperty, value);
         }
         // Using a DependencyProperty as the backing store for TextBindingChanged. This enables animation, styling, binding, etc...  
-        public static readonly DependencyProperty TextForegroundProperty =
-        DependencyProperty.RegisterAttached("TextForeground", typeof(Brush), typeof(AvalonEditBehaviour), new PropertyMetadata(Brushes.Black, TextForegroundChanged));
+        public static readonly DependencyProperty ThemeProperty =
+        DependencyProperty.RegisterAttached("Theme", typeof(Theme), typeof(AvalonEditBehaviour), new PropertyMetadata(Theme.Light, ThemeChanged));
 
         public static bool GetIsDiffEditor(DependencyObject obj)
         {
@@ -85,11 +87,10 @@ namespace ParseDiff.DiffControl
         public static readonly DependencyProperty FileDiffProperty =
         DependencyProperty.RegisterAttached("FileDiff", typeof(FileDiff), typeof(AvalonEditBehaviour), new PropertyMetadata(null, FileDiffChanged));
 
-        private static void TextForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void ThemeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             TextEditor textEditor = d as TextEditor;
-            textEditor.TextArea.TextView.BackgroundRenderers.Clear();
-            ChangeBackgroundRenderer(textEditor, GetTextForeground(textEditor));
+            ChangeBackgroundRenderer(textEditor, GetTheme(textEditor));
         }
 
         private static void FileDiffChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -101,14 +102,14 @@ namespace ParseDiff.DiffControl
         private static void BehaviourAttached(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             TextEditor textEditor = d as TextEditor;
-           // textEditor.TextArea.TextView.LineTransformers.Add(new DiffLineColorizer((ChunkDiff)textEditor.DataContext));
+            // textEditor.TextArea.TextView.LineTransformers.Add(new DiffLineColorizer((ChunkDiff)textEditor.DataContext));
             textEditor.TextArea.LeftMargins.Add(new TwoColumnMargin());
             textEditor.TextArea.LeftMargins.Add(DottedLineMargin.Create());
-            ChangeBackgroundRenderer(textEditor, GetTextForeground(textEditor));
+            ChangeBackgroundRenderer(textEditor, GetTheme(textEditor));
         }
 
 
-        private static void ChangeBackgroundRenderer(TextEditor textEditor, Brush textForeground)
+        private static void ChangeBackgroundRenderer(TextEditor textEditor, Theme theme)
         {
             var diffBackgroundRenderer = textEditor.TextArea.TextView.BackgroundRenderers.FirstOrDefault(x => x.GetType() == typeof(DiffLineBackgroundRenderer));
             if (diffBackgroundRenderer != null)
@@ -117,15 +118,15 @@ namespace ParseDiff.DiffControl
             SolidColorBrush addedBg;
             SolidColorBrush removedBg;
 
-            if (textForeground.ToString().Equals("#FF000000")) // TODO sick stupid but no time now xd
+            if (theme == Theme.Light)
             {
-                addedBg = _lightAddedBackground;
-                removedBg = _lightRemovedBackground;
+                addedBg = LightAddedBackground;
+                removedBg = LightRemovedBackground;
             }
             else
             {
-                addedBg = _darkAddedBackground;
-                removedBg = _darkRemovedBackground;
+                addedBg = DarkAddedBackground;
+                removedBg = DarkRemovedBackground;
             }
             textEditor.TextArea.TextView.BackgroundRenderers.Add(new DiffLineBackgroundRenderer(addedBg, removedBg));
         }

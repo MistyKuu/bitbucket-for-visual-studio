@@ -95,6 +95,10 @@
     <Compile Include="Controls\DiffControl.xaml.cs">
       <DependentUpon>DiffControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DiffControlUtils\AvalonEditBehaviour.cs" />
+    <Compile Include="Controls\DiffControlUtils\DiffLineBackgroundRenderer.cs" />
+    <Compile Include="Controls\DiffControlUtils\DiffLineColorizer.cs" />
+    <Compile Include="Controls\DiffControlUtils\TwoColumnMargin.cs" />
     <Compile Include="Controls\ProgressBar.xaml.cs">
       <DependentUpon>ProgressBar.xaml</DependentUpon>
     </Compile>

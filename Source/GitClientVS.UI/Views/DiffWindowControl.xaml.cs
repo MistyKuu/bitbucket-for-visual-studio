@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
@@ -20,10 +21,17 @@ namespace GitClientVS.UI.Views
     public partial class DiffWindowControl : UserControl, IDiffWindowControl
     {
         [ImportingConstructor]
-        public DiffWindowControl(IDiffWindowControlViewModel vm)
+        public DiffWindowControl()
         {
             InitializeComponent();
-            DataContext = vm;
+            Closed += delegate { OnClosed(); };
+        }
+
+        public event EventHandler Closed;
+
+        protected virtual void OnClosed()
+        {
+            Closed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

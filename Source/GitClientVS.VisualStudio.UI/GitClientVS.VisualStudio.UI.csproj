@@ -72,6 +72,7 @@
     <Compile Include="Sections\ConnectSection.cs" />
     <Compile Include="Sections\PublishSection.cs" />
     <Compile Include="Services\CommandsService.cs" />
+    <Compile Include="Services\UserInformationService.cs" />
     <Compile Include="Services\VsTools.cs" />
     <Compile Include="Services\GitService.cs" />
     <Compile Include="Services\GitWatcher.cs" />

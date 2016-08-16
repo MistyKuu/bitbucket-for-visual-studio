@@ -5,8 +5,9 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
+using ParseDiff;
 
-namespace ParseDiff.DiffControl
+namespace GitClientVS.UI.Controls.DiffControlUtils
 {
     public class TwoColumnMargin : LineNumberMargin
     {

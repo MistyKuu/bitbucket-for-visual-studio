@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              xmlns:parseDiff="clr-namespace:ParseDiff;assembly=ParseDiff"
-             xmlns:diffControl="clr-namespace:ParseDiff.DiffControl;assembly=ParseDiff"
              xmlns:controls="clr-namespace:GitClientVS.UI.Controls"
              Background="{DynamicResource VsBrush.Window}"
              Foreground="{DynamicResource VsBrush.WindowText}"
@@ -16,6 +15,6 @@
     <Grid >
         
         
-        <controls:DiffControl FileDiff="{Binding FileDiff}"/>
+        <controls:DiffControl FileDiff="{Binding FileDiff}" Theme="{Binding CurrentTheme}"/>
     </Grid>
 </UserControl>
