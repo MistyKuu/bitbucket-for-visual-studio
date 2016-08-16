@@ -73,7 +73,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task ShowDiff(FileDiff diff)
         {
-            _commandsService.ShowDiffWindow(diff);
+            _commandsService.ShowDiffWindow(diff, diff.Id);
         }
 
         public bool IsMainSectionExpanded

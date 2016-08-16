@@ -17,7 +17,6 @@ namespace GitClientVS.VisualStudio.UI.Services
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class CommandsService : ICommandsService
     {
-        private static int _windowNumber;
         private Package _package;
 
         public void Initialize(object package)
@@ -26,17 +25,17 @@ namespace GitClientVS.VisualStudio.UI.Services
         }
 
 
-        public void ShowDiffWindow(object parameter)
+        public void ShowDiffWindow(object parameter, int? id)
         {
-            ShowWindow<DiffWindow>(true, parameter);
+            ShowWindow<DiffWindow>(parameter, id);
         }
 
-        private void ShowWindow<TWindow>(bool multipleInstances = true, object parameter = null)
+        private void ShowWindow<TWindow>(object parameter = null, int? id = null)
         {
             if (_package == null)
                 throw new Exception("Package wasn't initialized");
 
-            var windowNumber = multipleInstances ? _windowNumber++ : 0;
+            var windowNumber = id ?? 0;
 
             ToolWindowPane window = _package.FindToolWindow(typeof(TWindow), windowNumber, true);
 
