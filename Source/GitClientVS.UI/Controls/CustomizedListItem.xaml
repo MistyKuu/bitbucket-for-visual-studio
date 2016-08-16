@@ -5,12 +5,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
+    xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
     x:Name="UserControl"
     >
-
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid >
         <Grid>
             <Grid.ColumnDefinitions>
@@ -51,9 +58,14 @@
                      <Run  Text="{Binding Date}"/>`
                 </TextBlock>
 
-                <Button Content="->" Grid.Row="1" Grid.Column="1" Visibility="{Binding GoToLink,Converter={converters:NullToNonVisibilityConverter}}"
-                        HorizontalAlignment="Right" 
-                        Click="NavigateButton_OnClick"/>
+                <Button Margin="5" Grid.Row="1" Grid.Column="1" Visibility="{Binding GoToLink,Converter={converters:NullToNonVisibilityConverter}}" 
+                        HorizontalAlignment="Right" Click="NavigateButton_OnClick">
+                        <Rectangle Width="10" Height="10">
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_navigate_next}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                </Button>
             </Grid>
         </Grid>
     </Grid>
