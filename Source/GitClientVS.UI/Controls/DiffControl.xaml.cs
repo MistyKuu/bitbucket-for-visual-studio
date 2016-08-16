@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ICSharpCode.AvalonEdit;
 using ParseDiff;
 
 namespace GitClientVS.UI.Controls
@@ -39,25 +40,24 @@ namespace GitClientVS.UI.Controls
             get
             {
                 if (FileDiff == null)
-                    return HighlightMappings["cs"];
+                    return HighlightMappings["xml"];
 
                 var splitted = FileDiff.From.Split('.');
                 if (splitted.Length < 2)
-                    return HighlightMappings["cs"];
+                    return HighlightMappings["xml"];
 
                 var ext = splitted.Last();
 
                 if (HighlightMappings.ContainsKey(ext))
                     return HighlightMappings[ext];
 
-                return HighlightMappings["cs"];
+                return HighlightMappings["xml"];
             }
         }
-
+        public delegate  void printString(string s);
         // Using a DependencyProperty as the backing store for FileDiff.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FileDiffProperty =
             DependencyProperty.Register("FileDiff", typeof(FileDiff), typeof(DiffControl), new PropertyMetadata(null));
-
 
         public DiffControl()
         {
@@ -65,11 +65,17 @@ namespace GitClientVS.UI.Controls
             (this.Content as FrameworkElement).DataContext = this;
         }
 
+
         private void UIElement_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             ScrollViewer scv = (ScrollViewer)sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
+        }
+
+        private void TextEditorControl_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            (sender as TextEditor).SyntaxHighlighting = ICSharpCode.AvalonEdit.Highlighting.HighlightingManager.Instance.GetDefinition(HighLightStyle);
         }
     }
 }

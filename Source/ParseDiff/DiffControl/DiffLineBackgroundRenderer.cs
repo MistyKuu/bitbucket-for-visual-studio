@@ -14,7 +14,7 @@ namespace ParseDiff.DiffControl
         static SolidColorBrush headerBackground;
 
         static DiffLineBackgroundRenderer()
-        {
+        { 
             removedBackground = new SolidColorBrush(Color.FromRgb(0xff, 0xdd, 0xdd)); removedBackground.Freeze();
             addedBackground = new SolidColorBrush(Color.FromRgb(0xdd, 0xff, 0xdd)); addedBackground.Freeze();
             headerBackground = new SolidColorBrush(Color.FromRgb(0xf8, 0xf8, 0xff)); headerBackground.Freeze();

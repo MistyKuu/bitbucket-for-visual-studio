@@ -24,15 +24,15 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <avalonedit:TextEditor x:Name="TextEditor" diffControl:AvalonEditBehaviour.TextBinding="{Binding Text}" 
+                    <avalonedit:TextEditor x:Name="TextEditorControl" diffControl:AvalonEditBehaviour.TextBinding="{Binding Text}" 
                                            diffControl:AvalonEditBehaviour.IsDiffEditor="True"
                                            HorizontalAlignment="Stretch"
                                            VerticalScrollBarVisibility="Hidden"
                                            HorizontalScrollBarVisibility="Hidden"
-                                            FontFamily="Consolas"
-                                            SyntaxHighlighting="{Binding ElementName=CurrentControl,Path=HighLightStyle}"
-                                            FontSize="10pt" 
+                                           FontFamily="Consolas"
+                                           FontSize="10pt" 
                                            IsReadOnly="True"
+                                           Loaded="TextEditorControl_OnLoaded"
                                            Foreground="{Binding ElementName=Tb,Path=Foreground}"
                                         >
                     </avalonedit:TextEditor>
