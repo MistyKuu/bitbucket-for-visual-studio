@@ -43,7 +43,7 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Row="0" FontSize="13"  Grid.ColumnSpan="2"
@@ -58,8 +58,8 @@
                      <Run  Text="{Binding Date}"/>`
                 </TextBlock>
 
-                <Button Margin="5" Grid.Row="1" Grid.Column="1" Visibility="{Binding GoToLink,Converter={converters:NullToNonVisibilityConverter}}" 
-                        HorizontalAlignment="Right" Click="NavigateButton_OnClick">
+                <Button Height="20" Width="20" Margin="5" Grid.Row="1" Grid.Column="1" Visibility="{Binding GoToLink,Converter={converters:NullToNonVisibilityConverter}}" 
+                        HorizontalAlignment="Right" Click="NavigateButton_OnClick" Background="Transparent">
                         <Rectangle Width="10" Height="10">
                             <Rectangle.Fill>
                                 <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_navigate_next}" />
