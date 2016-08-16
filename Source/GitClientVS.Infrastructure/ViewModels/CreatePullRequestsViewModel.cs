@@ -97,7 +97,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         [ImportingConstructor]
         public CreatePullRequestsViewModel(
             IGitClientService gitClientService,
-            IGitService gitService, 
+            IGitService gitService,
             IPageNavigationService pageNavigationService
             )
         {
@@ -131,8 +131,11 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadBranches()
         {
-            Branches = (await _gitClientService.GetBranches(_gitService.GetActiveRepository().Name)).ToList();
-            SourceBranch = Branches.FirstOrDefault(); // TODO active branch
+            var activeRepo = _gitService.GetActiveRepository().Name;
+            var activeBranch = _gitService.GetActiveBranchFromActiveRepository();
+
+            Branches = (await _gitClientService.GetBranches(activeRepo)).ToList();
+            SourceBranch = Branches.FirstOrDefault(x => x.Name.Equals(activeBranch, StringComparison.InvariantCultureIgnoreCase));
             DestinationBranch = Branches.FirstOrDefault();
         }
 
