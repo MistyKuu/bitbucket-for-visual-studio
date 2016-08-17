@@ -33,7 +33,7 @@ namespace BitBucket.REST.API.Wrappers
             return response;
         }
 
-        public async Task<IteratorBasedPage<T>> GetAllPages<T>(string url)
+        public async Task<IteratorBasedPage<T>> GetAllPages<T>(string url, int limit = 10)
         {
             var result = new IteratorBasedPage<T>()
             {
@@ -44,7 +44,7 @@ namespace BitBucket.REST.API.Wrappers
             do
             {
                 var request = new BitbucketRestRequest(url, Method.GET);
-                request.AddQueryParameter("page", pageNumber.ToString());
+                request.AddQueryParameter("pagelen", limit.ToString()).AddQueryParameter("page", pageNumber.ToString());
                 response = await this.ExecuteTaskAsync<IteratorBasedPage<T>>(request);
                 if (response.Data.Values != null)
                 {
@@ -77,7 +77,7 @@ namespace BitBucket.REST.API.Wrappers
                 || response.StatusCode == HttpStatusCode.NotFound
                 || response.StatusCode == HttpStatusCode.InternalServerError)
             {
-                throw new RequestFailedException();
+                throw new RequestFailedException(response.ErrorMessage);
             }
            
         }

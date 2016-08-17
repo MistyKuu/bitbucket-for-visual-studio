@@ -62,6 +62,8 @@
     <Compile Include="Clients\TeamsClient.cs" />
     <Compile Include="Clients\UserClient.cs" />
     <Compile Include="Exceptions\AuthorizationException.cs" />
+    <Compile Include="Exceptions\RequestFailedException.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Helpers\ApiHelpers.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Models\Author.cs" />
@@ -83,15 +85,18 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserShort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryBuilders\IQueryConnector.cs" />
+    <Compile Include="QueryBuilders\IQueryParam.cs" />
+    <Compile Include="QueryBuilders\Operators.cs" />
+    <Compile Include="QueryBuilders\PullRequestQueryBuilder.cs" />
+    <Compile Include="QueryBuilders\QueryBuilder.cs" />
     <Compile Include="Serializers\BitbucketPropertyNamesContractResolver.cs" />
     <Compile Include="Serializers\IJsonSerializer.cs" />
     <Compile Include="Serializers\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Wrappers\BitbucketRestClient.cs" />
     <Compile Include="Wrappers\BitbucketRestRequest.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

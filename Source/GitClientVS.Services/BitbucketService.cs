@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BitBucket.REST.API;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.QueryBuilders;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
@@ -109,7 +111,21 @@ namespace GitClientVS.Services
         public async Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName)
         {
             //todo put real repository name
-            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests(repositoryName, ownerName);
+            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(repositoryName, ownerName, 50);
+            return pullRequests.Values.MapTo<List<GitPullRequest>>();
+        }
+
+        public async Task<IEnumerable<GitPullRequest>> GetPullRequestsAfterDate(string repositoryName, string ownerName)
+        {
+            //todo put real repository name
+            var fakeDate = DateTime.ParseExact("2016-08-01", "yyyy-MM-dd",
+                                  CultureInfo.InvariantCulture);
+            PullRequestQueryBuilder queryBuilder = new PullRequestQueryBuilder();
+            var readyQuery = queryBuilder.StartBuilding().CreatedOn(fakeDate, Operators.Greater);
+            //with state
+            // queryBuilder.StartBuilding().CreatedOn(fakeDate, Operators.Greater).And().State(PullRequestOptions.MERGED);
+
+            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(repositoryName, ownerName, 50, readyQuery);
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
 
