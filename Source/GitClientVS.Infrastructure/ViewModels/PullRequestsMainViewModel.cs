@@ -35,7 +35,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private List<GitUser> _authors;
         private GitUser _selectedAuthor;
-        private GitPullRequestStatus _selectedStatus;
+        private GitPullRequestStatus? _selectedStatus;
         private GitPullRequest _selectedPullRequest;
 
         public ReactiveList<GitPullRequest> GitPullRequests
@@ -50,7 +50,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _selectedAuthor, value); }
         }
 
-        public GitPullRequestStatus SelectedStatus
+        public GitPullRequestStatus? SelectedStatus
         {
             get { return _selectedStatus; }
             set
@@ -122,8 +122,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             GitPullRequests = new ReactiveList<GitPullRequest>();
             FilteredGitPullRequests = new ReactiveList<GitPullRequest>();
             SetupObservables();
-
-            SelectedStatus = GitPullRequestStatus.Open;
             Authors = new List<GitUser>();
         }
 
@@ -169,7 +167,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             FilteredGitPullRequests = new ReactiveList<GitPullRequest>(
                 GitPullRequests
-                .Where(pullRequest => pullRequest.Status == SelectedStatus)
+                .Where(pullRequest => SelectedStatus == null || pullRequest.Status == SelectedStatus)
                 .Where(pullRequest => SelectedAuthor == null || (pullRequest.Author != null && pullRequest.Author.Username == SelectedAuthor.Username)));
         }
 

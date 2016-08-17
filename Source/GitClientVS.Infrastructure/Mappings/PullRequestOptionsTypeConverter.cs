@@ -22,7 +22,7 @@ namespace GitClientVS.Infrastructure.Mappings
                 return GitPullRequestStatus.Declined;
             }
         
-            return GitPullRequestStatus.Supersend;
+            return GitPullRequestStatus.Superseded;
         }
     }
 

@@ -5,6 +5,6 @@
         Open,
         Merged,
         Declined,
-        Supersend
+        Superseded
     }
 }

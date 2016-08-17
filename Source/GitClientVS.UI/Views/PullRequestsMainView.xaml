@@ -62,6 +62,7 @@
                     <Separator Grid.Row="1"/>
                 </Grid>
             </DataTemplate>
+
         </Grid.Resources>
 
         <Grid Margin="5">
@@ -73,15 +74,15 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0" Background="Transparent" BorderThickness="0" Command="{Binding GotoCreateNewPullRequestCommand}" Margin="5,0">
-                    <Rectangle Width="15" Height="15" >
-                        <Rectangle.Fill>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add_green}" />
-                        </Rectangle.Fill>
-                    </Rectangle>
+                <Rectangle Width="15" Height="15" >
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add_green}" />
+                    </Rectangle.Fill>
+                </Rectangle>
             </Button>
 
             <ComboBox Grid.Column="1" DisplayMemberPath="DisplayName"
-          ItemsSource="{extensions:EnumToItemsSource {x:Type gitClientModels:GitPullRequestStatus}}"
+          ItemsSource="{extensions:EnumToItemsSource {x:Type gitClientModels:GitPullRequestStatus}, 'None'}"
           SelectedValue="{Binding SelectedStatus}"
           SelectedValuePath="Value" 
                 
@@ -109,12 +110,12 @@
                     </wpfControls:AutoCompleteTextBox.Icon>
                 </wpfControls:AutoCompleteTextBox>
             </Border>
-          
+
         </Grid>
 
 
         <controls1:ProgressBar Grid.Row="1" ProgressContent="{Binding ElementName=PullRequests}"/>
-        
+
         <ListBox Grid.Row="1" Margin="20" x:Name="PullRequests"
                  ItemsSource="{Binding FilteredGitPullRequests}"
                  SelectedItem="{Binding SelectedPullRequest, Mode=TwoWay}"
