@@ -90,7 +90,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                await _gitClientService.ApprovePullRequest("test", "test", PullRequest.Id);
             }
-           
+
+            // no exception means we did it!
+            IsApproved = !IsApproved;
+
         }
 
         private async Task ShowDiff(FileDiff diff)
