@@ -108,11 +108,18 @@ namespace GitClientVS.Services
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
 
-        public async Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName)
+        public async Task<IEnumerable<GitPullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
         {
             //todo put real repository name
-            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(repositoryName, ownerName, 50);
+            var pullRequests = await _bitbucketClient.PullRequestsClient.GetAllPullRequests(repositoryName, ownerName);
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
+        }
+
+        public async Task<PageIterator<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit = 20, int page = 1)
+        {
+            //todo put real repository name
+            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(repositoryName, ownerName, limit: limit, page: page);
+            return pullRequests.MapTo<PageIterator<GitPullRequest>>();
         }
 
         public async Task<IEnumerable<GitPullRequest>> GetPullRequestsAfterDate(string repositoryName, string ownerName)
@@ -130,7 +137,7 @@ namespace GitClientVS.Services
         }
 
         public async Task<IEnumerable<GitPullRequest>> GetPullRequests(GitPullRequestStatus gitPullRequestStatus, string repositoryName)
-        {  
+        {
             var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests(repositoryName, gitPullRequestStatus.MapTo<PullRequestOptions>());
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
