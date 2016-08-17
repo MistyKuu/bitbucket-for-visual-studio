@@ -20,7 +20,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Username, CredentialsHelper.TestsCredentials.Password);
             var connection = new Connection(credentials);
 
-            bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection);
+            bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection, connection);
         }
 
         [Test]
