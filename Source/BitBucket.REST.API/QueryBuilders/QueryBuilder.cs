@@ -29,14 +29,14 @@ namespace BitBucket.REST.API.QueryBuilders
         public IQueryConnector UpdatedOn(DateTime date, Operators queryOperator)
         {
             var dateInProperFormat = date.ToString("yyyy-MM-dd");
-            query.Append($" updated_on {EnumExtensions.GetEnumDescription(queryOperator)} {dateInProperFormat}");
+            query.Append($" updated_on {OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
             return this;
         }
 
         public IQueryConnector CreatedOn(DateTime date, Operators queryOperator)
         {
             var dateInProperFormat = date.ToString("yyyy-MM-dd");
-            query.Append($" created_on {EnumExtensions.GetEnumDescription(queryOperator)} {dateInProperFormat}");
+            query.Append($" created_on {OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
             return this;
         }
 

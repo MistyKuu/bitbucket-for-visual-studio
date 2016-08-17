@@ -44,11 +44,12 @@ namespace BitBucket.REST.API.Clients
         //    return response.Data;
         //}
 
-        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 10, IQueryConnector query = null)
+        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 10, IQueryConnector query = null, int page = 1)
         {
             var url = ApiUrls.PullRequests(ownerName, repositoryName);
             var request = new BitbucketRestRequest(url, Method.GET);
             request.AddQueryParameter("pagelen", limit.ToString());
+            request.AddQueryParameter("page", page.ToString());
             if (query != null)
             {
                 request.AddQueryParameter("q", query.Build());
@@ -56,6 +57,8 @@ namespace BitBucket.REST.API.Clients
             var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<PullRequest>>(request);
             return response.Data;
         }
+
+
 
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequests(string repositoryName, PullRequestOptions option)
         {
