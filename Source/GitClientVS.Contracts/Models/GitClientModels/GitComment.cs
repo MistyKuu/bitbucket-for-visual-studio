@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace GitClientVS.Contracts.Models.GitClientModels
 {

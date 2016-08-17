@@ -26,6 +26,9 @@ namespace BitBucket.REST.API.Clients
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequests(string repositoryName, string ownerName)
         {
             var url = ApiUrls.PullRequests(ownerName, repositoryName);
+            //var request = new BitbucketRestRequest(url, Method.GET);
+            //var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<PullRequest>>(request);
+            //return response.Data;
             return await RestClient.GetAllPages<PullRequest>(url);
         }
 
@@ -98,6 +101,15 @@ namespace BitBucket.REST.API.Clients
             var url = ApiUrls.PullRequests(Connection.Credentials.Login, repositoryName);
             var request = new BitbucketRestRequest(url, Method.GET);
             request.AddQueryParameter("state", option.ToString());
+            var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<PullRequest>>(request);
+            return response.Data;
+        }
+
+        public async Task<IteratorBasedPage<PullRequest>> GetPullRequests(string repositoryName, PullRequestOptions option, int limit)
+        {
+            var url = ApiUrls.PullRequests(Connection.Credentials.Login, repositoryName);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            request.AddQueryParameter("state", option.ToString()).AddQueryParameter("pagelen", limit.ToString());
             var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<PullRequest>>(request);
             return response.Data;
         }

@@ -143,13 +143,14 @@ namespace GitClientVS.Infrastructure.ViewModels
             Dictionary<long, GitComment> searchableGitComments = new Dictionary<long, GitComment>();
             foreach (var comment in gitComments)
             {
+                comment.Content.Html = "<body style='font-size:13px'>" + comment.Content.Html + "</body>";
                 searchableGitComments.Add(comment.Id, comment);
             }
 
             Dictionary<int, List<ObjectTree>> result = new Dictionary<int, List<ObjectTree>>();
 
             var separator = '/';
-            var maxLevel = 0;
+            var maxLevel = -1;
             foreach (var comment in gitComments)
             {
                 var level = 0;
@@ -199,7 +200,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
             ICommentTree entryComment = new CommentTree();
-            for (var i = 0; i < maxLevel; i++)
+            for (var i = 0; i <= maxLevel; i++)
             {
                 List<ObjectTree> preparedComments = result[i];
                 foreach (var objectTree in preparedComments)
