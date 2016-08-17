@@ -4,7 +4,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
 {
     public class PageIterator<T>
     {
-        public int? PageLen { get; set; }
+        public int Page { get; set; }
         public string Next { get; set; }
         public List<T> Values { get; set; }
 

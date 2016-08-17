@@ -8,6 +8,9 @@ namespace BitBucket.REST.API.Models
         [JsonProperty(PropertyName = "pagelen")]
         public int? PageLen { get; set; }
 
+        [JsonProperty(PropertyName = "page")]
+        public int Page { get; set; }
+
         [JsonProperty(PropertyName = "next")]
         public string Next { get; set; }
 
