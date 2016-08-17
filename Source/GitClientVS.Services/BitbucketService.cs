@@ -108,10 +108,12 @@ namespace GitClientVS.Services
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
 
-        public async Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName)
+        public async Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit, DateTime date, string sign)
         {
             //todo put real repository name
-            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(repositoryName, ownerName, 50);
+            PullRequestQueryBuilder queryBuilder = new PullRequestQueryBuilder();
+            var readyQuery = queryBuilder.StartBuilding().UpdatedOn(date, sign == ">" ? Operators.Greater : Operators.Lesser);
+            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(repositoryName, ownerName, limit, readyQuery);
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
 
@@ -130,7 +132,7 @@ namespace GitClientVS.Services
         }
 
         public async Task<IEnumerable<GitPullRequest>> GetPullRequests(GitPullRequestStatus gitPullRequestStatus, string repositoryName)
-        {  
+        {
             var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests(repositoryName, gitPullRequestStatus.MapTo<PullRequestOptions>());
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }

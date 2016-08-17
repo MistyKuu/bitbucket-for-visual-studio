@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using GitClientVS.Contracts.Models.GitClientModels;
 
@@ -25,7 +26,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, string ownerName, long id);
         Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, long id);
 
-        Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName);
+        Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit, DateTime date, string sign);
 
         Task<string> GetPullRequestDiff(string repositoryName, string ownerName, long id);
         Task<string> GetPullRequestDiff(string repositoryName, long id);

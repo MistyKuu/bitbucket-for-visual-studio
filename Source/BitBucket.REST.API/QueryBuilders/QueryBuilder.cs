@@ -28,7 +28,7 @@ namespace BitBucket.REST.API.QueryBuilders
 
         public IQueryConnector UpdatedOn(DateTime date, Operators queryOperator)
         {
-            var dateInProperFormat = date.ToString("yyyy-MM-dd");
+            var dateInProperFormat = date.ToString("s");
             query.Append($" updated_on {EnumExtensions.GetEnumDescription(queryOperator)} {dateInProperFormat}");
             return this;
         }

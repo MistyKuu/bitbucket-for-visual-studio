@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -25,6 +27,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IPageNavigationService _pageNavigationService;
+        private readonly ICacheService _cacheService;
         private ReactiveCommand<Unit> _initializeCommand;
         private ReactiveCommand<object> _goToDetailsCommand;
         private bool _isLoading;
@@ -113,23 +116,26 @@ namespace GitClientVS.Infrastructure.ViewModels
         public PullRequestsMainViewModel(
             IGitClientService gitClientService,
             IGitService gitService,
-            IPageNavigationService pageNavigationService
+            IPageNavigationService pageNavigationService,
+            ICacheService cacheService
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _pageNavigationService = pageNavigationService;
+            _cacheService = cacheService;
             GitPullRequests = new ReactiveList<GitPullRequest>();
             FilteredGitPullRequests = new ReactiveList<GitPullRequest>();
             SetupObservables();
             Authors = new List<GitUser>();
+            //  SelectedStatus = GitPullRequestStatus.Open;
         }
 
         private void SetupObservables()
         {
-            this.WhenAnyValue(x => x.SelectedStatus, x => x.SelectedAuthor).Subscribe(_ => Filter());
+            this.WhenAnyValue(x => x.SelectedStatus, x => x.SelectedAuthor).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => Filter());
+            this.WhenAnyObservable(x => x.GitPullRequests.Changed).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => Filter());
 
-            _initializeCommand.Subscribe(_ => { Filter(); });
             this.WhenAnyValue(x => x.GitPullRequests).Where(x => x != null).Subscribe(_ => Authors = GitPullRequests
                                                                                                     .Select(x => x.Author)
                                                                                                     .Where(x => x != null)
@@ -151,8 +157,42 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadPullRequests()
         {
-            var requests = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian");
-            GitPullRequests = new ReactiveList<GitPullRequest>(requests);
+            var result = _cacheService.Get<IEnumerable<GitPullRequest>>(CacheKeys.PullRequestCacheKey);
+            if (result.IsSuccess)
+            {
+                GitPullRequests.AddRange(result.Data);
+                LoadNewerPullRequests();
+            }
+            else
+            {
+                LoadOlderPullRequests();
+            }
+        }
+
+        private async Task LoadOlderPullRequests()
+        {
+            IEnumerable<GitPullRequest> page = GitPullRequests;
+            do
+            {
+                var min = GitPullRequests.Any() ? page.Min(x => x.Updated) : DateTime.MaxValue;
+                page = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian", 20, min, "<");
+                GitPullRequests.AddRange(page);
+            } while (page.Any());
+
+            _cacheService.Add(CacheKeys.PullRequestCacheKey, GitPullRequests);
+        }
+
+        private async Task LoadNewerPullRequests()
+        {
+            IEnumerable<GitPullRequest> page = GitPullRequests;
+            do
+            {
+                var max = GitPullRequests.Any() ? page.Max(x => x.Updated) : DateTime.MinValue;
+                page = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian", 20, max, ">");
+                GitPullRequests.AddRange(page);
+            } while (page.Any());
+
+            _cacheService.Add(CacheKeys.PullRequestCacheKey, GitPullRequests);
         }
 
         private bool CanRunFilter()
@@ -168,7 +208,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             FilteredGitPullRequests = new ReactiveList<GitPullRequest>(
                 GitPullRequests
                 .Where(pullRequest => SelectedStatus == null || pullRequest.Status == SelectedStatus)
-                .Where(pullRequest => SelectedAuthor == null || (pullRequest.Author != null && pullRequest.Author.Username == SelectedAuthor.Username)));
+                .Where(pullRequest => SelectedAuthor == null || (pullRequest.Author != null && pullRequest.Author.Username == SelectedAuthor.Username))
+                .OrderByDescending(x => x.Created));
         }
 
         private IObservable<bool> CanLoadPullRequests()

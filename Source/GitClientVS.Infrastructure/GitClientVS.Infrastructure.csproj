@@ -93,6 +93,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CacheKeys.cs" />
     <Compile Include="Events\ActiveRepositoryChangedEvent.cs" />
     <Compile Include="Events\ConnectionChangedEvent.cs" />
     <Compile Include="Events\ThemeChangedEvent.cs" />
