@@ -42,15 +42,15 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
+
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="150" MaxWidth="150"/>
-                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="B"/>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="C" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="D" />
                     </Grid.ColumnDefinitions>
-                    
+
                     <Image Width="30" Height="30" VerticalAlignment="Top" Source="{Binding Author.Links.Avatar.Href}" Margin="0,0,5,0"/>
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Author.DisplayName}" Margin="0,0,10,0" TextWrapping="Wrap"/>
                     <TextBlock Grid.Row="0" Grid.Column="2" Foreground="CornflowerBlue" Text="{Binding Hash, Converter={converters:ShortCommitHashConverter}}" />
@@ -91,42 +91,50 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid x:Name="MainSectionGrid">
-                <Grid.Style>
-                    <Style TargetType="Grid">
+            <ScrollViewer x:Name="TitleSectionScrollViewer" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer.Style>
+                    <Style TargetType="ScrollViewer">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsMainSectionExpanded}" Value="False">
                                 <Setter Property="MaxHeight" Value="100"/>
+                                <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsMainSectionExpanded}" Value="True">
+                                <Setter Property="MaxHeight" Value="400"/>
+                                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </Grid.Style>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+                </ScrollViewer.Style>
 
-                <TextBlock Grid.Row="0" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontSize="15" Margin="5"/>
-                <Button Grid.Row="0" HorizontalAlignment="Right" IsEnabled="{Binding IsApproveAvailable}" Command="{Binding ApproveCommand}">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsApproved}" Value="True">
-                                    <Setter Property="Content" Value="Approve"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsApproved}" Value="False">
-                                    <Setter Property="Content" Value="Unapprove"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <TextBlock VerticalAlignment="Top" Grid.Row="1" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" TextTrimming="WordEllipsis" FontSize="13" FontWeight="Light" Margin="5"/>
-            </Grid>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontSize="15" Margin="5"/>
+                    <Button Grid.Row="0" HorizontalAlignment="Right" IsEnabled="{Binding IsApproveAvailable}" Command="{Binding ApproveCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsApproved}" Value="True">
+                                        <Setter Property="Content" Value="Approve"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsApproved}" Value="False">
+                                        <Setter Property="Content" Value="Unapprove"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <TextBlock VerticalAlignment="Top" Grid.Row="1" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" TextTrimming="WordEllipsis" FontSize="13" FontWeight="Light" Margin="5"/>
+                </Grid>
+            </ScrollViewer>
 
 
             <teamExplorer:TextLink x:Name="ExpandButton"  Grid.Row="1"  Command="{Binding ExpandMainSectionCommand}" Text="{Binding MainSectionCommandText}" HorizontalAlignment="Right"/>
-            
+
             <Separator Grid.Row="2"/>
 
             <controls:MetroAnimatedTabControl Grid.Row="3" >
@@ -204,10 +212,10 @@
                     </TreeView>
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
-                    <ListBox ItemsSource="{Binding Commits}" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                    <ListBox Grid.IsSharedSizeScope="True" ItemsSource="{Binding Commits}" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                              />
                 </controls:MetroTabItem>
-                
+
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Comments.Count,FallbackValue=0}"  HeaderStringFormat="{}Comments ({0})">
                     <TreeView  ItemsSource="{Binding CommentTree}" x:Name="CommentsTree" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <TreeView.Resources>
@@ -253,8 +261,8 @@
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
-                         
-                               
+
+
 
 
                             </Style>
@@ -289,7 +297,7 @@
                                                 <Trigger Property="IsExpanded" Value="false">
                                                     <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
                                                 </Trigger>
-                                            
+
                                                 <Trigger Property="IsSelected" Value="true">
                                                     <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                                                     <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
@@ -322,18 +330,18 @@
                                 </Style.Triggers>
                             </Style>
                             <HierarchicalDataTemplate DataType="{x:Type models:CommentTree}" ItemsSource="{Binding Comments}">
-                            
-                                    <StackPanel Orientation="Vertical" Margin="0,5,0,5">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="{Binding Comment.User.Links.Avatar.Href}" Margin="0,0,5,0"/>
-                                            <TextBlock HorizontalAlignment="Stretch" Text="{Binding Comment.User.Username}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
-                                        </StackPanel>
-                                      
-                                        <wpf:HtmlPanel Text="{Binding Comment.Content.Html}" Margin="30,0,0,0"/>
 
-                                        <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.CreatedOn}" Foreground="Gray"></TextBlock>
+                                <StackPanel Orientation="Vertical" Margin="0,5,0,5">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="{Binding Comment.User.Links.Avatar.Href}" Margin="0,0,5,0"/>
+                                        <TextBlock HorizontalAlignment="Stretch" Text="{Binding Comment.User.Username}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
                                     </StackPanel>
-                              
+
+                                    <wpf:HtmlPanel Text="{Binding Comment.Content.Html}" Margin="30,0,0,0"/>
+
+                                    <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.CreatedOn}" Foreground="Gray"></TextBlock>
+                                </StackPanel>
+
                             </HierarchicalDataTemplate>
                         </TreeView.Resources>
                     </TreeView>
