@@ -135,14 +135,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             this.WhenAnyValue(x => x.SelectedStatus, x => x.SelectedAuthor).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => Filter());
             this.WhenAnyObservable(x => x.GitPullRequests.Changed).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => Filter());
-
-            this.WhenAnyValue(x => x.GitPullRequests).Where(x => x != null).Subscribe(_ => Authors = GitPullRequests
-                                                                                                    .Select(x => x.Author)
-                                                                                                    .Where(x => x != null)
-                                                                                                    .DistinctBy(x => x.Username)
-                                                                                                    .ToList());
-
             this.WhenAnyValue(x => x.SelectedPullRequest).Where(x => x != null).Subscribe(_ => _goToDetailsCommand.Execute(SelectedPullRequest));
+            this.WhenAnyObservable(x => x.GitPullRequests.Changed).Subscribe(_ => Authors = GitPullRequests
+                                                                                                  .Select(x => x.Author)
+                                                                                                  .Where(x => x != null)
+                                                                                                  .DistinctBy(x => x.Username)
+                                                                                                  .ToList());
+
         }
 
         public void InitializeCommands()
@@ -157,39 +156,52 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadPullRequests()
         {
+            Authors = (await _gitClientService.GetPullRequestsAuthors("atlassian", "atlassian-rest")).ToList();
+
             var result = _cacheService.Get<IEnumerable<GitPullRequest>>(CacheKeys.PullRequestCacheKey);
             if (result.IsSuccess)
             {
                 GitPullRequests.AddRange(result.Data);
-                LoadNewerPullRequests();
+                ReloadAllPullRequests();
             }
             else
             {
-                LoadOlderPullRequests();
+                await LoadNewestPullRequests();
             }
         }
 
-        private async Task LoadOlderPullRequests()
+        private async Task ReloadAllPullRequests()
         {
-            IEnumerable<GitPullRequest> page = GitPullRequests;
-            do
+            var allPullRequests = new List<GitPullRequest>();
+            int startPage = 1;
+            PageIterator<GitPullRequest> iterator;
+            while ((iterator = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian", page: startPage)).HasNext())
             {
-                page = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian", 20, min, "<");
-                GitPullRequests.AddRange(page);
-            } while (page.Any());
+                allPullRequests.AddRange(iterator.Values);
+                startPage = iterator.Page + 1;
+            }
+            GitPullRequests.Clear();
+            GitPullRequests.AddRange(allPullRequests);
 
             _cacheService.Add(CacheKeys.PullRequestCacheKey, GitPullRequests);
         }
 
-        private async Task LoadNewerPullRequests()
+        private async Task LoadNewestPullRequests()
         {
-            IEnumerable<GitPullRequest> page = GitPullRequests;
-            do
+            PageIterator<GitPullRequest> iterator = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian");
+            GitPullRequests.AddRange(iterator.Values);
+            if (iterator.HasNext())
+                GetRemainingPullRequests(startPage: 2);
+        }
+
+        private async Task GetRemainingPullRequests(int startPage)
+        {
+            PageIterator<GitPullRequest> iterator;
+            while ((iterator = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian", page: startPage)).HasNext())
             {
-                var max = GitPullRequests.Any() ? page.Max(x => x.Updated) : DateTime.MinValue;
-                page = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian", 20, max, ">");
-                GitPullRequests.AddRange(page);
-            } while (page.Any());
+                GitPullRequests.AddRange(iterator.Values);
+                startPage = iterator.Page + 1;
+            }
 
             _cacheService.Add(CacheKeys.PullRequestCacheKey, GitPullRequests);
         }
