@@ -102,11 +102,25 @@
                     </Style>
                 </Grid.Style>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontSize="15" Margin="5"/>
+                <Button Grid.Row="0" HorizontalAlignment="Right" IsEnabled="{Binding IsApproveAvailable}" Command="{Binding ApproveCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsApproved}" Value="True">
+                                    <Setter Property="Content" Value="Approve"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsApproved}" Value="False">
+                                    <Setter Property="Content" Value="Unapprove"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
                 <TextBlock VerticalAlignment="Top" Grid.Row="1" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" TextTrimming="WordEllipsis" FontSize="13" FontWeight="Light" Margin="5"/>
             </Grid>
 

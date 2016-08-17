@@ -111,8 +111,6 @@ namespace GitClientVS.Services
         public async Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName)
         {
             //todo put real repository name
-
-            var test = await GetPullRequestsAuthors(ownerName, repositoryName);
             var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(repositoryName, ownerName, 50);
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }

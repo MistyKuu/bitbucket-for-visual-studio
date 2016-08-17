@@ -28,9 +28,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitService _gitService;
         private readonly ICommandsService _commandsService;
         private readonly IDiffFileParser _diffFileParser;
+        private readonly IUserInformationService _userInformationService;
         private string _errorMessage;
         private bool _isLoading;
         private ReactiveCommand<Unit> _initializeCommand;
+        private ReactiveCommand<Unit> _approveCommand;
         private IEnumerable<GitCommit> _commits;
         private IEnumerable<GitComment> _comments;
         private ReactiveCommand<Unit> _showDiffCommand;
@@ -43,32 +45,52 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<object> _expandMainSectionCommand;
         private bool _isMainSectionExpanded;
         private string _mainSectionCommandText;
+        private bool _isApproveAvailable;
+        private bool _isApproved;
 
         [ImportingConstructor]
         public PullRequestsDetailViewModel(
             IGitClientService gitClientService,
             IGitService gitService,
             ICommandsService commandsService,
-            IDiffFileParser diffFileParser
+            IDiffFileParser diffFileParser,
+            IUserInformationService userInformationService
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _commandsService = commandsService;
             _diffFileParser = diffFileParser;
+            _userInformationService = userInformationService;
             this.WhenAnyValue(x => x.IsMainSectionExpanded).Subscribe(_ => MainSectionCommandText = IsMainSectionExpanded ? "Hide" : "Expand");
         }
 
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand ShowDiffCommand => _showDiffCommand;
         public ICommand ExpandMainSectionCommand => _expandMainSectionCommand;
+        public ICommand ApproveCommand => _approveCommand;
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((GitPullRequest)x));
             _showDiffCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), (x) => ShowDiff((FileDiff)x));
+            _approveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => Approve());
             _expandMainSectionCommand = ReactiveCommand.Create(Observable.Return(true));
             _expandMainSectionCommand.Subscribe(_ => IsMainSectionExpanded = !IsMainSectionExpanded);
+        }
+
+        private async Task Approve()
+        {
+            // todo: put a real repo here
+            if (IsApproved)
+            {
+                await _gitClientService.DisapprovePullRequest("test", "test", PullRequest.Id);
+            }
+            else
+            {
+               await _gitClientService.ApprovePullRequest("test", "test", PullRequest.Id);
+            }
+           
         }
 
         private async Task ShowDiff(FileDiff diff)
@@ -80,6 +102,18 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get { return _isMainSectionExpanded; }
             set { this.RaiseAndSetIfChanged(ref _isMainSectionExpanded, value); }
+        }
+
+        public bool IsApproveAvailable
+        {
+            get { return _isApproveAvailable; }
+            set { this.RaiseAndSetIfChanged(ref _isApproveAvailable, value); }
+        }
+
+        public bool IsApproved
+        {
+            get { return _isApproved; }
+            set { this.RaiseAndSetIfChanged(ref _isApproved, value); }
         }
 
         public string MainSectionCommandText
@@ -136,6 +170,20 @@ namespace GitClientVS.Infrastructure.ViewModels
             FileDiffs = _diffFileParser.Parse(diff).ToList();
             CreateFileTree(FileDiffs.ToList());
             CreateCommentTree(Comments.ToList());
+            CheckReviewers();
+        }
+
+        private void CheckReviewers()
+        {
+            IsApproved = true;
+            foreach (var Reviewer in PullRequest.Reviewers)
+            {
+                if (Reviewer.Key == _userInformationService.ConnectionData.UserName)
+                {
+                    IsApproveAvailable = true;
+                    IsApproved = Reviewer.Value;
+                }
+            }
         }
 
         public void CreateCommentTree(List<GitComment> gitComments)
