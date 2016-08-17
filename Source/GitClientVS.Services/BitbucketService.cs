@@ -135,9 +135,9 @@ namespace GitClientVS.Services
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
 
-        public async Task<IEnumerable<GitBranch>> GetBranches(string repoName)
+        public async Task<IEnumerable<GitBranch>> GetBranches(string owner, string repoName)
         {
-            var repositories = await _bitbucketClient.RepositoriesClient.GetBranches(repoName);
+            var repositories = await _bitbucketClient.RepositoriesClient.GetBranches(owner, repoName);
             return repositories.Values.MapTo<List<GitBranch>>();
         }
 

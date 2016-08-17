@@ -131,10 +131,10 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadBranches()
         {
-            var activeRepo = _gitService.GetActiveRepository().Name;
+            var activeRepo = _gitService.GetActiveRepository();
             var activeBranch = _gitService.GetActiveBranchFromActiveRepository();
 
-            Branches = (await _gitClientService.GetBranches(activeRepo)).ToList();
+            Branches = (await _gitClientService.GetBranches(activeRepo.Owner, activeRepo.Name)).ToList();
             SourceBranch = Branches.FirstOrDefault(x => x.Name.Equals(activeBranch, StringComparison.InvariantCultureIgnoreCase));
             DestinationBranch = Branches.FirstOrDefault();
         }
