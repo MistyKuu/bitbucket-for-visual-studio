@@ -15,10 +15,10 @@ namespace BitBucket.REST.API.Clients
             
         }
 
-        public async Task<IteratorBasedPage<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
+        public async Task<IteratorBasedPage<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName, IQueryConnector query = null)
         {
             var url = ApiUrls.PullRequests(ownerName, repositoryName);
-            return await RestClient.GetAllPages<PullRequest>(url, 100);
+            return await RestClient.GetAllPages<PullRequest>(url, 100, query);
         }
 
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequests(string repositoryName)

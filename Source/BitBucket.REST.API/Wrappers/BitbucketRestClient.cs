@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BitBucket.REST.API.Authentication;
 using BitBucket.REST.API.Exceptions;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Serializers;
 using RestSharp;
 
@@ -33,7 +34,7 @@ namespace BitBucket.REST.API.Wrappers
             return response;
         }
 
-        public async Task<IteratorBasedPage<T>> GetAllPages<T>(string url, int limit = 10)
+        public async Task<IteratorBasedPage<T>> GetAllPages<T>(string url, int limit = 10, IQueryConnector query = null)
         {
             var result = new IteratorBasedPage<T>()
             {
@@ -45,6 +46,10 @@ namespace BitBucket.REST.API.Wrappers
             {
                 var request = new BitbucketRestRequest(url, Method.GET);
                 request.AddQueryParameter("pagelen", limit.ToString()).AddQueryParameter("page", pageNumber.ToString());
+                if (query != null)
+                {
+                    request.AddQueryParameter("q", query.Build());
+                }
                 response = await this.ExecuteTaskAsync<IteratorBasedPage<T>>(request);
                 if (response.Data.Values != null)
                 {
