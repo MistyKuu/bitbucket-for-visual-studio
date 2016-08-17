@@ -16,7 +16,7 @@ namespace Bitbucket.REST.API.Integration.Tests
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Username, CredentialsHelper.TestsCredentials.Password);
             var connection = new Connection(credentials);
 
-            var bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection);
+            var bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection, connection);
             Assert.AreEqual(CredentialsHelper.TestsCredentials.Username, bitbucketClient.Connection.Credentials.Login);
         }
 
