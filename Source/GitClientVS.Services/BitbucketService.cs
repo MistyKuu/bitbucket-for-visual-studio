@@ -46,7 +46,7 @@ namespace GitClientVS.Services
             var connection = new Connection(credentials);
             var bitbucketInitializer = new BitbucketClientInitializer(connection);
             _bitbucketClient = await bitbucketInitializer.Initialize();
-            OnConnectionChanged(ConnectionData.Create(login, password));
+            OnConnectionChanged(ConnectionData.Create(_bitbucketClient.Connection.Credentials.Login, password));
         }
 
         public async Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync()

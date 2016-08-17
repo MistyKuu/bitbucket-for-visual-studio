@@ -15,7 +15,7 @@ namespace GitClientVS.Services
     {
         //public IEnumerable<FileDiff> Parse(string diff)
         //{
-            
+
         //}
     }
 
