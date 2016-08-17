@@ -136,11 +136,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             this.WhenAnyValue(x => x.SelectedStatus, x => x.SelectedAuthor).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => Filter());
             this.WhenAnyObservable(x => x.GitPullRequests.Changed).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => Filter());
             this.WhenAnyValue(x => x.SelectedPullRequest).Where(x => x != null).Subscribe(_ => _goToDetailsCommand.Execute(SelectedPullRequest));
-            this.WhenAnyObservable(x => x.GitPullRequests.Changed).Subscribe(_ => Authors = GitPullRequests
-                                                                                                  .Select(x => x.Author)
-                                                                                                  .Where(x => x != null)
-                                                                                                  .DistinctBy(x => x.Username)
-                                                                                                  .ToList());
 
         }
 
