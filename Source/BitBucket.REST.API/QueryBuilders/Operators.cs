@@ -11,9 +11,9 @@ namespace BitBucket.REST.API.QueryBuilders
         Lesser
     }
 
-    static class OperatorsMappings
+    internal static class OperatorsMappings
     {
-        static readonly Dictionary<Operators, string> MappingsDictionary = new Dictionary<Operators, string>()
+        internal static readonly Dictionary<Operators, string> MappingsDictionary = new Dictionary<Operators, string>()
         {
             {Operators.Greater, ">"},
             {Operators.Lesser, "<" }
