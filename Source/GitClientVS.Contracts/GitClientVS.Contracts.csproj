@@ -112,6 +112,7 @@
     <Compile Include="Interfaces\Views\IPublishSectionView.cs" />
     <Compile Include="Interfaces\Views\IPullRequestsMainView.cs" />
     <Compile Include="Interfaces\ILoadableViewModel.cs" />
+    <Compile Include="Models\GitClientModels\PageIterator.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\Tree\CommentTree.cs" />
     <Compile Include="Models\Tree\ICommentTree.cs" />
