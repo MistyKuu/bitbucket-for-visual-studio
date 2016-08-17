@@ -174,7 +174,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             IEnumerable<GitPullRequest> page = GitPullRequests;
             do
             {
-                var min = GitPullRequests.Any() ? page.Min(x => x.Updated) : DateTime.MaxValue;
                 page = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian", 20, min, "<");
                 GitPullRequests.AddRange(page);
             } while (page.Any());

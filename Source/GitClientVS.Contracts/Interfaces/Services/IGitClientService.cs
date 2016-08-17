@@ -26,7 +26,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, string ownerName, long id);
         Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, long id);
 
-        Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit, DateTime date, string sign);
+        Task GetPullRequests(string repositoryName, string ownerName, int limit = 20, int page = 1);
 
         Task<string> GetPullRequestDiff(string repositoryName, string ownerName, long id);
         Task<string> GetPullRequestDiff(string repositoryName, long id);

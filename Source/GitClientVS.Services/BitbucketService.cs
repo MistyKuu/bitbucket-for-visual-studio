@@ -46,7 +46,7 @@ namespace GitClientVS.Services
             var connection = new Connection(credentials);
             var bitbucketInitializer = new BitbucketClientInitializer(connection);
             _bitbucketClient = await bitbucketInitializer.Initialize();
-            OnConnectionChanged(ConnectionData.Create(login, password));
+            OnConnectionChanged(ConnectionData.Create(_bitbucketClient.Connection.Credentials.Login, password));
         }
 
         public async Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync()
@@ -108,12 +108,10 @@ namespace GitClientVS.Services
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
 
-        public async Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit, DateTime date, string sign)
+        public async Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit = 20, int page = 1)
         {
             //todo put real repository name
-            PullRequestQueryBuilder queryBuilder = new PullRequestQueryBuilder();
-            var readyQuery = queryBuilder.StartBuilding().UpdatedOn(date, sign == ">" ? Operators.Greater : Operators.Lesser);
-            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(repositoryName, ownerName, limit, readyQuery);
+            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(repositoryName, ownerName, limit: limit, page: page);
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
 
