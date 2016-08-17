@@ -37,22 +37,26 @@
 
 
             <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">
-                <Grid>
+                <Grid Margin="0,5,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-
-                    <controls1:CustomizedListItem
-                    Date="{Binding Date}"
-                    Title="{Binding Message}"
-                    DateSeparator=" - commited on"
-                    Sender="{Binding Author.DisplayName}"
-                    Image="{Binding Author.Links.Avatar.Href}"
-                    Margin="0,10"
-                    TextWrapping="Wrap"
-                    />
-                    <Separator Grid.Row="1"/>
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="150" MaxWidth="150"/>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <Image Width="30" Height="30" VerticalAlignment="Top" Source="{Binding Author.Links.Avatar.Href}" Margin="0,0,5,0"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Author.DisplayName}" Margin="0,0,10,0" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Foreground="CornflowerBlue" Text="{Binding Hash, Converter={converters:ShortCommitHashConverter}}" />
+                    <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Message}" TextWrapping="Wrap" Margin="15,0,15,0"/>
+                    <TextBlock Grid.Row="0" Grid.Column="4" Text="{Binding Date}" HorizontalAlignment="Right" />
+                    <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="CommentsTemplate" DataType="gitClientModels:GitComment">
@@ -186,7 +190,7 @@
                     </TreeView>
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
-                    <ListBox ItemsSource="{Binding Commits}" ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                    <ListBox ItemsSource="{Binding Commits}" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                              />
                 </controls:MetroTabItem>
                 

@@ -65,7 +65,7 @@
                            TextWrapping="{Binding TextWrapping}"
                            TextTrimming="{Binding TextTrimming}"
                            />
-                <TextBlock Grid.Column="0" Grid.Row="1" TextWrapping="Wrap" FontSize="11" FontWeight="Light">
+                <TextBlock Grid.Column="0" Grid.Row="1" TextWrapping="Wrap" FontSize="12" FontWeight="Light" >
                      <Run  Text="{Binding Sender}" />
                      <Run  Text="{Binding DateSeparator}" />
                      <Run  Text="{Binding Date}"/>`

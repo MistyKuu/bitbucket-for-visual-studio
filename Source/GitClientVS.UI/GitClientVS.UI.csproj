@@ -109,6 +109,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\NegateVisibilityConverter.cs" />
     <Compile Include="Converters\NullToNonVisibilityConverter.cs" />
+    <Compile Include="Converters\ShortCommitHashConverter.cs" />
     <Compile Include="Converters\SubstractConverter.cs" />
     <Compile Include="Converters\TreeViewFolderIconConverter.cs" />
     <Compile Include="Extensions\EnumToItemsSource.cs" />
