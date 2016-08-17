@@ -9,13 +9,14 @@ namespace BitBucket.REST.API
 {
     public class BitbucketClient
     {
-        public BitbucketClient(Connection connection)
+        public BitbucketClient(Connection connection, Connection internaConnection)
         {
             Connection = connection;
             Client = new BitbucketRestClient(connection);
+            InternalClient = new BitbucketRestClient(internaConnection);
             RepositoriesClient = new RepositoriesClient(Client, Connection);
             UserClient = new UserClient(Client, Connection);
-            PullRequestsClient = new PullRequestsClient(Client, Connection);
+            PullRequestsClient = new PullRequestsClient(Client, InternalClient, Connection);
             TeamsClient = new TeamsClient(Client, Connection);
         }
 
@@ -36,6 +37,7 @@ namespace BitBucket.REST.API
         public PullRequestsClient PullRequestsClient { get; private set; }
         
         private BitbucketRestClient Client { get; set; }
+        private BitbucketRestClient InternalClient { get; set; }
 
     }
 }

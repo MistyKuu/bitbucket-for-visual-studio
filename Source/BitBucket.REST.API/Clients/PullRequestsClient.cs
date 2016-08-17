@@ -10,7 +10,7 @@ namespace BitBucket.REST.API.Clients
 {
     public class PullRequestsClient : ApiClient
     {
-        public PullRequestsClient(BitbucketRestClient restClient, Connection connection) : base(restClient, connection)
+        public PullRequestsClient(BitbucketRestClient restClient, BitbucketRestClient internalRestClient, Connection connection) : base(restClient, internalRestClient, connection)
         {
             
         }
@@ -27,6 +27,12 @@ namespace BitBucket.REST.API.Clients
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<PullRequest>>(request);
             return response.Data;
+        }
+
+        public async Task<IteratorBasedPage<UserShort>> GetAuthors(string repositoryName, string ownerName)
+        {
+            var url = ApiUrls.PullRequestsAuthors(ownerName, repositoryName);
+            return await InternalRestClient.GetAllPages<UserShort>(url, 100);
         }
 
         //public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 10)

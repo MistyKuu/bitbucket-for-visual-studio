@@ -80,7 +80,7 @@
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid  Margin="20" >
+    <Grid Margin="20" >
         <controls1:ProgressBar ProgressContent="{Binding ElementName=PrContent}"/>
 
         <Grid x:Name="PrContent">

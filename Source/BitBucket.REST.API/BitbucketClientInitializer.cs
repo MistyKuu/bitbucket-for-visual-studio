@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using BitBucket.REST.API.Clients;
 using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Wrappers;
@@ -18,9 +19,11 @@ namespace BitBucket.REST.API
         public async Task<BitbucketClient> Initialize()
         {
             var response = await this.userClient.GetUser();
-            // to handle email address 
             var connectionWithUsername = new Connection(new Credentials(response.Username, this.connection.Credentials.Password));
-            return new BitbucketClient(connectionWithUsername);
+
+            // todo: check in custom server
+            var internalApiConnection = new Connection(new Uri("https://bitbucket.org/!api/internal/"), new Credentials(response.Username, this.connection.Credentials.Password));
+            return new BitbucketClient(connectionWithUsername, internalApiConnection);
         }
 
         private Connection connection;

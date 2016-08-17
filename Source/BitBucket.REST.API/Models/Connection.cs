@@ -22,6 +22,9 @@ namespace BitBucket.REST.API.Models
         {
             BitbucketUrl = bitbucketUrl;
             Credentials = credentials;
+
+            // todo: check in custom server
+   
         }
 
         public Credentials Credentials { get; private set; }

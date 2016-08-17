@@ -12,8 +12,17 @@ namespace BitBucket.REST.API.Clients
             Connection = connection;
         }
 
+        protected ApiClient(BitbucketRestClient restClient, BitbucketRestClient internalRestClient,  Connection connection)
+        {
+            RestClient = restClient;
+            Connection = connection;
+            InternalRestClient = internalRestClient;
+        }
+
+
         protected Connection Connection { get; private set; }
 
         protected BitbucketRestClient RestClient { get; private set; }
+        protected BitbucketRestClient InternalRestClient { get; private set; }
     }
 }

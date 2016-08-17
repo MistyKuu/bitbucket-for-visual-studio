@@ -33,6 +33,8 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task DisapprovePullRequest(string ownerName, string repositoryName, long id);
         Task<bool> ApprovePullRequest(string ownerName, string repositoryName, long id);
 
+        Task<IEnumerable<GitUser>> GetPullRequestsAuthors(string ownerName, string repositoryName);
+
         bool IsOriginRepo(GitRemoteRepository gitRemoteRepository);
 
         Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName);

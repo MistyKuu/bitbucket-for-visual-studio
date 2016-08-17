@@ -35,6 +35,11 @@ namespace BitBucket.REST.API.Helpers
             return $"repositories/{username}/{repository}/pullrequests?state=ALL";
         }
 
+        public static string PullRequestsAuthors(string username, string repository)
+        {
+            return $"repositories/{username}/{repository}/pr-authors/";
+        }
+
         public static string PullRequest(string username, string repository, long id)
         {
             return $"repositories/{username}/{repository}/pullrequests/{id}";
