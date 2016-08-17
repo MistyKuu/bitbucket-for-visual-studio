@@ -63,6 +63,7 @@
     <Compile Include="AppInitializer.cs" />
     <Compile Include="AppServiceProvider.cs" />
     <Compile Include="Extensions\GitRepositoryExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="GitClientVSPackage.cs" />
     <Compile Include="NavigationItems\PullRequestNavigationItem.cs" />
     <Compile Include="Pages\CreatePullRequestsPage.cs" />

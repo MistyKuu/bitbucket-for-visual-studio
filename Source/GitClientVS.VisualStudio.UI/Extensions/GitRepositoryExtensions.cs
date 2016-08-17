@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using GitClientVS.Contracts.Models.GitClientModels;
 using LibGit2Sharp;
 using Microsoft.VisualStudio.TeamFoundation.Git.Extensibility;
@@ -16,7 +18,16 @@ namespace GitClientVS.VisualStudio.UI.Extensions
             var repo = repoPath == null ? null : new Repository(repoPath);
             if (repo == null) return null;
 
-            return new GitRemoteRepository(dir.Name, repo?.Network.Remotes["origin"]?.Url);
+            var repoUrl = repo?.Network.Remotes["origin"]?.Url;
+            string repoName = null, ownerName = null;
+            if (repoUrl != null)
+            {
+                var repoUri = new Uri(repoUrl);
+                repoName = repoUri.Segments.Last().TrimEnd('/').TrimEnd(".git");
+                ownerName = (repoUri.Segments[repoUri.Segments.Length - 2] ?? "").TrimEnd('/');
+            }
+          
+            return new GitRemoteRepository(repoName, ownerName, repoUrl);
         }
     }
 }
