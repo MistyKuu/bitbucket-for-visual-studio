@@ -123,9 +123,9 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" Margin="0,0,0,5" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontWeight="DemiBold" FontSize="15" />
-                    <Button Grid.Row="0" Grid.RowSpan="2" Margin="0,0,0,5"  HorizontalAlignment="Right" IsEnabled="{Binding IsApproveAvailable}" Command="{Binding ApproveCommand}">
+                    <Button Grid.Row="0"  VerticalAlignment="Center" Grid.RowSpan="2" Margin="0,0,0,5"  HorizontalAlignment="Right" IsEnabled="{Binding IsApproveAvailable}" Command="{Binding ApproveCommand}">
                         <Button.Style>
-                            <Style TargetType="Button">
+                            <Style TargetType="Button" BasedOn="{StaticResource MetroFlatButton}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsApproved}" Value="True">
                                         <Setter Property="Content" Value="Approve"/>
