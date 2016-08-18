@@ -6,6 +6,7 @@ using GitClientVS.Infrastructure;
 using GitClientVS.UI;
 using GitClientVS.VisualStudio.UI.TeamFoundation;
 using Microsoft.TeamFoundation.Controls;
+using Microsoft.TeamFoundation.Controls.WPF.TeamExplorer.Framework;
 
 namespace GitClientVS.VisualStudio.UI.Pages
 {
@@ -20,17 +21,18 @@ namespace GitClientVS.VisualStudio.UI.Pages
             Title = Resources.PullRequestDetailsPageTitle;
             _view = view;
             PageContent = view;
-            
         }
 
         public override void Initialize(object sender, PageInitializeEventArgs e)
         {
             var gitPullRequest = (GitPullRequest)e.Context;
+           
             if (gitPullRequest != null)
             {
                 Title += $" #{gitPullRequest.Id}";
                 _view.InitializeCommand.Execute(gitPullRequest);
             }
         }
+
     }
 }

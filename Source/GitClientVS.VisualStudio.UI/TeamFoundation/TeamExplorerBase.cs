@@ -124,6 +124,7 @@ namespace GitClientVS.VisualStudio.UI.TeamFoundation
 
         protected virtual void ContextChanged(object sender, ContextChangedEventArgs e)
         {
+            
         }
     }
 }

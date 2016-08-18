@@ -278,9 +278,14 @@
                     </TreeView>
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
-                    <ListBox Grid.IsSharedSizeScope="True" ItemsSource="{Binding Commits}" Focusable="False" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                    <ItemsControl Grid.IsSharedSizeScope="True" ItemsSource="{Binding Commits}" Focusable="False" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                              >
-                        <ListBox.Resources>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel VirtualizationMode="Recycling"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
@@ -293,8 +298,8 @@
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
-                        </ListBox.Resources>
-                    </ListBox>
+                        </ItemsControl.Resources>
+                    </ItemsControl>
                 </controls:MetroTabItem>
 
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Comments.Count,FallbackValue=0}"  HeaderStringFormat="{}Comments ({0})">

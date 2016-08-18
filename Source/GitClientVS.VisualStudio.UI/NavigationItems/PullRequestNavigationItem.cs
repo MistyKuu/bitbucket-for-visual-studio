@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -26,7 +28,6 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
         private readonly IPageNavigationService _navigationService;
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
-        private readonly IUserInformationService _userInfoService;
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IUserInformationService _userInformationService;
         private IDisposable _observable;
@@ -47,22 +48,22 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
             _eventAggregator = eventAggregator;
             _userInformationService = userInformationService;
             Text = Resources.PullRequestNavigationItemTitle;
-            //Image = Resources.luki;
-           // IsVisible = ShouldBeVisible(_userInformationService.ConnectionData); TODO activerepository changed + uncomment when development done
-
-            _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
+            Image = Resources.luki;
+            IsVisible = ShouldBeVisible(_userInformationService.ConnectionData);
+            var connectionObs = _eventAggregator.GetEvent<ConnectionChangedEvent>();
+            var repoObs = _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>();
+            _observable = connectionObs.Select(x => Unit.Default).Merge(repoObs.Select(x => Unit.Default)).Subscribe(_ => ValidateVisibility());
         }
 
-        private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)
+        private void ValidateVisibility()
         {
-            IsVisible = ShouldBeVisible(connectionChangedEvent.Data);
+            IsVisible = ShouldBeVisible(_userInformationService.ConnectionData);
         }
+
 
         private bool ShouldBeVisible(ConnectionData connectionData)
         {
-            return true;
-           // return _gitClientService.IsOriginRepo(_gitService.GetActiveRepository()) && connectionData.IsLoggedIn;
-            //TODO if its private i wont be able to see it if not logged in as the user of repo.
+            return connectionData.IsLoggedIn && _gitClientService.IsOriginRepo(_gitService.GetActiveRepository());
         }
 
         public override void Execute()

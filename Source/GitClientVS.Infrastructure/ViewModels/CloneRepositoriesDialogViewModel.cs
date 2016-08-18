@@ -129,7 +129,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private IObservable<bool> CanRefreshObservable()
         {
-            return this.WhenAnyValue(x => x.IsLoading).Select(x => !x);
+            return this.WhenAnyValue(x => x.IsLoading).Select(loading => !loading);
         }
 
         private async Task RefreshRepositories()

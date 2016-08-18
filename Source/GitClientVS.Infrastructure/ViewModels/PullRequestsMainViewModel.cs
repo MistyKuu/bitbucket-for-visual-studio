@@ -218,7 +218,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 GitPullRequests
                 .Where(pullRequest => SelectedStatus == null || pullRequest.Status == SelectedStatus)
                 .Where(pullRequest => SelectedAuthor == null || (pullRequest.Author != null && pullRequest.Author.Username == SelectedAuthor.Username))
-                .OrderByDescending(x => x.Created));
+                .OrderByDescending(x => x.Updated));
         }
 
         private IObservable<bool> CanLoadPullRequests()
