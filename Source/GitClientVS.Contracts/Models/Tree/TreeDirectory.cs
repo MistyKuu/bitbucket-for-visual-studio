@@ -10,6 +10,7 @@ namespace GitClientVS.Contracts.Models
     public class TreeDirectory : ITreeFile, INotifyPropertyChanged
     {
         private bool _isSelected;
+        private bool _isExpanded;
         public string Name { get; set; }
         public List<ITreeFile> Files { get; set; }
 
@@ -23,11 +24,20 @@ namespace GitClientVS.Contracts.Models
             }
         }
 
+        public bool IsExpanded
+        {
+            get { return _isExpanded; }
+            set
+            {
+                _isExpanded = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsAdded { get; set; }
         public bool IsRemoved { get; set; }
         public FileDiff FileDiff { get; set; }
         public Type GetTreeType { get { return this.GetType(); } }
-        public bool IsExpanded { get; set; }
         public bool IsSelectable { get; set; }
         public long Added { get; set; }
         public long Removed { get; set; }
