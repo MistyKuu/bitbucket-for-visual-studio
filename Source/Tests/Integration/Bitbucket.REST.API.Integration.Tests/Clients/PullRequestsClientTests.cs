@@ -22,34 +22,34 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
         [Test]
         public async Task GetAllRepositories()
         {
-            var pullRequests = await bitbucketClient.PullRequestsClient.GetPullRequests("test");
+            //var pullRequests = await bitbucketClient.PullRequestsClient.Ge("test");
 
-            var testStatus = await bitbucketClient.PullRequestsClient.GetPullRequests("test", PullRequestOptions.MERGED);
+            //var testStatus = await bitbucketClient.PullRequestsClient.GetPullRequests("test", PullRequestOptions.MERGED);
 
-            var newPullRequest = new PullRequest();
-            newPullRequest.Title = "testRest";
-            newPullRequest.Description = "testRestDesc";
-            newPullRequest.Source = new Source
-            {
-                Branch = new Branch()
-                {
-                    Name = "testbranch"
-                },
-                Repository = new Repository()
-                {
-                    Name = "test"
-                }
-            };
-            newPullRequest.Destination = new Source()
-            {
-                Branch = new Branch()
-                {
-                    Name = "master"
-                }
-            };
+            //var newPullRequest = new PullRequest();
+            //newPullRequest.Title = "testRest";
+            //newPullRequest.Description = "testRestDesc";
+            //newPullRequest.Source = new Source
+            //{
+            //    Branch = new Branch()
+            //    {
+            //        Name = "testbranch"
+            //    },
+            //    Repository = new Repository()
+            //    {
+            //        Name = "test"
+            //    }
+            //};
+            //newPullRequest.Destination = new Source()
+            //{
+            //    Branch = new Branch()
+            //    {
+            //        Name = "master"
+            //    }
+            //};
 
 
-            var result = await bitbucketClient.PullRequestsClient.CreatePullRequest(newPullRequest, "test");
+            //var result = await bitbucketClient.PullRequestsClient.CreatePullRequest(newPullRequest, "test");
 
         }
     }

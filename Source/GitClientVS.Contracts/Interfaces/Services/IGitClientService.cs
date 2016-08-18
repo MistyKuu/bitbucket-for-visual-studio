@@ -14,27 +14,25 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync();
         Task<IEnumerable<GitRemoteRepository>> GetAllRepositories();
         Task<GitRemoteRepository> CreateRepositoryAsync(GitRemoteRepository newRepository);
-        Task<IEnumerable<GitBranch>> GetBranches(string owner, string repoName);
-        Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName);
-        Task<IEnumerable<GitPullRequest>> GetPullRequests(GitPullRequestStatus gitPullRequestStatus,
-            string repositoryName);
+        Task<IEnumerable<GitBranch>> GetBranches(string repoName, string owner);
+
 
         Task<IEnumerable<GitTeam>> GetTeams();
 
         Task<IEnumerable<GitCommit>> GetPullRequestCommits(string repositoryName, string ownerName, long id);
-        Task<IEnumerable<GitCommit>> GetPullRequestCommits(string repositoryName, long id);
+
         Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, string ownerName, long id);
-        Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, long id);
+   
 
         Task<PageIterator<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit = 20, int page = 1);
 
         Task<string> GetPullRequestDiff(string repositoryName, string ownerName, long id);
         Task<string> GetPullRequestDiff(string repositoryName, long id);
 
-        Task DisapprovePullRequest(string ownerName, string repositoryName, long id);
-        Task<bool> ApprovePullRequest(string ownerName, string repositoryName, long id);
+        Task DisapprovePullRequest(string repositoryName, string ownerName, long id);
+        Task<bool> ApprovePullRequest(string repositoryName, string ownerName, long id);
 
-        Task<IEnumerable<GitUser>> GetPullRequestsAuthors(string ownerName, string repositoryName);
+        Task<IEnumerable<GitUser>> GetPullRequestsAuthors(string repositoryName, string ownerName);
 
         bool IsOriginRepo(GitRemoteRepository gitRemoteRepository);
 

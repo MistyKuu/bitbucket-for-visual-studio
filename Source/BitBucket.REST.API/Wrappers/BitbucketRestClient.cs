@@ -34,7 +34,7 @@ namespace BitBucket.REST.API.Wrappers
             return response;
         }
 
-        public async Task<IteratorBasedPage<T>> GetAllPages<T>(string url, int limit = 10, IQueryConnector query = null)
+        public async Task<IteratorBasedPage<T>> GetAllPages<T>(string url, int limit = 100, IQueryConnector query = null)
         {
             var result = new IteratorBasedPage<T>()
             {

@@ -16,9 +16,7 @@ namespace BitBucket.REST.API.Clients
         public async Task<IteratorBasedPage<Team>> GetTeams()
         {
             var url = ApiUrls.Teams();
-            var request = new BitbucketRestRequest(url, Method.GET);
-            var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<Team>>(request);
-            return response.Data;
+            return await RestClient.GetAllPages<Team>(url);
         }
     }
 }

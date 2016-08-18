@@ -40,6 +40,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private GitUser _selectedAuthor;
         private GitPullRequestStatus? _selectedStatus;
         private GitPullRequest _selectedPullRequest;
+        private GitRemoteRepository _currentRepository;
 
         public ReactiveList<GitPullRequest> GitPullRequests
         {
@@ -124,10 +125,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitService = gitService;
             _pageNavigationService = pageNavigationService;
             _cacheService = cacheService;
+            _currentRepository = _gitService.GetActiveRepository();
             GitPullRequests = new ReactiveList<GitPullRequest>();
             FilteredGitPullRequests = new ReactiveList<GitPullRequest>();
             SetupObservables();
             Authors = new List<GitUser>();
+            // todo: uncomment later
             //  SelectedStatus = GitPullRequestStatus.Open;
         }
 
@@ -151,7 +154,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadPullRequests()
         {
-            Authors = (await _gitClientService.GetPullRequestsAuthors("atlassian", "atlassian-rest")).ToList();
+            Authors = (await _gitClientService.GetPullRequestsAuthors(_currentRepository.Name, _currentRepository.Owner)).ToList();
 
             var result = _cacheService.Get<IEnumerable<GitPullRequest>>(CacheKeys.PullRequestCacheKey);
             if (result.IsSuccess)
@@ -170,7 +173,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             var allPullRequests = new List<GitPullRequest>();
             int startPage = 1;
             PageIterator<GitPullRequest> iterator;
-            while ((iterator = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian", page: startPage)).HasNext())
+            while ((iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner, page: startPage)).HasNext())
             {
                 allPullRequests.AddRange(iterator.Values);
                 startPage = iterator.Page + 1;
@@ -183,7 +186,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadNewestPullRequests()
         {
-            PageIterator<GitPullRequest> iterator = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian");
+            PageIterator<GitPullRequest> iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner);
             GitPullRequests.AddRange(iterator.Values);
             if (iterator.HasNext())
                 GetRemainingPullRequests(startPage: 2);
@@ -192,7 +195,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task GetRemainingPullRequests(int startPage)
         {
             PageIterator<GitPullRequest> iterator;
-            while ((iterator = await _gitClientService.GetPullRequests("atlassian-rest", "atlassian", page: startPage)).HasNext())
+            while ((iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner, page: startPage)).HasNext())
             {
                 GitPullRequests.AddRange(iterator.Values);
                 startPage = iterator.Page + 1;

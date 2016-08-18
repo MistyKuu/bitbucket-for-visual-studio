@@ -134,7 +134,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             var activeRepo = _gitService.GetActiveRepository();
             var activeBranch = _gitService.GetActiveBranchFromActiveRepository();
 
-            Branches = (await _gitClientService.GetBranches(activeRepo.Owner, activeRepo.Name)).ToList();
+            Branches = (await _gitClientService.GetBranches(activeRepo.Name, activeRepo.Owner)).ToList();
             SourceBranch = Branches.FirstOrDefault(x => x.Name.Equals(activeBranch, StringComparison.InvariantCultureIgnoreCase));
             DestinationBranch = Branches.FirstOrDefault();
         }

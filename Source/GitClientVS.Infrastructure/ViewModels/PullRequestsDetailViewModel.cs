@@ -82,13 +82,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task Approve()
         {
             // todo: put a real repo here
+            var activeRepository = _gitService.GetActiveRepository();
             if (IsApproved)
             {
-                await _gitClientService.DisapprovePullRequest("test", "test", PullRequest.Id);
+                await _gitClientService.DisapprovePullRequest(activeRepository.Name, activeRepository.Owner, PullRequest.Id);
             }
             else
             {
-               await _gitClientService.ApprovePullRequest("test", "test", PullRequest.Id);
+               await _gitClientService.ApprovePullRequest(activeRepository.Name, activeRepository.Owner, PullRequest.Id);
             }
 
             // no exception means we did it!
@@ -167,9 +168,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             PullRequest = pr;
             var id = pr.Id;
             var currentRepository = _gitService.GetActiveRepository();
-            Commits = await _gitClientService.GetPullRequestCommits(currentRepository.Owner, currentRepository.Name, id);
-            Comments = await _gitClientService.GetPullRequestComments(currentRepository.Owner, currentRepository.Name, id);
-            var diff = await _gitClientService.GetPullRequestDiff(currentRepository.Owner, currentRepository.Name, id);
+            Commits = await _gitClientService.GetPullRequestCommits(currentRepository.Name, currentRepository.Owner, id);
+            Comments = await _gitClientService.GetPullRequestComments(currentRepository.Name, currentRepository.Owner, id);
+            var diff = await _gitClientService.GetPullRequestDiff(currentRepository.Name, currentRepository.Owner, id);
             FileDiffs = _diffFileParser.Parse(diff).ToList();
             CreateFileTree(FileDiffs.ToList());
             CreateCommentTree(Comments.Where(comment => comment.IsFile == false).ToList());

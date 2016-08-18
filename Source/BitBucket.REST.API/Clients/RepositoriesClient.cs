@@ -18,18 +18,13 @@ namespace BitBucket.REST.API.Clients
 
         public async Task<IteratorBasedPage<Repository>> GetRepositories()
         {
-            var url = ApiUrls.Repositories(Connection.Credentials.Login);
-            var request = new BitbucketRestRequest(url, Method.GET);
-            var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<Repository>>(request);
-            return response.Data;
+            return await GetRepositories(Connection.Credentials.Login);
         }
 
         public async Task<IteratorBasedPage<Repository>> GetRepositories(string owner)
         {
             var url = ApiUrls.Repositories(owner);
-            var request = new BitbucketRestRequest(url, Method.GET);
-            var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<Repository>>(request);
-            return response.Data;
+            return await RestClient.GetAllPages<Repository>(url);
         }
 
         public async Task<IteratorBasedPage<Branch>> GetBranches(string repoName)
@@ -41,9 +36,7 @@ namespace BitBucket.REST.API.Clients
         public async Task<IteratorBasedPage<Branch>> GetBranches(string owner, string repoName)
         {
             var url = ApiUrls.Branches(owner, repoName);
-            var request = new BitbucketRestRequest(url, Method.GET);
-            var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<Branch>>(request);
-            return response.Data;
+            return await RestClient.GetAllPages<Branch>(url);
         }
 
         public async Task<Repository> CreateRepository(Repository repository)

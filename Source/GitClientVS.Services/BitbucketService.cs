@@ -101,12 +101,6 @@ namespace GitClientVS.Services
             return result.MapTo<GitRemoteRepository>();
         }
 
-        public async Task<IEnumerable<GitPullRequest>> GetPullRequests(string repositoryName)
-        {
-            //todo put real repository name
-            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests(repositoryName);
-            return pullRequests.Values.MapTo<List<GitPullRequest>>();
-        }
 
         public async Task<IEnumerable<GitPullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
         {
@@ -136,31 +130,25 @@ namespace GitClientVS.Services
             return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
 
-        public async Task<IEnumerable<GitPullRequest>> GetPullRequests(GitPullRequestStatus gitPullRequestStatus, string repositoryName)
-        {
-            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequests(repositoryName, gitPullRequestStatus.MapTo<PullRequestOptions>());
-            return pullRequests.Values.MapTo<List<GitPullRequest>>();
-        }
-
-        public async Task<IEnumerable<GitBranch>> GetBranches(string owner, string repoName)
+        public async Task<IEnumerable<GitBranch>> GetBranches(string repoName, string owner)
         {
             var repositories = await _bitbucketClient.RepositoriesClient.GetBranches(owner, repoName);
             return repositories.Values.MapTo<List<GitBranch>>();
         }
 
-        public async Task<IEnumerable<GitUser>> GetPullRequestsAuthors(string ownerName, string repositoryName)
+        public async Task<IEnumerable<GitUser>> GetPullRequestsAuthors(string repositoryName, string ownerName)
         {
             var authors = await _bitbucketClient.PullRequestsClient.GetAuthors(repositoryName, ownerName);
             return authors.Values.MapTo<List<GitUser>>();
         }
 
-        public async Task<bool> ApprovePullRequest(string ownerName, string repositoryName, long id)
+        public async Task<bool> ApprovePullRequest(string repositoryName, string ownerName, long id)
         {
             var result = await _bitbucketClient.PullRequestsClient.ApprovePullRequest(repositoryName, ownerName, id);
             return (result != null && result.Approved);
         }
 
-        public async Task DisapprovePullRequest(string ownerName, string repositoryName, long id)
+        public async Task DisapprovePullRequest(string repositoryName, string ownerName, long id)
         {
             await _bitbucketClient.PullRequestsClient.DisapprovePullRequest(repositoryName, ownerName, id);
         }
@@ -188,22 +176,11 @@ namespace GitClientVS.Services
             return commits.Values.MapTo<List<GitCommit>>();
         }
 
-        public async Task<IEnumerable<GitCommit>> GetPullRequestCommits(string repositoryName, long id)
-        {
-            var commits = await _bitbucketClient.PullRequestsClient.GetPullRequestCommits(repositoryName, id);
-            return commits.Values.MapTo<List<GitCommit>>();
-        }
-
         public async Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
         {
             var commits = await _bitbucketClient.PullRequestsClient.GetPullRequestComments(repositoryName, ownerName, id);
             return commits.Values.MapTo<List<GitComment>>();
         }
 
-        public async Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, long id)
-        {
-            var commits = await _bitbucketClient.PullRequestsClient.GetPullRequestComments(repositoryName, id);
-            return commits.Values.MapTo<List<GitComment>>();
-        }
     }
 }
