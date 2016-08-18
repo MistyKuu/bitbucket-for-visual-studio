@@ -149,38 +149,10 @@
                         <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                         <TextBlock Margin="5,0,5,0"  Text="{Binding PullRequest.Status}"></TextBlock>
                         <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                        <Rectangle Width="16" Height="16" Margin="5,0,0,0">
-                            <Rectangle.Fill>
-                                <DrawingBrush>
-                                    <DrawingBrush.Drawing>
-                                        <DrawingGroup>
-                                            <DrawingGroup.Children>
-                                                <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
-                                                <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M8,6.5454C7.63,5.9874,7.227,5.4654,6.807,5.0004L9.193,5.0004C8.773,5.4654,8.37,5.9874,8,6.5454 M10.586,1.0004L8,3.5864 5.414,1.0004 0,1.0004 0,6.4144 4,10.4144 4,7.8624C5.233,9.3074,6,11.2004,6,12.0004L6,15.0004 10,15.0004 10,12.0004C10,11.2004,10.767,9.3074,12,7.8634L12,10.4144 16,6.4144 16,1.0004z" />
-                                                <GeometryDrawing Brush="#FF00539C" Geometry="F1M15,2L15,6 13,8 13,5.414 11.707,6.707C10.111,8.302,9,10.776,9,12L9,14 7,14 7,12C7,10.776,5.889,8.302,4.293,6.707L3,5.414 3,8 1,6 1,2 5,2 7,4 4.414,4 5.707,5.293C6.608,6.194 7.411,7.358 8,8.535 8.589,7.358 9.392,6.194 10.293,5.293L11.586,4 9,4 11,2z" />
-                                            </DrawingGroup.Children>
-                                        </DrawingGroup>
-                                    </DrawingBrush.Drawing>
-                                </DrawingBrush>
-                            </Rectangle.Fill>
-                        </Rectangle>
+                        <controls1:BranchIcon Margin="5,0,0,0"/>
                         <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.SourceBranch}"/>
                         <TextBlock Margin="0,0,5,0" Text="&#x2794;" />
-                        <Rectangle Width="16" Height="16">
-                            <Rectangle.Fill>
-                                <DrawingBrush>
-                                    <DrawingBrush.Drawing>
-                                        <DrawingGroup>
-                                            <DrawingGroup.Children>
-                                                <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
-                                                <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M8,6.5454C7.63,5.9874,7.227,5.4654,6.807,5.0004L9.193,5.0004C8.773,5.4654,8.37,5.9874,8,6.5454 M10.586,1.0004L8,3.5864 5.414,1.0004 0,1.0004 0,6.4144 4,10.4144 4,7.8624C5.233,9.3074,6,11.2004,6,12.0004L6,15.0004 10,15.0004 10,12.0004C10,11.2004,10.767,9.3074,12,7.8634L12,10.4144 16,6.4144 16,1.0004z" />
-                                                <GeometryDrawing Brush="#FF00539C" Geometry="F1M15,2L15,6 13,8 13,5.414 11.707,6.707C10.111,8.302,9,10.776,9,12L9,14 7,14 7,12C7,10.776,5.889,8.302,4.293,6.707L3,5.414 3,8 1,6 1,2 5,2 7,4 4.414,4 5.707,5.293C6.608,6.194 7.411,7.358 8,8.535 8.589,7.358 9.392,6.194 10.293,5.293L11.586,4 9,4 11,2z" />
-                                            </DrawingGroup.Children>
-                                        </DrawingGroup>
-                                    </DrawingBrush.Drawing>
-                                </DrawingBrush>
-                            </Rectangle.Fill>
-                        </Rectangle>
+                        <controls1:BranchIcon />
                         <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.DestinationBranch}"/>
                     </StackPanel>
 

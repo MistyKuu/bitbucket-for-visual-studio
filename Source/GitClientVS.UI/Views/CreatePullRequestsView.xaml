@@ -57,12 +57,10 @@
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <controls1:BranchIcon />
                 <ComboBox SelectedItem="{bindings:ValidatedBinding SourceBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name" IsEnabled="False"/>
-                <Rectangle Fill="Black">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Visual="{StaticResource appbar_add}" Stretch="Fill" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+                <TextBlock Margin="0,0,5,0" Text="&#x2794;" VerticalAlignment="Center" />
+                <controls1:BranchIcon />
                 <ComboBox SelectedItem="{bindings:ValidatedBinding DestinationBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name"/>
             </StackPanel>
 
