@@ -31,6 +31,7 @@ namespace GitClientVS.Infrastructure.Mappings
                 Status = source.State.MapTo<GitPullRequestStatus>(),
                 Created = TimeConverter.GetDate(source.CreatedOn),
                 Updated = TimeConverter.GetDate(source.UpdatedOn),
+                Link = source.Links.Html.Href,
                 CloseSourceBranch = source.CloseSourceBranch,
                 Url = source.Links.Html.Href,
                 Reviewers = reviewers
