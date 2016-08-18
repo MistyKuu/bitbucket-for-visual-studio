@@ -27,6 +27,13 @@ namespace BitBucket.REST.API.Models
    
         }
 
+        public string GetBitbucketUrl()
+        {
+            return "https://bitbucket.org";
+        }
+
+        public string GetHost() { return "bitbucket.org"; }
+
         public Credentials Credentials { get; private set; }
 
         public Uri BitbucketUrl { get; private set; }

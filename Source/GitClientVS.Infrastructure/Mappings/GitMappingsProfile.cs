@@ -33,7 +33,8 @@ namespace GitClientVS.Infrastructure.Mappings
 
             CreateMap<Comment, GitComment>()
                 .ForMember(dto => dto.CreatedOn, e => e.MapFrom(o => TimeConverter.GetDate(o.CreatedOn)))
-                .ForMember(dto => dto.UpdatedOn, e => e.MapFrom(o => TimeConverter.GetDate(o.UpdatedOn)));
+                .ForMember(dto => dto.UpdatedOn, e => e.MapFrom(o => TimeConverter.GetDate(o.UpdatedOn)))
+                .ForMember(dto => dto.IsFile, e => e.MapFrom(o => o.Inline != null));
 
             CreateMap<Content, GitCommentContent>();
             CreateMap<Branch, GitBranch>();

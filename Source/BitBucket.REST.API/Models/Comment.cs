@@ -19,6 +19,9 @@ namespace BitBucket.REST.API.Models
         [JsonProperty(PropertyName = "parent")]
         public Parent Parent { get; set; }
 
+        [JsonProperty(PropertyName = "inline")]
+        public Inline Inline { get; set; }
+
         [JsonProperty(PropertyName = "id")]
         public long Id { get; set; }
 

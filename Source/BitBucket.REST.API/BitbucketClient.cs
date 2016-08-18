@@ -25,10 +25,6 @@ namespace BitBucket.REST.API
             
         }
 
-        public string GetHost()
-        {
-            return "bitbucket.org";
-        }
 
         public TeamsClient TeamsClient { get; private set; }
         public RepositoriesClient RepositoriesClient { get; private set; }

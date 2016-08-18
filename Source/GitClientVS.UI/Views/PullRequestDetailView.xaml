@@ -53,7 +53,14 @@
 
                     <Image Width="30" Height="30" VerticalAlignment="Top" Source="{Binding Author.Links.Avatar.Href}" Margin="0,0,5,0"/>
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Author.DisplayName}" Margin="0,0,10,0" TextWrapping="Wrap"/>
-                    <TextBlock Grid.Row="0" Grid.Column="2" Foreground="CornflowerBlue" Text="{Binding Hash, Converter={converters:ShortCommitHashConverter}}" />
+                    <!--<controls1:HyperlinkButton Grid.Row="0" Grid.Column="2" GoToLink="{Binding CommitHref}" HyperlinkForeground="CornflowerBlue"  HyperlinkContent="{Binding Hash, Converter={converters:ShortCommitHashConverter}}"/>-->
+                    <TextBlock Grid.Row="0" Grid.Column="2">
+                         <Hyperlink NavigateUri="{Binding CommitHref}" RequestNavigate="GoToCommit">
+                              <TextBlock Foreground="CornflowerBlue" Text="{Binding Hash, Converter={converters:ShortCommitHashConverter}}"/>
+                        </Hyperlink>
+                    </TextBlock>
+                       
+               
                     <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Message}" TextWrapping="Wrap" Margin="15,0,15,0"/>
                     <TextBlock Grid.Row="0" Grid.Column="4" Text="{Binding Date}" HorizontalAlignment="Right" />
                     <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"/>
@@ -212,8 +219,23 @@
                     </TreeView>
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
-                    <ListBox Grid.IsSharedSizeScope="True" ItemsSource="{Binding Commits}" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                             />
+                    <ListBox Grid.IsSharedSizeScope="True" ItemsSource="{Binding Commits}" Focusable="False" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                             >
+                        <ListBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Focusable" Value="False"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.Resources>
+                    </ListBox>
                 </controls:MetroTabItem>
 
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Comments.Count,FallbackValue=0}"  HeaderStringFormat="{}Comments ({0})">

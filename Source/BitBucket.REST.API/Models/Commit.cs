@@ -11,6 +11,8 @@ namespace BitBucket.REST.API.Models
         [JsonProperty(PropertyName = "links")]
         public Links Links { get; set; }
 
+        public string CommitHref { get; set; }
+
         [JsonProperty(PropertyName = "repository")]
         public Repository Repository { get; set; }
 

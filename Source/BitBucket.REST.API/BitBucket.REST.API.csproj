@@ -62,6 +62,7 @@
     <Compile Include="Clients\TeamsClient.cs" />
     <Compile Include="Clients\UserClient.cs" />
     <Compile Include="Exceptions\AuthorizationException.cs" />
+    <Compile Include="Exceptions\ForbiddenException.cs" />
     <Compile Include="Exceptions\RequestFailedException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Helpers\ApiHelpers.cs" />

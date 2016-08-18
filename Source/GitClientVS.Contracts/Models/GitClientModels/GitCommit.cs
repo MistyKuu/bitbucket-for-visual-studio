@@ -6,6 +6,8 @@ namespace GitClientVS.Contracts.Models.GitClientModels
     {
         public string Hash { get; set; }
 
+        public string CommitHref { get; set; }
+
         public string Message { get; set; }
 
         public DateTime Date { get; set; }

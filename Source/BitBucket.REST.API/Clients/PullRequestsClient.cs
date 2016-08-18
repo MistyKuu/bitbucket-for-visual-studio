@@ -126,6 +126,10 @@ namespace BitBucket.REST.API.Clients
             var url = ApiUrls.PullRequestCommits(ownerName, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<Commit>>(request);
+            foreach (var commit in response.Data.Values)
+            {
+                commit.CommitHref = $"{Connection.GetBitbucketUrl()}/{ownerName}/{repositoryName}/commits/{commit.Hash}";
+            }
             return response.Data;
         }
 

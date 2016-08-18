@@ -77,8 +77,12 @@ namespace BitBucket.REST.API.Wrappers
                 throw new AuthorizationException();
             }
 
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                throw new ForbiddenException(response.ErrorMessage);
+            }
+
             if (response.StatusCode == HttpStatusCode.BadRequest
-                || response.StatusCode == HttpStatusCode.Forbidden
                 || response.StatusCode == HttpStatusCode.NotFound
                 || response.StatusCode == HttpStatusCode.InternalServerError)
             {

@@ -172,7 +172,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             var diff = await _gitClientService.GetPullRequestDiff("atlassian-rest", "atlassian", id);
             FileDiffs = _diffFileParser.Parse(diff).ToList();
             CreateFileTree(FileDiffs.ToList());
-            CreateCommentTree(Comments.ToList());
+            CreateCommentTree(Comments.Where(comment => comment.IsFile == false).ToList());
             CheckReviewers();
         }
 
@@ -192,6 +192,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         public void CreateCommentTree(List<GitComment> gitComments)
         {
             Dictionary<long, GitComment> searchableGitComments = new Dictionary<long, GitComment>();
+            
             foreach (var comment in gitComments)
             {
                 comment.Content.Html = "<body style='font-size:13px'>" + comment.Content.Html + "</body>";
