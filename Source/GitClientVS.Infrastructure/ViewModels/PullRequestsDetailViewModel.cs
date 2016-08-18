@@ -167,9 +167,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             PullRequest = pr;
             var id = pr.Id;
             var currentRepository = _gitService.GetActiveRepository();
-            Commits = await _gitClientService.GetPullRequestCommits("atlassian-rest", "atlassian", id);
-            Comments = await _gitClientService.GetPullRequestComments("atlassian-rest", "atlassian", id);
-            var diff = await _gitClientService.GetPullRequestDiff("atlassian-rest", "atlassian", id);
+            Commits = await _gitClientService.GetPullRequestCommits(currentRepository.Owner, currentRepository.Name, id);
+            Comments = await _gitClientService.GetPullRequestComments(currentRepository.Owner, currentRepository.Name, id);
+            var diff = await _gitClientService.GetPullRequestDiff(currentRepository.Owner, currentRepository.Name, id);
             FileDiffs = _diffFileParser.Parse(diff).ToList();
             CreateFileTree(FileDiffs.ToList());
             CreateCommentTree(Comments.Where(comment => comment.IsFile == false).ToList());
