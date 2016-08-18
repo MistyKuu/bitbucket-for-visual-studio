@@ -176,7 +176,7 @@
                             </Style>
                         </Separator.Resources>
                     </Separator>
-                    <TextBlock VerticalAlignment="Top" Grid.Row="3" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" TextTrimming="WordEllipsis" FontSize="13" FontWeight="Light" Margin="5"/>
+                    <TextBlock VerticalAlignment="Top" Grid.Row="3" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" TextTrimming="WordEllipsis"  />
                 </Grid>
             </ScrollViewer>
 
