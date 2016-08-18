@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.Composition;
+using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models.GitClientModels;
@@ -14,6 +15,7 @@ namespace GitClientVS.VisualStudio.UI.Pages
     public class PullRequestDetailsPage : TeamExplorerBasePage
     {
         private readonly IPullRequestDetailView _view;
+        private static GitPullRequest _lastPullReq = null;
 
         [ImportingConstructor]
         public PullRequestDetailsPage(IPullRequestDetailView view)
@@ -26,11 +28,16 @@ namespace GitClientVS.VisualStudio.UI.Pages
         public override void Initialize(object sender, PageInitializeEventArgs e)
         {
             var gitPullRequest = (GitPullRequest)e.Context;
-           
             if (gitPullRequest != null)
             {
                 Title += $" #{gitPullRequest.Id}";
                 _view.InitializeCommand.Execute(gitPullRequest);
+                _lastPullReq = gitPullRequest;
+            }
+            else if (_lastPullReq != null)
+            {
+                Title += $" #{_lastPullReq.Id}";
+                _view.InitializeCommand.Execute(_lastPullReq);
             }
         }
 

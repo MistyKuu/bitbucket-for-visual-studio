@@ -15,7 +15,7 @@ namespace GitClientVS.VisualStudio.UI.Pages
         {
             Title = Resources.CreatePullRequestsPageTitle;
             PageContent = view;
-            
         }
+
     }
 }
