@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Infrastructure.Extensions;
+using GitClientVS.UI.Helpers;
 using GitClientVS.VisualStudio.UI.Window;
 using log4net;
 using Microsoft.TeamFoundation.Controls;
@@ -65,13 +66,16 @@ namespace GitClientVS.VisualStudio.UI
         public const string PackageGuidString = "69c97fa4-92b5-448c-b5db-037dd9c2c8b7";
         public const string GitExtensionsId = "11B8E6D7-C08B-4385-B321-321078CDD1F8";
 
+        static GitClientVSPackage()
+        {
+            AssemblyResolver.InitializeAssemblyResolver();
+        }
+
         public GitClientVSPackage()
         {
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
-
-
 
         #region Package Members
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -85,7 +89,6 @@ namespace GitClientVS.VisualStudio.UI
 
         protected override async void Initialize()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += LoadNotLoadedAssemblies;
             base.Initialize();
 
             var componentModel = this.GetService<SComponentModel, IComponentModel>();
@@ -99,58 +102,9 @@ namespace GitClientVS.VisualStudio.UI
             gitWatcher.Initialize();
             await appInitializer.Initialize();
             Logger.Info("Initialized GitClientVsPackage Extension");
-
         }
 
-        #region JustInCaseLoadingAssemblies
-
-        static readonly string[] OurAssemblies =
-      {
-            "GitClientVS.Api",
-            "GitClientVS.Contracts",
-            "GitClientVS.Infrastructure",
-            "GitClientVS.Services",
-            "GitClientVS.UI",
-            "GitClientVS.VisualStudio.UI",
-            "MahApps.Metro",
-            "WpfControls",
-            "ICSharpCode.AvalonEdit",
-            "ParseDiff",
-            "HtmlRenderer",
-            "HtmlRenderer.WPF",
-            "System.Windows.Interactivity"
-        };
-
-
-        private Assembly LoadNotLoadedAssemblies(object sender, ResolveEventArgs e)
-        {
-            try
-            {
-                var name = new AssemblyName(e.Name);
-                if (!OurAssemblies.Contains(name.Name))
-                    return null;
-                var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                var filename = Path.Combine(path, name.Name + ".dll");
-                if (!File.Exists(filename))
-                    return null;
-                return Assembly.LoadFrom(filename);
-            }
-            catch (Exception ex)
-            {
-                var log = string.Format(CultureInfo.CurrentCulture,
-                    "Error occurred loading {0} from {1}.{2}{3}{4}",
-                    e.Name,
-                    Assembly.GetExecutingAssembly().Location,
-                    Environment.NewLine,
-                    ex,
-                    Environment.NewLine);
-
-                Logger.Error(log);
-
-            }
-            return null;
-        }
-        #endregion
+     
 
         #endregion
     }

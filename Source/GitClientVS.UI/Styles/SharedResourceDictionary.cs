@@ -13,6 +13,11 @@ namespace GitClientVS.UI.Styles
 {
     public class SharedResourceDictionary : ResourceDictionary
     {
+
+        static SharedResourceDictionary()
+        {
+            AssemblyResolver.InitializeAssemblyResolver();
+        }
         /// <summary>
         /// Internal cache of loaded dictionaries 
         /// </summary>
