@@ -91,7 +91,7 @@
                     </Style>
                 </ScrollViewer.Style>
 
-                <Grid Margin="5">
+                <Grid Margin="5" x:Name="MainSectionGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
