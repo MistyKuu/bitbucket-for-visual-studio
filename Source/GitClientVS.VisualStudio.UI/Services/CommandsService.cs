@@ -35,6 +35,12 @@ namespace GitClientVS.VisualStudio.UI.Services
             _package = (Package)package;
         }
 
+
+        public void ShowPullRequestsWindow()
+        {
+            var window = ShowWindow<PullRequestsWindow>();
+        }
+
         public void ShowDiffWindow(object parameter, int id)
         {
             var window = ShowWindow<DiffWindow>(id);

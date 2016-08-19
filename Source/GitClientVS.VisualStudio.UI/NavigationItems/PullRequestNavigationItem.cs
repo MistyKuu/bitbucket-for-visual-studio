@@ -30,6 +30,7 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
         private readonly IGitService _gitService;
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IUserInformationService _userInformationService;
+        private readonly ICommandsService _commandService;
         private IDisposable _observable;
         public const string PullRequestsNavigationItemId = "5245767A-B657-4F8E-BFEE-F04159F1DDA3";
 
@@ -39,7 +40,8 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
             IGitClientService gitClientService,
             IGitService gitService,
             IEventAggregatorService eventAggregator,
-            IUserInformationService userInformationService
+            IUserInformationService userInformationService,
+            ICommandsService commandService
             ) : base(null)
         {
             _navigationService = navigationService;
@@ -47,6 +49,7 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
             _gitService = gitService;
             _eventAggregator = eventAggregator;
             _userInformationService = userInformationService;
+            _commandService = commandService;
             Text = Resources.PullRequestNavigationItemTitle;
             Image = Resources.PullRequest;
             IsVisible = ShouldBeVisible(_userInformationService.ConnectionData);
@@ -68,7 +71,8 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
 
         public override void Execute()
         {
-            _navigationService.Navigate(PageIds.PullRequestsMainPageId);
+            _commandService.ShowPullRequestsWindow();
+           // _navigationService.Navigate(PageIds.PullRequestsMainPageId);
         }
 
         public override void Dispose()

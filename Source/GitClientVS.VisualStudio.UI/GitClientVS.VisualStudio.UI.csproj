@@ -84,6 +84,7 @@
     <Compile Include="TeamFoundation\TeamExplorerBasePage.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBaseSection.cs" />
     <Compile Include="Window\DiffWindow.cs" />
+    <Compile Include="Window\PullRequestsWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -102,6 +103,7 @@
     </Content>
     <Content Include="Resources\GitClientVSPackage.ico" />
     <Content Include="stylesheet.css" />
+    <Content Include="Window\Resources\PullRequestsWindowCommand.png" />
     <VSCTCompile Include="Window\GitClientVSPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>

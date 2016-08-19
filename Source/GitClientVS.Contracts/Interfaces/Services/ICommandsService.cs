@@ -5,5 +5,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
     {
         void ShowDiffWindow(object parameter, int id);
         void Initialize(object package);
+        void ShowPullRequestsWindow();
     }
 }
