@@ -65,16 +65,28 @@
 
                     <Grid Grid.Row="0" Grid.Column="1" Margin="10, 5, 10, 5">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Margin="0, 0, 0, 5" Orientation="Horizontal">
-                            <TextBlock Margin="0,0,7,0" FontWeight="Bold" Foreground="#3572b0" Text="{Binding Title}" TextWrapping="Wrap"></TextBlock>
+                        <Grid Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Margin="0,0,7,0" FontWeight="Bold" Foreground="#3572b0" Text="{Binding Title}"  TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
+                            <TextBlock  Grid.Column="1" Margin="0,0,5,0" Text="&#x2794;" Foreground="DarkGray" TextTrimming="WordEllipsis" TextWrapping="Wrap" />
+                            <controls1:BranchIcon  Grid.Column="2" Margin="0,0,3,0"/>
+                            <TextBlock  Grid.Column="3" Margin="0,0,10,0" Text="{Binding DestinationBranch}" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
+                        </Grid>
+                        <!--<StackPanel Grid.Row="0" Margin="0, 0, 0, 5" Orientation="Horizontal">
+                            <TextBlock Margin="0,0,7,0" FontWeight="Bold" Foreground="#3572b0" Text="{Binding Title}"  TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
                             <TextBlock Margin="0,0,5,0" Text="&#x2794;" Foreground="DarkGray" />
                             <controls1:BranchIcon Margin="0,0,3,0"/>
                             <TextBlock Margin="0,0,10,0" Text="{Binding DestinationBranch}" />
-                        </StackPanel>
-                        <TextBlock Grid.Row="1" TextWrapping="Wrap">
+                        </StackPanel>-->
+                        <TextBlock Grid.Row="1" TextWrapping="Wrap" TextTrimming="WordEllipsis">
                             <Run Text="{Binding Author.DisplayName}"/>
                             <Run Text=" - #"/><Run Text="{Binding Id}"/><Run Text=", last updated on"/>
                             <Run Text="{Binding Updated}"/>
@@ -92,17 +104,6 @@
                         </StackPanel>
                     </Grid>
                     
-                    <!--<controls1:CustomizedListItem
-                    Date="{Binding Updated}"
-                    DateSeparator=" - updated on"
-                    Title="{Binding Title}"
-                    Sender="{Binding Author.DisplayName}"
-                    Image="{Binding Author.Links.Avatar.Href}"
-                    Margin="0,10"
-                    TextWrapping="NoWrap"
-                    TextTrimming="WordEllipsis"
-                    GoToLink="{Binding Url}"
-                    />-->
                     <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
                 </Grid>
             </DataTemplate>
