@@ -28,22 +28,15 @@ namespace GitClientVS.VisualStudio.UI
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IStorageService _storageService;
         private readonly IGitClientService _gitClient;
-        private readonly IEventAggregatorService _eventAggregator;
-        private readonly ICacheService _cacheService;
 
         [ImportingConstructor]
         public AppInitializer(
             IStorageService storageService,
-            IGitClientService gitClient,
-            IEventAggregatorService eventAggregator,
-            ICacheService cacheService
+            IGitClientService gitClient
             )
         {
             _storageService = storageService;
             _gitClient = gitClient;
-            _eventAggregator = eventAggregator;
-            _cacheService = cacheService;
-            _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(_ => cacheService.Delete(CacheKeys.PullRequestCacheKey));
         }
 
         public async Task Initialize()

@@ -2,7 +2,8 @@
 
 namespace GitClientVS.Contracts.Interfaces.Views
 {
-    public interface IPullRequestsWindow : IWorkflowWindow, IDisposable
+    public interface IPullRequestsWindow : IWorkflowWindow
     {
+        void Close();
     }
 }

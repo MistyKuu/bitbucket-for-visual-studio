@@ -22,6 +22,8 @@ namespace GitClientVS.VisualStudio.UI.Services
         private readonly IAppServiceProvider _appServiceProvider;
         private readonly IEventAggregatorService _eventAggregator;
         private readonly Subject<NavigationEvent> _navigationSubject = new Subject<NavigationEvent>();
+        private readonly ReactiveList<NavigationEvent> _navigationHistory = new ReactiveList<NavigationEvent>();
+        private int _currentPageIndex = -1;
 
         private int CurrentPageIndex
         {
@@ -35,14 +37,10 @@ namespace GitClientVS.VisualStudio.UI.Services
             }
         }
 
-        private readonly ReactiveList<NavigationEvent> _navigationHistory = new ReactiveList<NavigationEvent>();
-        private int _currentPageIndex = -1;
-
         [ImportingConstructor]
-        public PageNavigationService(IAppServiceProvider appServiceProvider, IEventAggregatorService eventAggregator)
+        public PageNavigationService(IAppServiceProvider appServiceProvider)
         {
             _appServiceProvider = appServiceProvider;
-            _eventAggregator = eventAggregator;
         }
 
         public IObservable<bool> CanNavigateBackObservable
@@ -67,6 +65,13 @@ namespace GitClientVS.VisualStudio.UI.Services
                 vm?.InitializeCommand.Execute(ev.Parameter);
                 _navigationSubject.OnNext(ev);
             }
+        }
+
+
+        public void ClearNavigationHistory()
+        {
+            _navigationHistory.Clear();
+            CurrentPageIndex = -1;
         }
 
         public void NavigateForward()

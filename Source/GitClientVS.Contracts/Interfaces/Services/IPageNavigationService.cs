@@ -11,5 +11,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
         IObservable<bool> CanNavigateBackObservable { get; }
         IObservable<bool> CanNavigateForwardObservable { get; }
         void NavigateForward();
+        void ClearNavigationHistory();
     }
 }

@@ -41,7 +41,7 @@ namespace GitClientVS.UI.Views
 
         private void CloseWindow(object sender, EventArgs e)
         {
-            Window.Dispose();
+            Window.Close();
         }
 
         public IPullRequestsWindowContainerViewModel ViewModel { get; set; }

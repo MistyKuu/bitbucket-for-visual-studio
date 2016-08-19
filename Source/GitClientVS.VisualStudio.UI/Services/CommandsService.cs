@@ -73,10 +73,12 @@ namespace GitClientVS.VisualStudio.UI.Services
 
             ToolWindowPane window = _package.FindToolWindow(typeof(TWindow), id, true);
 
+
             if (window?.Frame == null)
                 throw new NotSupportedException("Cannot create window");
 
             IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
+      
             Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
 
             return window as TWindow;
