@@ -197,16 +197,6 @@ namespace GitClientVS.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap luki {
-            get {
-                object obj = ResourceManager.GetObject("luki", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {
@@ -248,6 +238,16 @@ namespace GitClientVS.UI {
         public static string PublishSectionTitle {
             get {
                 return ResourceManager.GetString("PublishSectionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap PullRequest {
+            get {
+                object obj = ResourceManager.GetObject("PullRequest", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

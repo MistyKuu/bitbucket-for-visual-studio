@@ -319,6 +319,7 @@
     </Resource>
     <Content Include="Resources\Entypo-license.txt" />
     <None Include="Resources\luki.png" />
+    <None Include="Resources\PullRequest_24x.png" />
     <Content Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

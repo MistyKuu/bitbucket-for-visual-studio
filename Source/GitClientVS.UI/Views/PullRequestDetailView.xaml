@@ -417,7 +417,7 @@
 
                                 <StackPanel Orientation="Vertical" Margin="0,5,0,5">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding Comment.User.Links.Avatar.Href}" Margin="0,0,5,0"/>
+                                        <Image Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
                                         <TextBlock HorizontalAlignment="Stretch" Text="{Binding Comment.User.Username}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
                                     </StackPanel>
 

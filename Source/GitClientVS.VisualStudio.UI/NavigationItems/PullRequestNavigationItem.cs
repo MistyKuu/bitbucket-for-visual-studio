@@ -31,7 +31,7 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IUserInformationService _userInformationService;
         private IDisposable _observable;
-        public const string PullRequestsNavigationItemId = "4269bd3b-7f80-4463-978e-8a1c9431c362";
+        public const string PullRequestsNavigationItemId = "5245767A-B657-4F8E-BFEE-F04159F1DDA3";
 
         [ImportingConstructor]
         public PullRequestNavigationItem(
@@ -48,7 +48,7 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
             _eventAggregator = eventAggregator;
             _userInformationService = userInformationService;
             Text = Resources.PullRequestNavigationItemTitle;
-            Image = Resources.luki;
+            Image = Resources.PullRequest;
             IsVisible = ShouldBeVisible(_userInformationService.ConnectionData);
             var connectionObs = _eventAggregator.GetEvent<ConnectionChangedEvent>();
             var repoObs = _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>();
