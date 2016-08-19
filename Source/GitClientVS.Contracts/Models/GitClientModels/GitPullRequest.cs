@@ -18,6 +18,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public string Url { get; set; }
         public Dictionary<string, bool> Reviewers { get; set; }
         public string Link { get; set; }
+        public int CommentsCount { get; set; }
 
         public GitPullRequest(string title, string description, string sourceBranch, string destinationBranch) : 
             this(title, description, sourceBranch, destinationBranch, null)

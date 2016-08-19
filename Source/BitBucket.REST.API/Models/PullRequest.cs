@@ -51,6 +51,9 @@ namespace BitBucket.REST.API.Models
         [JsonProperty(PropertyName = "id")]
         public long Id { get; set; }
 
+        [JsonProperty(PropertyName = "comment_count")]
+        public int CommentsCount { get; set; }
+
         [JsonProperty(PropertyName = "reviewers")]
         public List<UserShort> Reviewers { get; set; }
 

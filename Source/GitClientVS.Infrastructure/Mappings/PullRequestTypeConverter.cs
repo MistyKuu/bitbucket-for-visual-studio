@@ -34,7 +34,8 @@ namespace GitClientVS.Infrastructure.Mappings
                 Link = source.Links.Html.Href,
                 CloseSourceBranch = source.CloseSourceBranch,
                 Url = source.Links.Html.Href,
-                Reviewers = reviewers
+                Reviewers = reviewers,
+                CommentsCount = source.CommentsCount
             };
         }
     }

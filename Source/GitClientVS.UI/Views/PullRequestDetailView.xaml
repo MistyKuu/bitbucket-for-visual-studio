@@ -59,30 +59,11 @@
                               <TextBlock Foreground="CornflowerBlue" Text="{Binding Hash, Converter={converters:ShortCommitHashConverter}}"/>
                         </Hyperlink>
                     </TextBlock>
-                       
-               
+
+
                     <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Message}" TextWrapping="Wrap" Margin="15,0,15,0"/>
                     <TextBlock Grid.Row="0" Grid.Column="4" Text="{Binding Date}" HorizontalAlignment="Right" />
                     <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"/>
-                </Grid>
-            </DataTemplate>
-            <DataTemplate x:Key="CommentsTemplate" DataType="gitClientModels:GitComment">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <controls1:CustomizedListItem
-                    Date="{Binding CreatedOn}"
-                    Title="{Binding Content.Raw}"
-                    DateSeparator=" - sent on"
-                    Sender="{Binding User.DisplayName}"
-                    Image="{Binding User.Links.Avatar.Href}"
-                    Margin="0,10"
-                    TextWrapping="Wrap"
-                    />
-                    <Separator Grid.Row="1"/>
                 </Grid>
             </DataTemplate>
         </ResourceDictionary>
@@ -141,8 +122,7 @@
                         <TextBlock Margin="0,0,5,0">
                              <Hyperlink NavigateUri="{Binding PullRequest.Link}" RequestNavigate="GoToCommit">
                                   <TextBlock Foreground="CornflowerBlue">
-                                        <Run Text="#"></Run>
-                                        <Run Text="{Binding PullRequest.Id}"></Run>
+                                        <Run Text="#"></Run><Run Text="{Binding PullRequest.Id}"></Run>
                                   </TextBlock>
                             </Hyperlink>
                         </TextBlock>
@@ -278,28 +258,30 @@
                     </TreeView>
                 </controls:MetroTabItem>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
-                    <ItemsControl Grid.IsSharedSizeScope="True" ItemsSource="{Binding Commits}" Focusable="False" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl Margin="5" Grid.IsSharedSizeScope="True" ItemsSource="{Binding Commits}" Focusable="False" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                              >
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel VirtualizationMode="Recycling"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.Resources>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
-                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Focusable" Value="False"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="Transparent"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ItemsControl.Resources>
-                    </ItemsControl>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel VirtualizationMode="Recycling"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Focusable" Value="False"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ItemsControl.Resources>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </controls:MetroTabItem>
 
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Comments.Count,FallbackValue=0}"  HeaderStringFormat="{}Comments ({0})">

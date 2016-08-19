@@ -41,14 +41,58 @@
         </Grid.RowDefinitions>
 
         <Grid.Resources>
+       
+                <Canvas x:Key="notification"  Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0" >
+                    <Path Width="38" Height="33" Canvas.Left="19" Canvas.Top="24" Stretch="Fill" Fill="Gainsboro" Data="F1 M 19,24L 57,24L 57,48L 47,48L 38,57L 29,48L 19,48L 19,24 Z "/>
+                </Canvas>
+          
+            
+
             <DataTemplate x:Key="PullRequestTemplate" DataType="gitClientModels:GitPullRequest">
-                <Grid>
+                <Grid Margin="0,0,5,0">
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Image Width="30" Height="30"  Source="{Binding Author.Links.Avatar.Href}" VerticalAlignment="Center"/>
 
-                    <controls1:CustomizedListItem
+                    <Grid Grid.Row="0" Grid.Column="1" Margin="10, 5, 10, 5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0, 0, 0, 5" Orientation="Horizontal">
+                            <TextBlock Margin="0,0,7,0" FontWeight="Bold" Foreground="#3572b0" Text="{Binding Title}" TextWrapping="Wrap"></TextBlock>
+                            <TextBlock Margin="0,0,5,0" Text="&#x2794;" Foreground="DarkGray" />
+                            <controls1:BranchIcon Margin="0,0,3,0"/>
+                            <TextBlock Margin="0,0,10,0" Text="{Binding DestinationBranch}" />
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" TextWrapping="Wrap">
+                            <Run Text="{Binding Author.DisplayName}"/>
+                            <Run Text=" - #"/><Run Text="{Binding Id}"/><Run Text=", last updated on"/>
+                            <Run Text="{Binding Updated}"/>
+                        </TextBlock>
+                    </Grid>
+                    
+                    <Grid Grid.Row="0"  Grid.Column="2" Margin="0,0,5,0" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="20" Height="20" Margin="0,0,5,0" VerticalAlignment="Center">
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Fill" Visual="{DynamicResource notification}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding CommentsCount}"/>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!--<controls1:CustomizedListItem
                     Date="{Binding Updated}"
                     DateSeparator=" - updated on"
                     Title="{Binding Title}"
@@ -58,8 +102,8 @@
                     TextWrapping="NoWrap"
                     TextTrimming="WordEllipsis"
                     GoToLink="{Binding Url}"
-                    />
-                    <Separator Grid.Row="1"/>
+                    />-->
+                    <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
                 </Grid>
             </DataTemplate>
 
@@ -116,7 +160,8 @@
 
         <controls1:ProgressBar Grid.Row="1" ProgressContent="{Binding ElementName=PullRequests}"/>
 
-        <ListBox Grid.Row="1" Margin="20" x:Name="PullRequests"
+        <ListBox Grid.Row="1" x:Name="PullRequests"
+                 HorizontalContentAlignment="Stretch"
                  ItemsSource="{Binding FilteredGitPullRequests}"
                  SelectedItem="{Binding SelectedPullRequest, Mode=TwoWay}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
