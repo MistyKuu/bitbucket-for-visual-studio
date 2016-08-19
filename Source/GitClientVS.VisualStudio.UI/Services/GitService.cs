@@ -54,7 +54,8 @@ namespace GitClientVS.VisualStudio.UI.Services
 
         public string GetHeadCommitOfActiveBranch()
         {
-            return GetRepository().Head.Tip.Sha;
+            var repo = GetRepository();
+            return repo?.Head?.Tip?.Sha;
         }
 
         public GitRemoteRepository GetActiveRepository()

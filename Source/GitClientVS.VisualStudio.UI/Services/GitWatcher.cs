@@ -37,6 +37,11 @@ namespace GitClientVS.VisualStudio.UI.Services
             gitExt.PropertyChanged += CheckAndUpdate;
         }
 
+        public void Refresh()
+        {
+            ActiveRepo = _gitService.GetActiveRepository();
+        }
+
         void CheckAndUpdate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName != "ActiveRepositories")
@@ -54,9 +59,6 @@ namespace GitClientVS.VisualStudio.UI.Services
             get { return activeRepo; }
             private set
             {
-                if (activeRepo == value)
-                    return;
-   
                 activeRepo = value;
 
                 eventAggregatorService.Publish(new ActiveRepositoryChangedEvent(value));

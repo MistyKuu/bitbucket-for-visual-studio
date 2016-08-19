@@ -47,7 +47,7 @@ namespace GitClientVS.VisualStudio.UI.Sections
 
         private bool IsGitLocalRepoAndLoggedIn(GitRemoteRepository repo)
         {
-            return (repo != null && string.IsNullOrEmpty(repo.CloneUrl)) && _userInformationService.ConnectionData.IsLoggedIn;
+            return _userInformationService.ConnectionData.IsLoggedIn && (repo != null && string.IsNullOrEmpty(repo.CloneUrl));
         }
 
         public override void Initialize(object sender, SectionInitializeEventArgs e)
