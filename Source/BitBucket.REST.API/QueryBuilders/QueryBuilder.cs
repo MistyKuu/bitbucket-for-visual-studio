@@ -40,6 +40,18 @@ namespace BitBucket.REST.API.QueryBuilders
             return this;
         }
 
+        public IQueryConnector SortAsc(string fieldName)
+        {
+            query.Append($" sort=-{fieldName}");
+            return this;
+        }
+
+        public IQueryConnector SortDesc(string fieldName)
+        {
+            query.Append($" sort={fieldName}");
+            return this;
+        }
+
         public IQueryConnector State(PullRequestOptions option)
         {
             query.Append($" state='{option}'");
