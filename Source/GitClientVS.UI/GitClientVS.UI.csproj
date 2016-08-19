@@ -129,6 +129,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Styles\SharedResourceDictionary.cs" />
+    <Compile Include="Views\PullRequestsWindowContainer.xaml.cs">
+      <DependentUpon>PullRequestsWindowContainer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DiffWindowControl.xaml.cs">
       <DependentUpon>DiffWindowControl.xaml</DependentUpon>
     </Compile>
@@ -237,6 +240,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\SharedDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PullRequestsWindowContainer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
+using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
-using GitClientVS.Contracts.Interfaces.ViewModels;
+using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
-using GitClientVS.Infrastructure;
-using GitClientVS.Infrastructure.Events;
 using GitClientVS.UI;
-using GitClientVS.VisualStudio.UI.Pages;
 using GitClientVS.VisualStudio.UI.TeamFoundation;
 using Microsoft.TeamFoundation.Controls;
-using Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;
-using Microsoft.VisualStudio.Shell;
 
 namespace GitClientVS.VisualStudio.UI.NavigationItems
 {
@@ -25,7 +16,6 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class PullRequestNavigationItem : TeamExplorerBaseNavigationItem
     {
-        private readonly IPageNavigationService _navigationService;
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IEventAggregatorService _eventAggregator;
@@ -36,7 +26,6 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
 
         [ImportingConstructor]
         public PullRequestNavigationItem(
-            IPageNavigationService navigationService,
             IGitClientService gitClientService,
             IGitService gitService,
             IEventAggregatorService eventAggregator,
@@ -44,7 +33,6 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
             ICommandsService commandService
             ) : base(null)
         {
-            _navigationService = navigationService;
             _gitClientService = gitClientService;
             _gitService = gitService;
             _eventAggregator = eventAggregator;
@@ -72,7 +60,6 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
         public override void Execute()
         {
             _commandService.ShowPullRequestsWindow();
-           // _navigationService.Navigate(PageIds.PullRequestsMainPageId);
         }
 
         public override void Dispose()

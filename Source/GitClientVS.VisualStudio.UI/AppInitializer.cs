@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure;
-using GitClientVS.Infrastructure.Events;
 using GitClientVS.Infrastructure.Mappings;
 using GitClientVS.UI.Helpers;
 using log4net;
@@ -30,24 +30,20 @@ namespace GitClientVS.VisualStudio.UI
         private readonly IGitClientService _gitClient;
         private readonly IEventAggregatorService _eventAggregator;
         private readonly ICacheService _cacheService;
-        private readonly IPageNavigationService _navigationService;
 
         [ImportingConstructor]
         public AppInitializer(
             IStorageService storageService,
             IGitClientService gitClient,
             IEventAggregatorService eventAggregator,
-            ICacheService cacheService,
-            IPageNavigationService navigationService
+            ICacheService cacheService
             )
         {
             _storageService = storageService;
             _gitClient = gitClient;
             _eventAggregator = eventAggregator;
             _cacheService = cacheService;
-            _navigationService = navigationService;
             _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(_ => cacheService.Delete(CacheKeys.PullRequestCacheKey));
-            _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(_ => navigationService.Navigate(TeamExplorerPageIds.Home));
         }
 
         public async Task Initialize()

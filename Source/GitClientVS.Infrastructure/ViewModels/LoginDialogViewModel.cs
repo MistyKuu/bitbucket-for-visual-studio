@@ -19,7 +19,6 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
-using GitClientVS.Infrastructure.Events;
 using log4net;
 using log4net.Config;
 

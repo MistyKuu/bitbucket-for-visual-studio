@@ -94,9 +94,6 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CacheKeys.cs" />
-    <Compile Include="Events\ActiveRepositoryChangedEvent.cs" />
-    <Compile Include="Events\ConnectionChangedEvent.cs" />
-    <Compile Include="Events\ThemeChangedEvent.cs" />
     <Compile Include="Extensions\ChainingExtensions.cs" />
     <Compile Include="Extensions\CommonExtensions.cs" />
     <Compile Include="Extensions\MapperExtensions.cs" />
@@ -125,6 +122,7 @@
     <Compile Include="ViewModels\LoginDialogViewModel.cs" />
     <Compile Include="ViewModels\ConnectSectionViewModel.cs" />
     <Compile Include="ViewModels\PullRequestsMainViewModel.cs" />
+    <Compile Include="ViewModels\PullRequestsWindowContainerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

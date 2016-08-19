@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading;
+using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models.GitClientModels;
-using GitClientVS.Infrastructure.Events;
 using GitClientVS.VisualStudio.UI.Extensions;
 using Microsoft.VisualStudio.TeamFoundation.Git.Extensibility;
 

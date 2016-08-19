@@ -1,6 +1,6 @@
 ﻿using GitClientVS.Contracts.Models.GitClientModels;
 
-namespace GitClientVS.Infrastructure.Events
+namespace GitClientVS.Contracts.Events
 {
     public class ActiveRepositoryChangedEvent
     {

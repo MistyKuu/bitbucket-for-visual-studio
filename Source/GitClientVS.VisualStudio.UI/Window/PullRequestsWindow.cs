@@ -5,6 +5,8 @@
 //------------------------------------------------------------------------------
 
 using System.Windows.Controls;
+using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.UI.Views;
 
 namespace GitClientVS.VisualStudio.UI.Window
 {
@@ -24,7 +26,7 @@ namespace GitClientVS.VisualStudio.UI.Window
     /// </para>
     /// </remarks>
     [Guid("90f622a8-c7bd-4c06-a737-400c0440fcfe")]
-    public class PullRequestsWindow : ToolWindowPane
+    public class PullRequestsWindow : ToolWindowPane, IPullRequestsWindow
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PullRequestsWindow"/> class.
@@ -36,7 +38,7 @@ namespace GitClientVS.VisualStudio.UI.Window
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
             // the object returned by the Content property.
-            this.Content = new Grid();
+            this.Content = new PullRequestsWindowContainer();
         }
     }
 }
