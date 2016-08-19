@@ -27,7 +27,7 @@
     </UserControl.Resources>
     <Grid>
 
-        <controls1:ProgressBar ProgressContent="{Binding ElementName=ContentGrid}"/>
+        <controls1:ProgressBar VerticalAlignment="Center" ProgressContent="{Binding ElementName=ContentGrid}"/>
 
         <Grid x:Name="ContentGrid" Margin="10">
             <Grid.Resources>
