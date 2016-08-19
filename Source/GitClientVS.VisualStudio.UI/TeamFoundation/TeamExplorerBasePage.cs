@@ -1,6 +1,7 @@
 ﻿// <copyright file="TeamExplorerBasePage.cs" company="Microsoft Corporation">Copyright Microsoft Corporation. All Rights Reserved. This code released under the terms of the Microsoft Public License (MS-PL, http://opensource.org/licenses/ms-pl.html.) This is sample code only, do not use in production environments.</copyright>
 
 using System;
+using GitClientVS.Contracts.Interfaces.Services;
 using Microsoft.TeamFoundation.Controls;
 
 namespace GitClientVS.VisualStudio.UI.TeamFoundation
@@ -23,7 +24,7 @@ namespace GitClientVS.VisualStudio.UI.TeamFoundation
 
             set
             {
-                this.title = value; 
+                this.title = value;
                 this.RaisePropertyChanged("Title");
             }
         }
@@ -37,7 +38,7 @@ namespace GitClientVS.VisualStudio.UI.TeamFoundation
 
             set
             {
-                this.pageContent = value; 
+                this.pageContent = value;
                 this.RaisePropertyChanged("PageContent");
             }
         }
@@ -51,7 +52,7 @@ namespace GitClientVS.VisualStudio.UI.TeamFoundation
 
             set
             {
-                this.isBusy = value; 
+                this.isBusy = value;
                 this.RaisePropertyChanged("IsBusy");
             }
         }

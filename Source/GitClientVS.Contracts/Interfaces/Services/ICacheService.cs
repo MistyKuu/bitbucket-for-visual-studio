@@ -6,5 +6,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
     {
         void Add(string key, object value);
         Result<T> Get<T>(string key) where T : class;
+        void Delete(string key);
     }
 }

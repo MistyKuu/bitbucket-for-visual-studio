@@ -32,5 +32,11 @@ namespace GitClientVS.Services
                 return Result<T>.Fail(ex);
             }
         }
+
+        public void Delete(string key)
+        {
+            if (_cache.Contains(key))
+                _cache.Remove(key);
+        }
     }
 }

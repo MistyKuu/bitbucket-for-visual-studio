@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ using GitClientVS.UI.Helpers;
 using log4net;
 using log4net.Repository.Hierarchy;
 using Microsoft.TeamFoundation.Common.Internal;
+using Microsoft.TeamFoundation.Controls;
 using Microsoft.VisualStudio.PlatformUI;
 
 namespace GitClientVS.VisualStudio.UI
@@ -26,14 +28,26 @@ namespace GitClientVS.VisualStudio.UI
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IStorageService _storageService;
         private readonly IGitClientService _gitClient;
+        private readonly IEventAggregatorService _eventAggregator;
+        private readonly ICacheService _cacheService;
+        private readonly IPageNavigationService _navigationService;
 
         [ImportingConstructor]
         public AppInitializer(
             IStorageService storageService,
-            IGitClientService gitClient)
+            IGitClientService gitClient,
+            IEventAggregatorService eventAggregator,
+            ICacheService cacheService,
+            IPageNavigationService navigationService
+            )
         {
             _storageService = storageService;
             _gitClient = gitClient;
+            _eventAggregator = eventAggregator;
+            _cacheService = cacheService;
+            _navigationService = navigationService;
+            _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(_ => cacheService.Delete(CacheKeys.PullRequestCacheKey));
+            _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(_ => navigationService.Navigate(TeamExplorerPageIds.Home));
         }
 
         public async Task Initialize()

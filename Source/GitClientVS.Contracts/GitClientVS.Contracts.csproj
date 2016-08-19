@@ -79,6 +79,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Interfaces\IClosingable.cs" />
     <Compile Include="Interfaces\IViewModelWithCommands.cs" />
     <Compile Include="Interfaces\IViewModelWithErrorMessage.cs" />
     <Compile Include="Interfaces\Services\ICommandsService.cs" />
