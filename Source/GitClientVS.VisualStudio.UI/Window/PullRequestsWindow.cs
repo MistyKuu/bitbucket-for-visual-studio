@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Windows.Controls;
+using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.UI.Views;
 
@@ -40,5 +41,7 @@ namespace GitClientVS.VisualStudio.UI.Window
             // the object returned by the Content property.
             this.Content = new PullRequestsWindowContainer();
         }
+
+        public IPullRequestsWindowContainer Container => (PullRequestsWindowContainer)Content;
     }
 }

@@ -1,8 +1,10 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 
 namespace GitClientVS.Contracts.Interfaces.Views
 {
-    public interface IPullRequestsWindowContainerViewModel 
+    public interface IPullRequestsWindowContainerViewModel
     {
+        event EventHandler Closed;
     }
 }

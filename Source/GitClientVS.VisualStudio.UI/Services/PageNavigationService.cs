@@ -63,6 +63,8 @@ namespace GitClientVS.VisualStudio.UI.Services
 
                 CurrentPageIndex--;
                 var ev = _navigationHistory[CurrentPageIndex];
+                var vm = ev.View.DataContext as IInitializable;
+                vm?.InitializeCommand.Execute(ev.Parameter);
                 _navigationSubject.OnNext(ev);
             }
         }

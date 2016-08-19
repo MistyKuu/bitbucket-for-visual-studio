@@ -25,6 +25,26 @@ namespace GitClientVS.UI.Views
         public PullRequestsWindowContainer()
         {
             InitializeComponent();
+            DataContextChanged += PullRequestsWindowContainer_DataContextChanged;
         }
+
+        private void PullRequestsWindowContainer_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (ViewModel != null)
+                ViewModel.Closed -= CloseWindow;
+
+            ViewModel = DataContext as IPullRequestsWindowContainerViewModel;
+
+            if (ViewModel != null)
+                ViewModel.Closed += CloseWindow;
+        }
+
+        private void CloseWindow(object sender, EventArgs e)
+        {
+            Window.Dispose();
+        }
+
+        public IPullRequestsWindowContainerViewModel ViewModel { get; set; }
+        public IPullRequestsWindow Window { get; set; }
     }
 }

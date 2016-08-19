@@ -47,8 +47,9 @@ namespace GitClientVS.VisualStudio.UI.Services
         {
             var window = ShowWindow<PullRequestsWindow>();
             var vm = _pqFactory.CreateExport().Value;
-            var view = window.Content as IView;
+            var view = window.Content as IPullRequestsWindowContainer;
             view.DataContext = vm;
+            view.Window = window;
             _navigationService.Navigate<IPullRequestsMainView>();
         }
 

@@ -37,7 +37,8 @@
                     <Setter Property="Width" Value="22"/>
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
-                    <Setter Property="Padding" Value="5"/>
+                    <Setter Property="Padding" Value="2"/>
+                    <Setter Property="Margin" Value="0,2"/>
                 </Style>
             </StackPanel.Resources>
             
@@ -64,7 +65,7 @@
             <WrapPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding CurrentViewModel.PageTitle,Mode=OneWay}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap"/>
                 <Separator Style="{StaticResource VerticalSeparator}" Margin="5,0"/>
-                <TextBlock Text="Current Branch" FontWeight="ExtraLight" FontSize="12"/>
+                <TextBlock Text="{Binding ActiveRepository}" FontWeight="ExtraLight" FontSize="13"/>
             </WrapPanel>
         </Grid>
         

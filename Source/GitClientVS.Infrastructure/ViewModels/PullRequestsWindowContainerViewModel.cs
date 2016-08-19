@@ -19,10 +19,14 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class PullRequestsWindowContainerViewModel : ViewModelBase, IPullRequestsWindowContainerViewModel
     {
         private readonly IPageNavigationService<IPullRequestsWindow> _pageNavigationService;
+        private readonly IEventAggregatorService _eventAggregator;
+        private readonly IGitService _gitService;
         private IView _currentView;
         private readonly ReactiveCommand<object> _prevCommand;
         private readonly ReactiveCommand<object> _nextCommand;
         private IWithPageTitle _currentViewModel;
+
+        public string ActiveRepository { get; set; }
 
         public IView CurrentView
         {
@@ -45,22 +49,37 @@ namespace GitClientVS.Infrastructure.ViewModels
         [ImportingConstructor]
         public PullRequestsWindowContainerViewModel(
             IPullRequestsMainView pullRequestStartView,
-            IPageNavigationService<IPullRequestsWindow> pageNavigationService
+            IPageNavigationService<IPullRequestsWindow> pageNavigationService,
+            IEventAggregatorService eventAggregator,
+            IGitService gitService
             )
         {
             _pageNavigationService = pageNavigationService;
+            _eventAggregator = eventAggregator;
+            _gitService = gitService;
             _pageNavigationService.Where(x => x.Window == typeof(IPullRequestsWindow)).Subscribe(ChangeView);
             _prevCommand = ReactiveCommand.Create(_pageNavigationService.CanNavigateBackObservable);
             _prevCommand.Subscribe(_ => _pageNavigationService.NavigateBack());
             _nextCommand = ReactiveCommand.Create(_pageNavigationService.CanNavigateForwardObservable);
             _nextCommand.Subscribe(_ => _pageNavigationService.NavigateForward());
             this.WhenAnyValue(x => x.CurrentView).Where(x => x != null).Subscribe(_ => CurrentViewModel = CurrentView.DataContext as IWithPageTitle);
+            _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(_ => OnClosed());
+            ActiveRepository = _gitService.GetActiveRepository().Name;
         }
+
+     
 
 
         private void ChangeView(NavigationEvent navEvent)
         {
             CurrentView = navEvent.View;
+        }
+
+        public event EventHandler Closed;
+
+        protected virtual void OnClosed()
+        {
+            Closed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

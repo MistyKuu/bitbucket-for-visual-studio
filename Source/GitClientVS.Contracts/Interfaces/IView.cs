@@ -1,4 +1,6 @@
-﻿namespace GitClientVS.Contracts.Interfaces
+﻿using GitClientVS.Contracts.Interfaces.Views;
+
+namespace GitClientVS.Contracts.Interfaces
 {
     public interface IView
     {
