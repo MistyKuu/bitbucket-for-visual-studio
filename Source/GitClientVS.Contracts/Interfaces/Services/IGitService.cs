@@ -8,5 +8,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
         void CloneRepository(string cloneUrl, string repositoryName, string repositoryPath);
         void PublishRepository(GitRemoteRepository repository);
         string GetActiveBranchFromActiveRepository();
+        string GetHeadCommitOfActiveBranch();
     }
 }

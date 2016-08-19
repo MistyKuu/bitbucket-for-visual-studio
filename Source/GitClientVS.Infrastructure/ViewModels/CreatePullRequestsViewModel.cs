@@ -33,7 +33,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _description;
         private string _title;
         private bool _closeSourceBranch;
+        private bool _isSync;
 
+
+        public bool IsSync
+        {
+            get { return _isSync; }
+            set { this.RaiseAndSetIfChanged(ref _isSync, value); }
+        }
 
         public string ErrorMessage
         {
@@ -133,9 +140,17 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var activeRepo = _gitService.GetActiveRepository();
             var activeBranch = _gitService.GetActiveBranchFromActiveRepository();
+            var lastCommit = _gitService.GetHeadCommitOfActiveBranch();
 
             Branches = (await _gitClientService.GetBranches(activeRepo.Name, activeRepo.Owner)).ToList();
             SourceBranch = Branches.FirstOrDefault(x => x.Name.Equals(activeBranch, StringComparison.InvariantCultureIgnoreCase));
+
+            if (SourceBranch != null)
+            {
+                IsSync = SourceBranch.Target.Hash == lastCommit;
+            }
+           
+
             DestinationBranch = Branches.FirstOrDefault();
         }
 

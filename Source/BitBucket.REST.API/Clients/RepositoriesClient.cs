@@ -32,7 +32,6 @@ namespace BitBucket.REST.API.Clients
             return await GetBranches(Connection.Credentials.Login, repoName);
         }
 
-
         public async Task<IteratorBasedPage<Branch>> GetBranches(string owner, string repoName)
         {
             var url = ApiUrls.Branches(owner, repoName);
