@@ -133,8 +133,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             FilteredGitPullRequests = new ReactiveList<GitPullRequest>();
             SetupObservables();
             Authors = new List<GitUser>();
-            // todo: uncomment later
-            //  SelectedStatus = GitPullRequestStatus.Open;
+
+            SelectedStatus = GitPullRequestStatus.Open;
         }
 
         private void SetupObservables()
@@ -189,13 +189,10 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadNewestPullRequests()
         {
-            PageIterator<GitPullRequest> iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner);
-            GitPullRequests.AddRange(iterator.Values);
-            if (iterator.HasNext())
-                GetRemainingPullRequests(startPage: 2);
+            await GetPullRequestsFromPage(1);
         }
 
-        private async Task GetRemainingPullRequests(int startPage)
+        private async Task GetPullRequestsFromPage(int startPage)
         {
             PageIterator<GitPullRequest> iterator;
             while ((iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner, page: startPage)).HasNext())
@@ -229,6 +226,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             return this.WhenAnyValue(x => x.IsLoading).Select(x => !IsLoading);
         }
 
-      
+
     }
 }

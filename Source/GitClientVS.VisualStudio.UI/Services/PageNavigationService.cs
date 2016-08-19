@@ -20,7 +20,6 @@ namespace GitClientVS.VisualStudio.UI.Services
     public class PageNavigationService<TWindow> : ReactiveObject, IPageNavigationService<TWindow> where TWindow : IWorkflowWindow
     {
         private readonly IAppServiceProvider _appServiceProvider;
-        private readonly IEventAggregatorService _eventAggregator;
         private readonly Subject<NavigationEvent> _navigationSubject = new Subject<NavigationEvent>();
         private readonly ReactiveList<NavigationEvent> _navigationHistory = new ReactiveList<NavigationEvent>();
         private int _currentPageIndex = -1;
