@@ -20,7 +20,8 @@
              WindowTitleBrush="#004f83"
              Background="#004f83"
              Width="400"
-             Height="300"            
+             Height="300"       
+             FocusManager.FocusedElement="{Binding ElementName=LoginBox}"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:LoginDialogViewModel,IsDesignTimeCreatable=False}"  >
     <controls:MetroWindow.Resources>
         <ResourceDictionary>
@@ -31,7 +32,7 @@
     </controls:MetroWindow.Resources>
 
     
-    <Grid Margin="20">
+    <Grid Margin="20,20,20,5">
         <Grid.Resources>
             <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                 <Setter Property="Margin" Value="5"/>
@@ -63,7 +64,7 @@
 
 
             <Label Content="Please log in." Grid.Row="0" Foreground="White" HorizontalAlignment="Center" FontWeight="Bold"/>
-            <TextBox x:Name="LoginBox" Grid.Row="1" Style="{StaticResource ValidatedTextBoxStyle}"  controls:TextBoxHelper.Watermark="Login" Margin="50,0,50,0"  Text="{bindings:ValidatedBinding Login}"/>
+            <TextBox  x:Name="LoginBox" Grid.Row="1" Style="{StaticResource ValidatedTextBoxStyle}"  controls:TextBoxHelper.Watermark="Login" Margin="50,0,50,5"  Text="{bindings:ValidatedBinding Login}"/>
             <PasswordBox
                 x:Name="PasswordBox"
                 PasswordChanged="PasswordBox_OnPasswordChanged"
@@ -71,7 +72,7 @@
                 controls:TextBoxHelper.Watermark="Password"
                 bindings:PasswordHelper.Attach="True" 
                 bindings:PasswordHelper.Password="{bindings:ValidatedBinding Password,Mode=TwoWay}"
-                Margin="50,0,50,0"
+                Margin="50,0,50, 5"
                 >
                 <PasswordBox.Style>
                     <Style TargetType="PasswordBox" BasedOn="{StaticResource {x:Type PasswordBox}}">
@@ -81,7 +82,7 @@
                 </PasswordBox>
 
             <Button Style="{StaticResource ConnectButtonStyle}" IsEnabled="True" Grid.Row="3"  Command="{Binding ConnectCommand}" Content="{x:Static ui:Resources.Connect}" HorizontalAlignment="Center"/>
-            <controls1:ErrorView  Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  />
+            <controls1:ErrorView  Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"  />
             
         </Grid> 
     </Grid>
