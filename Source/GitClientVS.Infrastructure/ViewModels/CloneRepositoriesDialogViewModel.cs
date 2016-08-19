@@ -139,12 +139,14 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private IObservable<bool> CanExecuteCloneObservable()
         {
-            return ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
+            var obs = this.WhenAnyValue(x => x.ClonePath, x => x.SelectedRepository.Name).Select(x => CanExecute());
+            var valObs = ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
+            return obs.Merge(valObs);
         }
 
         private bool CanExecute()
         {
-            return IsObjectValid();
+            return IsObjectValid() &&  !Directory.Exists(Path.Combine(ClonePath, SelectedRepository.Name));
         }
 
         protected void OnClose()

@@ -123,7 +123,7 @@
             </Button>
 
             <ComboBox Grid.Column="1" DisplayMemberPath="DisplayName"
-          ItemsSource="{extensions:EnumToItemsSource {x:Type gitClientModels:GitPullRequestStatus}, 'None'}"
+          ItemsSource="{extensions:EnumToItemsSource {x:Type gitClientModels:GitPullRequestStatus}, 'All'}"
           SelectedValue="{Binding SelectedStatus}"
           SelectedValuePath="Value" 
                 
@@ -156,14 +156,27 @@
 
 
         <controls1:ProgressBar Grid.Row="1" ProgressContent="{Binding ElementName=PullRequests}"/>
-
-        <ListBox Grid.Row="1" x:Name="PullRequests"
+        <Grid x:Name="PullRequests" Grid.Row="1" >
+            <ListBox 
                  HorizontalContentAlignment="Stretch"
                  ItemsSource="{Binding FilteredGitPullRequests}"
                  SelectedItem="{Binding SelectedPullRequest, Mode=TwoWay}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ItemTemplate="{StaticResource PullRequestTemplate}"
                      />
+            <TextBlock Text="No pull requests" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FilteredGitPullRequests.Count}" Value="0">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+            </TextBlock.Style>   
+            </TextBlock>
+        </Grid>
 
         <controls1:ErrorView Grid.Row="1"/>
     </Grid>
