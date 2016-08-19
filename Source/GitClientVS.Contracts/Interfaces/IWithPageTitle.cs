@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace GitClientVS.Contracts.Interfaces
 {
-    public interface IWithTitle
+    public interface IWithPageTitle
     {
-        string Title { get; }
+        string PageTitle { get; }
     }
 }

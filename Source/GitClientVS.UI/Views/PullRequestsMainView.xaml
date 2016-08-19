@@ -21,11 +21,7 @@
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PrView"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsMainViewModel,IsDesignTimeCreatable=False}" 
-             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type framework:PageControl}},Path=ActualHeight}"
              >
-    <i:Interaction.Behaviors>
-        <attachedProperties:DisableParentScrollViewerBehavior DisableVertical="True"/>
-    </i:Interaction.Behaviors>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

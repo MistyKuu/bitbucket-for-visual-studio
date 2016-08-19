@@ -25,12 +25,6 @@ namespace GitClientVS.UI.Views
             _vm = vm;
             DataContext = vm;
             InitializeComponent();
-            Loaded += PullRequestsMainViewView_Loaded;
-        }
-
-        private void PullRequestsMainViewView_Loaded(object sender, EventArgs e)
-        {
-            _vm.InitializeCommand.Execute(null);
         }
     }
 }

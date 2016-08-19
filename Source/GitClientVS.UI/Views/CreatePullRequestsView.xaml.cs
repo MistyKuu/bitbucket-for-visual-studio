@@ -15,20 +15,12 @@ namespace GitClientVS.UI.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class CreatePullRequestsView : UserControl, ICreatePullRequestsView
     {
-        private readonly ICreatePullRequestsViewModel _vm;
 
         [ImportingConstructor]
         public CreatePullRequestsView(ICreatePullRequestsViewModel vm)
         {
-            _vm = vm;
             DataContext = vm;
             InitializeComponent();
-            Loaded += PullRequestsMainViewView_Loaded;
-        }
-
-        private void PullRequestsMainViewView_Loaded(object sender, EventArgs e)
-        {
-            _vm.InitializeCommand.Execute(null);
         }
     }
 }

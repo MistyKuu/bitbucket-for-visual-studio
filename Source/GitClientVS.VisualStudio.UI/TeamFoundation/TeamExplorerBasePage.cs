@@ -25,7 +25,7 @@ namespace GitClientVS.VisualStudio.UI.TeamFoundation
             set
             {
                 this.title = value;
-                this.RaisePropertyChanged("Title");
+                this.RaisePropertyChanged("PageTitle");
             }
         }
 

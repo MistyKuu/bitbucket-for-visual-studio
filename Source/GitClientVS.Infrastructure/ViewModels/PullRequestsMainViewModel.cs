@@ -97,7 +97,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
         }
 
-        public string Title { get; } = "Pull Requests Window";
+        public string PageTitle { get; } = "Pull Requests Window";
 
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand GoToDetailsCommand => _goToDetailsCommand;

@@ -20,6 +20,7 @@ namespace GitClientVS.VisualStudio.UI.Services
     public class PageNavigationService<TWindow> : ReactiveObject, IPageNavigationService<TWindow> where TWindow : IWorkflowWindow
     {
         private readonly IAppServiceProvider _appServiceProvider;
+        private readonly IEventAggregatorService _eventAggregator;
         private readonly Subject<NavigationEvent> _navigationSubject = new Subject<NavigationEvent>();
 
         private int CurrentPageIndex
@@ -38,9 +39,10 @@ namespace GitClientVS.VisualStudio.UI.Services
         private int _currentPageIndex = -1;
 
         [ImportingConstructor]
-        public PageNavigationService(IAppServiceProvider appServiceProvider)
+        public PageNavigationService(IAppServiceProvider appServiceProvider, IEventAggregatorService eventAggregator)
         {
             _appServiceProvider = appServiceProvider;
+            _eventAggregator = eventAggregator;
         }
 
         public IObservable<bool> CanNavigateBackObservable
@@ -52,10 +54,13 @@ namespace GitClientVS.VisualStudio.UI.Services
             get { return this.WhenAnyValue(x => x.CurrentPageIndex).Select(_ => CanNavigateForward()); }
         }
 
-        public void NavigateBack()
+        public void NavigateBack(bool removeFromHistory = false)
         {
             if (CanNavigateBack())
             {
+                if (removeFromHistory)
+                    _navigationHistory.RemoveAt(CurrentPageIndex);
+
                 CurrentPageIndex--;
                 var ev = _navigationHistory[CurrentPageIndex];
                 _navigationSubject.OnNext(ev);

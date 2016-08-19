@@ -49,7 +49,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _isApproved;
 
 
-        public string Title => _pullRequest.Title;
+        public string PageTitle => "Pull Request Details";
 
         public bool IsMainSectionExpanded
         {
@@ -128,7 +128,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _diffFileParser = diffFileParser;
             _userInformationService = userInformationService;
             this.WhenAnyValue(x => x.IsMainSectionExpanded).Subscribe(_ => MainSectionCommandText = IsMainSectionExpanded ? "Hide" : "Expand");
-            this.WhenAnyValue(x => x._pullRequest).Subscribe(_ => this.RaisePropertyChanged(nameof(Title)));
+            this.WhenAnyValue(x => x._pullRequest).Subscribe(_ => this.RaisePropertyChanged(nameof(PageTitle)));
         }
 
         public ICommand InitializeCommand => _initializeCommand;

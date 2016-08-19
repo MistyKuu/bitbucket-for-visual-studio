@@ -123,7 +123,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             _createNewPullRequestCommand.Subscribe(_ =>
             {
-                _pageNavigationService.NavigateBack();
+                _pageNavigationService.NavigateBack(true);
             });
         }
 

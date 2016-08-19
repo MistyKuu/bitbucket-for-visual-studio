@@ -6,20 +6,47 @@
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              xmlns:parseDiff="clr-namespace:ParseDiff;assembly=ParseDiff"
              xmlns:controls="clr-namespace:GitClientVS.UI.Controls"
+             xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsWindowContainerViewModel,IsDesignTimeCreatable=False}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <StackPanel Orientation="Horizontal">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="#CED5E4">
             <Button Command="{Binding PrevCommand}" Content="Prev"/>
             <Button Command="{Binding NextCommand}" Content="Next"/>
         </StackPanel>
+
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <WrapPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding CurrentViewModel.PageTitle,Mode=OneWay}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                <Separator Style="{StaticResource VerticalSeparator}" Margin="5,0"/>
+                <TextBlock Text="Current Branch" FontWeight="ExtraLight" FontSize="12"/>
+            </WrapPanel>
+        </Grid>
         
-        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"  />
+        <Separator Grid.Row="2" Margin="0,2"/>
+
+        <ContentControl Grid.Row="3" Content="{Binding CurrentView}"  />
     </Grid>
 </UserControl>

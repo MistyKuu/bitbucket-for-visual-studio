@@ -23,11 +23,7 @@
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PqDetailView"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsDetailViewModel,IsDesignTimeCreatable=False}" 
-             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type framework:PageControl}},Path=ActualHeight}"
              >
-    <i:Interaction.Behaviors>
-        <attachedProperties:DisableParentScrollViewerBehavior DisableVertical="True"/>
-    </i:Interaction.Behaviors>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -109,13 +105,7 @@
                         </Grid.ColumnDefinitions>
                         
                         <Grid Grid.Column="0" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Margin="0,0,0,5" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontWeight="DemiBold" FontSize="15" />
-
-                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <StackPanel  Orientation="Horizontal">
                                 <TextBlock Margin="0,0,5,0">
                                     <Hyperlink NavigateUri="{Binding PullRequest.Link}" RequestNavigate="GoToCommit">
                                       <TextBlock Foreground="CornflowerBlue">

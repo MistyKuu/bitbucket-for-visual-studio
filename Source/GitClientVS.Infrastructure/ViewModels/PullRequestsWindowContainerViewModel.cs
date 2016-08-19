@@ -22,6 +22,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private IView _currentView;
         private readonly ReactiveCommand<object> _prevCommand;
         private readonly ReactiveCommand<object> _nextCommand;
+        private IWithPageTitle _currentViewModel;
 
         public IView CurrentView
         {
@@ -30,6 +31,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _currentView, value);
             }
+        }
+
+        public IWithPageTitle CurrentViewModel
+        {
+            get { return _currentViewModel; }
+            set { this.RaiseAndSetIfChanged(ref _currentViewModel, value); }
         }
 
         public ICommand PrevCommand => _prevCommand;
@@ -47,6 +54,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _prevCommand.Subscribe(_ => _pageNavigationService.NavigateBack());
             _nextCommand = ReactiveCommand.Create(_pageNavigationService.CanNavigateForwardObservable);
             _nextCommand.Subscribe(_ => _pageNavigationService.NavigateForward());
+            this.WhenAnyValue(x => x.CurrentView).Where(x => x != null).Subscribe(_ => CurrentViewModel = CurrentView.DataContext as IWithPageTitle);
         }
 
 
