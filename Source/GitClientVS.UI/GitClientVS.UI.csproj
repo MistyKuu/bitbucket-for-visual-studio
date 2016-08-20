@@ -82,7 +82,6 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AttachedProperties\AnimatedFadeVisibilityBehavior.cs" />
     <Compile Include="AttachedProperties\AttachableForStyleBehavior.cs" />
     <Compile Include="AttachedProperties\DisableParentScrollViewerBehavior.cs" />
     <Compile Include="AttachedProperties\HandleMouseWheelInParentBehaviour.cs" />
