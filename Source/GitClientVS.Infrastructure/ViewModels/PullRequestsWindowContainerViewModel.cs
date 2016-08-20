@@ -81,13 +81,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             _nextCommand.Subscribe(_ => _pageNavigationService.NavigateForward());
             this.WhenAnyValue(x => x.CurrentView).Where(x => x != null).Subscribe(_ => CurrentViewModel = CurrentView.DataContext as IWithPageTitle);
             _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(_ => OnClosed());
-            ActiveRepository = _gitService.GetActiveRepository().Name;
+            var repo = _gitService.GetActiveRepository();
+            ActiveRepository = repo.Owner + '/' + repo.Name;
             _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(ev => CurrentTheme = ev.Theme);
             CurrentTheme = _userInfoService.CurrentTheme;
         }
-
-
-
 
         private void ChangeView(NavigationEvent navEvent)
         {

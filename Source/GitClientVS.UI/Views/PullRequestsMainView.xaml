@@ -37,8 +37,8 @@
         </Grid.RowDefinitions>
 
         <Grid.Resources>
-       
-                <Canvas x:Key="notification"  Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0" >
+      
+            <Canvas x:Key="notification"  Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0" >
                     <Path Width="38" Height="33" Canvas.Left="19" Canvas.Top="24" Stretch="Fill" Fill="Gainsboro" Data="F1 M 19,24L 57,24L 57,48L 47,48L 38,57L 29,48L 19,48L 19,24 Z "/>
                 </Canvas>
           

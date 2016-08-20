@@ -113,7 +113,7 @@
                             </WrapPanel>
                         </Grid>
                         
-                        <Button Grid.Column="1"  VerticalAlignment="Center" Grid.RowSpan="2" HorizontalAlignment="Right" IsEnabled="{Binding IsApproveAvailable}" Command="{Binding ApproveCommand}">
+                        <Button Grid.Column="1"  VerticalAlignment="Center" Grid.RowSpan="2" HorizontalAlignment="Right" Command="{Binding ApproveCommand}">
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource MetroFlatButton}">
                                     <Style.Triggers>
@@ -122,6 +122,12 @@
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding IsApproved}" Value="False">
                                             <Setter Property="Content" Value="Approve"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsApproveAvailable}" Value="False">
+                                            <Setter Property="Visibility" Value="Hidden"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsApproveAvailable}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
