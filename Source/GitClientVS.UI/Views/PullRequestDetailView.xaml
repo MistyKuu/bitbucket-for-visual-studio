@@ -69,7 +69,7 @@
         <Grid x:Name="PrContent">
             <Grid.RowDefinitions>
                 <RowDefinition  Height="250"/>
-                <RowDefinition Height="5"/>
+                <RowDefinition Height="3"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -409,8 +409,6 @@
                     </TreeView>
                 </controls:MetroTabItem>
             </controls:MetroAnimatedTabControl>
-
-            <controls1:ErrorView Grid.Row="1"/>
         </Grid>
     </Grid>
 

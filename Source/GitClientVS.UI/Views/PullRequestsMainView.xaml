@@ -177,7 +177,5 @@
             </TextBlock.Style>   
             </TextBlock>
         </Grid>
-
-        <controls1:ErrorView Grid.Row="1"/>
     </Grid>
 </UserControl>

@@ -152,6 +152,8 @@
     <Compile Include="Models\GitClientModels\GitUser.cs" />
     <Compile Include="Models\Tree\ITreeFile.cs" />
     <Compile Include="Models\Result.cs" />
+    <Compile Include="NotificationFlags.cs" />
+    <Compile Include="NotificationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

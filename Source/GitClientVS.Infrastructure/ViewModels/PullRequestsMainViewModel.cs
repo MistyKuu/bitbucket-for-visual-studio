@@ -9,6 +9,7 @@ using System.Reactive.Threading.Tasks;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
@@ -29,6 +30,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitService _gitService;
         private readonly IPageNavigationService<IPullRequestsWindow> _pageNavigationService;
         private readonly ICacheService _cacheService;
+        private readonly IVsTools _vsTools;
         private ReactiveCommand<Unit> _initializeCommand;
         private ReactiveCommand<object> _goToDetailsCommand;
         private bool _isLoading;
@@ -52,7 +54,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         public GitUser SelectedAuthor
         {
             get { return _selectedAuthor; }
-            set { this.RaiseAndSetIfChanged(ref _selectedAuthor, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedAuthor, value);
+            }
         }
 
         public GitPullRequestStatus? SelectedStatus

@@ -84,6 +84,11 @@ namespace GitClientVS.Infrastructure
             return result;
         }
 
+        public IEnumerable<string> Errors
+        {
+            get { return _validationCache.Values.Where(x => x != null); }
+        }
+
 
         public bool IsObjectValid()
         {

@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading;
 using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.VisualStudio.UI.Extensions;
+using Microsoft.TeamFoundation.Controls;
 using Microsoft.VisualStudio.TeamFoundation.Git.Extensibility;
 
 namespace GitClientVS.VisualStudio.UI.Services

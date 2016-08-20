@@ -80,6 +80,7 @@
     <Compile Include="TeamFoundation\TeamExplorerBaseNavigationLink.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBasePage.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBaseSection.cs" />
+    <Compile Include="VisualMappingsProfile.cs" />
     <Compile Include="Window\DiffWindow.cs" />
     <Compile Include="Window\PullRequestsWindow.cs" />
   </ItemGroup>

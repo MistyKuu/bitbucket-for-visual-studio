@@ -17,6 +17,15 @@ namespace GitClientVS.Infrastructure.Extensions
                 reactiveCommand.IsExecuting.Where(x => x).Subscribe(_ => vm.ErrorMessage = null);
                 reactiveCommand.ThrownExceptions.Subscribe((ex) => vm.ErrorMessage = ex.Message);
             }
+
+            var reactiveValidated = vm as ReactiveValidatedObject; // todo don't show at the beginning
+            reactiveValidated?.Changed.Subscribe(__ =>
+            {
+                reactiveValidated?.ValidationObservable.Subscribe(_ =>
+                {
+                    vm.ErrorMessage = reactiveValidated.Errors.FirstOrDefault();
+                });
+            });
         }
 
         public static void SetupLoadingCommands(this ILoadableViewModel vm)

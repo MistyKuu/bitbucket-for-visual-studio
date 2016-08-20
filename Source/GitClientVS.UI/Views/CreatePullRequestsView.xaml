@@ -98,7 +98,6 @@
                     <Run Text="{Binding SourceBranch.Name}" FontWeight="Bold"></Run>
                     <Run Text="is out of sync with remote branch."></Run>
                 </TextBlock>
-                <controls1:ErrorView Grid.Row="7" />
             </Grid>
             
             <Separator Grid.Row="2"/>

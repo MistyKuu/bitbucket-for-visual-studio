@@ -7,6 +7,5 @@
 
     <Style x:Key="ErrorTextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
        <Setter Property="Foreground" Value="Red"/>
-       <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
 </ResourceDictionary>

@@ -47,6 +47,7 @@ namespace GitClientVS.VisualStudio.UI
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<GitMappingsProfile>();
+                cfg.AddProfile<VisualMappingsProfile>();
             });
 
             await GitClientLogin(result);

@@ -62,13 +62,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _sourceBranch; }
             set { this.RaiseAndSetIfChanged(ref _sourceBranch, value); }
         }
-
-        [Required]
+        
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = "ValidateDestinationBranch", ErrorMessage = "Branches must be different")]
         public GitBranch DestinationBranch
         {
             get { return _destinationBranch; }
             set { this.RaiseAndSetIfChanged(ref _destinationBranch, value); }
         }
+
+     
 
         [Required]
         public string Description
@@ -169,11 +171,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool CanExecute()
         {
             return IsObjectValid() &&
-                !string.IsNullOrEmpty(SourceBranch.Name) &&
-                !string.IsNullOrEmpty(DestinationBranch.Name) &&
-                SourceBranch.Name != DestinationBranch.Name;
+                   !string.IsNullOrEmpty(SourceBranch.Name) &&
+                   !string.IsNullOrEmpty(DestinationBranch.Name);
+
         }
 
-
+        public bool ValidateDestinationBranch(GitBranch destBranch)
+        {
+            return destBranch.Name != SourceBranch.Name;
+        }
     }
 }
