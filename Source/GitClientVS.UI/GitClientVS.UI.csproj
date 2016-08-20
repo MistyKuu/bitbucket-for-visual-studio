@@ -115,6 +115,9 @@
     <Compile Include="Controls\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RepositoryIcon.xaml.cs">
+      <DependentUpon>RepositoryIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BaseMarkupExtensionConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\HumanizeDateTimeConverter.cs" />
@@ -223,6 +226,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\ErrorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RepositoryIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
