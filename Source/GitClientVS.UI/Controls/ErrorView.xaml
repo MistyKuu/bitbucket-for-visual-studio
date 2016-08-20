@@ -29,12 +29,19 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
+                <Canvas x:Key="warning" Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
+                    <Path Width="38" Height="38" Canvas.Left="19" Canvas.Top="19" Stretch="Fill" Fill="Red" Data="F1 M 38,19C 48.4934,19 57,27.5066 57,38C 57,48.4934 48.4934,57 38,57C 27.5066,57 19,48.4934 19,38C 19,27.5066 27.5066,19 38,19 Z M 34.0417,25.7292L 36.0208,41.9584L 39.9792,41.9583L 41.9583,25.7292L 34.0417,25.7292 Z M 38,44.3333C 36.2511,44.3333 34.8333,45.7511 34.8333,47.5C 34.8333,49.2489 36.2511,50.6667 38,50.6667C 39.7489,50.6667 41.1667,49.2489 41.1667,47.5C 41.1667,45.7511 39.7489,44.3333 38,44.3333 Z "/>
+                </Canvas>
             </ResourceDictionary>
         </Grid.Resources>
 
 
-        <WrapPanel x:Name="ErrorPanel" Orientation="Horizontal" Visibility="{Binding ErrorMessage, Converter={converters:NullToNonVisibilityConverter}}" Style="{StaticResource Animated}">
-            <Image Margin="5" Width="16" Height="16" Source="{Binding Source={x:Static draw:SystemIcons.Error}, Converter={converters:IconToImageSourceConverter}, Mode=OneWay}" />
+        <WrapPanel Margin="5" x:Name="ErrorPanel" Orientation="Horizontal" Visibility="{Binding ErrorMessage, Converter={converters:NullToNonVisibilityConverter}}" Style="{StaticResource Animated}">
+           <Rectangle Width="16" Height="16" Margin="0,0,5,0" VerticalAlignment="Center">
+                <Rectangle.Fill>
+                    <VisualBrush Stretch="Fill" Visual="{DynamicResource warning}" />
+                </Rectangle.Fill>
+            </Rectangle>
             <TextBlock Text="{Binding ErrorMessage}" Style="{StaticResource ErrorTextBlockStyle}"  TextWrapping="Wrap"  />
         </WrapPanel>
 
