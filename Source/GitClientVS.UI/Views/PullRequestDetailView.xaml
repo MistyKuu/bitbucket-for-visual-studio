@@ -94,7 +94,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Margin="0,0,0,5" Text="{Binding PullRequest.Title}" TextWrapping="Wrap" FontWeight="DemiBold" FontSize="15" />
 
-                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <WrapPanel Grid.Row="1" Orientation="Horizontal">
                                 <TextBlock Margin="0,0,5,0">
                                     <Hyperlink NavigateUri="{Binding PullRequest.Link}" RequestNavigate="GoToCommit">
                                       <TextBlock Foreground="CornflowerBlue">
@@ -110,7 +110,7 @@
                                 <TextBlock Margin="0,0,5,0" Text="&#x2794;" />
                                 <controls1:BranchIcon />
                                 <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.DestinationBranch}"/>
-                            </StackPanel>
+                            </WrapPanel>
                         </Grid>
                         
                         <Button Grid.Column="1"  VerticalAlignment="Center" Grid.RowSpan="2" HorizontalAlignment="Right" IsEnabled="{Binding IsApproveAvailable}" Command="{Binding ApproveCommand}">

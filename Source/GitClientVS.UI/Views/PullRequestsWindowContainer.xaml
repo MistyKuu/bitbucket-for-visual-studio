@@ -7,6 +7,7 @@
              xmlns:parseDiff="clr-namespace:ParseDiff;assembly=ParseDiff"
              xmlns:controls="clr-namespace:GitClientVS.UI.Controls"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
+             xmlns:models="clr-namespace:GitClientVS.Contracts.Models;assembly=GitClientVS.Contracts"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsWindowContainerViewModel,IsDesignTimeCreatable=False}">
@@ -30,9 +31,19 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="#CED5E4">
+        <StackPanel Orientation="Horizontal" Grid.Row="0" >
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Background" Value="#CED5E4"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentTheme}" Value="{x:Static models:Theme.Dark}">
+                            <Setter Property="Background" Value="#2D2D30"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
             <StackPanel.Resources>
-                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <!--<Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="Height" Value="22"/>
                     <Setter Property="Width" Value="22"/>
@@ -40,7 +51,7 @@
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                     <Setter Property="Padding" Value="2"/>
                     <Setter Property="Margin" Value="0,2"/>
-                </Style>
+                </Style>-->
             </StackPanel.Resources>
             
             <Button Command="{Binding PrevCommand}">

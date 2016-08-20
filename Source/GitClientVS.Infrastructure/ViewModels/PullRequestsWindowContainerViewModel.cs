@@ -10,6 +10,7 @@ using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Contracts.Models;
 using ReactiveUI;
 
 namespace GitClientVS.Infrastructure.ViewModels
@@ -22,10 +23,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitService _gitService;
         private readonly ICacheService _cacheService;
+        private readonly IUserInformationService _userInfoService;
         private IView _currentView;
         private readonly ReactiveCommand<object> _prevCommand;
         private readonly ReactiveCommand<object> _nextCommand;
         private IWithPageTitle _currentViewModel;
+        private Theme _currentTheme;
 
         public string ActiveRepository { get; set; }
 
@@ -44,6 +47,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _currentViewModel, value); }
         }
 
+        public Theme CurrentTheme
+        {
+            get { return _currentTheme; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _currentTheme, value);
+            }
+        }
+
         public ICommand PrevCommand => _prevCommand;
         public ICommand NextCommand => _nextCommand;
 
@@ -53,13 +65,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             IPageNavigationService<IPullRequestsWindow> pageNavigationService,
             IEventAggregatorService eventAggregator,
             IGitService gitService,
-            ICacheService cacheService
+            ICacheService cacheService,
+            IUserInformationService userInfoService
             )
         {
             _pageNavigationService = pageNavigationService;
             _eventAggregator = eventAggregator;
             _gitService = gitService;
             _cacheService = cacheService;
+            _userInfoService = userInfoService;
             _pageNavigationService.Where(x => x.Window == typeof(IPullRequestsWindow)).Subscribe(ChangeView);
             _prevCommand = ReactiveCommand.Create(_pageNavigationService.CanNavigateBackObservable);
             _prevCommand.Subscribe(_ => _pageNavigationService.NavigateBack());
@@ -68,7 +82,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             this.WhenAnyValue(x => x.CurrentView).Where(x => x != null).Subscribe(_ => CurrentViewModel = CurrentView.DataContext as IWithPageTitle);
             _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(_ => OnClosed());
             ActiveRepository = _gitService.GetActiveRepository().Name;
-            _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(_ => _cacheService.Delete(CacheKeys.PullRequestCacheKey));
+            _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(ev => CurrentTheme = ev.Theme);
+            CurrentTheme = _userInfoService.CurrentTheme;
         }
 
 
@@ -83,6 +98,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         protected virtual void OnClosed()
         {
+            _cacheService.Delete(CacheKeys.PullRequestCacheKey);
             _pageNavigationService.ClearNavigationHistory();
             Closed?.Invoke(this, EventArgs.Empty);
         }
