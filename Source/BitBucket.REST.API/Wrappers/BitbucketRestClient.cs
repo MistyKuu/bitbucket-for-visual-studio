@@ -87,12 +87,14 @@ namespace BitBucket.REST.API.Wrappers
                 || response.StatusCode == HttpStatusCode.InternalServerError)
             {
                 var errorMessage = response.ErrorMessage;
+                var friendly = false;
                 if (response.Content != null)
                 {
                     try
                     {
                         var serializer = new NewtonsoftJsonSerializer();
                         errorMessage = serializer.Deserialize<ErrorWrapper>(response.Content).Error.Message;
+                        friendly = true;
                     }
                     catch (Exception er)
                     {
@@ -100,7 +102,7 @@ namespace BitBucket.REST.API.Wrappers
                     }
                 } 
              
-                throw new RequestFailedException(errorMessage);
+                throw new RequestFailedException(errorMessage, friendly);
             }
            
         }

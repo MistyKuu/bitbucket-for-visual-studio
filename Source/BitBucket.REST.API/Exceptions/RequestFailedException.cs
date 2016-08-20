@@ -4,9 +4,11 @@ namespace BitBucket.REST.API.Exceptions
 {
     public class RequestFailedException : Exception
     {
-        public RequestFailedException(string message) : base(message)
+        public bool IsFriendlyMessage { get; set; }
+
+        public RequestFailedException(string message, bool isFriendlyMessage) : base(message)
         {
-            
+            IsFriendlyMessage = isFriendlyMessage;
         }
 
 
