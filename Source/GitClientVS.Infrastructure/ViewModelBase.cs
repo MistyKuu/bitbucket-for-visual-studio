@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Infrastructure.Extensions;
@@ -13,6 +14,8 @@ namespace GitClientVS.Infrastructure
             (this as IViewModelWithCommands)?.InitializeCommands();
             (this as ILoadableViewModel)?.SetupLoadingCommands();
             (this as IViewModelWithErrorMessage)?.CatchCommandErrors();
+
+          
         }
     }
 }

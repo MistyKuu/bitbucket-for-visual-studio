@@ -79,9 +79,14 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Events\ActiveRepositoryChangedEvent.cs" />
+    <Compile Include="Events\ConnectionChangedEvent.cs" />
+    <Compile Include="Events\NavigationEvent.cs" />
+    <Compile Include="Events\ThemeChangedEvent.cs" />
     <Compile Include="Interfaces\IClosingable.cs" />
     <Compile Include="Interfaces\IViewModelWithCommands.cs" />
     <Compile Include="Interfaces\IViewModelWithErrorMessage.cs" />
+    <Compile Include="Interfaces\IWithPageTitle.cs" />
     <Compile Include="Interfaces\Services\ICommandsService.cs" />
     <Compile Include="Interfaces\Services\IDiffFileParser.cs" />
     <Compile Include="Interfaces\Services\ICacheService.cs" />
@@ -94,6 +99,7 @@
     <Compile Include="Interfaces\ViewModels\IPullRequestDetailView.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestsDetailViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestsMainViewModel.cs" />
+    <Compile Include="Interfaces\ViewModels\IPullRequestsWindowContainer.cs" />
     <Compile Include="Interfaces\Views\ICreatePullRequestsView.cs" />
     <Compile Include="Interfaces\Views\ICreateRepositoriesDialogView.cs" />
     <Compile Include="Interfaces\ViewModels\ICreateRepositoriesDialogViewModel.cs" />
@@ -114,6 +120,9 @@
     <Compile Include="Interfaces\Views\IPublishSectionView.cs" />
     <Compile Include="Interfaces\Views\IPullRequestsMainView.cs" />
     <Compile Include="Interfaces\ILoadableViewModel.cs" />
+    <Compile Include="Interfaces\Views\IPullRequestsWindow.cs" />
+    <Compile Include="Interfaces\Views\IPullRequestsWindowContainerViewModel.cs" />
+    <Compile Include="Interfaces\Views\IWorkflowWindow.cs" />
     <Compile Include="Models\GitClientModels\PageIterator.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\Tree\CommentTree.cs" />
@@ -143,6 +152,8 @@
     <Compile Include="Models\GitClientModels\GitUser.cs" />
     <Compile Include="Models\Tree\ITreeFile.cs" />
     <Compile Include="Models\Result.cs" />
+    <Compile Include="NotificationFlags.cs" />
+    <Compile Include="NotificationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

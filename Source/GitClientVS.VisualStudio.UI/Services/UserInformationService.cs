@@ -2,9 +2,9 @@
 using System.ComponentModel.Composition;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models;
-using GitClientVS.Infrastructure.Events;
 using GitClientVS.UI.Helpers;
 using Microsoft.VisualStudio.PlatformUI;
 

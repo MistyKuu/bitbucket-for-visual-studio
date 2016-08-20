@@ -16,12 +16,12 @@ using System.Security;
 using System.Windows.Input;
 using BitBucket.REST.API;
 using BitBucket.REST.API.Models;
+using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
-using GitClientVS.Infrastructure.Events;
 using GitClientVS.Infrastructure.Extensions;
 using log4net;
 using log4net.Config;
@@ -36,6 +36,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private IGitService _gitService;
         private readonly IUserInformationService _userInformationService;
         private readonly IEventAggregatorService _eventAggregator;
+        private readonly IGitWatcher _gitWatcher;
         private ReactiveCommand<Unit> _publishRepositoryCommand;
         private ReactiveCommand<Unit> _initializeCommand;
         private string _repositoryName;
@@ -56,13 +57,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             IGitService gitService,
             IFileService fileService,
             IUserInformationService userInformationService,
-            IEventAggregatorService eventAggregator
+            IEventAggregatorService eventAggregator,
+            IGitWatcher gitWatcher
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _userInformationService = userInformationService;
             _eventAggregator = eventAggregator;
+            _gitWatcher = gitWatcher;
         }
 
 
@@ -127,7 +130,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _publishRepositoryCommand = ReactiveCommand.CreateAsyncTask(CanPublishRepository(), _ => PublishRepository());
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => CreateOwners());
-            _publishRepositoryCommand.Subscribe(_ => _eventAggregator.Publish(new ActiveRepositoryChangedEvent(_gitService.GetActiveRepository())));
+            _publishRepositoryCommand.Subscribe(_ => _gitWatcher.Refresh());
         }
 
         private async Task CreateOwners()

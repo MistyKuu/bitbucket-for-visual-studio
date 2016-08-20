@@ -21,13 +21,20 @@ namespace GitClientVS.VisualStudio.UI.Services
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class CommandsService : ICommandsService
     {
-        private readonly ExportFactory<IDiffWindowControlViewModel> _vmFactory;
+        private readonly ExportFactory<IDiffWindowControlViewModel> _diffFactory;
+        private readonly ExportFactory<IPullRequestsWindowContainerViewModel> _pqFactory;
+        private readonly IPageNavigationService<IPullRequestsWindow> _navigationService;
         private Package _package;
 
         [ImportingConstructor]
-        public CommandsService(ExportFactory<IDiffWindowControlViewModel> vmFactory)
+        public CommandsService(
+            ExportFactory<IDiffWindowControlViewModel> diffFactory,
+            ExportFactory<IPullRequestsWindowContainerViewModel> pqFactory,
+            IPageNavigationService<IPullRequestsWindow> navigationService)
         {
-            _vmFactory = vmFactory;
+            _diffFactory = diffFactory;
+            _pqFactory = pqFactory;
+            _navigationService = navigationService;
         }
 
         public void Initialize(object package)
@@ -35,10 +42,21 @@ namespace GitClientVS.VisualStudio.UI.Services
             _package = (Package)package;
         }
 
+
+        public void ShowPullRequestsWindow()
+        {
+            var window = ShowWindow<PullRequestsWindow>();
+            var vm = _pqFactory.CreateExport().Value;
+            var view = window.Content as IPullRequestsWindowContainer;
+            view.DataContext = vm;
+            view.Window = window;
+            _navigationService.Navigate<IPullRequestsMainView>();
+        }
+
         public void ShowDiffWindow(object parameter, int id)
         {
             var window = ShowWindow<DiffWindow>(id);
-            var vm = (DiffWindowControlViewModel)_vmFactory.CreateExport().Value; // xd
+            var vm = (DiffWindowControlViewModel)_diffFactory.CreateExport().Value;
             var view = window.Content as IView;
             view.DataContext = vm;
             vm.InitializeCommand.Execute(parameter);
@@ -55,10 +73,12 @@ namespace GitClientVS.VisualStudio.UI.Services
 
             ToolWindowPane window = _package.FindToolWindow(typeof(TWindow), id, true);
 
+
             if (window?.Frame == null)
                 throw new NotSupportedException("Cannot create window");
 
             IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
+      
             Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
 
             return window as TWindow;

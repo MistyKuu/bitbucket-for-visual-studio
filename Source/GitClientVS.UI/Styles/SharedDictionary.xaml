@@ -47,9 +47,8 @@
     </Setter>
   </Style>
 
-  <Style x:Key="VerticalSeparator" TargetType="{x:Type Separator}">
-    <Setter Property="Background" Value="{DynamicResource GitHubHeaderSeparatorBrush}" />
-    <Setter Property="Margin" Value="3,0,3,0" />
+    <Style x:Key="VerticalSeparator" TargetType="{x:Type Separator}">
+        <Setter Property="Margin" Value="3,0,3,0" />
     <Setter Property="LayoutTransform">
       <Setter.Value>
         <RotateTransform Angle="90" />

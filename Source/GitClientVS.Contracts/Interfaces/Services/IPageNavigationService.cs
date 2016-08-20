@@ -1,8 +1,16 @@
-﻿namespace GitClientVS.Contracts.Interfaces.Services
+﻿using System;
+using GitClientVS.Contracts.Events;
+using GitClientVS.Contracts.Interfaces.Views;
+
+namespace GitClientVS.Contracts.Interfaces.Services
 {
-    public interface IPageNavigationService
+    public interface IPageNavigationService<TWindow> : IObservable<NavigationEvent> where TWindow : IWorkflowWindow
     {
-        void NavigateBack();
-        void Navigate(string pageId, object parameter = null);
+        void NavigateBack(bool removeFromHistory = false);
+        void Navigate<TView>(object parameter = null) where TView : class, IView;
+        IObservable<bool> CanNavigateBackObservable { get; }
+        IObservable<bool> CanNavigateForwardObservable { get; }
+        void NavigateForward();
+        void ClearNavigationHistory();
     }
 }

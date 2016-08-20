@@ -15,17 +15,13 @@ namespace GitClientVS.UI.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class PullRequestDetailView : UserControl, IPullRequestDetailView
     {
-        private readonly IPullRequestsDetailViewModel _detailsViewModel;
 
         [ImportingConstructor]
-        public PullRequestDetailView(IPullRequestsDetailViewModel detailsViewModel)
+        public PullRequestDetailView(IPullRequestsDetailViewModel vm)
         {
             InitializeComponent();
-            _detailsViewModel = detailsViewModel;
-            DataContext = _detailsViewModel;
+            DataContext = vm;
         }
-
-        public ICommand InitializeCommand => _detailsViewModel.InitializeCommand;
 
         private void GoToCommit(object sender, RequestNavigateEventArgs e)
         {

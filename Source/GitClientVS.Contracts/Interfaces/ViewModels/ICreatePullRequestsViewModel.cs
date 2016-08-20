@@ -1,6 +1,6 @@
 namespace GitClientVS.Contracts.Interfaces.ViewModels
 {
-    public interface ICreatePullRequestsViewModel : IInitializable, IViewModelWithErrorMessage, ILoadableViewModel
+    public interface ICreatePullRequestsViewModel : IInitializable, IViewModelWithErrorMessage, ILoadableViewModel, IWithPageTitle
     {
 
     }

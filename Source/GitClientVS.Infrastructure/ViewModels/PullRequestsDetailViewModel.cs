@@ -42,71 +42,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _title;
         private string _description;
         private GitPullRequest _pullRequest;
-        private ReactiveCommand<object> _expandMainSectionCommand;
-        private bool _isMainSectionExpanded;
         private string _mainSectionCommandText;
         private bool _isApproveAvailable;
         private bool _isApproved;
 
-        [ImportingConstructor]
-        public PullRequestsDetailViewModel(
-            IGitClientService gitClientService,
-            IGitService gitService,
-            ICommandsService commandsService,
-            IDiffFileParser diffFileParser,
-            IUserInformationService userInformationService
-            )
-        {
-            _gitClientService = gitClientService;
-            _gitService = gitService;
-            _commandsService = commandsService;
-            _diffFileParser = diffFileParser;
-            _userInformationService = userInformationService;
-            this.WhenAnyValue(x => x.IsMainSectionExpanded).Subscribe(_ => MainSectionCommandText = IsMainSectionExpanded ? "Hide" : "Expand");
-        }
 
-        public ICommand InitializeCommand => _initializeCommand;
-        public ICommand ShowDiffCommand => _showDiffCommand;
-        public ICommand ExpandMainSectionCommand => _expandMainSectionCommand;
-        public ICommand ApproveCommand => _approveCommand;
-
-        public void InitializeCommands()
-        {
-            _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((GitPullRequest)x));
-            _showDiffCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), (x) => ShowDiff((FileDiff)x));
-            _approveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => Approve());
-            _expandMainSectionCommand = ReactiveCommand.Create(Observable.Return(true));
-            _expandMainSectionCommand.Subscribe(_ => IsMainSectionExpanded = !IsMainSectionExpanded);
-        }
-
-        private async Task Approve()
-        {
-            // todo: put a real repo here
-            var activeRepository = _gitService.GetActiveRepository();
-            if (IsApproved)
-            {
-                await _gitClientService.DisapprovePullRequest(activeRepository.Name, activeRepository.Owner, PullRequest.Id);
-            }
-            else
-            {
-               await _gitClientService.ApprovePullRequest(activeRepository.Name, activeRepository.Owner, PullRequest.Id);
-            }
-
-            // no exception means we did it!
-            IsApproved = !IsApproved;
-
-        }
-
-        private async Task ShowDiff(FileDiff diff)
-        {
-            _commandsService.ShowDiffWindow(diff, diff.Id);
-        }
-
-        public bool IsMainSectionExpanded
-        {
-            get { return _isMainSectionExpanded; }
-            set { this.RaiseAndSetIfChanged(ref _isMainSectionExpanded, value); }
-        }
+        public string PageTitle => "Pull Request Details";
 
         public bool IsApproveAvailable
         {
@@ -160,6 +101,59 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get { return _pullRequest; }
             set { this.RaiseAndSetIfChanged(ref _pullRequest, value); }
+        }
+
+
+
+        [ImportingConstructor]
+        public PullRequestsDetailViewModel(
+            IGitClientService gitClientService,
+            IGitService gitService,
+            ICommandsService commandsService,
+            IDiffFileParser diffFileParser,
+            IUserInformationService userInformationService
+            )
+        {
+            _gitClientService = gitClientService;
+            _gitService = gitService;
+            _commandsService = commandsService;
+            _diffFileParser = diffFileParser;
+            _userInformationService = userInformationService;
+            this.WhenAnyValue(x => x._pullRequest).Subscribe(_ => this.RaisePropertyChanged(nameof(PageTitle)));
+        }
+
+        public ICommand InitializeCommand => _initializeCommand;
+        public ICommand ShowDiffCommand => _showDiffCommand;
+        public ICommand ApproveCommand => _approveCommand;
+
+        public void InitializeCommands()
+        {
+            _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((GitPullRequest)x));
+            _showDiffCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), (x) => ShowDiff((FileDiff)x));
+            _approveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => Approve());
+        }
+
+        private async Task Approve()
+        {
+            // todo: put a real repo here
+            var activeRepository = _gitService.GetActiveRepository();
+            if (IsApproved)
+            {
+                await _gitClientService.DisapprovePullRequest(activeRepository.Name, activeRepository.Owner, PullRequest.Id);
+            }
+            else
+            {
+               await _gitClientService.ApprovePullRequest(activeRepository.Name, activeRepository.Owner, PullRequest.Id);
+            }
+
+            // no exception means we did it!
+            IsApproved = !IsApproved;
+
+        }
+
+        private async Task ShowDiff(FileDiff diff)
+        {
+            _commandsService.ShowDiffWindow(diff, diff.Id);
         }
 
 
@@ -353,6 +347,5 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _isLoading; }
             set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
         }
-
     }
 }

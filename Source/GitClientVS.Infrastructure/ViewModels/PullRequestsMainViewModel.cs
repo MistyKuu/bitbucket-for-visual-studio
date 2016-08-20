@@ -9,8 +9,10 @@ using System.Reactive.Threading.Tasks;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
+using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.Infrastructure.Utils;
@@ -26,8 +28,9 @@ namespace GitClientVS.Infrastructure.ViewModels
     {
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
-        private readonly IPageNavigationService _pageNavigationService;
+        private readonly IPageNavigationService<IPullRequestsWindow> _pageNavigationService;
         private readonly ICacheService _cacheService;
+        private readonly IVsTools _vsTools;
         private ReactiveCommand<Unit> _initializeCommand;
         private ReactiveCommand<object> _goToDetailsCommand;
         private bool _isLoading;
@@ -51,7 +54,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         public GitUser SelectedAuthor
         {
             get { return _selectedAuthor; }
-            set { this.RaiseAndSetIfChanged(ref _selectedAuthor, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedAuthor, value);
+            }
         }
 
         public GitPullRequestStatus? SelectedStatus
@@ -96,6 +102,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
         }
 
+        public string PageTitle { get; } = "Pull Requests";
+
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand GoToDetailsCommand => _goToDetailsCommand;
         public ICommand GotoCreateNewPullRequestCommand => _goToCreateNewPullRequestCommand;
@@ -117,7 +125,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         public PullRequestsMainViewModel(
             IGitClientService gitClientService,
             IGitService gitService,
-            IPageNavigationService pageNavigationService,
+            IPageNavigationService<IPullRequestsWindow> pageNavigationService,
             ICacheService cacheService
             )
         {
@@ -130,8 +138,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             FilteredGitPullRequests = new ReactiveList<GitPullRequest>();
             SetupObservables();
             Authors = new List<GitUser>();
-            // todo: uncomment later
-            //  SelectedStatus = GitPullRequestStatus.Open;
+
+            SelectedStatus = GitPullRequestStatus.Open;
         }
 
         private void SetupObservables()
@@ -146,10 +154,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), _ => LoadPullRequests());
             _goToCreateNewPullRequestCommand = ReactiveCommand.Create(Observable.Return(true));
-            _goToCreateNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.Navigate(PageIds.CreatePullRequestsPageId); });
+            _goToCreateNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.Navigate<ICreatePullRequestsView>(); });
 
             _goToDetailsCommand = ReactiveCommand.Create(Observable.Return(true));
-            _goToDetailsCommand.Subscribe(x => { _pageNavigationService.Navigate(PageIds.PullRequestsDetailPageId, x); });
+            _goToDetailsCommand.Subscribe(x => { _pageNavigationService.Navigate<IPullRequestDetailView>(x); });
         }
 
         private async Task LoadPullRequests()
@@ -186,13 +194,10 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadNewestPullRequests()
         {
-            PageIterator<GitPullRequest> iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner);
-            GitPullRequests.AddRange(iterator.Values);
-            if (iterator.HasNext())
-                GetRemainingPullRequests(startPage: 2);
+            await GetPullRequestsFromPage(1);
         }
 
-        private async Task GetRemainingPullRequests(int startPage)
+        private async Task GetPullRequestsFromPage(int startPage)
         {
             PageIterator<GitPullRequest> iterator;
             while ((iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner, page: startPage)).HasNext())
@@ -225,5 +230,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             return this.WhenAnyValue(x => x.IsLoading).Select(x => !IsLoading);
         }
+
+
     }
 }

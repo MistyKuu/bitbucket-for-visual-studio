@@ -1,33 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using System.Configuration;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using EnvDTE;
-using GitClientVS.UI.Views;
 using Microsoft.TeamFoundation.Controls;
-using Microsoft.TeamFoundation.MVVM;
 using GitClientVS.VisualStudio.UI.TeamFoundation;
-using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces.Services;
-using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
-using GitClientVS.Contracts.Models;
-using GitClientVS.Infrastructure;
-using Reactive.EventAggregator;
-using GitClientVS.Infrastructure.Extensions;
-using GitClientVS.Services;
 using log4net;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace GitClientVS.VisualStudio.UI.Sections
 {

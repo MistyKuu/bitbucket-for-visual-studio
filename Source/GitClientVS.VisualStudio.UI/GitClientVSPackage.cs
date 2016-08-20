@@ -61,6 +61,7 @@ namespace GitClientVS.VisualStudio.UI
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideAutoLoad(GitExtensionsId)]
     [ProvideToolWindow(typeof(DiffWindow), Style = VsDockStyle.MDI, Orientation = ToolWindowOrientation.Left, MultiInstances = true, Transient = true)]
+    [ProvideToolWindow(typeof(PullRequestsWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Left, MultiInstances = false, Transient = true, Window = EnvDTE.Constants.vsWindowKindSolutionExplorer)]
     public sealed class GitClientVSPackage : Package
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

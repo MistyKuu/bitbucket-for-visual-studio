@@ -23,18 +23,13 @@
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PqDetailView"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsDetailViewModel,IsDesignTimeCreatable=False}" 
-             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type framework:PageControl}},Path=ActualHeight}"
              >
-    <i:Interaction.Behaviors>
-        <attachedProperties:DisableParentScrollViewerBehavior DisableVertical="True"/>
-    </i:Interaction.Behaviors>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
 
             <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">
                 <Grid Margin="0,5,0,0">
@@ -73,29 +68,13 @@
 
         <Grid x:Name="PrContent">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition  Height="250"/>
+                <RowDefinition Height="3"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <ScrollViewer x:Name="TitleSectionScrollViewer" HorizontalScrollBarVisibility="Disabled">
-                <ScrollViewer.Style>
-                    <Style TargetType="ScrollViewer">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsMainSectionExpanded}" Value="False">
-                                <Setter Property="MaxHeight" Value="250"/>
-                                <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsMainSectionExpanded}" Value="True">
-                                <Setter Property="MaxHeight" Value="500"/>
-                                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ScrollViewer.Style>
-
-                <Grid Margin="5">
+                <Grid Margin="5" x:Name="MainSectionGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -172,14 +151,13 @@
                             </Style>
                         </Separator.Resources>
                     </Separator>
-                    <TextBlock VerticalAlignment="Top" Grid.Row="2" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" TextTrimming="WordEllipsis"  />
+                    <TextBlock VerticalAlignment="Top" Grid.Row="2" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" TextTrimming="WordEllipsis" />
                 </Grid>
             </ScrollViewer>
+            
+            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch"/>
 
-
-            <teamExplorer:TextLink x:Name="ExpandButton"  Grid.Row="1"  Command="{Binding ExpandMainSectionCommand}" Text="{Binding MainSectionCommandText}" HorizontalAlignment="Center"/>
-
-            <Separator Height="3" Grid.Row="2" Margin="0, 4">
+            <!--<Separator Height="3" Grid.Row="2" Margin="0, 4">
                 <Separator.Resources>
                     <Style TargetType="Separator">
                         <Setter Property="Template">
@@ -197,9 +175,9 @@
                         </Setter>
                     </Style>
                 </Separator.Resources>
-            </Separator>
+            </Separator>-->
 
-            <controls:MetroAnimatedTabControl Grid.Row="3" >
+            <controls:MetroAnimatedTabControl Grid.Row="2" >
 
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
 
@@ -431,8 +409,6 @@
                     </TreeView>
                 </controls:MetroTabItem>
             </controls:MetroAnimatedTabControl>
-
-            <controls1:ErrorView Grid.Row="1"/>
         </Grid>
     </Grid>
 

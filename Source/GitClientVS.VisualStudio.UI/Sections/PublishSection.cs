@@ -4,11 +4,11 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models.GitClientModels;
-using GitClientVS.Infrastructure.Events;
 using GitClientVS.UI;
 using GitClientVS.VisualStudio.UI.TeamFoundation;
 using Microsoft.TeamFoundation.Controls;
@@ -47,7 +47,7 @@ namespace GitClientVS.VisualStudio.UI.Sections
 
         private bool IsGitLocalRepoAndLoggedIn(GitRemoteRepository repo)
         {
-            return (repo != null && string.IsNullOrEmpty(repo.CloneUrl)) && _userInformationService.ConnectionData.IsLoggedIn;
+            return _userInformationService.ConnectionData.IsLoggedIn && (repo != null && string.IsNullOrEmpty(repo.CloneUrl));
         }
 
         public override void Initialize(object sender, SectionInitializeEventArgs e)

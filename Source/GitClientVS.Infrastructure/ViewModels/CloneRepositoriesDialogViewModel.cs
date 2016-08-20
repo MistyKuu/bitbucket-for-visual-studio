@@ -21,7 +21,6 @@ using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
-using GitClientVS.Infrastructure.Events;
 using GitClientVS.Infrastructure.Extensions;
 using log4net;
 using log4net.Config;
@@ -64,7 +63,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _repositories, value); }
         }
 
-        [Required]
         public GitRemoteRepository SelectedRepository
         {
             get { return _selectedRepository; }
@@ -72,11 +70,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         [Required(AllowEmptyStrings = false)]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathValidate), ErrorMessage = "Directory already exists")]
         public string ClonePath
         {
             get { return _clonePath; }
             set { this.RaiseAndSetIfChanged(ref _clonePath, value); }
         }
+
+
 
         public ICommand CloneCommand => _cloneCommand;
         public ICommand ChoosePathCommand => _choosePathCommand;
@@ -110,8 +111,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _cloneCommand.Subscribe(_ => OnClose());
             _choosePathCommand.Subscribe(_ => ChooseClonePath());
+            this.WhenAnyValue(x => x.SelectedRepository).Subscribe(_ =>
+            {
+                var clonePath = ClonePath;//TODO CHANGE IT LATER, REVALIDATE CLONEPATH WHEN SELECTEDREPOSITORYCHANGED
+                ClonePath = null;
+                ClonePath = clonePath;
+            });
         }
-
         private void ChooseClonePath()
         {
             var result = _fileService.OpenDirectoryDialog(ClonePath);
@@ -140,13 +146,24 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private IObservable<bool> CanExecuteCloneObservable()
         {
-            return ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
+            var obs = this.WhenAnyValue(x => x.ClonePath, x => x.SelectedRepository.Name).Select(x => CanExecute());
+            var valObs = ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
+            return obs.Merge(valObs);
         }
 
         private bool CanExecute()
         {
             return IsObjectValid();
         }
+
+        public bool ClonePathValidate(string clonePath)
+        {
+            if (SelectedRepository == null)
+                return false;
+
+            return !Directory.Exists(Path.Combine(ClonePath, SelectedRepository.Name));
+        }
+
 
         protected void OnClose()
         {

@@ -6,5 +6,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
     {
         GitRemoteRepository ActiveRepo { get; }
         void Initialize();
+        void Refresh();
     }
 }

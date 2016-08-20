@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading;
+using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models.GitClientModels;
-using GitClientVS.Infrastructure.Events;
 using GitClientVS.VisualStudio.UI.Extensions;
+using Microsoft.TeamFoundation.Controls;
 using Microsoft.VisualStudio.TeamFoundation.Git.Extensibility;
 
 namespace GitClientVS.VisualStudio.UI.Services
@@ -37,6 +39,11 @@ namespace GitClientVS.VisualStudio.UI.Services
             gitExt.PropertyChanged += CheckAndUpdate;
         }
 
+        public void Refresh()
+        {
+            ActiveRepo = _gitService.GetActiveRepository();
+        }
+
         void CheckAndUpdate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName != "ActiveRepositories")
@@ -54,9 +61,6 @@ namespace GitClientVS.VisualStudio.UI.Services
             get { return activeRepo; }
             private set
             {
-                if (activeRepo == value)
-                    return;
-   
                 activeRepo = value;
 
                 eventAggregatorService.Publish(new ActiveRepositoryChangedEvent(value));

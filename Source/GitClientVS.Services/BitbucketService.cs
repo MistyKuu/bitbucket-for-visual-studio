@@ -9,11 +9,11 @@ using AutoMapper;
 using BitBucket.REST.API;
 using BitBucket.REST.API.Models;
 using BitBucket.REST.API.QueryBuilders;
+using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
-using GitClientVS.Infrastructure.Events;
 using GitClientVS.Infrastructure.Extensions;
 
 namespace GitClientVS.Services

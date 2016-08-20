@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:GitClientVS.UI.Controls"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
+             xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
+             xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -14,9 +16,27 @@
                 <ResourceDictionary.MergedDictionaries>
                     <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
+                <Style TargetType="FrameworkElement" x:Key="Animated">
+                    <Style.Triggers>
+                        <Trigger Property="Visibility" Value="Visible">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"  From="0.0" To="1.0" Duration="0:0:0.5"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
             </ResourceDictionary>
         </Grid.Resources>
-        
-        <TextBlock Grid.Column="0" Text="{Binding ErrorMessage}" Style="{StaticResource ErrorTextBlockStyle}" TextWrapping="Wrap"/>
+
+
+        <WrapPanel x:Name="ErrorPanel" Orientation="Horizontal" Visibility="{Binding ErrorMessage, Converter={converters:NullToNonVisibilityConverter}}" Style="{StaticResource Animated}">
+            <Image Margin="5" Width="16" Height="16" Source="{Binding Source={x:Static draw:SystemIcons.Error}, Converter={converters:IconToImageSourceConverter}, Mode=OneWay}" />
+            <TextBlock Text="{Binding ErrorMessage}" Style="{StaticResource ErrorTextBlockStyle}"  TextWrapping="Wrap"  />
+        </WrapPanel>
+
     </Grid>
 </UserControl>
