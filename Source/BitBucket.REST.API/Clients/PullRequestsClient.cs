@@ -102,9 +102,9 @@ namespace BitBucket.REST.API.Clients
             return await RestClient.GetAllPages<Comment>(url);
         }
 
-        public async Task<PullRequest> GetPullRequest(string repositoryName, long id)
+        public async Task<PullRequest> GetPullRequest(string repositoryName, string owner, long id)
         {
-            var url = ApiUrls.PullRequest(Connection.Credentials.Login, repositoryName, id);
+            var url = ApiUrls.PullRequest(owner, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await RestClient.ExecuteTaskAsync<PullRequest>(request);
             return response.Data;

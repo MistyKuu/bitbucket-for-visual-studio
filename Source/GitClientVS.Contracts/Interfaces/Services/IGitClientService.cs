@@ -38,5 +38,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
 
         Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName, string owner);
         Task<IEnumerable<GitPullRequest>> GetAllPullRequests(string repositoryName, string ownerName);
+        Task<GitPullRequest> GetPullRequest(string repositoryName, string ownerName, long id);
     }
 }

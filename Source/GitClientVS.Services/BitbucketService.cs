@@ -78,6 +78,11 @@ namespace GitClientVS.Services
             return teams.Values.MapTo<List<GitTeam>>();
         }
 
+        public async Task<GitPullRequest> GetPullRequest(string repositoryName, string ownerName, long id)
+        {
+            return (await _bitbucketClient.PullRequestsClient.GetPullRequest(repositoryName, ownerName, id)).MapTo<GitPullRequest>();
+        }
+
         public async Task<string> GetPullRequestDiff(string repositoryName, long id)
         {
             return await _bitbucketClient.PullRequestsClient.GetPullRequestDiff(repositoryName, id);

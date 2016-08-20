@@ -118,10 +118,10 @@
                                 <Style TargetType="Button" BasedOn="{StaticResource MetroFlatButton}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsApproved}" Value="True">
-                                            <Setter Property="Content" Value="Approve"/>
+                                            <Setter Property="Content" Value="Unapprove"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding IsApproved}" Value="False">
-                                            <Setter Property="Content" Value="Unapprove"/>
+                                            <Setter Property="Content" Value="Approve"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
