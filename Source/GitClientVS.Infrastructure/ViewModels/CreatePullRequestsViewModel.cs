@@ -63,7 +63,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _sourceBranch, value); }
         }
         
-        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = "ValidateDestinationBranch", ErrorMessage = "Branches must be different")]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateDestinationBranch), ErrorMessage = "Branches must be different")]
         public GitBranch DestinationBranch
         {
             get { return _destinationBranch; }
