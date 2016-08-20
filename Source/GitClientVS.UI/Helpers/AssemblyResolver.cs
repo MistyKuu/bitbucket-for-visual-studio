@@ -25,7 +25,8 @@ namespace GitClientVS.UI.Helpers
             "ParseDiff",
             "HtmlRenderer",
             "HtmlRenderer.WPF",
-            "System.Windows.Interactivity"
+            "System.Windows.Interactivity",
+            "Humanizer"
         };
 
         public static void InitializeAssemblyResolver()
