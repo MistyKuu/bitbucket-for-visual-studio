@@ -36,7 +36,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
 
         bool IsOriginRepo(GitRemoteRepository gitRemoteRepository);
 
-        Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName);
+        Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName, string owner);
         Task<IEnumerable<GitPullRequest>> GetAllPullRequests(string repositoryName, string ownerName);
     }
 }

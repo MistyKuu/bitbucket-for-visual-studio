@@ -154,9 +154,9 @@ namespace GitClientVS.Services
             await _bitbucketClient.PullRequestsClient.DisapprovePullRequest(repositoryName, ownerName, id);
         }
 
-        public async Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName)
+        public async Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName, string owner)
         {
-            var responsePullRequest = await _bitbucketClient.PullRequestsClient.CreatePullRequest(gitPullRequest.MapTo<PullRequest>(), repositoryName);
+            var responsePullRequest = await _bitbucketClient.PullRequestsClient.CreatePullRequest(gitPullRequest.MapTo<PullRequest>(), repositoryName, owner);
             return responsePullRequest.MapTo<GitPullRequest>();
         }
 

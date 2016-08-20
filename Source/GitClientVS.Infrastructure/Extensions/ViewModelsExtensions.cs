@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GitClientVS.Contracts.Interfaces;
+using GitClientVS.Infrastructure.Utils;
 using log4net;
 using Microsoft.VisualStudio.Shell;
 
@@ -21,15 +22,13 @@ namespace GitClientVS.Infrastructure.Extensions
                 reactiveCommand.IsExecuting.Where(x => x).Subscribe(_ => vm.ErrorMessage = null);
                 reactiveCommand.ThrownExceptions.Subscribe((ex) =>
                 {
-                    // todo: remove later
-                    ActivityLog.LogError("BITBUCKET", ex.StackTrace);
                     Logger.Error(ex);
-                    vm.ErrorMessage = ex.Message;
+                    vm.ErrorMessage = ExceptionMapper.Map(ex);
                 });
             }
 
             var reactiveValidated = vm as ReactiveValidatedObject; // todo don't show at the beginning
-            reactiveValidated?.Changed.Subscribe(__ =>
+            reactiveValidated?.Changed.Take(1).Subscribe(__ =>
             {
                 reactiveValidated?.ValidationObservable.Subscribe(_ =>
                 {

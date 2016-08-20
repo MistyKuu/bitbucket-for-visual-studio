@@ -62,7 +62,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _sourceBranch; }
             set { this.RaiseAndSetIfChanged(ref _sourceBranch, value); }
         }
-        
+
         [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateDestinationBranch), ErrorMessage = "Branches must be different")]
         public GitBranch DestinationBranch
         {
@@ -70,9 +70,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _destinationBranch, value); }
         }
 
-     
 
-        [Required]
+
         public string Description
         {
             get { return _description; }
@@ -132,12 +131,12 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CreateNewPullRequest()
         {
-            var currentRepo = (_gitService.GetActiveRepository()).Name;
+            var currentRepo = _gitService.GetActiveRepository();
             var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.Name, DestinationBranch.Name)
             {
                 CloseSourceBranch = CloseSourceBranch
             };
-            await _gitClientService.CreatePullRequest(gitPullRequest, currentRepo);
+            await _gitClientService.CreatePullRequest(gitPullRequest, currentRepo.Name, currentRepo.Owner);
         }
 
         private async Task LoadBranches()

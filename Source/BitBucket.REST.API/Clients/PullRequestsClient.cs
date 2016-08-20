@@ -110,13 +110,13 @@ namespace BitBucket.REST.API.Clients
             return response.Data;
         }
 
-        public async Task<PullRequest> CreatePullRequest(PullRequest pullRequest, string repositoryName)
+        public async Task<PullRequest> CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner)
         {
             pullRequest.Author = new User()
             {
                 Username = Connection.Credentials.Login
             };
-            var url = ApiUrls.PullRequests(Connection.Credentials.Login, repositoryName);
+            var url = ApiUrls.PullRequests(owner, repositoryName);
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(pullRequest), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<PullRequest>(request);
