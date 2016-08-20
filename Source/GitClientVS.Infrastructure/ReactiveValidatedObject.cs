@@ -306,9 +306,7 @@ namespace GitClientVS.Infrastructure
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class ValidatesViaMethodAttribute : ValidationBase
     {
         public string Name;

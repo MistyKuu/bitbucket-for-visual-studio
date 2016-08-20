@@ -70,7 +70,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         [Required(AllowEmptyStrings = false)]
-        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathValidate), ErrorMessage = "Directory already exists")]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathNotExists), ErrorMessage = "Directory already exists")]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathIsPath), ErrorMessage = "Clone Path must be a valid path")]
         public string ClonePath
         {
             get { return _clonePath; }
@@ -156,12 +157,17 @@ namespace GitClientVS.Infrastructure.ViewModels
             return IsObjectValid();
         }
 
-        public bool ClonePathValidate(string clonePath)
+        public bool ClonePathNotExists(string clonePath)
         {
             if (SelectedRepository == null)
                 return false;
 
             return !Directory.Exists(Path.Combine(ClonePath, SelectedRepository.Name));
+        }
+
+        public bool ClonePathIsPath(string clonePath)
+        {
+            return  Path.IsPathRooted(clonePath) && clonePath.IndexOfAny(Path.GetInvalidPathChars()) == -1;
         }
 
 
