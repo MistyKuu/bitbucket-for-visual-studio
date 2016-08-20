@@ -162,6 +162,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadPullRequests()
         {
+            GitPullRequests.Clear();
             Authors = (await _gitClientService.GetPullRequestsAuthors(_currentRepository.Name, _currentRepository.Owner)).ToList();
 
             var result = _cacheService.Get<IEnumerable<GitPullRequest>>(CacheKeys.PullRequestCacheKey);
@@ -172,7 +173,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
             else
             {
-                await LoadNewestPullRequests();
+                await ReloadAllPullRequests();
             }
         }
 
@@ -181,32 +182,19 @@ namespace GitClientVS.Infrastructure.ViewModels
             var allPullRequests = new List<GitPullRequest>();
             int startPage = 1;
             PageIterator<GitPullRequest> iterator;
-            while ((iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner, page: startPage)).HasNext())
+
+            do
             {
+                iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner, page: startPage);
                 allPullRequests.AddRange(iterator.Values);
                 startPage = iterator.Page + 1;
-            }
+
+            } while (iterator.HasNext());
+
             GitPullRequests.Clear();
             GitPullRequests.AddRange(allPullRequests);
 
-            _cacheService.Add(CacheKeys.PullRequestCacheKey, GitPullRequests);
-        }
-
-        private async Task LoadNewestPullRequests()
-        {
-            await GetPullRequestsFromPage(1);
-        }
-
-        private async Task GetPullRequestsFromPage(int startPage)
-        {
-            PageIterator<GitPullRequest> iterator;
-            while ((iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner, page: startPage)).HasNext())
-            {
-                GitPullRequests.AddRange(iterator.Values);
-                startPage = iterator.Page + 1;
-            }
-
-            _cacheService.Add(CacheKeys.PullRequestCacheKey, GitPullRequests);
+            _cacheService.Add(CacheKeys.PullRequestCacheKey, GitPullRequests.ToList());
         }
 
         private bool CanRunFilter()

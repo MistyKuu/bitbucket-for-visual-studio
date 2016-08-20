@@ -15,17 +15,17 @@ namespace GitClientVS.Services
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class MemoryCacheService : ICacheService
     {
-        private readonly ObjectCache _cache = MemoryCache.Default;
+        private readonly Dictionary<string, object> _cache = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
         public void Add(string key, object value)
         {
-            _cache.Add(key, value, DateTimeOffset.MaxValue);
+            _cache.Add(key, value);
         }
         public Result<T> Get<T>(string key) where T : class
         {
             try
             {
-                return _cache.Contains(key) ? Result<T>.Success((T)_cache.Get(key)) : Result<T>.Fail();
+                return _cache.ContainsKey(key) ? Result<T>.Success((T)_cache[key]) : Result<T>.Fail();
             }
             catch (Exception ex)
             {
@@ -35,7 +35,7 @@ namespace GitClientVS.Services
 
         public void Delete(string key)
         {
-            if (_cache.Contains(key))
+            if (_cache.ContainsKey(key))
                 _cache.Remove(key);
         }
     }
