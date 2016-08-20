@@ -101,7 +101,7 @@
                         </Style>
                     </TextBlock.Resources>
                     <Run Text="Warning!"></Run>
-                    <Run Text="Your local source branch"></Run>
+                    <Run Text="Your local branch"></Run>
                     <Run Text="{Binding SourceBranch.Name}" FontWeight="Bold"></Run>
                     <Run Text="is out of sync with remote branch."></Run>
                 </TextBlock>
