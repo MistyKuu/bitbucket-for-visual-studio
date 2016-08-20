@@ -166,7 +166,7 @@
                      />
             <TextBlock Text="No pull requests" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15">
             <TextBlock.Style>
-                <Style TargetType="TextBlock">
+                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Setter Property="Visibility" Value="Collapsed"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding FilteredGitPullRequests.Count}" Value="0">

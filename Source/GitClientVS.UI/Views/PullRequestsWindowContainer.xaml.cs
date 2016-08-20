@@ -55,7 +55,6 @@ namespace GitClientVS.UI.Views
 
         private void FrameworkElement_OnLoaded1(object sender, RoutedEventArgs e)
         {
-            var tb = Lb.FindDescendant<TextBlock>();
             //black
         }
     }
