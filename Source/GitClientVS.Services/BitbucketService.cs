@@ -90,7 +90,7 @@ namespace GitClientVS.Services
 
         public bool IsOriginRepo(GitRemoteRepository gitRemoteRepository)
         {
-            if (gitRemoteRepository.CloneUrl == null) return false;
+            if (gitRemoteRepository?.CloneUrl == null) return false;
             Uri uri = new Uri(gitRemoteRepository.CloneUrl);
             return uri.Host.Contains(_bitbucketClient.Connection.GetHost(), StringComparison.OrdinalIgnoreCase);
         }
