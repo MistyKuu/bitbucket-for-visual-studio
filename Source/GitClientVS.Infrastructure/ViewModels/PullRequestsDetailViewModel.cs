@@ -42,20 +42,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _title;
         private string _description;
         private GitPullRequest _pullRequest;
-        private ReactiveCommand<object> _expandMainSectionCommand;
-        private bool _isMainSectionExpanded;
         private string _mainSectionCommandText;
         private bool _isApproveAvailable;
         private bool _isApproved;
 
 
         public string PageTitle => "Pull Request Details";
-
-        public bool IsMainSectionExpanded
-        {
-            get { return _isMainSectionExpanded; }
-            set { this.RaiseAndSetIfChanged(ref _isMainSectionExpanded, value); }
-        }
 
         public bool IsApproveAvailable
         {
@@ -127,13 +119,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             _commandsService = commandsService;
             _diffFileParser = diffFileParser;
             _userInformationService = userInformationService;
-            this.WhenAnyValue(x => x.IsMainSectionExpanded).Subscribe(_ => MainSectionCommandText = IsMainSectionExpanded ? "Hide" : "Expand");
             this.WhenAnyValue(x => x._pullRequest).Subscribe(_ => this.RaisePropertyChanged(nameof(PageTitle)));
         }
 
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand ShowDiffCommand => _showDiffCommand;
-        public ICommand ExpandMainSectionCommand => _expandMainSectionCommand;
         public ICommand ApproveCommand => _approveCommand;
 
         public void InitializeCommands()
@@ -141,8 +131,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((GitPullRequest)x));
             _showDiffCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), (x) => ShowDiff((FileDiff)x));
             _approveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => Approve());
-            _expandMainSectionCommand = ReactiveCommand.Create(Observable.Return(true));
-            _expandMainSectionCommand.Subscribe(_ => IsMainSectionExpanded = !IsMainSectionExpanded);
         }
 
         private async Task Approve()
