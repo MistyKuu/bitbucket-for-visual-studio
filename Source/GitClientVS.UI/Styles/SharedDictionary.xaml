@@ -19,6 +19,10 @@
         <!--THESE TWO LINES DETERMINES ACCENT AND BAR COLOR-->
     </ResourceDictionary.MergedDictionaries>
 
+    <Style TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+    </Style>
+    
     <DrawingBrush x:Key="ConnectArrowBrush">
         <DrawingBrush.Drawing>
             <DrawingGroup>

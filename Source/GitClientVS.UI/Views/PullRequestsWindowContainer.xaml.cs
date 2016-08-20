@@ -47,15 +47,5 @@ namespace GitClientVS.UI.Views
 
         public IPullRequestsWindowContainerViewModel ViewModel { get; set; }
         public IPullRequestsWindow Window { get; set; }
-
-        private void FrameworkElement_OnLoaded(object sender, RoutedEventArgs e)
-        {
-          //white
-        }
-
-        private void FrameworkElement_OnLoaded1(object sender, RoutedEventArgs e)
-        {
-            //black
-        }
     }
 }

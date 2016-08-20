@@ -178,7 +178,9 @@
             </Separator>-->
 
             <controls:MetroAnimatedTabControl Grid.Row="2" >
-
+                <controls:MetroAnimatedTabControl.Resources>
+                    <Style TargetType="TextBlock"/>
+                </controls:MetroAnimatedTabControl.Resources>
                 <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
 
                     <TreeView ItemsSource="{Binding FilesTree}" x:Name="FilesTree" Margin="0,4,0,0" >
