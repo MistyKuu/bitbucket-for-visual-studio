@@ -31,7 +31,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace GitClientVS.VisualStudio.UI.Sections
 {
-    [TeamExplorerSection(Id, TeamExplorerPageIds.Connect, 10)]
+    [TeamExplorerSection(Id, TeamExplorerPageIds.Connect, 20)]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class ConnectSection : TeamExplorerBaseSection
     {

@@ -22,9 +22,17 @@ namespace GitClientVS.VisualStudio.UI.Extensions
             string repoName = null, ownerName = null;
             if (repoUrl != null)
             {
-                var repoUri = new Uri(repoUrl);
-                repoName = repoUri.Segments.Last().TrimEnd('/').TrimEnd(".git");
-                ownerName = (repoUri.Segments[repoUri.Segments.Length - 2] ?? "").TrimEnd('/');
+                try
+                {
+                    var repoUri = new Uri(repoUrl);
+                    repoName = repoUri.Segments.Last().TrimEnd('/').TrimEnd(".git");
+                    ownerName = (repoUri.Segments[repoUri.Segments.Length - 2] ?? "").TrimEnd('/');
+                } catch (Exception ex)
+                {
+                    // probably ssh remote
+                    return null;
+                }
+             
             }
           
             return new GitRemoteRepository(repoName, ownerName, repoUrl);

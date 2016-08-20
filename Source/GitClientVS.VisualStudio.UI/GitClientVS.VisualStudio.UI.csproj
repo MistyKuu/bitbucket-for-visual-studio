@@ -78,6 +78,7 @@
     <Compile Include="Services\GitService.cs" />
     <Compile Include="Services\GitWatcher.cs" />
     <Compile Include="Services\PageNavigationService.cs" />
+    <Compile Include="Settings\GuidList.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBase.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBaseNavigationItem.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBaseNavigationLink.cs" />
@@ -104,6 +105,7 @@
     <Content Include="stylesheet.css" />
     <VSCTCompile Include="Window\GitClientVSPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
     </VSCTCompile>
     <Content Include="Window\Resources\DiffWindowCommand.png" />
   </ItemGroup>

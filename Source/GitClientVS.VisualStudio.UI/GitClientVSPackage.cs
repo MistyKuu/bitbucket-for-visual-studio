@@ -19,8 +19,10 @@ using System.Windows;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.UI.Helpers;
+using GitClientVS.VisualStudio.UI.Settings;
 using GitClientVS.VisualStudio.UI.Window;
 using log4net;
+using log4net.Repository.Hierarchy;
 using Microsoft.TeamFoundation.Controls;
 using Microsoft.TeamFoundation.Git.Controls.Extensibility;
 using Microsoft.VisualStudio;
@@ -54,16 +56,16 @@ namespace GitClientVS.VisualStudio.UI
     /// 
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
-    [Guid(GitClientVSPackage.PackageGuidString)]
-    [ProvideAutoLoad(GitExtensionsId)]
+    [Guid(GuidList.guidBitbuketPkgString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideAutoLoad(GitExtensionsId)]
     [ProvideToolWindow(typeof(DiffWindow), Style = VsDockStyle.MDI, Orientation = ToolWindowOrientation.Left, MultiInstances = true, Transient = true)]
     public sealed class GitClientVSPackage : Package
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public const string PackageGuidString = "69c97fa4-92b5-448c-b5db-037dd9c2c8b7";
+        public const string ActivityLogName = "BitbucketExtension";
         public const string GitExtensionsId = "11B8E6D7-C08B-4385-B321-321078CDD1F8";
 
         static GitClientVSPackage()
@@ -104,7 +106,7 @@ namespace GitClientVS.VisualStudio.UI
             Logger.Info("Initialized GitClientVsPackage Extension");
         }
 
-     
+
 
         #endregion
     }

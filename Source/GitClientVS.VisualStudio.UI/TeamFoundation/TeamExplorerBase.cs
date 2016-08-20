@@ -3,8 +3,11 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using GitClientVS.VisualStudio.UI.Settings;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.Controls;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace GitClientVS.VisualStudio.UI.TeamFoundation
 {
@@ -38,13 +41,49 @@ namespace GitClientVS.VisualStudio.UI.TeamFoundation
                     this.UnsubscribeContextChanges();
                 }
 
+               
                 this.serviceProvider = value;
-
+                CheckPackage();
                 // Subscribe to Team Foundation context changes
                 if (this.serviceProvider != null)
                 {
                     this.SubscribeContextChanges();
                 }
+            }
+        }
+
+        // Visual doesnt want to load our package automatically when GUID is specified in ProvideAutoLoad
+        // this trick is a temporary workaround, we check if package has been loaded, if not we load it manually using VS API
+        private void CheckPackage()
+        {
+            try
+            {
+                IVsShell shell = serviceProvider?.GetService(typeof(SVsShell)) as IVsShell;
+                if (shell == null) return;
+
+                // always false, why?
+                // IVsPackage gitPackage;
+                // Guid gitExtensionPackage = new Guid(GitClientVSPackage.GitExtensionsId);
+                // var isGitLoaded = shell.IsPackageLoaded(ref gitExtensionPackage, out gitPackage);
+
+                IVsPackage package;
+                Guid packageToBeLoadedGuid =
+                    new Guid(GuidList.guidBitbuketPkgString);
+               
+                var isLoaded = shell.IsPackageLoaded(ref packageToBeLoadedGuid, out package);
+                 ActivityLog.LogInformation(GitClientVSPackage.ActivityLogName, "Bitbucket package is loaded: " + (Microsoft.VisualStudio.VSConstants.S_OK == isLoaded));
+
+                if (Microsoft.VisualStudio.VSConstants.S_OK != isLoaded)
+                {
+                    ActivityLog.LogWarning(GitClientVSPackage.ActivityLogName, "Package was not loaded, trying to load it manually...");
+                    shell.LoadPackage(ref packageToBeLoadedGuid, out package);
+                    ActivityLog.LogWarning(GitClientVSPackage.ActivityLogName, "Package has been loaded");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ActivityLog.LogError(GitClientVSPackage.ActivityLogName, ex.ToString());
             }
         }
 
