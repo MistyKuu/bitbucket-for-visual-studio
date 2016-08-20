@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models;
+using GitClientVS.Infrastructure.Extensions;
 using ParseDiff;
 
 namespace GitClientVS.Services
@@ -15,17 +17,17 @@ namespace GitClientVS.Services
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class MemoryCacheService : ICacheService
     {
-        private readonly ObjectCache _cache = MemoryCache.Default;
+        private readonly ConcurrentDictionary<string, object> _cache = new ConcurrentDictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
         public void Add(string key, object value)
         {
-            _cache.Add(key, value, DateTimeOffset.MaxValue);
+            _cache.AddOrUpdate(key, value);
         }
         public Result<T> Get<T>(string key) where T : class
         {
             try
             {
-                return _cache.Contains(key) ? Result<T>.Success((T)_cache.Get(key)) : Result<T>.Fail();
+                return _cache.ContainsKey(key) ? Result<T>.Success((T)_cache[key]) : Result<T>.Fail();
             }
             catch (Exception ex)
             {
@@ -35,8 +37,9 @@ namespace GitClientVS.Services
 
         public void Delete(string key)
         {
-            if (_cache.Contains(key))
-                _cache.Remove(key);
+            object res;
+            if (_cache.ContainsKey(key))
+                _cache.TryRemove(key, out res);
         }
     }
 }

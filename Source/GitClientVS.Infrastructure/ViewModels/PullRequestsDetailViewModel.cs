@@ -29,6 +29,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly ICommandsService _commandsService;
         private readonly IDiffFileParser _diffFileParser;
         private readonly IUserInformationService _userInformationService;
+        private readonly IVsTools _vsTools;
         private string _errorMessage;
         private bool _isLoading;
         private ReactiveCommand<Unit> _initializeCommand;
@@ -159,9 +160,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task LoadPullRequestData(GitPullRequest pr)
         {
-            PullRequest = pr;
             var id = pr.Id;
             var currentRepository = _gitService.GetActiveRepository();
+            PullRequest = await _gitClientService.GetPullRequest(currentRepository.Name, currentRepository.Owner, id);
             Commits = await _gitClientService.GetPullRequestCommits(currentRepository.Name, currentRepository.Owner, id);
             Comments = (await _gitClientService.GetPullRequestComments(currentRepository.Name, currentRepository.Owner, id)).Where(comment => comment.IsFile == false);
             var diff = await _gitClientService.GetPullRequestDiff(currentRepository.Name, currentRepository.Owner, id);

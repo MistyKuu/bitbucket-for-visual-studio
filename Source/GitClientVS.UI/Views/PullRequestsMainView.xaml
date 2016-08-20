@@ -84,8 +84,8 @@
                         </StackPanel>-->
                         <TextBlock Grid.Row="1" TextWrapping="Wrap" TextTrimming="WordEllipsis">
                             <Run Text="{Binding Author.DisplayName}"/>
-                            <Run Text=" - #"/><Run Text="{Binding Id}"/><Run Text=", last updated on"/>
-                            <Run Text="{Binding Updated}"/>
+                            <Run Text=" - #"/><Run Text="{Binding Id}"/><Run Text=", last updated"/>
+                            <Run Text="{Binding Updated, Converter={converters:HumanizeDateTimeConverter}}"/>
                         </TextBlock>
                     </Grid>
                     

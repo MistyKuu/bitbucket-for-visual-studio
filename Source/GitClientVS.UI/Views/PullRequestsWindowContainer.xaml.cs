@@ -9,6 +9,7 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.UI.Helpers;
@@ -46,5 +47,16 @@ namespace GitClientVS.UI.Views
 
         public IPullRequestsWindowContainerViewModel ViewModel { get; set; }
         public IPullRequestsWindow Window { get; set; }
+
+        private void FrameworkElement_OnLoaded(object sender, RoutedEventArgs e)
+        {
+          //white
+        }
+
+        private void FrameworkElement_OnLoaded1(object sender, RoutedEventArgs e)
+        {
+            var tb = Lb.FindDescendant<TextBlock>();
+            //black
+        }
     }
 }
