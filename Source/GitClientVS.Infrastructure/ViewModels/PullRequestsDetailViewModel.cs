@@ -29,6 +29,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly ICommandsService _commandsService;
         private readonly IDiffFileParser _diffFileParser;
         private readonly IUserInformationService _userInformationService;
+        private readonly IVsTools _vsTools;
         private string _errorMessage;
         private bool _isLoading;
         private ReactiveCommand<Unit> _initializeCommand;

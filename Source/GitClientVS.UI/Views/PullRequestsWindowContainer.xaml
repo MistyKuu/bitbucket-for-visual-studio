@@ -43,7 +43,7 @@
                 </Style>
             </StackPanel.Style>
             <StackPanel.Resources>
-                <!--<Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="Height" Value="22"/>
                     <Setter Property="Width" Value="22"/>
@@ -51,7 +51,7 @@
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                     <Setter Property="Padding" Value="2"/>
                     <Setter Property="Margin" Value="0,2"/>
-                </Style>-->
+                </Style>
             </StackPanel.Resources>
             
             <Button Command="{Binding PrevCommand}">
