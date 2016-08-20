@@ -86,7 +86,21 @@ namespace BitBucket.REST.API.Wrappers
                 || response.StatusCode == HttpStatusCode.NotFound
                 || response.StatusCode == HttpStatusCode.InternalServerError)
             {
-                throw new RequestFailedException(response.ErrorMessage);
+                var errorMessage = response.ErrorMessage;
+                if (response.Content != null)
+                {
+                    try
+                    {
+                        var serializer = new NewtonsoftJsonSerializer();
+                        errorMessage = serializer.Deserialize<ErrorWrapper>(response.Content).Error.Message;
+                    }
+                    catch (Exception er)
+                    {
+                        
+                    }
+                } 
+             
+                throw new RequestFailedException(errorMessage);
             }
            
         }

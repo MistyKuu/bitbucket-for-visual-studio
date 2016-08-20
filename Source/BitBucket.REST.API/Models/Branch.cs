@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BitBucket.REST.API.Models
 {
-    public class Branch
+    public class Branch 
     {
         [JsonProperty(PropertyName = "target")]
         public Commit Target { get; set; }

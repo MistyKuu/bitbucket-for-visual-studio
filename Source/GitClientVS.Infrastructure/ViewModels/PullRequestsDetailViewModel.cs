@@ -163,11 +163,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             var id = pr.Id;
             var currentRepository = _gitService.GetActiveRepository();
             Commits = await _gitClientService.GetPullRequestCommits(currentRepository.Name, currentRepository.Owner, id);
-            Comments = await _gitClientService.GetPullRequestComments(currentRepository.Name, currentRepository.Owner, id);
+            Comments = (await _gitClientService.GetPullRequestComments(currentRepository.Name, currentRepository.Owner, id)).Where(comment => comment.IsFile == false);
             var diff = await _gitClientService.GetPullRequestDiff(currentRepository.Name, currentRepository.Owner, id);
             FileDiffs = _diffFileParser.Parse(diff).ToList();
             CreateFileTree(FileDiffs.ToList());
-            CreateCommentTree(Comments.Where(comment => comment.IsFile == false).ToList());
+            CreateCommentTree(Comments.ToList());
             CheckReviewers();
         }
 

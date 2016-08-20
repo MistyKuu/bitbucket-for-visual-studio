@@ -73,6 +73,8 @@
     <Compile Include="Models\Commit.cs" />
     <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\Content.cs" />
+    <Compile Include="Models\Error.cs" />
+    <Compile Include="Models\ErrorWrapper.cs" />
     <Compile Include="Models\Inline.cs" />
     <Compile Include="Models\IteratorBasedPage.cs" />
     <Compile Include="Models\Link.cs" />
