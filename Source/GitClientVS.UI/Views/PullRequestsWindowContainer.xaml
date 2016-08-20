@@ -78,6 +78,15 @@
                 <TextBlock Text="{Binding CurrentViewModel.PageTitle,Mode=OneWay}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap"/>
                 <Separator Style="{StaticResource VerticalSeparator}" Margin="5,0"/>
                 <TextBlock Text="{Binding ActiveRepository}" FontWeight="ExtraLight" FontSize="13"/>
+                <TextBlock Text="xd" Loaded="FrameworkElement_OnLoaded1"/>
+                <ListBox x:Name="Lb">
+                    <ListBoxItem>asdasdasd</ListBoxItem>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Loaded="FrameworkElement_OnLoaded"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </WrapPanel>
         </Grid>
 
