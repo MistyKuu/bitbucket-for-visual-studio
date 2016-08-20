@@ -33,10 +33,14 @@
         </Grid.Resources>
 
 
-        <WrapPanel x:Name="ErrorPanel" Orientation="Horizontal" Visibility="{Binding ErrorMessage, Converter={converters:NullToNonVisibilityConverter}}" Style="{StaticResource Animated}">
-            <Image Margin="5" Width="16" Height="16" Source="{Binding Source={x:Static draw:SystemIcons.Error}, Converter={converters:IconToImageSourceConverter}, Mode=OneWay}" />
-            <TextBlock Text="{Binding ErrorMessage}" Style="{StaticResource ErrorTextBlockStyle}"  TextWrapping="Wrap"  />
-        </WrapPanel>
+        <Grid  Visibility="{Binding ErrorMessage, Converter={converters:NullToNonVisibilityConverter}}" Style="{StaticResource Animated}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Margin="5" Width="16" Height="16" Source="{Binding Source={x:Static draw:SystemIcons.Error}, Converter={converters:IconToImageSourceConverter}, Mode=OneWay}" />
+            <TextBlock Grid.Column="1" Text="{Binding ErrorMessage}" Style="{StaticResource ErrorTextBlockStyle}"  TextWrapping="Wrap"  />
+        </Grid>
 
     </Grid>
 </UserControl>

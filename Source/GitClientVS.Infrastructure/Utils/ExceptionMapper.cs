@@ -16,7 +16,10 @@ namespace GitClientVS.Infrastructure.Utils
             if (ex is ForbiddenException)
                 return "Insufficient privileges";
             if (ex is RequestFailedException)
-                return "Wrong Request";
+            {
+                var failedEx = ((RequestFailedException)ex);
+                return failedEx.IsFriendlyMessage ? ex.Message : "Wrong request";
+            }
 
             return "Unknown error";
         }
