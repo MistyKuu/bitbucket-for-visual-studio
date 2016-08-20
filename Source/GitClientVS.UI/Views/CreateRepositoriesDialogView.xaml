@@ -57,7 +57,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Button HorizontalAlignment="Center" Command="{Binding CreateCommand}" Content="{x:Static ui:Resources.Create}"/>
+            <Button HorizontalAlignment="Center" Command="{Binding CreateCommand}" Content="{x:Static ui:Resources.Create}" IsDefault="True"/>
             <controls1:ErrorView Grid.Row="1" Grid.Column="0"/>
         </Grid>
     </Grid>
