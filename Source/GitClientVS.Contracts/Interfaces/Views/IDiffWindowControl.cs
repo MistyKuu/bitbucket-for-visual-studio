@@ -1,6 +1,6 @@
 ﻿namespace GitClientVS.Contracts.Interfaces.Views
 {
-    public interface IDiffWindowControl : IView,ICloseable
+    public interface IDiffWindowControl : IView
     {
     }
 }

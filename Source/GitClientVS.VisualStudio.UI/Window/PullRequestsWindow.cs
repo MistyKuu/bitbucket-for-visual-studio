@@ -5,9 +5,11 @@
 //------------------------------------------------------------------------------
 
 using System.Windows.Controls;
+using EnvDTE;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.UI.Views;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace GitClientVS.VisualStudio.UI.Window
@@ -44,7 +46,6 @@ namespace GitClientVS.VisualStudio.UI.Window
         }
 
         public IPullRequestsWindowContainer Container => (PullRequestsWindowContainer)Content;
-
 
         public void Close()
         {

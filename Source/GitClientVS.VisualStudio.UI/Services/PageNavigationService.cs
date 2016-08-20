@@ -42,6 +42,8 @@ namespace GitClientVS.VisualStudio.UI.Services
             _appServiceProvider = appServiceProvider;
         }
 
+
+
         public IObservable<bool> CanNavigateBackObservable
         {
             get { return this.WhenAnyValue(x => x.CurrentPageIndex).Select(_ => CanNavigateBack()); }
@@ -91,10 +93,12 @@ namespace GitClientVS.VisualStudio.UI.Services
             vm?.InitializeCommand.Execute(parameter);
 
             var ev = new NavigationEvent(typeof(TWindow), view) { Parameter = parameter };
+            _navigationSubject.OnNext(ev);
+
             CurrentPageIndex++;
             _navigationHistory.Add(ev);
-            _navigationSubject.OnNext(ev);
         }
+
 
         private void ClearForwardNavigationHistory()
         {

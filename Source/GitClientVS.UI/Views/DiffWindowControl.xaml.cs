@@ -24,14 +24,6 @@ namespace GitClientVS.UI.Views
         public DiffWindowControl()
         {
             InitializeComponent();
-            Closed += delegate { OnClosed(); };
-        }
-
-        public event EventHandler Closed;
-
-        protected virtual void OnClosed()
-        {
-            Closed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

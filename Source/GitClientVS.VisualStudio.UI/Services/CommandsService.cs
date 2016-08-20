@@ -50,6 +50,7 @@ namespace GitClientVS.VisualStudio.UI.Services
             var view = window.Content as IPullRequestsWindowContainer;
             view.DataContext = vm;
             view.Window = window;
+            _navigationService.ClearNavigationHistory();
             _navigationService.Navigate<IPullRequestsMainView>();
         }
 
@@ -60,10 +61,7 @@ namespace GitClientVS.VisualStudio.UI.Services
             var view = window.Content as IView;
             view.DataContext = vm;
             vm.InitializeCommand.Execute(parameter);
-            var obs = vm.WhenAnyValue(x => x.FileDiff).Where(x => x != null).Subscribe(x => window.Caption = $"Diff ({x.From})");
-            var closeable = view as ICloseable;
-            if (closeable != null)
-                closeable.Closed += delegate { obs.Dispose(); };
+            vm.WhenAnyValue(x => x.FileDiff).Where(x => x != null).Subscribe(x => window.Caption = $"Diff ({x.From})");
         }
 
         private TWindow ShowWindow<TWindow>(int id = 0) where TWindow : class
@@ -73,12 +71,10 @@ namespace GitClientVS.VisualStudio.UI.Services
 
             ToolWindowPane window = _package.FindToolWindow(typeof(TWindow), id, true);
 
-
             if (window?.Frame == null)
                 throw new NotSupportedException("Cannot create window");
 
             IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
-      
             Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
 
             return window as TWindow;
