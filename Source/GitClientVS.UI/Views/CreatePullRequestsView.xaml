@@ -16,6 +16,8 @@
              xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
+             
+              FocusManager.FocusedElement="{Binding ElementName=TitleBox}"
              d:DataContext="{d:DesignInstance viewModels:CreatePullRequestsViewModel,IsDesignTimeCreatable=False}" 
              >
     <UserControl.Resources>
@@ -82,7 +84,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="{x:Static ui:Resources.Title}"/>
+                <TextBlock Grid.Row="0" Text="{x:Static ui:Resources.Title}" x:Name="TitleBox"/>
                 <TextBox Grid.Row="1" Text="{bindings:ValidatedBinding Title}" />
                 <TextBlock Grid.Row="2" Text="{x:Static ui:Resources.Description}"/>
                 <TextBox Grid.Row="3" Text="{bindings:ValidatedBinding Description}" AcceptsReturn="True" MinLines="3"/>

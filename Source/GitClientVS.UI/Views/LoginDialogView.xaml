@@ -81,7 +81,7 @@
                 </PasswordBox.Style>
                 </PasswordBox>
 
-            <Button Style="{StaticResource ConnectButtonStyle}" IsEnabled="True" Grid.Row="3"  Command="{Binding ConnectCommand}" Content="{x:Static ui:Resources.Connect}" HorizontalAlignment="Center"/>
+            <Button IsDefault="True" Style="{StaticResource ConnectButtonStyle}" IsEnabled="True" Grid.Row="3"  Command="{Binding ConnectCommand}" Content="{x:Static ui:Resources.Connect}" HorizontalAlignment="Center"/>
             <controls1:ErrorView  Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"  />
             
         </Grid> 

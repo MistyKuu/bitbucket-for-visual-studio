@@ -22,5 +22,6 @@ namespace GitClientVS.UI.Views
             DataContext = vm;
             InitializeComponent();
         }
+
     }
 }

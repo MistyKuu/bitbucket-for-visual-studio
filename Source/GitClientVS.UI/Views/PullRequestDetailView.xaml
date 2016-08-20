@@ -42,7 +42,7 @@
                         <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="B"/>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="C" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" MinWidth="100"/>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="D" />
                     </Grid.ColumnDefinitions>
 
@@ -68,7 +68,7 @@
 
         <Grid x:Name="PrContent">
             <Grid.RowDefinitions>
-                <RowDefinition  Height="250"/>
+                <RowDefinition  Height="200"/>
                 <RowDefinition Height="3"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
