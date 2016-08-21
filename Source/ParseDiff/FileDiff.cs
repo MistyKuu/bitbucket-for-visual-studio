@@ -23,7 +23,8 @@
 
         public string To { get; internal set; }
 
-        public string From { get; internal set; }
+       
+        public string From { get; set; }
 
         public FileChangeType Type { get; internal set; }
 

@@ -12,7 +12,7 @@ namespace GitClientVS.Services
     [Export(typeof(IDiffFileParser))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class DiffFileParser : IDiffFileParser
-    {
+    { // from property holds the name of the file -> no matter what
         public IEnumerable<FileDiff> Parse(string diff)
         {
             var files = Diff.Parse(diff).ToList();
@@ -31,6 +31,8 @@ namespace GitClientVS.Services
                 }
                 else if (fileDiff.Type == FileChangeType.Add)
                 {
+                    fileDiff.From = fileDiff.To;
+
                     foreach (var change in fileDiff.Chunks.Select(chunk => chunk.Changes).SelectMany(changes => changes))
                         change.NewIndex = change.Index;
                 }
