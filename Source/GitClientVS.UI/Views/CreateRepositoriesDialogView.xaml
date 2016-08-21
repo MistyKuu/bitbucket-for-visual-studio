@@ -15,11 +15,10 @@
              Title="{x:Static ui:Resources.CreateWindowTitle}"
              Style="{DynamicResource DefaultMetroWindowStyle}"
              WindowStartupLocation="CenterOwner"
-             Icon="../Images/BitbucketIcon.png"
              WindowTitleBrush="#004f83"
              Background="#004f83"
              Width="300"
-             Height="300"            
+             Height="260"            
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:CreateRepositoriesDialogViewModel,IsDesignTimeCreatable=False}"  >
     <controls:MetroWindow.Resources>
         <ResourceDictionary>

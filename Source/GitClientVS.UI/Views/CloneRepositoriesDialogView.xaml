@@ -13,7 +13,6 @@
              xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              mc:Ignorable="d" 
-             Icon="../Images/BitbucketIcon.png"
              Style="{DynamicResource DefaultMetroWindowStyle}"
              WindowStartupLocation="CenterOwner"
              Title="{x:Static ui:Resources.CloneWindowTitle}"

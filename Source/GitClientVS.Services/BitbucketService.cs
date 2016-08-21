@@ -36,6 +36,7 @@ namespace GitClientVS.Services
 
         public string Origin => "Bitbucket";
         public string Title => $"{Origin} Extension";
+        private readonly string supportedSCM = "git";
 
         public async Task LoginAsync(string login, string password)
         {
@@ -52,7 +53,7 @@ namespace GitClientVS.Services
         public async Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync()
         {
             var repositories = await _bitbucketClient.RepositoriesClient.GetRepositories();
-            return repositories.Values.MapTo<List<GitRemoteRepository>>();
+            return repositories.Values.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>();
         }
 
         public async Task<IEnumerable<GitRemoteRepository>> GetAllRepositories()
@@ -60,13 +61,13 @@ namespace GitClientVS.Services
             var allRepositories = new List<GitRemoteRepository>();
 
             var userRepositories = await _bitbucketClient.RepositoriesClient.GetRepositories();
-            allRepositories.AddRange(userRepositories.Values.MapTo<List<GitRemoteRepository>>());
+            allRepositories.AddRange(userRepositories.Values.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>());
 
             var teams = await _bitbucketClient.TeamsClient.GetTeams();
             foreach (var team in teams.Values)
             {
                 var teamRepositories = await _bitbucketClient.RepositoriesClient.GetRepositories(team.Username);
-                allRepositories.AddRange(teamRepositories.Values.MapTo<List<GitRemoteRepository>>());
+                allRepositories.AddRange(teamRepositories.Values.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>());
             }
 
             return allRepositories;
