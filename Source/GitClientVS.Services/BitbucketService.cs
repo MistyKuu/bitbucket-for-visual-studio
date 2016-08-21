@@ -34,7 +34,7 @@ namespace GitClientVS.Services
         }
 
 
-        public string Origin => "BitBucket";
+        public string Origin => "Bitbucket";
         public string Title => $"{Origin} Extension";
         private readonly string supportedSCM = "git";
 
