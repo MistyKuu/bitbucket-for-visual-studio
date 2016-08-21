@@ -41,10 +41,8 @@
                 <Style TargetType="TextBox" BasedOn="{StaticResource ValidatedTextBoxStyle}">
                     <Setter Property="Margin" Value="5"/>
                 </Style>
-                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                    <Setter Property="Margin" Value="5"/>
-                    <Setter Property="Padding" Value="5"/>
-                </Style>
+
+                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MetroFlatButton}" />
             </Grid.Resources>
 
             <Grid.RowDefinitions>
@@ -62,8 +60,8 @@
             <ComboBox Grid.Row="1" Text="One" ItemsSource="{Binding Owners}" SelectedItem="{Binding SelectedOwner,Mode=TwoWay}" />
             <TextBox x:Name="RepositoryName" Grid.Row="2" Text="{bindings:ValidatedBinding RepositoryName}" controls:TextBoxHelper.Watermark="Repository name"/>
             <TextBox Grid.Row="3" Text="{bindings:ValidatedBinding Description}" controls:TextBoxHelper.Watermark="Description" AcceptsReturn="True" MinLines="3"/>
-            <CheckBox Grid.Row="4"  Grid.Column="0" IsChecked="{Binding IsPrivate, Mode=TwoWay}" Content="{x:Static ui:Resources.IsPrivateRepo}"/>
-            <Button Grid.Row="5" Command="{Binding PublishRepositoryCommand}" HorizontalAlignment="Left" Content="{x:Static ui:Resources.Publish}"/>
+            <CheckBox Grid.Row="4" VerticalAlignment="Center"  Grid.Column="0" IsChecked="{Binding IsPrivate, Mode=TwoWay}" Content="{x:Static ui:Resources.IsPrivateRepo}"/>
+            <Button Grid.Row="4" VerticalAlignment="Center" Margin="0,0,5,0"  Command="{Binding PublishRepositoryCommand}" HorizontalAlignment="Right" Content="{x:Static ui:Resources.Publish}"/>
             <controls1:ErrorView Grid.Row="6"/>
         </Grid>
     </Grid>
