@@ -40,7 +40,7 @@ namespace BitBucket.REST.API.Clients
 
         public async Task<Repository> CreateRepository(Repository repository)
         {
-            var url = ApiUrls.CreateRepository(Connection.Credentials.Login, repository.Name.ToLower(CultureInfo.InvariantCulture));
+            var url = ApiUrls.CreateRepository(Connection.Credentials.Login, repository.Name.Replace(' ','-').ToLower(CultureInfo.InvariantCulture));
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(repository), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<Repository>(request);
