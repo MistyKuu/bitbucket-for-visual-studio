@@ -144,7 +144,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
             else
             {
-               await _gitClientService.ApprovePullRequest(activeRepository.Name, activeRepository.Owner, PullRequest.Id);
+                await _gitClientService.ApprovePullRequest(activeRepository.Name, activeRepository.Owner, PullRequest.Id);
             }
 
             // no exception means we did it!
@@ -162,14 +162,39 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var id = pr.Id;
             var currentRepository = _gitService.GetActiveRepository();
+            var tasks = new[]
+            {
+                GetPullRequestInfo(currentRepository, id),
+                CreateCommits(currentRepository, id),
+                CreateComments(currentRepository, id),
+                CreateDiffContent(currentRepository, id)
+            };
+
+            await Task.WhenAll(tasks);
+        }
+
+        private async Task GetPullRequestInfo(GitRemoteRepository currentRepository, long id)
+        {
             PullRequest = await _gitClientService.GetPullRequest(currentRepository.Name, currentRepository.Owner, id);
-            Commits = await _gitClientService.GetPullRequestCommits(currentRepository.Name, currentRepository.Owner, id);
+            CheckReviewers();
+        }
+
+        private async Task CreateComments(GitRemoteRepository currentRepository, long id)
+        {
             Comments = (await _gitClientService.GetPullRequestComments(currentRepository.Name, currentRepository.Owner, id)).Where(comment => comment.IsFile == false);
+            CreateCommentTree(Comments.ToList());
+        }
+
+        private async Task CreateCommits(GitRemoteRepository currentRepository, long id)
+        {
+            Commits = await _gitClientService.GetPullRequestCommits(currentRepository.Name, currentRepository.Owner, id);
+        }
+
+        private async Task CreateDiffContent(GitRemoteRepository currentRepository, long id)
+        {
             var diff = await _gitClientService.GetPullRequestDiff(currentRepository.Name, currentRepository.Owner, id);
             FileDiffs = _diffFileParser.Parse(diff).ToList();
             CreateFileTree(FileDiffs.ToList());
-            CreateCommentTree(Comments.ToList());
-            CheckReviewers();
         }
 
         private void CheckReviewers()
@@ -188,7 +213,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         public void CreateCommentTree(List<GitComment> gitComments)
         {
             Dictionary<long, GitComment> searchableGitComments = new Dictionary<long, GitComment>();
-            
+
             foreach (var comment in gitComments)
             {
                 comment.Content.Html = "<body style='font-size:13px'>" + comment.Content.Html + "</body>";
