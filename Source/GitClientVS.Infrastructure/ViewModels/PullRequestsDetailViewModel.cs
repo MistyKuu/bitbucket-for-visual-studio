@@ -10,6 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
@@ -46,6 +47,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _mainSectionCommandText;
         private bool _isApproveAvailable;
         private bool _isApproved;
+        private Theme _currentTheme;
 
 
         public string PageTitle => "Pull Request Details";
@@ -104,6 +106,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _pullRequest, value); }
         }
 
+        public Theme CurrentTheme
+        {
+            get { return _currentTheme; }
+            set { this.RaiseAndSetIfChanged(ref _currentTheme, value); }
+        }
 
 
         [ImportingConstructor]
@@ -112,7 +119,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             IGitService gitService,
             ICommandsService commandsService,
             IDiffFileParser diffFileParser,
-            IUserInformationService userInformationService
+            IUserInformationService userInformationService,
+            IEventAggregatorService eventAggregatorService
             )
         {
             _gitClientService = gitClientService;
@@ -120,6 +128,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             _commandsService = commandsService;
             _diffFileParser = diffFileParser;
             _userInformationService = userInformationService;
+            CurrentTheme = userInformationService.CurrentTheme;
+            eventAggregatorService.GetEvent<ThemeChangedEvent>().Subscribe(ev =>
+            {
+                CurrentTheme = ev.Theme;
+                ReloadCommentsTree();
+            });
             this.WhenAnyValue(x => x._pullRequest).Subscribe(_ => this.RaisePropertyChanged(nameof(PageTitle)));
         }
 
@@ -182,7 +196,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task CreateComments(GitRemoteRepository currentRepository, long id)
         {
             Comments = (await _gitClientService.GetPullRequestComments(currentRepository.Name, currentRepository.Owner, id)).Where(comment => comment.IsFile == false);
-            CreateCommentTree(Comments.ToList());
+            ReloadCommentsTree();
         }
 
         private async Task CreateCommits(GitRemoteRepository currentRepository, long id)
@@ -210,13 +224,25 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
         }
 
+        public void ReloadCommentsTree()
+        {
+            CreateCommentTree(Comments.ToList());
+        }
+
+        public void WrapComment(GitComment comment)
+        {
+            var foregroundColor = CurrentTheme == Theme.Light ? "black" : "white";
+            comment.Content.DisplayHtml = $"<body style='background-color:transparent;color:{foregroundColor};font-size:13px'>" + comment.Content.Html + "</body>";
+        }
+
         public void CreateCommentTree(List<GitComment> gitComments)
         {
             Dictionary<long, GitComment> searchableGitComments = new Dictionary<long, GitComment>();
 
             foreach (var comment in gitComments)
             {
-                comment.Content.Html = "<body style='font-size:13px'>" + comment.Content.Html + "</body>";
+                WrapComment(comment);
+
                 searchableGitComments.Add(comment.Id, comment);
             }
 
@@ -224,7 +250,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             var separator = '/';
             var maxLevel = -1;
-            foreach (var comment in gitComments)
+            foreach (var comment in Comments)
             {
                 var level = 0;
                 List<long> ids = new List<long>();

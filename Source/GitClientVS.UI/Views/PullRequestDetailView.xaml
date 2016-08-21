@@ -407,7 +407,7 @@
                                         <TextBlock HorizontalAlignment="Stretch" Text="{Binding Comment.User.Username}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
                                     </StackPanel>
 
-                                    <wpf:HtmlPanel Text="{Binding Comment.Content.Html}" Margin="30,0,0,0"/>
+                                    <wpf:HtmlPanel Text="{Binding Comment.Content.DisplayHtml}" Background="Transparent" Margin="30,0,0,0" />
 
                                     <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.CreatedOn}" Foreground="Gray"></TextBlock>
                                 </StackPanel>
