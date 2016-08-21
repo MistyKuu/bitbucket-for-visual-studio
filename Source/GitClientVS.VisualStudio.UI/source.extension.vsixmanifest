@@ -4,6 +4,8 @@
     <Identity Id="69c97fa4-92b5-448c-b5db-037dd9c2c8b7" Version="0.9" Language="en-US" Publisher="NextIteration" />
     <DisplayName>Visual Studio Bitbucket Extension</DisplayName>
     <Description xml:space="preserve">Provides the integration with Atlassian Bitbucket - bitbucket.org.</Description>
+    <Icon>next_iteration.png</Icon>
+    <Tags>bitbucket git visual studio</Tags>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />

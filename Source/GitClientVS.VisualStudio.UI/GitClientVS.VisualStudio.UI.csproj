@@ -100,6 +100,10 @@
     <Content Include="NativeBinaries\x86\git2-785d8c4.dll">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="next_iteration.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\GitClientVSPackage.ico" />
     <Content Include="stylesheet.css" />
     <Content Include="Window\Resources\PullRequestsWindowCommand.png" />
