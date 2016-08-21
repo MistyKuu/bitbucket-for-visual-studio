@@ -77,7 +77,7 @@
             <WrapPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding CurrentViewModel.PageTitle,Mode=OneWay}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap"/>
                 <Separator Style="{StaticResource VerticalSeparator}" Margin="5,0"/>
-                <TextBlock Text="{Binding ActiveRepository}" FontWeight="ExtraLight" FontSize="13"/>
+                <TextBlock Text="{Binding ActiveRepository}" FontSize="11" VerticalAlignment="Center" Foreground="#6D6D6D"/>
             </WrapPanel>
         </Grid>
 

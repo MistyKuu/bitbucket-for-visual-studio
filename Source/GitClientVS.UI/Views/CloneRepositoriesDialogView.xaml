@@ -105,12 +105,14 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBox 
+                    x:Name="ClonePathTb"
                     Grid.Column="0"
                     controls:TextBoxHelper.Watermark="Path"
                     Text="{bindings:ValidatedBinding ClonePath}" 
                     Style="{DynamicResource ValidatedTextBoxStyle}" 
+                    VerticalAlignment="Center"
                 />
-                <Button VerticalAlignment="Stretch" Grid.Column="1" Command="{Binding ChoosePathCommand}">
+                <Button VerticalAlignment="Stretch" Grid.Column="1" Command="{Binding ChoosePathCommand}" >
                     <Rectangle Width="15" Height="15">
                         <Rectangle.Fill>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_magnify_browse}" />
