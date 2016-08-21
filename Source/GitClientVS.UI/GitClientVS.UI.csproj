@@ -93,6 +93,9 @@
     <Compile Include="AttachedProperties\SetErrorTemplateAfterTouchBehavior.cs" />
     <Compile Include="Bindings\PasswordHelper.cs" />
     <Compile Include="Bindings\ValidatedBinding.cs" />
+    <Compile Include="Controls\BitbucketLogo.xaml.cs">
+      <DependentUpon>BitbucketLogo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\BranchIcon.xaml.cs">
       <DependentUpon>BranchIcon.xaml</DependentUpon>
     </Compile>
@@ -205,6 +208,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\BitbucketLogo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\BranchIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

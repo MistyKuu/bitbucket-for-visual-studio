@@ -15,7 +15,6 @@
              Title="{x:Static ui:Resources.CreateWindowTitle}"
              Style="{DynamicResource DefaultMetroWindowStyle}"
              WindowStartupLocation="CenterOwner"
-             Icon="../Images/BitbucketIcon.png"
              WindowTitleBrush="#004f83"
              Background="#004f83"
              Width="300"

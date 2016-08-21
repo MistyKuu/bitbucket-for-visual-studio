@@ -20,6 +20,6 @@
     </UserControl.Resources>
 
     <Grid>
-        <teamExplorer:TextLink  KeyboardNavigation.TabIndex="0" Command="{Binding OpenLoginCommand}" Text="{x:Static prop:Resources.Login}"/>
+        <teamExplorer:TextLink Margin="5"  KeyboardNavigation.TabIndex="0" Command="{Binding OpenLoginCommand}" Text="{x:Static prop:Resources.Login}"/>
     </Grid>
 </UserControl>
