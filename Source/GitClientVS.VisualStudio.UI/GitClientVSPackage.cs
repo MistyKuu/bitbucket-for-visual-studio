@@ -15,7 +15,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Markup;
+using System.Windows.Media;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.UI.Helpers;
@@ -93,6 +97,10 @@ namespace GitClientVS.VisualStudio.UI
         protected override async void Initialize()
         {
             base.Initialize();
+            var encoding = new ASCIIEncoding();
+            var grdBytes = encoding.GetBytes(_myXaml);
+            var xamlstyle = (DrawingBrush)XamlReader.Load(new MemoryStream(grdBytes));
+            Application.Current.Resources["ConnectArrowBrush"] = xamlstyle;
 
             var componentModel = this.GetService<SComponentModel, IComponentModel>();
             var serviceProvider = componentModel.DefaultExportProvider;
@@ -106,7 +114,18 @@ namespace GitClientVS.VisualStudio.UI
             await appInitializer.Initialize();
             Logger.Info("Initialized GitClientVsPackage Extension");
         }
-
+    //this is a workaround for missing ConnectArrowBrush style from VS
+        private readonly String _myXaml =
+            @"<DrawingBrush xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">
+    <DrawingBrush.Drawing>
+      <DrawingGroup>
+        <DrawingGroup.Children>
+          <GeometryDrawing Brush = ""#004f83"" Geometry=""F1 M 9,11 L 7,11 9,9 4,9 4,7 9,7 7,5 9,5 12,8 Z"" />
+          <GeometryDrawing Brush = ""#004f83"" Geometry=""F1 M 7.9741,1.0698 C 4.1461,1.0698 1.0441,4.1728 1.0441,7.9998 1.0441,11.8268 4.1461,14.9298 7.9741,14.9298 11.8011,14.9298 14.9041,11.8268 14.9041,7.9998 14.9041,4.1728 11.8011,1.0698 7.9741,1.0698 M 7.9741,2.0598 C 11.2501,2.0598 13.9151,4.7248 13.9151,7.9998 13.9151,11.2758 11.2501,13.9408 7.9741,13.9408 4.6991,13.9408 2.0341,11.2758 2.0341,7.9998 2.0341,4.7248 4.6991,2.0598 7.9741,2.0598 "" />
+        </DrawingGroup.Children>
+      </DrawingGroup>
+    </DrawingBrush.Drawing>
+  </DrawingBrush>";
 
 
         #endregion
