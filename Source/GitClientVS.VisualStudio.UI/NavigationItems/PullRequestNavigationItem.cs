@@ -12,7 +12,7 @@ using Microsoft.TeamFoundation.Controls;
 
 namespace GitClientVS.VisualStudio.UI.NavigationItems
 {
-    [TeamExplorerNavigationItem(PullRequestsNavigationItemId, 1)]
+    [TeamExplorerNavigationItem(PullRequestsNavigationItemId, 320)]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class PullRequestNavigationItem : TeamExplorerBaseNavigationItem
     {
