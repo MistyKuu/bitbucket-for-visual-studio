@@ -19,6 +19,7 @@ namespace BitBucket.REST.API.Wrappers
             var serializer = new NewtonsoftJsonSerializer();
             this.AddHandler("application/json", serializer);
             this.AddHandler("text/json", serializer);
+            this.AddHandler("text/plain", serializer);
             this.AddHandler("text/x-json", serializer);
             this.AddHandler("text/javascript", serializer);
             this.AddHandler("*+json", serializer);
@@ -30,7 +31,14 @@ namespace BitBucket.REST.API.Wrappers
         public override async Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)
         {
             var response = await base.ExecuteTaskAsync<T>(request);
-            this.CheckResponseStatusCode<T>(response);
+            this.CheckResponseStatusCode(response);
+            return response;
+        }
+
+        public override async Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
+        {
+            var response = await base.ExecuteTaskAsync(request);
+            this.CheckResponseStatusCode(response);
             return response;
         }
 
@@ -66,11 +74,11 @@ namespace BitBucket.REST.API.Wrappers
         {
             var response = await base.ExecuteTaskAsync<T>(request, token);
 
-            this.CheckResponseStatusCode<T>(response);
+            this.CheckResponseStatusCode(response);
             return response;
         }
 
-        private void CheckResponseStatusCode<T>(IRestResponse<T> response)
+        private void CheckResponseStatusCode(IRestResponse response)
         {
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {

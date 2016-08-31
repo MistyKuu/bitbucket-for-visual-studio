@@ -351,7 +351,6 @@
     <Resource Include="Images\arrow_forward.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <None Include="Resources\ConnectArrowBrushPlain.txt" />
     <Content Include="Resources\Entypo-license.txt" />
     <None Include="Resources\luki.png" />
     <None Include="Resources\PullRequest_24x.png" />
