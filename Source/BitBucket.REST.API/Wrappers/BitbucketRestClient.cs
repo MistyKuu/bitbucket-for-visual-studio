@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,11 +27,13 @@ namespace BitBucket.REST.API.Wrappers
 
             var auth = new Authenticator(connection.Credentials);
             this.Authenticator = auth.CreatedAuthenticator;
+            this.FollowRedirects = false;
         }
 
         public override async Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)
         {
             var response = await base.ExecuteTaskAsync<T>(request);
+            response = await RedirectIfNeededAndGetResponse(response, request);
             this.CheckResponseStatusCode(response);
             return response;
         }
@@ -38,9 +41,12 @@ namespace BitBucket.REST.API.Wrappers
         public override async Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
         {
             var response = await base.ExecuteTaskAsync(request);
+            response = await RedirectIfNeededAndGetResponse(response, request);
             this.CheckResponseStatusCode(response);
             return response;
         }
+
+
 
         public async Task<IteratorBasedPage<T>> GetAllPages<T>(string url, int limit = 100, IQueryConnector query = null)
         {
@@ -67,15 +73,6 @@ namespace BitBucket.REST.API.Wrappers
             } while (response.Data != null && response.Data.Next != null);
 
             return result;
-        }
-
-
-        public override async Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request, CancellationToken token)
-        {
-            var response = await base.ExecuteTaskAsync<T>(request, token);
-
-            this.CheckResponseStatusCode(response);
-            return response;
         }
 
         private void CheckResponseStatusCode(IRestResponse response)
@@ -106,15 +103,59 @@ namespace BitBucket.REST.API.Wrappers
                     }
                     catch (Exception er)
                     {
-                        
+
                     }
-                } 
-             
+                }
+
                 throw new RequestFailedException(errorMessage, friendly);
             }
-           
+
         }
 
+        private async Task<IRestResponse<T>> RedirectIfNeededAndGetResponse<T>(IRestResponse<T> response, IRestRequest request)
+        {
+            while (response.StatusCode == HttpStatusCode.Redirect)
+            {
+                var newLocation = GetNewLocationFromHeader(response);
+
+                if (newLocation == null)
+                    return response;
+
+                request.Resource = RemoveBaseUrl(newLocation);
+                response = await base.ExecuteTaskAsync<T>(request);
+            }
+
+            return response;
+        }
+
+        private async Task<IRestResponse> RedirectIfNeededAndGetResponse(IRestResponse response, IRestRequest request)
+        {
+            while (response.StatusCode == HttpStatusCode.Redirect)
+            {
+                var newLocation = GetNewLocationFromHeader(response);
+
+                if (newLocation == null)
+                    return response;
+
+                request.Resource = RemoveBaseUrl(newLocation);
+                response = await base.ExecuteTaskAsync(request);
+            }
+
+            return response;
+        }
+
+
+        private static Parameter GetNewLocationFromHeader(IRestResponse response)
+        {
+            return response.Headers
+                .FirstOrDefault(x => x.Type == ParameterType.HttpHeader &&
+                                     x.Name.Equals(HttpResponseHeader.Location.ToString(), StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        private static string RemoveBaseUrl(Parameter newLocation)
+        {
+            return newLocation.Value.ToString().Replace(Connection.DefaultBitbucketUrl.ToString(), string.Empty);
+        }
 
 
     }
