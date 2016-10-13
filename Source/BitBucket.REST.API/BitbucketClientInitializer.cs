@@ -8,26 +8,20 @@ namespace BitBucket.REST.API
 {
     public class BitbucketClientInitializer
     {
-        public BitbucketClientInitializer(Connection connection)
+        public async Task<BitbucketClient> Initialize(Credentials cred)
         {
-            var client = new BitbucketRestClient(connection);
-            this.userClient = new UserClient(client, connection);
+            var apiConnection = new Connection(new Uri("https://api.bitbucket.org/2.0/"), cred);
 
-            this.connection = connection;
+            var client = new BitbucketRestClient(apiConnection);
+            var userClient = new UserClient(client, apiConnection);
+
+            var response = await userClient.GetUser();
+            var credentials = new Credentials(response.Username, apiConnection.Credentials.Password);
+
+            var internalApiConnection = new Connection(new Uri("https://bitbucket.org/!api/internal/"), credentials);
+
+            return new BitbucketClient(apiConnection, internalApiConnection);
         }
-
-        public async Task<BitbucketClient> Initialize()
-        {
-            var response = await this.userClient.GetUser();
-            var connectionWithUsername = new Connection(new Credentials(response.Username, this.connection.Credentials.Password));
-
-            // todo: check in custom server
-            var internalApiConnection = new Connection(new Uri("https://bitbucket.org/!api/internal/"), new Credentials(response.Username, this.connection.Credentials.Password));
-            return new BitbucketClient(connectionWithUsername, internalApiConnection);
-        }
-
-        private Connection connection;
-        private UserClient userClient;
 
     }
 }

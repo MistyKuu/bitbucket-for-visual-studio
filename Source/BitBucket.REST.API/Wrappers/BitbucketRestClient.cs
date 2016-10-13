@@ -15,8 +15,11 @@ namespace BitBucket.REST.API.Wrappers
 {
     public class BitbucketRestClient : RestClient
     {
-        public BitbucketRestClient(Connection connection) : base(connection.BitbucketUrl)
+        private readonly Connection _connection;
+
+        public BitbucketRestClient(Connection connection) : base(connection.ApiUrl)
         {
+            _connection = connection;
             var serializer = new NewtonsoftJsonSerializer();
             this.AddHandler("application/json", serializer);
             this.AddHandler("text/json", serializer);
@@ -152,9 +155,9 @@ namespace BitBucket.REST.API.Wrappers
                                      x.Name.Equals(HttpResponseHeader.Location.ToString(), StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private static string RemoveBaseUrl(Parameter newLocation)
+        private string RemoveBaseUrl(Parameter newLocation)
         {
-            return newLocation.Value.ToString().Replace(Connection.DefaultBitbucketUrl.ToString(), string.Empty);
+            return newLocation.Value.ToString().Replace(_connection.ApiUrl.ToString(), string.Empty);
         }
 
 

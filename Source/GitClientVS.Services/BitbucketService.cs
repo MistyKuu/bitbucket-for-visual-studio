@@ -44,10 +44,9 @@ namespace GitClientVS.Services
                 return;
 
             var credentials = new Credentials(login, password);
-            var connection = new Connection(credentials);
-            var bitbucketInitializer = new BitbucketClientInitializer(connection);
-            _bitbucketClient = await bitbucketInitializer.Initialize();
-            OnConnectionChanged(ConnectionData.Create(_bitbucketClient.Connection.Credentials.Login, password));
+            var bitbucketInitializer = new BitbucketClientInitializer();
+            _bitbucketClient = await bitbucketInitializer.Initialize(credentials);
+            OnConnectionChanged(ConnectionData.Create(_bitbucketClient.ApiConnection.Credentials.Login, password));
         }
 
         public async Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync()
@@ -98,7 +97,7 @@ namespace GitClientVS.Services
         {
             if (gitRemoteRepository?.CloneUrl == null) return false;
             Uri uri = new Uri(gitRemoteRepository.CloneUrl);
-            return uri.Host.Contains(_bitbucketClient.Connection.GetHost(), StringComparison.OrdinalIgnoreCase);
+            return uri.Host.Contains(_bitbucketClient.ApiConnection.GetHost(), StringComparison.OrdinalIgnoreCase);
         }
 
         public async Task<GitRemoteRepository> CreateRepositoryAsync(GitRemoteRepository newRepository)

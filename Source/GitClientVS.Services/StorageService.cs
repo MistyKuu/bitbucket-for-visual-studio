@@ -29,7 +29,7 @@ namespace GitClientVS.Services
             _hashService = hashService;
         }
 
-        public Result SaveUserData(ConnectionData connectionData) // TODO USE NIBA SERIALIZER, should I?
+        public Result SaveUserData(ConnectionData connectionData) 
         {
             try
             {
