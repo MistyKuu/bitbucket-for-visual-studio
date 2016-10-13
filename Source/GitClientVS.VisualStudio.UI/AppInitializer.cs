@@ -12,6 +12,8 @@ using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure;
 using GitClientVS.Infrastructure.Mappings;
+using GitClientVS.Infrastructure.Mappings.Bitbucket;
+using GitClientVS.Infrastructure.Mappings.Gitlab;
 using GitClientVS.UI.Helpers;
 using log4net;
 using log4net.Repository.Hierarchy;
@@ -27,16 +29,16 @@ namespace GitClientVS.VisualStudio.UI
     {
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IStorageService _storageService;
-        private readonly IGitClientService _gitClient;
+        private readonly IGitClientServiceFactory _gitClientFactory;
 
         [ImportingConstructor]
         public AppInitializer(
             IStorageService storageService,
-            IGitClientService gitClient
+            IGitClientServiceFactory gitClientFactory
             )
         {
             _storageService = storageService;
-            _gitClient = gitClient;
+            _gitClientFactory = gitClientFactory;
         }
 
         public async Task Initialize()
@@ -46,7 +48,8 @@ namespace GitClientVS.VisualStudio.UI
 
             Mapper.Initialize(cfg =>
             {
-                cfg.AddProfile<GitMappingsProfile>();
+                cfg.AddProfile<BitbucketMappingsProfile>();
+                cfg.AddProfile<GitlabMappingsProfile>();
                 cfg.AddProfile<VisualMappingsProfile>();
             });
 
@@ -59,7 +62,9 @@ namespace GitClientVS.VisualStudio.UI
             {
                 try
                 {
-                    await _gitClient.LoginAsync(result.Data.UserName, result.Data.Password);
+
+                    var gitClient = _gitClientFactory.GetService(result.Data.GitProvider);
+                    await gitClient.LoginAsync(result.Data.UserName, result.Data.Password);
                 }
                 catch (Exception ex)
                 {

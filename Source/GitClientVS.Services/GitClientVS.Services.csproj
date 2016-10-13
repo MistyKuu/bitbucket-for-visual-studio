@@ -34,6 +34,10 @@
       <HintPath>..\..\packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GitLab.NET, Version=0.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AssemblyReferences\Gitlab\GitLab.NET.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -88,6 +92,8 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BitbucketService.cs" />
+    <Compile Include="GitClientServiceFactory.cs" />
+    <Compile Include="GitlabService.cs" />
     <Compile Include="MemoryCacheService.cs" />
     <Compile Include="DiffFileParser.cs" />
     <Compile Include="EventAggregatorService.cs" />

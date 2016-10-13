@@ -26,14 +26,14 @@ namespace GitClientVS.VisualStudio.UI.NavigationItems
 
         [ImportingConstructor]
         public PullRequestNavigationItem(
-            IGitClientService gitClientService,
+            IGitClientServiceFactory gitClientServiceFactory,
             IGitService gitService,
             IEventAggregatorService eventAggregator,
             IUserInformationService userInformationService,
             ICommandsService commandService
             ) : base(null)
         {
-            _gitClientService = gitClientService;
+            _gitClientService = gitClientServiceFactory.GetService();
             _gitService = gitService;
             _eventAggregator = eventAggregator;
             _userInformationService = userInformationService;

@@ -43,7 +43,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private GitUser _selectedAuthor;
         private GitPullRequestStatus? _selectedStatus;
         private GitPullRequest _selectedPullRequest;
-        private GitRemoteRepository _currentRepository;
+        private GitRepository _currentRepository;
 
         public ReactiveList<GitPullRequest> GitPullRequests
         {
@@ -123,13 +123,13 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         [ImportingConstructor]
         public PullRequestsMainViewModel(
-            IGitClientService gitClientService,
+            IGitClientServiceFactory gitClientServiceFactory,
             IGitService gitService,
             IPageNavigationService<IPullRequestsWindow> pageNavigationService,
             ICacheService cacheService
             )
         {
-            _gitClientService = gitClientService;
+            _gitClientService = gitClientServiceFactory.GetService();
             _gitService = gitService;
             _pageNavigationService = pageNavigationService;
             _cacheService = cacheService;
@@ -163,7 +163,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task LoadPullRequests()
         {
             GitPullRequests.Clear();
-            Authors = (await _gitClientService.GetPullRequestsAuthors(_currentRepository.Name, _currentRepository.Owner)).ToList();
+            Authors = (await _gitClientService.GetPullRequestsAuthors(_currentRepository)).ToList();
 
             var result = _cacheService.Get<IEnumerable<GitPullRequest>>(CacheKeys.PullRequestCacheKey);
             if (result.IsSuccess)
@@ -185,7 +185,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             do
             {
-                iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner, page: startPage);
+                iterator = await _gitClientService.GetPullRequests(_currentRepository, page: startPage);
                 allPullRequests.AddRange(iterator.Values);
                 startPage = iterator.Page + 1;
 

@@ -53,7 +53,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         [ImportingConstructor]
         public PublishSectionViewModel(
-            IGitClientService gitClientService,
+            IGitClientServiceFactory gitClientServiceFactory,
             IGitService gitService,
             IFileService fileService,
             IUserInformationService userInformationService,
@@ -61,7 +61,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             IGitWatcher gitWatcher
             )
         {
-            _gitClientService = gitClientService;
+            _gitClientService = gitClientServiceFactory.GetService();
             _gitService = gitService;
             _userInformationService = userInformationService;
             _eventAggregator = eventAggregator;
@@ -137,13 +137,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var teamNames = (await _gitClientService.GetTeams()).Select(x => x.Name).ToList();
             teamNames.Insert(0, _userInformationService.ConnectionData.UserName);
-            Owners = teamNames;
+            Owners = teamNames.Distinct().ToList();
             SelectedOwner = Owners.FirstOrDefault();
         }
 
         private async Task PublishRepository()
         {
-            var gitRemoteRepository = new GitRemoteRepository()
+            var gitRemoteRepository = new GitRepository()
             {
                 Name = RepositoryName,
                 Description = Description,

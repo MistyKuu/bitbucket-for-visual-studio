@@ -21,7 +21,7 @@
     
     <Grid >
         <Grid.Resources>
-            <DataTemplate x:Key="RepositoryDateTemplate" DataType="gitClientModels:GitRemoteRepository">
+            <DataTemplate x:Key="RepositoryDateTemplate" DataType="gitClientModels:GitRepository">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>

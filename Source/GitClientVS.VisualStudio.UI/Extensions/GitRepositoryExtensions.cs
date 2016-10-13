@@ -9,7 +9,7 @@ namespace GitClientVS.VisualStudio.UI.Extensions
 {
     public static class GitRepositoryExtensions
     {
-        public static GitRemoteRepository ToModel(this IGitRepositoryInfo source)
+        public static GitRepository ToModel(this IGitRepositoryInfo source)
         {
             if (source == null) return null;
 
@@ -35,7 +35,7 @@ namespace GitClientVS.VisualStudio.UI.Extensions
              
             }
           
-            return new GitRemoteRepository(repoName, ownerName, repoUrl);
+            return new GitRepository(repoName, ownerName, repoUrl);
         }
     }
 }

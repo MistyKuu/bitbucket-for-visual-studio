@@ -10,6 +10,7 @@ using GitClientVS.Contracts.Interfaces;
 using ReactiveUI;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using GitClientVS.Contracts;
 using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
@@ -22,13 +23,14 @@ namespace GitClientVS.Infrastructure.ViewModels
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class ConnectSectionViewModel : ViewModelBase, IConnectSectionViewModel
     {
-        private readonly ExportFactory<ILoginDialogView> _loginViewFactory;
+        private readonly ExportFactory<ILoginDialogView> _loginBitbucketViewFactory;
         private readonly ExportFactory<ICloneRepositoriesDialogView> _cloneRepoViewFactory;
         private readonly ExportFactory<ICreateRepositoriesDialogView> _createRepoViewFactory;
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IUserInformationService _userInformationService;
         private readonly IGitClientService _gitClientService;
-        private readonly ReactiveCommand<object> _openLoginCommand;
+        private readonly ReactiveCommand<object> _openLoginBitbucketCommand;
+        private readonly ReactiveCommand<object> _openLoginGitlabCommand;
         private readonly ReactiveCommand<object> _logoutCommand;
         private readonly ReactiveCommand<object> _openCloneCommand;
         private ReactiveCommand<object> _openCreateCommand;
@@ -36,7 +38,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private IDisposable _observable;
         private ConnectionData _connectionData;
 
-        public ICommand OpenLoginCommand => _openLoginCommand;
+        public ICommand OpenLoginBitbucketCommand => _openLoginBitbucketCommand;
+        public ICommand OpenLoginGitlabCommand => _openLoginGitlabCommand;
         public ICommand OpenCreateCommand => _openCreateCommand;
         public ICommand LogoutCommand => _logoutCommand;
         public ICommand OpenCloneCommand => _openCloneCommand;
@@ -44,34 +47,37 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         [ImportingConstructor]
         public ConnectSectionViewModel(
-            ExportFactory<ILoginDialogView> loginViewFactory,
+            ExportFactory<ILoginDialogView> loginBitbucketViewFactory,
             ExportFactory<ICloneRepositoriesDialogView> cloneRepoViewFactory,
             ExportFactory<ICreateRepositoriesDialogView> createRepoViewFactory,
             IEventAggregatorService eventAggregator,
             IUserInformationService userInformationService,
-            IGitClientService gitClientService)
+            IGitClientServiceFactory gitClientFactory)
         {
-            _loginViewFactory = loginViewFactory;
+            _loginBitbucketViewFactory = loginBitbucketViewFactory;
             _cloneRepoViewFactory = cloneRepoViewFactory;
             _createRepoViewFactory = createRepoViewFactory;
             _eventAggregator = eventAggregator;
             _userInformationService = userInformationService;
-            _gitClientService = gitClientService;
+            _gitClientService = gitClientFactory.GetService();
 
-            _openLoginCommand = ReactiveCommand.Create(Observable.Return(true));
+            _openLoginBitbucketCommand = ReactiveCommand.Create(Observable.Return(true));
+            _openLoginGitlabCommand = ReactiveCommand.Create(Observable.Return(true));
             _openCloneCommand = ReactiveCommand.Create(Observable.Return(true));
             _openCreateCommand = ReactiveCommand.Create(Observable.Return(true));
             _logoutCommand = ReactiveCommand.Create();
 
             ConnectionData = _userInformationService.ConnectionData;
+            AvailableServices = gitClientFactory.AvailableServices;
+
             SetupObservables();
         }
 
 
-
         private void SetupObservables()
         {
-            _openLoginCommand.Subscribe(_ => _loginViewFactory.CreateExport().Value.ShowDialog());
+            _openLoginBitbucketCommand.Subscribe(_ => { OpenLoginWindow(GitProviderType.Bitbucket); });
+            _openLoginGitlabCommand.Subscribe(_ => { OpenLoginWindow(GitProviderType.Gitlab); });
             _openCreateCommand.Subscribe(_ => _createRepoViewFactory.CreateExport().Value.ShowDialog());
             _openCloneCommand.Subscribe(_ => _cloneRepoViewFactory.CreateExport().Value.ShowDialog());
             _logoutCommand.Subscribe(_ => { _gitClientService.Logout(); });
@@ -79,16 +85,27 @@ namespace GitClientVS.Infrastructure.ViewModels
             _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
         }
 
+        private void OpenLoginWindow(GitProviderType gitProviderType)
+        {
+            var view = _loginBitbucketViewFactory.CreateExport().Value;
+            view.InitializeCommand.Execute(gitProviderType);
+            view.ShowDialog();
+        }
+
         private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)
         {
             ConnectionData = connectionChangedEvent.Data;
         }
+
+
+        public IEnumerable<GitProviderType> AvailableServices { get; set; }
 
         public ConnectionData ConnectionData
         {
             get { return _connectionData; }
             set { this.RaiseAndSetIfChanged(ref _connectionData, value); }
         }
+
 
         public void Dispose()
         {

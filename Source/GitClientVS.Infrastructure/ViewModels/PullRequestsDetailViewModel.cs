@@ -115,7 +115,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         [ImportingConstructor]
         public PullRequestsDetailViewModel(
-            IGitClientService gitClientService,
+            IGitClientServiceFactory gitClientServiceFactory,
             IGitService gitService,
             ICommandsService commandsService,
             IDiffFileParser diffFileParser,
@@ -123,7 +123,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             IEventAggregatorService eventAggregatorService
             )
         {
-            _gitClientService = gitClientService;
+            _gitClientService = gitClientServiceFactory.GetService();
             _gitService = gitService;
             _commandsService = commandsService;
             _diffFileParser = diffFileParser;
@@ -154,11 +154,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             var activeRepository = _gitService.GetActiveRepository();
             if (IsApproved)
             {
-                await _gitClientService.DisapprovePullRequest(activeRepository.Name, activeRepository.Owner, PullRequest.Id);
+                await _gitClientService.DisapprovePullRequest(activeRepository, PullRequest.Id);
             }
             else
             {
-                await _gitClientService.ApprovePullRequest(activeRepository.Name, activeRepository.Owner, PullRequest.Id);
+                await _gitClientService.ApprovePullRequest(activeRepository, PullRequest.Id);
             }
 
             // no exception means we did it!
@@ -187,26 +187,26 @@ namespace GitClientVS.Infrastructure.ViewModels
             await Task.WhenAll(tasks);
         }
 
-        private async Task GetPullRequestInfo(GitRemoteRepository currentRepository, long id)
+        private async Task GetPullRequestInfo(GitRepository currentRepository, long id)
         {
-            PullRequest = await _gitClientService.GetPullRequest(currentRepository.Name, currentRepository.Owner, id);
+            PullRequest = await _gitClientService.GetPullRequest(currentRepository, id);
             CheckReviewers();
         }
 
-        private async Task CreateComments(GitRemoteRepository currentRepository, long id)
+        private async Task CreateComments(GitRepository currentRepository, long id)
         {
-            Comments = (await _gitClientService.GetPullRequestComments(currentRepository.Name, currentRepository.Owner, id)).Where(comment => comment.IsFile == false);
+            Comments = (await _gitClientService.GetPullRequestComments(currentRepository, id)).Where(comment => comment.IsFile == false);
             ReloadCommentsTree();
         }
 
-        private async Task CreateCommits(GitRemoteRepository currentRepository, long id)
+        private async Task CreateCommits(GitRepository currentRepository, long id)
         {
-            Commits = await _gitClientService.GetPullRequestCommits(currentRepository.Name, currentRepository.Owner, id);
+            Commits = await _gitClientService.GetPullRequestCommits(currentRepository, id);
         }
 
-        private async Task CreateDiffContent(GitRemoteRepository currentRepository, long id)
+        private async Task CreateDiffContent(GitRepository currentRepository, long id)
         {
-            var diff = await _gitClientService.GetPullRequestDiff(currentRepository.Name, currentRepository.Owner, id);
+            var diff = await _gitClientService.GetPullRequestDiff(currentRepository, id);
             FileDiffs = _diffFileParser.Parse(diff).ToList();
             CreateFileTree(FileDiffs.ToList());
         }

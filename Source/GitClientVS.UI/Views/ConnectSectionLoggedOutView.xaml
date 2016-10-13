@@ -8,6 +8,7 @@
              xmlns:prop="clr-namespace:GitClientVS.UI"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
              xmlns:teamExplorer="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;assembly=Microsoft.TeamFoundation.Controls"
+             xmlns:contracts="clr-namespace:GitClientVS.Contracts;assembly=GitClientVS.Contracts"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:ConnectSectionViewModel,IsDesignTimeCreatable=False}" >
 
@@ -19,7 +20,8 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
-        <teamExplorer:TextLink Margin="5"  KeyboardNavigation.TabIndex="0" Command="{Binding OpenLoginCommand}" Text="{x:Static prop:Resources.Login}"/>
-    </Grid>
+    <StackPanel Orientation="Horizontal">
+        <teamExplorer:TextLink Margin="5"  KeyboardNavigation.TabIndex="0" Command="{Binding OpenLoginBitbucketCommand}" Text="Login to Bitbucket"/>
+        <teamExplorer:TextLink Margin="5"  KeyboardNavigation.TabIndex="0" Command="{Binding OpenLoginGitlabCommand}" Text="Login to Gitlab"/>
+    </StackPanel>
 </UserControl>

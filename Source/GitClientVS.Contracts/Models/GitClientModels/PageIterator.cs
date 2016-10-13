@@ -10,7 +10,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
 
         public bool HasNext()
         {
-            return Next != null;
+            return !string.IsNullOrEmpty(Next);
         }
     }
 }

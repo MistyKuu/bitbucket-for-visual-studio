@@ -4,7 +4,7 @@ namespace BitBucket.REST.API.Models
 {
     public class Connection
     {
-        internal static readonly Uri DefaultBitbucketUrl = new Uri("https://api.bitbucket.org/2.0/");
+        public static readonly Uri DefaultBitbucketUrl = new Uri("https://api.bitbucket.org/2.0/");
 
         public Connection()
             : this(DefaultBitbucketUrl, new Credentials())

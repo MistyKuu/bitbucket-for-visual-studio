@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using BitBucket.REST.API.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 
-namespace GitClientVS.Infrastructure.Mappings
+namespace GitClientVS.Infrastructure.Mappings.Bitbucket
 {
-    public class RepositoryTypeConverter: ITypeConverter<Repository, GitRemoteRepository>
+    public class BitbucketRepositoryTypeConverter: ITypeConverter<Repository, GitRepository>
     {
-        public GitRemoteRepository Convert(Repository source, GitRemoteRepository destination, ResolutionContext context)
+        public GitRepository Convert(Repository source, GitRepository destination, ResolutionContext context)
         {
-            return new GitRemoteRepository()
+            return new GitRepository()
             {
                 Name = source.Name,
                 Description = source.Description,
@@ -25,9 +24,9 @@ namespace GitClientVS.Infrastructure.Mappings
         }
     }
 
-    public class ReverseRepositoryTypeConverter : ITypeConverter<GitRemoteRepository, Repository>
+    public class BitbucketReverseRepositoryTypeConverter : ITypeConverter<GitRepository, Repository>
     {
-        public Repository Convert(GitRemoteRepository source, Repository destination, ResolutionContext context)
+        public Repository Convert(GitRepository source, Repository destination, ResolutionContext context)
         {
             return new Repository()
             {

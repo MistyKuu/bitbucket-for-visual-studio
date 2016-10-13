@@ -58,7 +58,7 @@ namespace GitClientVS.VisualStudio.UI.Services
             return repo?.Head?.Tip?.Sha;
         }
 
-        public GitRemoteRepository GetActiveRepository()
+        public GitRepository GetActiveRepository()
         {
             var gitExt = _appServiceProvider.GetService<IGitExt>();
             var activeRepository = gitExt.ActiveRepositories.FirstOrDefault();
@@ -157,7 +157,7 @@ namespace GitClientVS.VisualStudio.UI.Services
             }
         }
 
-        public void PublishRepository(GitRemoteRepository repository)
+        public void PublishRepository(GitRepository repository)
         {
             Repository activeRepository = GetRepository();
             SetRemote(activeRepository, repository.CloneUrl);

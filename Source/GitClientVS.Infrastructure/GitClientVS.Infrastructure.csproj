@@ -33,6 +33,9 @@
     <Reference Include="AutoMapper">
       <HintPath>..\..\packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="GitLab.NET">
+      <HintPath>..\..\AssemblyReferences\Gitlab\GitLab.NET.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -95,6 +98,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CacheKeys.cs" />
+    <Compile Include="Consts.cs" />
     <Compile Include="Extensions\ChainingExtensions.cs" />
     <Compile Include="Extensions\CommonExtensions.cs" />
     <Compile Include="Extensions\MapperExtensions.cs" />
@@ -102,11 +106,22 @@
     <Compile Include="Extensions\ServiceProviderExtensions.cs" />
     <Compile Include="Extensions\ViewModelsExtensions.cs" />
     <Compile Include="LoggerConfigurator.cs" />
-    <Compile Include="Mappings\GitMappingsProfile.cs" />
-    <Compile Include="Mappings\PullRequestOptionsTypeConverter.cs" />
-    <Compile Include="Mappings\PullRequestTypeConverter.cs" />
-    <Compile Include="Mappings\RepositoryTypeConverter.cs" />
-    <Compile Include="Mappings\TeamTypeConverter.cs" />
+    <Compile Include="Mappings\Gitlab\GitlabNamespaceConverter.cs" />
+    <Compile Include="Mappings\Gitlab\GitlabBranchConverter.cs" />
+    <Compile Include="Mappings\Gitlab\GitlabNoteToCommentConverter.cs" />
+    <Compile Include="Mappings\Gitlab\GitlabCommentConverter.cs" />
+    <Compile Include="Mappings\Gitlab\GitlabCommitConverter.cs" />
+    <Compile Include="Mappings\Gitlab\GitlabMappingsProfile.cs" />
+    <Compile Include="Mappings\Bitbucket\BitbucketMappingsProfile.cs" />
+    <Compile Include="Mappings\Gitlab\GitlabMergeRequestTypeConverter.cs" />
+    <Compile Include="Mappings\Gitlab\GitlabPaginatedConverter.cs" />
+    <Compile Include="Mappings\Gitlab\GitlabRepositoryConverter.cs" />
+    <Compile Include="Mappings\Gitlab\GitlabUserPreviewConverter.cs" />
+    <Compile Include="Mappings\Gitlab\GitlabMergeRequestStateConverter.cs" />
+    <Compile Include="Mappings\Bitbucket\BitbucketPullRequestOptionsTypeConverter.cs" />
+    <Compile Include="Mappings\Bitbucket\BitbucketPullRequestTypeConverter.cs" />
+    <Compile Include="Mappings\Bitbucket\BitbucketRepositoryTypeConverter.cs" />
+    <Compile Include="Mappings\Bitbucket\BitbucketTeamTypeConverter.cs" />
     <Compile Include="PageIds.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

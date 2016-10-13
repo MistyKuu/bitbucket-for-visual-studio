@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GitClientVS.Contracts.Models.GitClientModels
 {
-    public class  GitRemoteRepository
+    public class  GitRepository
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -17,12 +17,12 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public string Owner { get; set; }
         public string CloneUrl { get; set; }
 
-        public GitRemoteRepository()
+        public GitRepository()
         {
             
         }
 
-        public GitRemoteRepository(string name, string description, string owner, bool isPrivate)
+        public GitRepository(string name, string description, string owner, bool isPrivate)
         {
             Name = name;
             Description = description;
@@ -30,7 +30,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
             IsPrivate = isPrivate;
         }
 
-        public GitRemoteRepository(string name, string owner, string cloneUrl)
+        public GitRepository(string name, string owner, string cloneUrl)
         {
             Name = name;
             Owner = owner;

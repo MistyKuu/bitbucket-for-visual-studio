@@ -36,7 +36,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<Unit> _createCommand;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _errorMessage;
-        private GitRemoteRepository _repository;
+        private GitRepository _repository;
         private string _localPath;
         private string _name;
         private string _description;
@@ -82,12 +82,12 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         [ImportingConstructor]
         public CreateRepositoriesDialogViewModel(
-            IGitClientService gitClientService,
+            IGitClientServiceFactory gitClientServiceFactory,
             IGitService gitService,
             IFileService fileService
             )
         {
-            _gitClientService = gitClientService;
+            _gitClientService = gitClientServiceFactory.GetService();
             _gitService = gitService;
             _fileService = fileService;
             LocalPath = Paths.DefaultRepositoryPath;
@@ -108,7 +108,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task Create()
         {
-            var repository = new GitRemoteRepository { Name = Name, Description = Description, IsPrivate = IsPrivate };
+            var repository = new GitRepository { Name = Name, Description = Description, IsPrivate = IsPrivate };
             var remoteRepo = await _gitClientService.CreateRepositoryAsync(repository);
             _gitService.CloneRepository(remoteRepo.CloneUrl, remoteRepo.Name, LocalPath);
         }

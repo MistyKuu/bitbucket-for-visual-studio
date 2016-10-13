@@ -15,6 +15,7 @@ using System.Security;
 using System.Windows.Input;
 using BitBucket.REST.API;
 using BitBucket.REST.API.Models;
+using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
@@ -29,14 +30,17 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class LoginDialogViewModel : ViewModelBase, ILoginDialogViewModel
     {
         private readonly IEventAggregatorService _eventAggregator;
-        private readonly IGitClientService _gitClientService;
+        private readonly IGitClientServiceFactory _gitClientServiceFactory;
+        private IGitClientService _gitClientService;
         private string _login;
         private string _password;
         private ReactiveCommand<Unit> _connectCommand;
         private string _errorMessage;
         private bool _isLoading;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private ICommand _initializeCommand;
 
+        public ICommand InitializeCommand => _initializeCommand;
         public ICommand ConnectCommand => _connectCommand;
         public IEnumerable<IReactiveCommand> ThrowableCommands => new List<IReactiveCommand> { _connectCommand };
         public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _connectCommand };
@@ -49,10 +53,10 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
         [ImportingConstructor]
-        public LoginDialogViewModel(IEventAggregatorService eventAggregator, IGitClientService gitClientService)
+        public LoginDialogViewModel(IEventAggregatorService eventAggregator, IGitClientServiceFactory gitClientServiceFactory)
         {
             _eventAggregator = eventAggregator;
-            _gitClientService = gitClientService;
+            _gitClientServiceFactory = gitClientServiceFactory;
 
             _connectCommand.Subscribe(_ => OnClose());
         }
@@ -61,6 +65,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         public void InitializeCommands()
         {
             _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Connect());
+            _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => Initialize((GitProviderType)x));
+        }
+
+        private async Task Initialize(GitProviderType type)
+        {
+            _gitClientService = _gitClientServiceFactory.GetService(type);
         }
 
         private async Task Connect()

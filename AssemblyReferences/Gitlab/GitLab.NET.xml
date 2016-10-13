@@ -1,0 +1,2636 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GitLab.NET</name>
+    </assembly>
+    <members>
+        <member name="T:GitLab.NET.Abstractions.IRequest">
+            <summary> Provides a simple wrapper around RESTful requests. </summary>
+        </member>
+        <member name="M:GitLab.NET.Abstractions.IRequest.AddParameter(System.String,System.Object)">
+            <summary> Adds a parameter to the request. </summary>
+            <param name="name"> The name of the parameter. </param>
+            <param name="value"> The value for the parameter. </param>
+        </member>
+        <member name="M:GitLab.NET.Abstractions.IRequest.AddParameterIfNotNull(System.String,System.Object)">
+            <summary> Adds a parameter to the request if value is not null. </summary>
+            <param name="name"> The name of the parameter. </param>
+            <param name="value"> The value for the parameter. </param>
+        </member>
+        <member name="M:GitLab.NET.Abstractions.IRequest.AddUrlSegment(System.String,System.Object)">
+            <summary> Adds a url segment to the request. </summary>
+            <param name="name"> The name of the url segment. </param>
+            <param name="value"> The value for the url segment. </param>
+        </member>
+        <member name="M:GitLab.NET.Abstractions.IRequest.AddUrlSegmentIfNotNull(System.String,System.Object)">
+            <summary> Adds a url segment to the request if value is not null. </summary>
+            <param name="name"> The name of the url segment. </param>
+            <param name="value"> The value for the url segment. </param>
+        </member>
+        <member name="M:GitLab.NET.Abstractions.IRequest.Execute``1">
+            <summary> Executes the request and returns the response deserialized into the specified type. </summary>
+            <typeparam name="T"> The type to deserialize the response into. </typeparam>
+            <returns> The response. </returns>
+        </member>
+        <member name="M:GitLab.NET.Abstractions.IRequest.ExecuteBytes">
+            <summary> Executes the request and returns the response as a byte array. </summary>
+            <returns> The response containing a byte array. </returns>
+        </member>
+        <member name="M:GitLab.NET.Abstractions.IRequest.ExecuteContent">
+            <summary> Executes the request and returns the contents of the response. </summary>
+            <returns> The response containing the contents of the response as a string. </returns>
+        </member>
+        <member name="M:GitLab.NET.Abstractions.IRequest.ExecutePaginated``1">
+            <summary>
+                Executes the request and returns the response deserialized into the specified type along with pagination
+                data.
+            </summary>
+            <typeparam name="T"> The type to deserialize the response into. </typeparam>
+            <returns> The response. </returns>
+        </member>
+        <member name="T:GitLab.NET.Abstractions.IRequestFactory">
+            <summary> Provides a factory pattern for creating requests. </summary>
+        </member>
+        <member name="M:GitLab.NET.Abstractions.IRequestFactory.Create(System.String,GitLab.NET.Abstractions.Method,System.Boolean)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Abstractions.IRequest" /> instance. </summary>
+            <param name="resource"> The resource to use for this request. </param>
+            <param name="method"> The method to use for this request. </param>
+            <param name="authenticate"> Whether or not to use authentication for this request. </param>
+            <returns> A new instance of <see cref="T:GitLab.NET.Abstractions.IRequest" />. </returns>
+        </member>
+        <member name="T:GitLab.NET.Abstractions.Method">
+            <summary> Represents a REST method. </summary>
+        </member>
+        <member name="F:GitLab.NET.Abstractions.Method.Get">
+            <summary> Get </summary>
+        </member>
+        <member name="F:GitLab.NET.Abstractions.Method.Delete">
+            <summary> Delete </summary>
+        </member>
+        <member name="F:GitLab.NET.Abstractions.Method.Head">
+            <summary> Head </summary>
+        </member>
+        <member name="F:GitLab.NET.Abstractions.Method.Merge">
+            <summary> Merge </summary>
+        </member>
+        <member name="F:GitLab.NET.Abstractions.Method.Options">
+            <summary> Options </summary>
+        </member>
+        <member name="F:GitLab.NET.Abstractions.Method.Patch">
+            <summary> Patch </summary>
+        </member>
+        <member name="F:GitLab.NET.Abstractions.Method.Post">
+            <summary> Post </summary>
+        </member>
+        <member name="F:GitLab.NET.Abstractions.Method.Put">
+            <summary> Put </summary>
+        </member>
+        <member name="T:GitLab.NET.AccessLevel">
+            <summary> Group access level. </summary>
+        </member>
+        <member name="F:GitLab.NET.AccessLevel.Guest">
+            <summary> Guest </summary>
+        </member>
+        <member name="F:GitLab.NET.AccessLevel.Reporter">
+            <summary> Reporter </summary>
+        </member>
+        <member name="F:GitLab.NET.AccessLevel.Developer">
+            <summary> Developer </summary>
+        </member>
+        <member name="F:GitLab.NET.AccessLevel.Master">
+            <summary> Master </summary>
+        </member>
+        <member name="F:GitLab.NET.AccessLevel.Owner">
+            <summary> Owner </summary>
+        </member>
+        <member name="T:GitLab.NET.BuildStatus">
+            <summary> Contains the possible status' for a build. </summary>
+        </member>
+        <member name="F:GitLab.NET.BuildStatus.Failed">
+            <summary> The build has failed. </summary>
+        </member>
+        <member name="F:GitLab.NET.BuildStatus.Pending">
+            <summary> The build is pending. </summary>
+        </member>
+        <member name="F:GitLab.NET.BuildStatus.Running">
+            <summary> The build is running. </summary>
+        </member>
+        <member name="F:GitLab.NET.BuildStatus.Success">
+            <summary> The build succeeded. </summary>
+        </member>
+        <member name="M:GitLab.NET.Helpers.EnumDisplayAttributes.GetDescription(System.Enum)">
+            <summary> Gets the description attribute on an enum field value. </summary>
+            <param name="enumVal"> The enum value. </param>
+            <returns> The description attribute from the enum value. </returns>
+        </member>
+        <member name="T:GitLab.NET.MergeRequestState">
+            <summary> Contains the states for a merge request. </summary>
+        </member>
+        <member name="F:GitLab.NET.MergeRequestState.Closed">
+            <summary> The merge request is closed. </summary>
+        </member>
+        <member name="F:GitLab.NET.MergeRequestState.Merged">
+            <summary> The merge request has been merged. </summary>
+        </member>
+        <member name="F:GitLab.NET.MergeRequestState.Opened">
+            <summary> The merge request is opened. </summary>
+        </member>
+        <member name="T:GitLab.NET.MergeRequestStateEvent">
+            <summary> Contains state events for a merge request. </summary>
+        </member>
+        <member name="F:GitLab.NET.MergeRequestStateEvent.Close">
+            <summary> Closes the merge request. </summary>
+        </member>
+        <member name="F:GitLab.NET.MergeRequestStateEvent.Merge">
+            <summary> Merges the merge request. </summary>
+        </member>
+        <member name="F:GitLab.NET.MergeRequestStateEvent.Reopen">
+            <summary> Reopens a closed merge request. </summary>
+        </member>
+        <member name="T:GitLab.NET.OrderBy">
+            <summary> Contains the potential fields to order issues by. </summary>
+        </member>
+        <member name="F:GitLab.NET.OrderBy.CreatedAt">
+            <summary> Order by the date and time the issue was created at. </summary>
+        </member>
+        <member name="F:GitLab.NET.OrderBy.UpdatedAt">
+            <summary> Order by the date and time the issue was last updated at. </summary>
+        </member>
+        <member name="T:GitLab.NET.IssueState">
+            <summary> Contains the possible states for an issue. </summary>
+        </member>
+        <member name="F:GitLab.NET.IssueState.Opened">
+            <summary> The issue is opened. </summary>
+        </member>
+        <member name="F:GitLab.NET.IssueState.Closed">
+            <summary> The issue is closed. </summary>
+        </member>
+        <member name="T:GitLab.NET.LineType">
+            <summary> Contains the line types for commit comments. </summary>
+        </member>
+        <member name="F:GitLab.NET.LineType.New">
+            <summary> New </summary>
+        </member>
+        <member name="F:GitLab.NET.LineType.Old">
+            <summary> Old </summary>
+        </member>
+        <member name="T:GitLab.NET.MilestoneState">
+            <summary> Contains the states for a milestone. </summary>
+        </member>
+        <member name="F:GitLab.NET.MilestoneState.Active">
+            <summary> The milestone is active. </summary>
+        </member>
+        <member name="F:GitLab.NET.MilestoneState.Closed">
+            <summary> The milestone is closed. </summary>
+        </member>
+        <member name="T:GitLab.NET.MilestoneStateEvent">
+            <summary> Contains the state events for milestones. </summary>
+        </member>
+        <member name="F:GitLab.NET.MilestoneStateEvent.Close">
+            <summary> Close the milestone. </summary>
+        </member>
+        <member name="F:GitLab.NET.MilestoneStateEvent.Activate">
+            <summary> Activate the milestone. </summary>
+        </member>
+        <member name="T:GitLab.NET.Repositories.BranchRepository">
+            <summary> Provides GitLab Branch access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BranchRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.BranchRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BranchRepository.Create(System.UInt32,System.String,System.String)">
+            <summary> Creates a branch. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="branchName"> The name of the new branch. </param>
+            <param name="refName"> The name of the branch or commit SHA to create the branch from. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BranchRepository.Delete(System.UInt32,System.String)">
+            <summary> Deletes a branch. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="branchName"> The name of the branch. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BranchRepository.Find(System.UInt32,System.String)">
+            <summary> Gets a branch by its name. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="branchName"> The name of the branch. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BranchRepository.GetAll(System.UInt32)">
+            <summary> Gets all branches for the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of the
+                request.
+            </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BranchRepository.Protect(System.UInt32,System.String)">
+            <summary> Protects a branch. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="branchName"> The name of the branch. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BranchRepository.Unprotect(System.UInt32,System.String)">
+            <summary> Unprotects a branch. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="branchName"> The name of the branch. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.BuildRepository">
+            <summary> Provides GitLab Build access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.BuildRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildRepository.Cancel(System.UInt32,System.UInt32)">
+            <summary> Cancels a build. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="buildId"> The ID of the build. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildRepository.Erase(System.UInt32,System.UInt32)">
+            <summary> Erases the build trace and artifacts of a build. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="buildId"> The ID of the build. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildRepository.Find(System.UInt32,System.UInt32)">
+            <summary> Gets a build by its ID. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="buildId"> The ID of the build. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildRepository.GetArtifacts(System.UInt32,System.UInt32)">
+            <summary> Gets the artifacts from a build by its ID. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="buildId"> The ID of the build. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> containing a byte array representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildRepository.GetByCommit(System.UInt32,System.String,GitLab.NET.BuildStatus[])">
+            <summary> Gets all builds for the specified commit. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="commitSha"> The commit SHA. </param>
+            <param name="scopes"> The scopes to limit the results to. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildRepository.GetByProject(System.UInt32,GitLab.NET.BuildStatus[])">
+            <summary> Gets all builds for the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="scopes"> The scopes to limit the results to. (pending/running/failed/success/canceled) </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildRepository.Retry(System.UInt32,System.UInt32)">
+            <summary> Retries a build. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="buildId"> The ID of the build. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.BuildTriggerRepository">
+            <summary> Provides GitLab Build Trigger access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildTriggerRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.BuildTriggerRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildTriggerRepository.Create(System.UInt32)">
+            <summary> Creates a new build trigger associated with the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildTriggerRepository.Delete(System.UInt32,System.String)">
+            <summary> Deletes the build trigger with the provided token. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="token"> The token of the build trigger. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildTriggerRepository.Find(System.UInt32,System.String)">
+            <summary> Gets a build trigger by its token. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="token"> The token of the desired build trigger. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildTriggerRepository.GetAll(System.UInt32,System.UInt32,System.UInt32)">
+            <summary> Gets all build triggers associated with the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.BuildVariableRepository">
+            <summary> Provides GitLab Build Variable access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildVariableRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.BuildVariableRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildVariableRepository.Create(System.UInt32,System.String,System.String)">
+            <summary> Creates a new build variable. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="key"> The desired key for the new build variable. </param>
+            <param name="value"> The desired value for the new build variable. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildVariableRepository.Delete(System.UInt32,System.String)">
+            <summary> Deletes a build variable by the specified key. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="key"> The key of the desired build variable. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildVariableRepository.Find(System.UInt32,System.String)">
+            <summary> Gets a build variable by the specified key. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="key"> The key of the desired build variable. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildVariableRepository.GetAll(System.UInt32,System.UInt32,System.UInt32)">
+            <summary> Gets all build variables for the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.BuildVariableRepository.Update(System.UInt32,System.String,System.String)">
+            <summary> Updates an existing build variable. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="key"> The key of the build variable. </param>
+            <param name="value"> The desired value for the build variable. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.CommitRepository">
+            <summary> Provides GitLab Commit access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.CommitRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.CommitRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.CommitRepository.CreateComment(System.UInt32,System.String,System.String,System.String,System.Nullable{System.UInt32},System.Nullable{GitLab.NET.LineType})">
+            <summary> Creates a new commit comment. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="commitSha"> The commit sha or branch or tag name. </param>
+            <param name="note"> The text for the comment. </param>
+            <param name="path"> The file path to associate this comment with. </param>
+            <param name="line"> The line to associate this comment with. </param>
+            <param name="lineType"> The line type for this comment. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.CommitRepository.CreateStatus(System.UInt32,System.String,GitLab.NET.BuildStatus,System.String,System.String,System.String,System.String)">
+            <summary> Creates a status for a commit. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="commitSha"> The commit SHA. </param>
+            <param name="state"> The state for the new status. </param>
+            <param name="refName"> The branch or tag name to associate this status with. </param>
+            <param name="name"> The name of the build. </param>
+            <param name="targetUrl"> The target URL for the build. </param>
+            <param name="description"> The description for the build status. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.CommitRepository.Find(System.UInt32,System.String)">
+            <summary> Gets a commit by its SHA. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="commitSha"> The SHA of the desired commit. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.CommitRepository.GetAll(System.UInt32,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+            <summary> Gets all commits for the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="refName"> The branch or tag name to limit the results to. </param>
+            <param name="since"> The maximum date and time to return results from. </param>
+            <param name="until"> The maximum date and time to return results to. </param>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of the
+                request.
+            </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.CommitRepository.GetComments(System.UInt32,System.String,System.UInt32,System.UInt32)">
+            <summary> Gets the comments for a commit. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="commitSha"> The commit sha or branch or tag name. </param>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.CommitRepository.GetDiff(System.UInt32,System.String)">
+            <summary> Gets a commit diff. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="commitSha"> The SHA of the commit to get the diff for. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.CommitRepository.GetStatus(System.UInt32,System.String,System.String,System.String,System.String,System.Nullable{System.Boolean},System.UInt32,System.UInt32)">
+            <summary> Gets the status for a commit. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="commitSha"> The commit sha. </param>
+            <param name="refName"> The branch or tag name. </param>
+            <param name="stage"> </param>
+            <param name="name"> </param>
+            <param name="all"> </param>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.CommitRepository.UpdateStatus(System.UInt32,System.String,GitLab.NET.BuildStatus,System.String,System.String,System.String,System.String)">
+            <summary> Updates the status for a commit. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="commitSha"> The commit SHA. </param>
+            <param name="state"> The state for the new status. </param>
+            <param name="refName"> The branch or tag name to associate this status with. </param>
+            <param name="name"> The name of the build. </param>
+            <param name="targetUrl"> The target URL for the build. </param>
+            <param name="description"> The description for the build status. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.DeployKeyRepository">
+            <summary> Provides GitLab Deploy Key access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.DeployKeyRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.DeployKeyRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.DeployKeyRepository.Create(System.UInt32,System.String,System.String)">
+            <summary> Creates a new deploy key. </summary>
+            <param name="projectId"> The ID of the project to associate this key with. </param>
+            <param name="title"> The title of the key. </param>
+            <param name="key"> The key. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> containing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.DeployKeyRepository.Delete(System.UInt32,System.UInt32)">
+            <summary> Deletes a deploy key. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="keyId"> The ID of the key to delete. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> containing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.DeployKeyRepository.Find(System.UInt32,System.UInt32)">
+            <summary> Gets a deploy key. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="keyId"> The ID of the desired key. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> containing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.DeployKeyRepository.GetAll(System.UInt32)">
+            <summary> Gets all deploy keys associated with the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of the
+                request.
+            </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.EmailRepository">
+            <summary> Provides GitLab Email access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.EmailRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.EmailRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.EmailRepository.Create(System.String,System.Nullable{System.UInt32})">
+            <summary> Adds an email address to the currently authenticated user's account or the specified user's account. </summary>
+            <param name="email"> The email address to add. </param>
+            <param name="userId"> The user's ID. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.EmailRepository.Delete(System.UInt32,System.Nullable{System.UInt32})">
+            <summary> Deletes an email address from the current user's account. </summary>
+            <param name="id"> The ID of the email address to delete. </param>
+            <param name="userId"> The user's ID. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.EmailRepository.Find(System.UInt32)">
+            <summary> Gets an email address by ID. </summary>
+            <param name="id"> The ID of the email address. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.EmailRepository.GetForUser(System.Nullable{System.UInt32})">
+            <summary>
+                Gets the email addresses attached to the currently authenticated user's account or the specified user's
+                account.
+            </summary>
+            <param name="userId"> The user's ID. </param>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of
+                the request.
+            </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.FileRepository">
+            <summary> Provides GitLab File access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.FileRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.FileRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.FileRepository.Create(System.UInt32,System.String,System.String,System.String,System.String,System.String)">
+            <summary> Creates a new file. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="filePath"> The path for the new file. </param>
+            <param name="branchName"> The branch name for the new file. </param>
+            <param name="content"> The new file's contents. </param>
+            <param name="commitMessage"> The commit message to use for the commit created by this operation. </param>
+            <param name="encoding"> The encoding of the content field. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.FileRepository.Delete(System.UInt32,System.String,System.String,System.String)">
+            <summary> Deletes a file. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="filePath"> The path of the file to delete. </param>
+            <param name="branchName"> The name of the branch to delete the file from. </param>
+            <param name="commitMessage"> The commit message to use for this operation. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.FileRepository.Find(System.UInt32,System.String,System.String)">
+            <summary> Finds a file by its path. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="filePath"> The path of the file. </param>
+            <param name="refName"> The branch or tag name for the file. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.FileRepository.Update(System.UInt32,System.String,System.String,System.String,System.String,System.String)">
+            <summary> Updates a file. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="filePath"> The path for the file. </param>
+            <param name="branchName"> The branch name for the file. </param>
+            <param name="content"> The file's contents. </param>
+            <param name="commitMessage"> The commit message to use for the commit created by this operation. </param>
+            <param name="encoding"> The encoding of the content field. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.GitLabSettingsRepository">
+            <summary> Provides GitLab Settings access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.GitLabSettingsRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.GitLabSettingsRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.GitLabSettingsRepository.Get">
+            <summary> Gets the current settings for the server. </summary>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.GitLabSettingsRepository.Set(System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.Nullable{System.Boolean},System.String,System.Nullable{System.UInt32},System.String[],System.UInt32[],System.Nullable{System.UInt32},System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+            <summary> Sets the GitLab server's settings. </summary>
+            <param name="afterSignOutPath"> Where to redirect users after logout. </param>
+            <param name="defaultBranchProtection"> The protection level for the default branch. </param>
+            <param name="defaultProjectVisibility"> The visibility level new projects receive by default. </param>
+            <param name="defaultProjectsLimit"> The default project limit per user. </param>
+            <param name="defaultSnippetVisibility"> The visibility level new snippets receive by default. </param>
+            <param name="gravatarEnabled"> Whether or not gravatars are enabled. </param>
+            <param name="homePageUrl"> Where users will be redirected when not logged in. </param>
+            <param name="maxAttachmentSize"> The maximum attachment size in MB. </param>
+            <param name="restrictedSignupDomains"> Restrict registration to email addresses from these domains only. </param>
+            <param name="restrictedVisbilityLevels">
+                The specified levels cannot be used by non-admin users for projects or
+                snippets.
+            </param>
+            <param name="sessionExpireDelay"> Session duration in minutes. </param>
+            <param name="signinText"> The text to display on the login page. </param>
+            <param name="signinEnabled"> Whether or not users can log in via a GitLab account. </param>
+            <param name="signupEnabled"> Whether or not registration is enabled. </param>
+            <param name="userOauthApplications"> Allow users to register any application to use GitLab as an OAuth provider. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.IssueRepository">
+            <summary> Provides GitLab Issue access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.IssueRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.IssueRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.IssueRepository.Create(System.UInt32,System.String,System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.String[],System.Nullable{System.DateTime})">
+            <summary> Creates a new issue. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="title"> The title for the issue. </param>
+            <param name="description"> The description for the issue. </param>
+            <param name="assigneeId"> The ID of the user to assign this issue to. </param>
+            <param name="milestoneId"> The ID of the milestone to assign this issue to. </param>
+            <param name="labels"> The labels to assign to this issue. </param>
+            <param name="createdAt"> The date and time this issue was created at. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.IssueRepository.Delete(System.UInt32,System.UInt32)">
+            <summary> Deletes an issue. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="issueId"> The ID of the issue. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.IssueRepository.Find(System.UInt32,System.UInt32)">
+            <summary> Gets an issue by its ID. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="issueId"> The ID of the issue. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.IssueRepository.GetByProject(System.UInt32,System.Nullable{GitLab.NET.IssueState},System.String[],System.String,System.Nullable{GitLab.NET.OrderBy},System.Nullable{GitLab.NET.SortOrder})">
+            <summary> Gets all issues for the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="state"> Limit the results to the specified state. (opened/closed) </param>
+            <param name="labels"> Limit the results to only issues with the specified labels. </param>
+            <param name="milestone"> Limit the results to only issues for the specified milestone. </param>
+            <param name="orderBy"> Order the results by created_at or updated_at. Default is created_at. </param>
+            <param name="sort"> Sort results in ascending or descending order. (asc/desc) </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.IssueRepository.GetOwned(System.Nullable{GitLab.NET.IssueState},System.String[],System.Nullable{GitLab.NET.OrderBy},System.Nullable{GitLab.NET.SortOrder})">
+            <summary> Gets all issues created by the currently authenticated user. </summary>
+            <param name="state"> Limit the results to the specified state. (opened/closed) </param>
+            <param name="labels"> Limit the results to only issues with specified labels. </param>
+            <param name="orderBy"> Order the results by created_at or updated_at. Default is created_at. </param>
+            <param name="sort"> Sort results in ascending or descending order. (asc/desc) </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.IssueRepository.Move(System.UInt32,System.UInt32,System.UInt32)">
+            <summary> Moves an issue to a new project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="issueId"> The ID of the issue. </param>
+            <param name="newProjectId"> The ID of the project to move the issue to. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.IssueRepository.Subscribe(System.UInt32,System.UInt32)">
+            <summary> Subscribes to an issue. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="issueId"> The ID of the issue. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.IssueRepository.Unsubscribe(System.UInt32,System.UInt32)">
+            <summary> Unsubscribes from an issue. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="issueId"> The ID of the issue. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the resultse of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.IssueRepository.Update(System.UInt32,System.UInt32,System.String,System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.String[],System.Nullable{GitLab.NET.IssueStateEvent},System.Nullable{System.DateTime})">
+            <summary> updates an issue. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="issueId"> The ID of the issue. </param>
+            <param name="title"> The new title for the issue. </param>
+            <param name="description"> The new description for this issue. </param>
+            <param name="assigneeId"> The ID of the user to assign this issue to. </param>
+            <param name="milestoneId"> The ID of the milestone to assign this issue to. </param>
+            <param name="labels"> The labels for this issue. </param>
+            <param name="state"> The state event to update this issue with. (close/reopen) </param>
+            <param name="updatedAt"> The date and time this issue was updated at. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.MergeRequestRepository">
+            <summary> Provides GitLab Merge Request access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.MergeRequestRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.Accept(System.UInt32,System.UInt32,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+            <summary> Accepts a merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <param name="commitMessage"> The commit message to use for the merge. </param>
+            <param name="removeSourceBranch"> Whether or not to remove the source branch on merge. </param>
+            <param name="mergedWhenBuildSucceeds"> Whether or not to merge when the build succeeds. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.CancelMergeOnBuildSuccess(System.UInt32,System.UInt32)">
+            <summary> Cancels a merge request that is set to merge on build success. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.Create(System.UInt32,System.String,System.String,System.String,System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.String[],System.Nullable{System.UInt32})">
+            <summary> Creates a new merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="sourceBranch"> The source branch for this merge request. </param>
+            <param name="targetBranch"> The target branch for this merge request. </param>
+            <param name="title"> The title for this merge request. </param>
+            <param name="description"> The description for this merge request. </param>
+            <param name="assigneeId"> The ID of the user to assign to this merge request. </param>
+            <param name="targetProjectId"> The ID of the project to merge into. </param>
+            <param name="labels"> The labels to assign to this merge request. </param>
+            <param name="milestoneId"> The ID of the milestone to assign to this merge request. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.Delete(System.UInt32,System.UInt32)">
+            <summary> Deletes a merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.Find(System.UInt32,System.UInt32)">
+            <summary> Finds a merge request by its ID. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.GetAll(System.UInt32,System.Nullable{GitLab.NET.MergeRequestState},System.Nullable{GitLab.NET.OrderBy},System.Nullable{GitLab.NET.SortOrder},System.Nullable{System.UInt32},System.Nullable{System.UInt32})">
+            <summary> Gets all merge requests associated with the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="state"> The state to limit results to. </param>
+            <param name="orderBy"> The field to order results by. </param>
+            <param name="sort"> The sort order to use for sorting. </param>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.GetChanges(System.UInt32,System.UInt32)">
+            <summary> Gets all changes that will be applied by the merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.GetCommits(System.UInt32,System.UInt32)">
+            <summary> Gets the commits for the specified merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of this
+                request.
+            </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.CreateComment(System.UInt32,System.UInt32,System.String)">
+            <summary> Creates a new comment for merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            /// <param name="comment"> The comment content. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.GetComments(System.UInt32,System.UInt32)">
+            <summary> Gets all comments of the merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.GetNotes(System.UInt32,System.UInt32)">
+            <summary> Gets all notes of the merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.GetIssuesClosedOnMerge(System.UInt32,System.UInt32,System.UInt32,System.UInt32)">
+            <summary> Gets all issues that will be closed on accepting the merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.Subscribe(System.UInt32,System.UInt32)">
+            <summary> Subscribes to a merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <returns> </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.Unsubscribe(System.UInt32,System.UInt32)">
+            <summary> Unsubscribes from a merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <returns> </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MergeRequestRepository.Update(System.UInt32,System.UInt32,System.String,System.String,System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.String[],System.Nullable{GitLab.NET.MergeRequestStateEvent})">
+            <summary> Updates a merge request. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="mergeRequestId"> The ID of the merge request. </param>
+            <param name="targetBranch"> The target branch for this merge request. </param>
+            <param name="title"> The title for this merge request. </param>
+            <param name="description"> The description for this merge request. </param>
+            <param name="assigneeId"> The ID of the user to assign to this merge request. </param>
+            <param name="milestoneId"> The ID of the milestone to assign to this merge request. </param>
+            <param name="labels"> The labels to assign to this merge request. </param>
+            <param name="state"> The state event for this merge request. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.MilestoneRepository">
+            <summary> Provides GitLab Milestone access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MilestoneRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.MilestoneRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MilestoneRepository.Create(System.UInt32,System.String,System.String,System.Nullable{System.DateTime})">
+            <summary> Creates a milestone. </summary>
+            <param name="projectId"> The ID of the project to attach the milestone to. </param>
+            <param name="title"> The title for the milestone. </param>
+            <param name="description"> The description for the milestone. </param>
+            <param name="dueDate"> The due date for the milestone. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MilestoneRepository.Find(System.UInt32,System.UInt32)">
+            <summary> Finds a milestone by its ID. </summary>
+            <param name="projectId"> The ID of the project the milestone is attached to. </param>
+            <param name="milestoneId"> The ID of the milestone. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MilestoneRepository.GetAll(System.UInt32,System.Nullable{GitLab.NET.MilestoneState},System.UInt32,System.UInt32)">
+            <summary> Gets all milestones attached to the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="state"> The state to limit results to (active/closed) </param>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MilestoneRepository.GetIssues(System.UInt32,System.UInt32,System.UInt32,System.UInt32)">
+            <summary> Gets all issues attached to the specified milestone. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="milestoneId"> The ID of the milestone. </param>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.MilestoneRepository.Update(System.UInt32,System.UInt32,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{GitLab.NET.MilestoneStateEvent})">
+            <summary> Updates a milestone. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="milestoneId"> The ID of the milestone. </param>
+            <param name="title"> The new title for the milestone. </param>
+            <param name="description"> The new description for the milestone. </param>
+            <param name="dueDate"> The new due date for the milestone. </param>
+            <param name="state"> The new state for the milestone (close/activate). </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.ProjectRepository">
+            <summary> Provides GitLab Projects access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.ProjectRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.ProjectRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.ProjectRepository.GetAll(System.UInt32,System.UInt32)">
+            <summary> Gets all projects. </summary>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.ProjectRepository.Accessible(System.UInt32,System.UInt32)">
+            <summary> Gets accessible projects. </summary>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.ProjectRepository.Find(System.UInt32)">
+            <summary> Gets a project by its ID. </summary>
+            <param name="id"> The ID of the project. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.RunnerRepository">
+            <summary> Provides GitLab Runner access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RunnerRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.RunnerRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RunnerRepository.Delete(System.UInt32)">
+            <summary> Deletes a runner. </summary>
+            <param name="runnerId"> The runner's ID. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RunnerRepository.DisableForProject(System.UInt32,System.UInt32)">
+            <summary> Disables a runner for the specified project. </summary>
+            <param name="runnerId"> The runner's ID. </param>
+            <param name="projectId"> The project's ID. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RunnerRepository.EnableForProject(System.UInt32,System.UInt32)">
+            <summary> Enables a runner for the specified project. </summary>
+            <param name="runnerId"> The runner's ID. </param>
+            <param name="projectId"> The project's ID. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RunnerRepository.Find(System.UInt32)">
+            <summary> Finds a runner by its ID. </summary>
+            <param name="runnerId"> The runner's ID. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RunnerRepository.GetAll(System.Nullable{GitLab.NET.RunnerScope})">
+            <summary> Gets all runners in the GitLab instance. </summary>
+            <param name="scope"> The scope to limit the results to (active/paused/online/specific/shared) </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RunnerRepository.GetByProject(System.UInt32)">
+            <summary> Gets all runners assigned to the specified project. </summary>
+            <param name="projectId"> The project's ID. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RunnerRepository.GetOwned(System.Nullable{GitLab.NET.RunnerScope})">
+            <summary> Gets all runners owned by the currently authenticated user. </summary>
+            <param name="scope"> The scope to limit the results to (active/paused/online) </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RunnerRepository.Update(System.UInt32,System.String,System.Nullable{System.Boolean},System.String[])">
+            <summary> Updates a runner's details. </summary>
+            <param name="runnerId"> The runner's ID. </param>
+            <param name="description"> The new description for the runner. </param>
+            <param name="active"> Whether or not the runner is active. </param>
+            <param name="tagList"> The new tag list for the runner. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.TagRepository">
+            <summary> Provides GitLab Tag access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.TagRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.TagRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.TagRepository.Create(System.UInt32,System.String,System.String,System.String,System.String)">
+            <summary> Creates a new tag. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="tagName"> The name for the new tag. </param>
+            <param name="refName"> The commit sha, branch name, or tag name to associate this tag with. </param>
+            <param name="message"> The message for this tag. </param>
+            <param name="releaseDescription"> The release description for this tag. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.TagRepository.CreateRelease(System.UInt32,System.String,System.String)">
+            <summary> Creates a release associated with the specified tag. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="tagName"> The name of the tag to associate the release with. </param>
+            <param name="description"> The release description. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.TagRepository.Delete(System.UInt32,System.String)">
+            <summary> Deletes a tag. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="tagName"> The name of the tag to delete. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.TagRepository.Find(System.UInt32,System.String)">
+            <summary> Finds a tag by name. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="tagName"> The name of the desired tag. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.TagRepository.GetAll(System.UInt32)">
+            <summary> Gets all tags associated with the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of the
+                request.
+            </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.TagRepository.UpdateRelease(System.UInt32,System.String,System.String)">
+            <summary> Updates a release associated with the specified tag. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="tagName"> The name of the tag the release is associated with. </param>
+            <param name="description"> The release description. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.KeyRepository">
+            <summary> Provides GitLab Key access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.KeyRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.KeyRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.KeyRepository.Create(System.String,System.String,System.Nullable{System.UInt32})">
+            <summary> Creates a new SSH key under the currently authenticated user's account or the specified user's account. </summary>
+            <param name="title"> The title for the new SSH key. </param>
+            <param name="key"> The key for the new SSH key. </param>
+            <param name="userId"> The user's ID. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.KeyRepository.Delete(System.UInt32,System.Nullable{System.UInt32})">
+            <summary> Delete's an SSH key from the currently authenticated user's account or the specified user's account. </summary>
+            <param name="id"> The ID of the key to delete. </param>
+            <param name="userId"> The ID of the user. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.KeyRepository.Find(System.UInt32)">
+            <summary> Finds an SSH key by ID. </summary>
+            <param name="id"> The ID of the SSH key. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.KeyRepository.FindWithUser(System.UInt32)">
+            <summary> Finds an SSH key and user information by ID. </summary>
+            <param name="id"> The ID of the SSH key. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.KeyRepository.GetAll(System.Nullable{System.UInt32})">
+            <summary> Gets all SSH keys for the current user or the specified user. </summary>
+            <param name="userId"> The ID of the user. </param>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of the
+                request.
+            </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.GitLabLicenseRepository">
+            <summary> Provides GitLab User access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.GitLabLicenseRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.GitLabLicenseRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.GitLabLicenseRepository.Get">
+            <summary> Gets information about the license for the server's GitLab installation. </summary>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.LabelRepository">
+            <summary> Provides GitLab Label access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.LabelRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.LabelRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.LabelRepository.Create(System.UInt32,System.String,System.String,System.String)">
+            <summary> Creates a new label. </summary>
+            <param name="projectId"> The ID of the project to attach this label to. </param>
+            <param name="name"> The name for the new label. </param>
+            <param name="color"> The color for the new label. </param>
+            <param name="description"> The description for the new label. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.LabelRepository.Delete(System.UInt32,System.String)">
+            <summary> Deletes a label. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="name"> The name of the label to delete. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of this request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.LabelRepository.GetAll(System.UInt32)">
+            <summary> Gets all labels attached to the specified project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of the
+                request.
+            </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.LabelRepository.Subscribe(System.UInt32,System.String)">
+            <summary> Subscribes to a label. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="name"> The name of the label to subscribe to. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.LabelRepository.Unsubscribe(System.UInt32,System.String)">
+            <summary> Unsubscribes from a label. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="name"> The name of the label to unsubscribe from. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.LabelRepository.Update(System.UInt32,System.String,System.String,System.String,System.String)">
+            <summary> Updates a label. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="name"> The name for the label. </param>
+            <param name="newName"> The new name for the label. </param>
+            <param name="color"> The new color for the label. </param>
+            <param name="description"> The new description for the label. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.LicenseRepository">
+            <summary> Provides GitLab License Template access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.LicenseRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.LicenseRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.LicenseRepository.Find(System.String,System.String,System.String)">
+            <summary> Finds a license template matching the specified key. </summary>
+            <param name="key"> The key for the desired license. </param>
+            <param name="project"> The project name to replace references in the license with. </param>
+            <param name="fullName"> The full name of the copyright holder to replace references in the license with. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.LicenseRepository.GetAll(System.Nullable{System.Boolean})">
+            <summary> Gets all license templates. </summary>
+            <param name="popular"> Whether or not to only return popular results. </param>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of the
+                request.
+            </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.NamespaceRepository">
+            <summary> Provides GitLab Namespace access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.NamespaceRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.NamespaceRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.NamespaceRepository.GetAll(System.UInt32,System.UInt32)">
+            <summary> Gets all namespaces that the currently authenticated user is authorized to see. </summary>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.NamespaceRepository.Search(System.String,System.UInt32,System.UInt32)">
+            <summary> Gets all namespaces matching the search query that the currently authenticated user is authorized to see. </summary>
+            <param name="search"> The search term. </param>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.ProjectSnippetRepository">
+            <summary> Provides GitLab Project Snippets access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.ProjectSnippetRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.ProjectSnippetRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.ProjectSnippetRepository.Create(System.UInt32,System.String,System.String,System.String,GitLab.NET.VisibilityLevel)">
+            <summary> Creates a new project snippet associated with the provided project ID. </summary>
+            <param name="projectId"> The ID of the project to create this snippet for. </param>
+            <param name="title"> The snippet's title. </param>
+            <param name="fileName"> The snippet's file name. </param>
+            <param name="code"> The code for this snippet. </param>
+            <param name="visibilityLevel"> The visibility level for this snippet. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.ProjectSnippetRepository.Delete(System.UInt32,System.UInt32)">
+            <summary> Deletes a project snippet. </summary>
+            <param name="id"> </param>
+            <param name="projectId"> </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.ProjectSnippetRepository.Find(System.UInt32,System.UInt32)">
+            <summary> Finds a snippet by its ID and the project ID it is associated with. </summary>
+            <param name="id"> The ID of the snippet to retrieve. </param>
+            <param name="projectId"> The ID of the project to get snippets from. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.ProjectSnippetRepository.GetAll(System.UInt32,System.UInt32,System.UInt32)">
+            <summary> Gets all of the project snippets associated with a project. </summary>
+            <param name="projectId"> The ID of the project to get snippets from. </param>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.ProjectSnippetRepository.GetContent(System.UInt32,System.UInt32)">
+            <summary> Gets a snippet's content by its ID and the project ID it is associated with. </summary>
+            <param name="id"> The ID of the snippet. </param>
+            <param name="projectId"> The ID of the project to get the snippet from. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.ProjectSnippetRepository.Update(System.UInt32,System.UInt32,System.String,System.String,System.String,System.Nullable{GitLab.NET.VisibilityLevel})">
+            <summary> Updates a project snippet associated with the provided project ID. </summary>
+            <param name="id"> The ID of the snippet to update. </param>
+            <param name="projectId"> The ID of the project the snippet is attached to. </param>
+            <param name="title"> The snippet's title. </param>
+            <param name="fileName"> The snippet's file name. </param>
+            <param name="code"> The code for this snippet. </param>
+            <param name="visibilityLevel"> The visibility level for this snippet. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.RepositoryBase">
+            <summary> Base implementation of a repository. </summary>
+        </member>
+        <member name="F:GitLab.NET.Repositories.RepositoryBase.RequestFactory">
+            <summary> The <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> instance for this class. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RepositoryBase.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Base constructor for a <see cref="T:GitLab.NET.Repositories.RepositoryBase" /> class. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="T:GitLab.NET.Repositories.RepositoryRepository">
+            <summary> Provides GitLab Repository access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RepositoryRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.RepositoryRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RepositoryRepository.Compare(System.UInt32,System.String,System.String)">
+            <summary> Compares two branches or tags. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="from"> The branch or tag to compare from. </param>
+            <param name="to"> The branch or tag to compare to. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RepositoryRepository.GetArchive(System.UInt32,System.String)">
+            <summary> Gets an archive of the repository. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="sha"> The commit sha to download. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RepositoryRepository.GetBlobContent(System.UInt32,System.String)">
+            <summary> Gets the contents of a blob file. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="sha"> The sha of the blob. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RepositoryRepository.GetContributors(System.UInt32)">
+            <summary> Gets the contributors for the repository. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the
+                results of the request.
+            </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RepositoryRepository.GetFileContent(System.UInt32,System.String,System.String)">
+            <summary> Gets the contents of a file. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="sha"> The sha of the file. </param>
+            <param name="filePath"> The path of the file. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.RepositoryRepository.GetTree(System.UInt32,System.String,System.String)">
+            <summary> Gets a list of repository files and directories in a project. </summary>
+            <param name="projectId"> The ID of the project. </param>
+            <param name="path"> The path inside the repository. </param>
+            <param name="refName"> The name of a repository branch or tag. </param>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the
+                results of the request.
+            </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.SessionRepository">
+            <summary> Retrieves a private token for a given username/password combination. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.SessionRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.SessionRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.SessionRepository.RequestSession(System.String,System.String)">
+            <summary> Asynchronously retrieves a private token for a user. </summary>
+            <param name="username"> The username or email address for the user. </param>
+            <param name="password"> The user's password. </param>
+            <returns> The user's private token. Null if the username/password was incorrect. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.SystemHookRepository">
+            <summary> Provides GitLab System Hook access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.SystemHookRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.SystemHookRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.SystemHookRepository.Create(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+            <summary> Creates a new system hook. </summary>
+            <param name="url"> The URL to use for the new system hook. </param>
+            <param name="mergeRequestsEvents"> Track merge requests events by new system hook. </param>
+            <param name="pushEvents"> Track push events by new system hook. </param>
+            <param name="buildEvents"> Track build events by new system hook. </param>
+            <param name="enableSSLVerification"> Enable SSL verification for new system hook. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.SystemHookRepository.Update(System.UInt32,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary> Updates an existing system hook. </summary>
+            <param name="hookId"> The ID of the system hook to update. </param>
+            <param name="url"> The URL of the system hook to update. </param>
+            <param name="mergeRequestsEvents"> Update trackicng merge requests events. </param>
+            <param name="pushEvents"> Update trackicng push events. </param>
+            <param name="buildEvents"> Update trackicng build events. </param>
+            <param name="enableSSLVerification"> Update SSL verification. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.SystemHookRepository.Delete(System.UInt32)">
+            <summary> Deletes a system hook. </summary>
+            <param name="hookId"> The ID of the system hook to delete. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.SystemHookRepository.GetAll(System.Nullable{System.UInt32})">
+            <summary> Gets all system hooks. </summary>
+            <returns>
+                A <see cref="T:GitLab.NET.RequestResult`1" /> containing a <see cref="T:System.Collections.Generic.List`1" /> representing the results of
+                the request.
+            </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.SystemHookRepository.Test(System.UInt32)">
+            <summary> Tests a system hook. </summary>
+            <param name="hookId"> The ID of the system hook to test. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.Repositories.UserRepository">
+            <summary> Provides GitLab User access in a repository pattern. </summary>
+        </member>
+        <member name="M:GitLab.NET.Repositories.UserRepository.#ctor(GitLab.NET.Abstractions.IRequestFactory)">
+            <summary> Creates a new <see cref="T:GitLab.NET.Repositories.UserRepository" /> instance. </summary>
+            <param name="requestFactory"> An instance of <see cref="T:GitLab.NET.Abstractions.IRequestFactory" /> to use for this repository. </param>
+        </member>
+        <member name="M:GitLab.NET.Repositories.UserRepository.Block(System.UInt32)">
+            <summary> Blocks a user. </summary>
+            <param name="id"> The user's ID. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.UserRepository.Create(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.UInt32},System.String,System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+            <summary> Creates a new user. </summary>
+            <param name="email"> The user's email address. </param>
+            <param name="password"> The user's password. </param>
+            <param name="username"> The user's username. </param>
+            <param name="name"> The user's full name. </param>
+            <param name="skype"> The user's Skype profile. </param>
+            <param name="linkedIn"> The user's LinkedIn profile. </param>
+            <param name="twitter"> The user's Twitter profile. </param>
+            <param name="websiteUrl"> The user's website URL. </param>
+            <param name="projectsLimit"> The maximum projects the user is allowed to create. </param>
+            <param name="externUid"> The UID for the external authentication provider. </param>
+            <param name="provider"> The external provider. </param>
+            <param name="bio"> The user's bio. </param>
+            <param name="location"> The user's location. </param>
+            <param name="admin"> Whether or not the user should receive administrator privileges. </param>
+            <param name="canCreateGroup"> Whether or not the user can create groups. </param>
+            <param name="confirm"> Whether or not the user needs to confirm their account. </param>
+            <param name="external"> Whether or not the user's account should be flagged as external. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.UserRepository.Delete(System.UInt32)">
+            <summary> Deletes a user. </summary>
+            <param name="id"> The user's id. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.UserRepository.Find(System.UInt32)">
+            <summary> Finds a user by id. </summary>
+            <param name="id"> The user's id. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.UserRepository.Find(System.String)">
+            <summary> Finds a user by username. </summary>
+            <param name="username"> The user's username. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.UserRepository.GetAll(System.UInt32,System.UInt32)">
+            <summary> Gets all users. </summary>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.UserRepository.GetCurrent">
+            <summary> Gets the currently authenticated user. </summary>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.UserRepository.Search(System.String,System.UInt32,System.UInt32)">
+            <summary> Searches for a user by email address or name. </summary>
+            <param name="searchQuery"> The user's name or email address. </param>
+            <param name="page"> The page number for a paginated request. </param>
+            <param name="resultsPerPage"> The number of results to return per request. </param>
+            <returns> A <see cref="T:GitLab.NET.PaginatedResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.UserRepository.Unblock(System.UInt32)">
+            <summary> Unblocks a user. </summary>
+            <param name="id"> The user's ID. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="M:GitLab.NET.Repositories.UserRepository.Update(System.UInt32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.UInt32},System.String,System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+            <summary> Updates information for a user. </summary>
+            <param name="id"> The user's ID. </param>
+            <param name="email"> The user's email address. </param>
+            <param name="password"> The user's password. </param>
+            <param name="username"> The user's username. </param>
+            <param name="name"> The user's full name. </param>
+            <param name="skype"> The user's Skype profile. </param>
+            <param name="linkedIn"> The user's LinkedIn profile. </param>
+            <param name="twitter"> The user's Twitter profile. </param>
+            <param name="websiteUrl"> The user's website URL. </param>
+            <param name="projectsLimit"> The maximum projects the user is allowed to create. </param>
+            <param name="externUid"> The UID for the external authentication provider. </param>
+            <param name="provider"> The external provider. </param>
+            <param name="bio"> The user's bio. </param>
+            <param name="location"> The user's location. </param>
+            <param name="admin"> Whether or not the user should receive administrator privileges. </param>
+            <param name="canCreateGroup"> Whether or not the user can create groups. </param>
+            <param name="external"> Whether or not the user's account should be flagged as external. </param>
+            <returns> A <see cref="T:GitLab.NET.RequestResult`1" /> representing the results of the request. </returns>
+        </member>
+        <member name="T:GitLab.NET.GitLabClient">
+            <summary> A wrapper around the GitLab API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.PrivateToken">
+            <summary> The user's private token. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Branches">
+            <summary> Provides a wrapper around the GitLab branches API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Builds">
+            <summary> Provides a wrapper around the GitLab builds API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.BuildTriggers">
+            <summary> Provides a wrapper around the GitLab build triggers API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.BuildVariables">
+            <summary> Provides a wrapper around the GitLab build variables API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Commits">
+            <summary> Provides a wrapper around the GitLab commits API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.DeployKeys">
+            <summary> Provides a wrapper around the GitLab deploy keys API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Emails">
+            <summary> Provides a wrapper around the GitLab emails API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Files">
+            <summary> Provides a wrapper around the GitLab files API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.GitLabLicense">
+            <summary> Provides a wrapper around the GitLab license API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.GitLabSettings">
+            <summary> Provides a wrapper around the GitLab settings API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Issues">
+            <summary> Provides a wrapper around the GitLab issues API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Keys">
+            <summary> Provides a wrapper around the GitLab keys API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Labels">
+            <summary> Provides a wrapper around the GitLab labels API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Licenses">
+            <summary> Provides a wrapper around the GitLab license templates API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.MergeRequests">
+            <summary> Provides a wrapper around the GitLab merge requests API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Milestones">
+            <summary> Provides a wrapper around the GitLab milestones API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Namespaces">
+            <summary> Provides a wrapper around the GitLab namespaces API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.ProjectSnippets">
+            <summary> Provides a wrapper around the GitLab project snippets API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Repositories">
+            <summary> Provides a wrapper around the GitLab repositories API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Runners">
+            <summary> Provides a wrapper around the GitLab runners API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Session">
+            <summary> Provides a wrapper around the GitLab sessions API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.SystemHooks">
+            <summary> Provides a wrapper around the GitLab system hooks API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Tags">
+            <summary> Provides a wrapper around the GitLab tags API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Users">
+            <summary> Provides a wrapper around the GitLab users API. </summary>
+        </member>
+        <member name="P:GitLab.NET.GitLabClient.Projects">
+            <summary> Provides a wrapper around the GitLab projects API. </summary>
+        </member>
+        <member name="M:GitLab.NET.GitLabClient.#ctor(System.Uri,System.String)">
+            <summary> Creates a new <see cref="T:GitLab.NET.GitLabClient" /> instance. </summary>
+            <param name="hostUri"> The GitLab server to connect to. </param>
+            <param name="privateToken"> The private token to use when making requests to the GitLab API. </param>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Branch">
+            <summary> Stores information about a branch. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Branch.Name">
+            <summary> The name of this branch. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Branch.Protected">
+            <summary> Whether or not this branch is protected. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Branch.Commit">
+            <summary> The current commit for this branch. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Build">
+            <summary> Stores information about a build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.Id">
+            <summary> The ID for this build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.Status">
+            <summary> The status of this build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.Stage">
+            <summary> The stage for this build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.Name">
+            <summary> The name for this build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.Ref">
+            <summary> The branch or tag for this build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.Tag">
+            <summary> Whether or not this build is for a tag. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.Coverage">
+            <summary> The test coverage reported by this build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.CreatedAt">
+            <summary> The date and time this build was created at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.StartedAt">
+            <summary> The date and time this build was started at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.FinishedAt">
+            <summary> The date and time this build was finished at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.User">
+            <summary> The user that initiated this build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.ArtifactsFile">
+            <summary> The build artifact for this build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.Commit">
+            <summary> The commit for this build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Build.Runner">
+            <summary> The runner used for this build. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.BuildArtifact">
+            <summary> Stores information about a build's artifacts. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.BuildArtifact.Filename">
+            <summary> The name of the archive containing the build artifacts. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.BuildArtifact.Size">
+            <summary> The size of the archive containing the build artifacts. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Comment">
+            <summary> Stores information about a comment on a merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Comment.Note">
+            <summary> The text of the comment. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Comment.Author">
+            <summary> The author of the comment. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.GitLabSettings">
+            <summary> Stores information about GitLab's settings. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.Id">
+            <summary> Unknown. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.SignInText">
+            <summary> The text shown on the login page. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.HomePageUrl">
+            <summary> Redirect to this URL when not logged in. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.AfterSignOutPath">
+            <summary> Where to redirect users after logout. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.RestrictedSignupDomains">
+            <summary> Force people to use only emails from the domains provided for signup. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.DefaultBranchProtection">
+            <summary> The protection level for the default branch. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.DefaultProjectsLimit">
+            <summary> The default projects limit for users. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.DefaultProjectVisibility">
+            <summary> What visibility level new projects receive. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.DefaultSnippetVisibility">
+            <summary> What visibility level new snippets receive. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.MaxAttachmentSize">
+            <summary> The maximum attachment size in MB. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.SessionExpireDelay">
+            <summary> Session duration in minutes. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.RestrictedVisibilityLevels">
+            <summary> Selected levels cannot be used by non-admin users for projects or snippets. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.GravatarEnabled">
+            <summary> Enable gravatar. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.SignupEnabled">
+            <summary> Whether or not registration is enabled. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.SigninEnabled">
+            <summary> Whether or not signin via a GitLab account is enabled. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.UserOauthApplications">
+            <summary> Allow users to register any application to use GitLab as an OAuth provider. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.CreatedAt">
+            <summary> Unknown </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabSettings.UpdatedAt">
+            <summary> Unknown </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Group">
+            <summary> Stores information about a group. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Group.GroupId">
+            <summary> The GroupId for this group. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Group.GroupName">
+            <summary> The GroupName for this group. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Group.GroupAccessLevel">
+            <summary> The GroupAccessLevel for this group. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.MergeRequest">
+            <summary> Stores information about a merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Id">
+            <summary> The ID of the merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Iid">
+            <summary> The ID of the merge request within the project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.ProjectId">
+            <summary> The ID of the project that owns this merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Title">
+            <summary> The title of the merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Description">
+            <summary> The description for the merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.State">
+            <summary> The state of the merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.CreatedAt">
+            <summary> The date and time the merge request was created at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.UpdatedAt">
+            <summary> The date and time the merge request was last updated at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.TargetBranch">
+            <summary> The branch to merge into. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.SourceBranch">
+            <summary> The branch to merge from. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Upvotes">
+            <summary> The number of upvotes this merge request has. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Downvotes">
+            <summary> The number of downvotes this merge request has. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Author">
+            <summary> The author of this merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Assignee">
+            <summary> The assignee for this merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.SourceProjectId">
+            <summary> The source project ID. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.TargetProjectId">
+            <summary> The target project ID. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Labels">
+            <summary> The labels assigned to this merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.WorkInProgress">
+            <summary> Whether or not the merge request is marked as WIP. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Milestone">
+            <summary> The milestone for this merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.MergeWhenBuildSucceeds">
+            <summary> Whether or not the merge request will automatically be merged when the build succeeds. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.MergeStatus">
+            <summary> The merge status. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Subscribed">
+            <summary> Whether or not the currently authenticated user is subscribed to this merge request. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.UserNotesCount">
+            <summary> The number of user notes the merge request has. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.MergeRequest.Changes">
+            <summary> The changes that will be applied by this merge request. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Project">
+            <summary> Stores information about a project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.Id">
+            <summary> The ID for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.Description">
+            <summary> The Description for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.DefaultBranch">
+            <summary> The DefaultBranch for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.Public">
+            <summary> Is project public. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.VisibilityLevel">
+            <summary> The VisibilityLevel for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.SshUrl">
+            <summary> The ssh url to this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.HttpUrlToRepo">
+            <summary> The http url to this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.WebUrl">
+            <summary> The web url to this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.TagList">
+            <summary> The tags for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.Owner">
+            <summary> The project owner. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.Name">
+            <summary> The name for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.NameWithNamespace">
+            <summary> The name with namespace for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.Path">
+            <summary> The custom repository name for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.PathWithNamespace">
+            <summary> The custom repository name with namespace for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.IssuesEnabled">
+            <summary> Is issues enabled for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.OpenIssuesCount">
+            <summary> How many issues are open for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.MergeRequestsEnabled">
+            <summary> Is this project allows merge requests. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.BuildsEnabled">
+            <summary> Is builds enabled for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.WikiEnabled">
+            <summary> Is wiki enabled for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.SnippetsEnabled">
+            <summary> Is snippets enabled for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.ContainerRepositoryEnabled">
+            <summary> Is container repository enabled for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.CreatedAt">
+            <summary> The date and time this project was created at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.LastActivityAt">
+            <summary> The date and time this project was updated at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.CreatorId">
+            <summary> The creator id for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.Namespace">
+            <summary> The namespace for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.Archived">
+            <summary> Is this project archived. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.AvatarUlr">
+            <summary> The avatar url for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.SharedRunnersEnabled">
+            <summary> Is shared runners enabled for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.ForksCount">
+            <summary> The forks count for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.StarCount">
+            <summary> The stars count for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.RunnersToken">
+            <summary> The runners token for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.PublicBuilds">
+            <summary> Is public builds enabled for this project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Project.SharedWithGroups">
+            <summary> The groups what shared this project. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Runner">
+            <summary> Stores information about a runner. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.Id">
+            <summary> The ID for this runner. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.Name">
+            <summary> The name for this runner. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.Description">
+            <summary> The description for this runner. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.Active">
+            <summary> Whether or not this runner is active. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.IsShared">
+            <summary> Whether or not this runner is shared. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.RunUntagged">
+            <summary> Whether or not this runner can run untagged projects. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.TagList">
+            <summary> The tags for this runner. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.Version">
+            <summary> The version for this runner. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.Revision">
+            <summary> The revision for this runner. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.Platform">
+            <summary> The platform of this runner. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.Architecture">
+            <summary> The CPU architecture for this runner. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.Token">
+            <summary> This runner's token. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.ContactedAt">
+            <summary> The date and time this runner was last contacted at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Runner.Projects">
+            <summary> The projects this runner is assigned to. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.UserPreview">
+            <summary> Stores a snippet of information about a user. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.UserPreview.Id">
+            <summary> The ID of the user. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.UserPreview.Username">
+            <summary> The user's username. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.UserPreview.Name">
+            <summary> The user's name. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.UserPreview.State">
+            <summary> The state of the user's account. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.UserPreview.AvatarUrl">
+            <summary> The user's avatar URL. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.UserPreview.WebUrl">
+            <summary> The web URL for the user's account. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Commit">
+            <summary> Stores information about a commit. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.Id">
+            <summary> The ID of the commit. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.ShortId">
+            <summary> The short ID of the commit. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.Title">
+            <summary> The title for the commit. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.AuthorName">
+            <summary> The name of the commit's author. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.AuthorEmail">
+            <summary> The email address of the commit's author. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.CommitterName">
+            <summary> The committer's name. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.CommitterEmail">
+            <summary> The committer's email address. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.Message">
+            <summary> The commit message. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.ParentIds">
+            <summary> The parent IDs of the commit. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.CreatedAt">
+            <summary> The date and time the commit was created at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.CommittedDate">
+            <summary> The date and time the commit was committed at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.AuthoredDate">
+            <summary> The date and time the commit was authored at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Commit.Status">
+            <summary> The status of the commit. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.CommitComment">
+            <summary> Stores information about a comment on a commit. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitComment.Note">
+            <summary> The text of the comment. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitComment.Path">
+            <summary> The path of the file being commented on. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitComment.Line">
+            <summary> The line in the file that the comment is on. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitComment.LineType">
+            <summary> The type of line the comment is on. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitComment.CreatedAt">
+            <summary> The date and time the comment was created at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitComment.Author">
+            <summary> The author of the comment. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.CommitStatus">
+            <summary> Stores information about a commit's build status. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.Id">
+            <summary> The ID of the status. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.Sha">
+            <summary> The SHA of the commit. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.Ref">
+            <summary> The branch or tag for this status. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.Status">
+            <summary> The status of this build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.Name">
+            <summary> The name of the build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.TargetUrl">
+            <summary> The target URL for the build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.Description">
+            <summary> The description for the build. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.AllowFailure">
+            <summary> Whether or not failure is allowed. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.CreatedAt">
+            <summary> The date and time the build was created at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.StartedAt">
+            <summary> The date and time the build was started at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.FinishedAt">
+            <summary> The date and time the build was finished at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitStatus.Author">
+            <summary> The author of the build. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Issue">
+            <summary> Stores information about an issue. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.Id">
+            <summary> The ID of the issue. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.Iid">
+            <summary> The ID of the issue in relation to the project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.ProjectId">
+            <summary> The ID of the project that owns this issue. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.Title">
+            <summary> The title of the issue. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.Description">
+            <summary> The description for the issue. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.State">
+            <summary> The current state of the issue. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.CreatedAt">
+            <summary> The date and time the issue was created at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.UpdatedAt">
+            <summary> The date and time the issue was last updated at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.Labels">
+            <summary> The labels attached to the issue. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.Milestone">
+            <summary> The milestone that owns the issue, if any. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.Assignee">
+            <summary> The user currently assigned to the issue. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.Author">
+            <summary> The user that created the issue. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.Subscribed">
+            <summary> Whether or not the currently authenticated user is subscribed to the issue. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Issue.UserNotesCount">
+            <summary> The total number of user-created notes attached to the issue. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Milestone">
+            <summary> Stores information about a milestone. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Milestone.Id">
+            <summary> The ID of the milestone. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Milestone.Iid">
+            <summary> The ID of the milestone in relation to the project. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Milestone.ProjectId">
+            <summary> The ID of the project that owns this milestone. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Milestone.Title">
+            <summary> The title of the milestone. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Milestone.Description">
+            <summary> The description for the milestone. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Milestone.State">
+            <summary> The current state of the milestone. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Milestone.CreatedAt">
+            <summary> The date and time the milestone was created at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Milestone.UpdatedAt">
+            <summary> The date and time the milestone was last updated at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Milestone.DueDate">
+            <summary> The date the milestone is due. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Release">
+            <summary> Stores information about a release. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Release.TagName">
+            <summary> The tag name for this release. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Release.Description">
+            <summary> The description for this release. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.RepositoryFile">
+            <summary> Stores information about a repository file. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryFile.FileName">
+            <summary> The name of the file. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryFile.FilePath">
+            <summary> The path of the file. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryFile.Size">
+            <summary> The size of the file. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryFile.Encoding">
+            <summary> The encoding for the Content field. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryFile.Ref">
+            <summary> The branch or tag name for the file. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryFile.BlobId">
+            <summary> The file's blob ID. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryFile.CommitId">
+            <summary> The commit ID for the file. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryFile.LastCommitId">
+            <summary> The last commit ID for the file. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryFile.Content">
+            <summary> The file contents. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Tag">
+            <summary> Stores information about a tag. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Tag.Name">
+            <summary> The name for this tag. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Tag.Message">
+            <summary> The message for this tag. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Tag.Commit">
+            <summary> The commit this tag is attached to. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Tag.Release">
+            <summary> The release for this tag. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.BuildTrigger">
+            <summary> Stores information about a build trigger. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.BuildTrigger.Token">
+            <summary> The token for this build trigger. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.BuildTrigger.CreatedAt">
+            <summary> The date and time this build trigger was created at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.BuildTrigger.UpdatedAt">
+            <summary> The date and time this build trigger was updated at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.BuildTrigger.DeletedAt">
+            <summary> The date and time this build trigger was deleted at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.BuildTrigger.LastUsed">
+            <summary> The date and time this build trigger was last used at. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.BuildVariable">
+            <summary> Stores information about a build variable. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.BuildVariable.Key">
+            <summary> The key for this build variable. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.BuildVariable.Value">
+            <summary> The value for this build variable. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.DeployKey">
+            <summary> Stores information about a deploy key. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.DeployKey.Id">
+            <summary> The ID for this deploy key. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.DeployKey.UserId">
+            <summary> The ID for the user that owns this deploy key. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.DeployKey.Public">
+            <summary> Whether or not this deploy key is public. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.DeployKey.Title">
+            <summary> The title for this deploy key. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.DeployKey.Key">
+            <summary> The deploy key. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.DeployKey.Fingerprint">
+            <summary> The fingerprint for this deploy key. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.DeployKey.CreatedAt">
+            <summary> The date and time this deploy key was created at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.DeployKey.UpdatedAt">
+            <summary> The date and time this deploy key was updated at. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.EmailAddress">
+            <summary> Stores information about an email address. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.EmailAddress.Id">
+            <summary> The ID for this email address. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.EmailAddress.Email">
+            <summary> The email address. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Identity">
+            <summary> Provides information about an external identity. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Identity.Provider">
+            <summary> The identity provider. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Identity.ExternUid">
+            <summary> The UID for the identity. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.GitLabLicense">
+            <summary> Stores information about the GitLab license for the currently connected server. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabLicense.StartsAt">
+            <summary> The date and time this license starts at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabLicense.ExpiresAt">
+            <summary> The date and time this license expires at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabLicense.Licensee">
+            <summary> The licensee. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabLicense.UserLimit">
+            <summary> The user limit for this license. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.GitLabLicense.ActiveUsers">
+            <summary> THe number of active users this license currently has. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Label">
+            <summary> Stores information about a label. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Label.Name">
+            <summary> The name for this label. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Label.Color">
+            <summary> The color for this label. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Label.Description">
+            <summary> The description for this label. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Label.OpenIssuesCount">
+            <summary> The number of open issues with this label. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Label.ClosedIssuesCount">
+            <summary> The number of closed issues with this label. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Label.OpenMergeRequestsCount">
+            <summary> The number of open merge requests with this label. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Label.Subscribed">
+            <summary> Whether or not the current user is subscribed to this label. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.License">
+            <summary> Stores information about a GitLab license template. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.License.Key">
+            <summary> The key for this license. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.License.Name">
+            <summary> The name for this license. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.License.Nickname">
+            <summary> The nickname for this license. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.License.Popular">
+            <summary> Whether or not this license template is popular. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.License.HtmlUrl">
+            <summary> The HTML URL for this license. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.License.SourceUrl">
+            <summary> The source URL for this license. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.License.Description">
+            <summary> The description for this license. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.License.Conditions">
+            <summary> The conditions of this license. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.License.Permissions">
+            <summary> The permissions provided by this license. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.License.Limitations">
+            <summary> The limitations set by this license. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.License.Content">
+            <summary> The license content. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Licensee">
+            <summary> Stores information about a GitLab licensee. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Licensee.Name">
+            <summary> The licensee's name. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Licensee.Company">
+            <summary> The licensee's company name. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Licensee.Email">
+            <summary> The licensee's email address. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.Namespace">
+            <summary> Stores information for a namespace. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Namespace.Id">
+            <summary> The ID for this namespace. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Namespace.Path">
+            <summary> The path for this namespace. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.Namespace.Kind">
+            <summary> The kind for this namespace. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.ProjectSnippet">
+            <summary> Stores information about a project snippet. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippet.Id">
+            <summary> The ID of this project snippet. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippet.Title">
+            <summary> The title of this project snippet. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippet.FileName">
+            <summary> The file name of this project snippet. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippet.Author">
+            <summary> The author of this project snippet. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippet.ExpiresAt">
+            <summary> The date and time this project snippet expires at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippet.UpdatedAt">
+            <summary> The date and time this project snippet was updated at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippet.CreatedAt">
+            <summary> The date and time this project snippet was created at. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.ProjectSnippetAuthor">
+            <summary> Stores information about a project snippet's author. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippetAuthor.Id">
+            <summary> The author's user ID. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippetAuthor.Username">
+            <summary> The author's username. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippetAuthor.Email">
+            <summary> The author's email address. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippetAuthor.Name">
+            <summary> The author's name. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippetAuthor.State">
+            <summary> The current state of the author's account. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.ProjectSnippetAuthor.CreatedAt">
+            <summary> The date and time the author's account was created at. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.RepositoryComparison">
+            <summary> Represents a repository comparison. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryComparison.Commit">
+            <summary> The last commit for the primary item in the comparison. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryComparison.Commits">
+            <summary> The commits for the secondary item in the comparison. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryComparison.Diffs">
+            <summary> The diffs between the primary and secondary items in the comparison. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryComparison.CompareTimeout">
+            <summary> Whether or not the comparison timed out. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryComparison.CompareSameRef">
+            <summary> Whether or not the comparison is for the same references. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.RepositoryContributor">
+            <summary> Stores information about a repository contributor. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryContributor.Name">
+            <summary> The contributor's name. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryContributor.Email">
+            <summary> The contributor's email address. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryContributor.Commits">
+            <summary> The number of commits this contributor has made to the repository. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryContributor.Additions">
+            <summary> The number of additions this contributor has made to the repository. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryContributor.Deletions">
+            <summary> The number of deletions this contributor has made to the repository. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.CommitDiff">
+            <summary> Stores information about a repository diff. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitDiff.Diff">
+            <summary> A string representation of the diff. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitDiff.NewPath">
+            <summary> The new path. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitDiff.OldPath">
+            <summary> The old path. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitDiff.AMode">
+            <summary> The mode for item A in the comparison. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitDiff.BMode">
+            <summary> The mode for item B in the comparison. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitDiff.NewFile">
+            <summary> Whether or not this is a new file. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitDiff.RenamedFile">
+            <summary> Whether or not the file was renamed. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitDiff.DeletedFile">
+            <summary> Whether or not the file was deleted. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.CommitDiff.TooLarge">
+            <summary> Whether or not the diff was too large. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.RepositoryTreeItem">
+            <summary> Stores information about a repository tree item. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryTreeItem.Id">
+            <summary> The ID for this tree item. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryTreeItem.Name">
+            <summary> The name of this tree item. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryTreeItem.Type">
+            <summary> The type for this tree item. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.RepositoryTreeItem.Mode">
+            <summary> The mode for this tree item. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.SshKey">
+            <summary> Provides information about an SSH Key. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SshKey.Id">
+            <summary> The ID of this key. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SshKey.Title">
+            <summary> The title for this key. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SshKey.Key">
+            <summary> The public key. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SshKey.CreatedAt">
+            <summary> The date and time this key was created at. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.SystemHook">
+            <summary> Stores information about a system hook. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.Id">
+            <summary> The ID for this system hook. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.ProjectId">
+            <summary> The ID of the project this system hook is attached to. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.ServiceId">
+            <summary> The ID of the service this system hook is attached to. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.Url">
+            <summary> The URL for this system hook. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.NoteEvents">
+            <summary> Whether or not this system hook fires note events. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.IssuesEvents">
+            <summary> Whether or not this system hook fires issue events. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.MergeRequestsEvents">
+            <summary> Whether or not this system hook fires merge request events. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.PushEvents">
+            <summary> Whether or not this system hook fires push events. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.BuildEvents">
+            <summary> Whether or not this system hook fires build events. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.TagPushEvents">
+            <summary> Whether or not this system hook fires tag push events. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.EnableSslVerification">
+            <summary> Whether or not SSL verification is enabled for this system hook. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.CreatedAt">
+            <summary> The date and time this system hook was created at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHook.UpdatedAt">
+            <summary> The date and time this system hook was updated at. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.SystemHookEvent">
+            <summary> Stores information about a system hook event. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHookEvent.ProjectId">
+            <summary> The ID of the project this event was fired for. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHookEvent.Name">
+            <summary> The name of the project this event was fired for. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHookEvent.Path">
+            <summary> The path of the project this event was fired for. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHookEvent.EventName">
+            <summary> The name of this event. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHookEvent.OwnerEmail">
+            <summary> The email address of the owner of the project this event was fired for. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.SystemHookEvent.OwnerName">
+            <summary> The name of the owner of the project this event was fired for. </summary>
+        </member>
+        <member name="T:GitLab.NET.ResponseModels.User">
+            <summary> Provides details about a user. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.Id">
+            <summary> The user's ID. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.Username">
+            <summary> The user's username. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.Email">
+            <summary> The user's email address. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.Name">
+            <summary> The user's full name. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.State">
+            <summary> The current state of the user (active/blocked). </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.AvatarUrl">
+            <summary> The URL for the user's avatar. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.WebUrl">
+            <summary> The URL for the user's profile. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.CreatedAt">
+            <summary> The date and time the user's account was created. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.IsAdmin">
+            <summary> Whether or not the user has admin privileges. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.Bio">
+            <summary> The user's bio. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.Location">
+            <summary> The user's location. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.Skype">
+            <summary> The user's Skype username. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.LinkedIn">
+            <summary> The user's LinkedIn profile. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.Twitter">
+            <summary> The user's Twitter profile. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.WebsiteUrl">
+            <summary> The user's website URL. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.LastSignInAt">
+            <summary> The date and time of the user's last sign in. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.ConfirmedAt">
+            <summary> The date and time the user's account was confirmed at. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.ThemeId">
+            <summary> The ID of the user's currently selected theme. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.ColorSchemeId">
+            <summary> The ID of the user's currently selected color scheme. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.ProjectsLimit">
+            <summary> The maximum number of projects the user is allowed to create. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.CurrentSignInAt">
+            <summary> The date and time of the user's current sign in. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.Identities">
+            <summary> The external identites attached to the user's account. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.CanCreateGroup">
+            <summary> Whether or not the user can create groups. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.CanCreateProject">
+            <summary> Whether or not the user can create projects. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.TwoFactorEnabled">
+            <summary> Whether or not the user's account requires two-factor authentication for login. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.External">
+            <summary> Whether or not the user's account is flagged as external. </summary>
+        </member>
+        <member name="P:GitLab.NET.ResponseModels.User.PrivateToken">
+            <summary> The user's private token. </summary>
+        </member>
+        <member name="T:GitLab.NET.Authenticators.PrivateTokenAuthenticator">
+            <summary> A GitLab private token authenticator. </summary>
+        </member>
+        <member name="P:GitLab.NET.Authenticators.PrivateTokenAuthenticator.PrivateToken">
+            <summary> The user's private token. </summary>
+        </member>
+        <member name="M:GitLab.NET.Authenticators.PrivateTokenAuthenticator.Authenticate(RestSharp.IRestClient,RestSharp.IRestRequest)">
+            <summary> Adds the provided private token to the request as a header. </summary>
+            <param name="client"> The <see cref="T:RestSharp.IRestClient" />. </param>
+            <param name="request"> The <see cref="T:RestSharp.IRestRequest" /> to add the header to. </param>
+        </member>
+        <member name="T:GitLab.NET.PaginatedResult`1">
+            <summary> Stores results from a paginated query as well as pagination information. </summary>
+            <typeparam name="T"> The type of result stored. </typeparam>
+        </member>
+        <member name="P:GitLab.NET.PaginatedResult`1.CurrentPage">
+            <summary> The current page. </summary>
+        </member>
+        <member name="P:GitLab.NET.PaginatedResult`1.PreviousPage">
+            <summary> The number of the previous page. </summary>
+        </member>
+        <member name="P:GitLab.NET.PaginatedResult`1.NextPage">
+            <summary> The number of the next page. </summary>
+        </member>
+        <member name="P:GitLab.NET.PaginatedResult`1.ResultsPerPage">
+            <summary> The number of results returned per page. </summary>
+        </member>
+        <member name="P:GitLab.NET.PaginatedResult`1.TotalPages">
+            <summary> The total number of pages for this result. </summary>
+        </member>
+        <member name="P:GitLab.NET.PaginatedResult`1.TotalResults">
+            <summary> The total number of results available. </summary>
+        </member>
+        <member name="M:GitLab.NET.PaginatedResult`1.#ctor(RestSharp.IRestResponse{System.Collections.Generic.List{`0}})">
+            <summary> Creates a new <see cref="T:GitLab.NET.PaginatedResult`1" /> instance. </summary>
+            <param name="response"> The response to populate this instance with. </param>
+        </member>
+        <member name="T:GitLab.NET.RequestResult`1">
+            <summary> Provides data from an API request. </summary>
+            <typeparam name="T"> The type of the data for this result. </typeparam>
+        </member>
+        <member name="P:GitLab.NET.RequestResult`1.StatusCode">
+            <summary> The <see cref="T:System.Net.HttpStatusCode" /> returned by the server for this request. </summary>
+        </member>
+        <member name="P:GitLab.NET.RequestResult`1.Data">
+            <summary> The results from the query. </summary>
+        </member>
+        <member name="M:GitLab.NET.RequestResult`1.#ctor(RestSharp.IRestResponse{`0})">
+            <summary> Creates a new <see cref="T:GitLab.NET.RequestResult`1" /> instance. </summary>
+            <param name="response"> The response to populate this instance with. </param>
+        </member>
+        <member name="M:GitLab.NET.RequestResult`1.#ctor(RestSharp.IRestResponse,`0)">
+            <summary> Creates a new <see cref="T:GitLab.NET.RequestResult`1" /> instance. </summary>
+            <param name="response"> The response to populate this instance with. </param>
+            <param name="data"> The data for this instance. </param>
+        </member>
+        <member name="T:GitLab.NET.RunnerScope">
+            <summary> Contains the possible scopes to use for runner queries. </summary>
+        </member>
+        <member name="F:GitLab.NET.RunnerScope.Active">
+            <summary> The runner is active. </summary>
+        </member>
+        <member name="F:GitLab.NET.RunnerScope.Online">
+            <summary> The runner is online. </summary>
+        </member>
+        <member name="F:GitLab.NET.RunnerScope.Paused">
+            <summary> The runner is paused. </summary>
+        </member>
+        <member name="F:GitLab.NET.RunnerScope.Shared">
+            <summary> The runner is shared. </summary>
+        </member>
+        <member name="F:GitLab.NET.RunnerScope.Specific">
+            <summary> The runner is specific. </summary>
+        </member>
+        <member name="T:GitLab.NET.SortOrder">
+            <summary> Contains the possible orders for sorting. </summary>
+        </member>
+        <member name="F:GitLab.NET.SortOrder.Asc">
+            <summary> Ascending order. </summary>
+        </member>
+        <member name="F:GitLab.NET.SortOrder.Desc">
+            <summary> Descending order. </summary>
+        </member>
+        <member name="T:GitLab.NET.IssueStateEvent">
+            <summary> Contains the possible state events. </summary>
+        </member>
+        <member name="F:GitLab.NET.IssueStateEvent.Close">
+            <summary> Closes the item. </summary>
+        </member>
+        <member name="F:GitLab.NET.IssueStateEvent.Reopen">
+            <summary> Reopens the item. </summary>
+        </member>
+        <member name="T:GitLab.NET.VisibilityLevel">
+            <summary> Visibility level for an object. </summary>
+        </member>
+        <member name="F:GitLab.NET.VisibilityLevel.Private">
+            <summary> The object in question is private. </summary>
+        </member>
+        <member name="F:GitLab.NET.VisibilityLevel.Internal">
+            <summary> The object in question is internal. </summary>
+        </member>
+        <member name="F:GitLab.NET.VisibilityLevel.Public">
+            <summary> The object in question is public. </summary>
+        </member>
+    </members>
+</doc>

@@ -51,12 +51,12 @@ namespace GitClientVS.VisualStudio.UI.Services
 
             var repo = gitExt.ActiveRepositories.FirstOrDefault()?.ToModel();
             if (repo != ActiveRepo)
-                syncContext.Post(r => ActiveRepo = r as GitRemoteRepository, repo);
+                syncContext.Post(r => ActiveRepo = r as GitRepository, repo);
         }
 
 
-        private GitRemoteRepository activeRepo;
-        public GitRemoteRepository ActiveRepo
+        private GitRepository activeRepo;
+        public GitRepository ActiveRepo
         {
             get { return activeRepo; }
             private set

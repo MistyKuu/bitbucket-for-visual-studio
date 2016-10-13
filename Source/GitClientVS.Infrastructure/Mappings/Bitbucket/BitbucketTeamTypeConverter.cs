@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using BitBucket.REST.API.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 
-namespace GitClientVS.Infrastructure.Mappings
+namespace GitClientVS.Infrastructure.Mappings.Bitbucket
 {
-    public class TeamTypeConverter : ITypeConverter<Team, GitTeam>
+    public class BitbucketTeamTypeConverter : ITypeConverter<Team, GitTeam>
     {
         public GitTeam Convert(Team source, GitTeam destination, ResolutionContext context)
         {
@@ -17,7 +15,7 @@ namespace GitClientVS.Infrastructure.Mappings
         }
     }
 
-    public class ReverseTeamTypeConverter : ITypeConverter<GitTeam, Team>
+    public class BitbucketReverseTeamTypeConverter : ITypeConverter<GitTeam, Team>
     {
         public Team Convert(GitTeam source, Team destination, ResolutionContext context)
         {

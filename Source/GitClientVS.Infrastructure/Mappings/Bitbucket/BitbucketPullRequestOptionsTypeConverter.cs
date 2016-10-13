@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using GitClientVS.Contracts.Models.GitClientModels;
 using BitBucket.REST.API.Models;
+using GitClientVS.Contracts.Models.GitClientModels;
 
-namespace GitClientVS.Infrastructure.Mappings
+namespace GitClientVS.Infrastructure.Mappings.Bitbucket
 {
-    public class PullRequestOptionsTypeConverter
+    public class BitbucketPullRequestOptionsTypeConverter
           : ITypeConverter<PullRequestOptions, GitPullRequestStatus>
     {
         public GitPullRequestStatus Convert(PullRequestOptions source, GitPullRequestStatus destination, ResolutionContext context)
@@ -26,7 +26,7 @@ namespace GitClientVS.Infrastructure.Mappings
         }
     }
 
-    public class ReversePullRequestOptionsTypeConverter : ITypeConverter<GitPullRequestStatus, PullRequestOptions>
+    public class BitbucketReversePullRequestOptionsTypeConverter : ITypeConverter<GitPullRequestStatus, PullRequestOptions>
     {
         public PullRequestOptions Convert(GitPullRequestStatus source, PullRequestOptions destination, ResolutionContext context)
         {

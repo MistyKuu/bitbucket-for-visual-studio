@@ -31,7 +31,7 @@ namespace GitClientVS.VisualStudio.UI.Sections
         public PublishSection(
             IPublishSectionView view,
             IAppServiceProvider appServiceProvider,
-            IGitClientService gitClientService,
+            IGitClientServiceFactory gitClientServiceFactory,
             IGitWatcher gitWatcher,
             IUserInformationService userInformationService,
             IEventAggregatorService eventAggregator
@@ -40,12 +40,12 @@ namespace GitClientVS.VisualStudio.UI.Sections
             _appServiceProvider = appServiceProvider;
             _userInformationService = userInformationService;
             _eventAggregator = eventAggregator;
-            Title = $"{Resources.PublishSectionTitle} to {gitClientService.Origin}";
+            Title = $"{Resources.PublishSectionTitle} to {gitClientServiceFactory.GetService().Origin}";
             IsVisible = IsGitLocalRepoAndLoggedIn(gitWatcher.ActiveRepo);
             _obs = _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(x => IsVisible = IsGitLocalRepoAndLoggedIn(x.ActiveRepository));
         }
 
-        private bool IsGitLocalRepoAndLoggedIn(GitRemoteRepository repo)
+        private bool IsGitLocalRepoAndLoggedIn(GitRepository repo)
         {
             return _userInformationService.ConnectionData.IsLoggedIn && (repo != null && string.IsNullOrEmpty(repo.CloneUrl));
         }

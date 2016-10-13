@@ -1,26 +1,25 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using BitBucket.REST.API.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Utils;
 
-namespace GitClientVS.Infrastructure.Mappings
+namespace GitClientVS.Infrastructure.Mappings.Bitbucket
 {
-    public class GitMappingsProfile : Profile
+    public class BitbucketMappingsProfile : Profile
     {
-        public GitMappingsProfile()
+        public BitbucketMappingsProfile()
         {
-            CreateMap<Repository, GitRemoteRepository>().ConvertUsing<RepositoryTypeConverter>();
-            CreateMap<GitRemoteRepository, Repository>().ConvertUsing<ReverseRepositoryTypeConverter>();
+            CreateMap<Repository, GitRepository>().ConvertUsing<BitbucketRepositoryTypeConverter>();
+            CreateMap<GitRepository, Repository>().ConvertUsing<BitbucketReverseRepositoryTypeConverter>();
 
-            CreateMap<GitPullRequest, PullRequest>().ConvertUsing<ReversePullRequestTypeConverter>();
-            CreateMap<PullRequest, GitPullRequest>().ConvertUsing<PullRequestTypeConverter>();
+            CreateMap<GitPullRequest, PullRequest>().ConvertUsing<BitbucketReversePullRequestTypeConverter>();
+            CreateMap<PullRequest, GitPullRequest>().ConvertUsing<BitbucketPullRequestTypeConverter>();
 
-            CreateMap<PullRequestOptions, GitPullRequestStatus>().ConvertUsing<PullRequestOptionsTypeConverter>();
-            CreateMap<GitPullRequestStatus, PullRequestOptions>().ConvertUsing<ReversePullRequestOptionsTypeConverter>();
+            CreateMap<PullRequestOptions, GitPullRequestStatus>().ConvertUsing<BitbucketPullRequestOptionsTypeConverter>();
+            CreateMap<GitPullRequestStatus, PullRequestOptions>().ConvertUsing<BitbucketReversePullRequestOptionsTypeConverter>();
 
-            CreateMap<Team, GitTeam>().ConvertUsing<TeamTypeConverter>();
-            CreateMap<GitTeam, Team>().ConvertUsing<ReverseTeamTypeConverter>();
+            CreateMap<Team, GitTeam>().ConvertUsing<BitbucketTeamTypeConverter>();
+            CreateMap<GitTeam, Team>().ConvertUsing<BitbucketReverseTeamTypeConverter>();
 
             CreateMap<Commit, GitCommit>()
                 .ForMember(dto => dto.Date, e => e.MapFrom(o => TimeConverter.GetDate(o.Date)))

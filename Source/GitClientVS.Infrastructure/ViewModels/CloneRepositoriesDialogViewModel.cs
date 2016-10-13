@@ -37,10 +37,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<Unit> _cloneCommand;
         private ReactiveCommand<object> _choosePathCommand;
         private ReactiveCommand<Unit> _initializeCommand;
-        private IEnumerable<GitRemoteRepository> _repositories;
+        private IEnumerable<GitRepository> _repositories;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _errorMessage;
-        private GitRemoteRepository _selectedRepository;
+        private GitRepository _selectedRepository;
         private string _clonePath;
         private bool _isLoading;
 
@@ -57,13 +57,13 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
-        public IEnumerable<GitRemoteRepository> Repositories
+        public IEnumerable<GitRepository> Repositories
         {
             get { return _repositories; }
             set { this.RaiseAndSetIfChanged(ref _repositories, value); }
         }
 
-        public GitRemoteRepository SelectedRepository
+        public GitRepository SelectedRepository
         {
             get { return _selectedRepository; }
             set { this.RaiseAndSetIfChanged(ref _selectedRepository, value); }
@@ -89,12 +89,12 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         [ImportingConstructor]
         public CloneRepositoriesDialogViewModel(
-            IGitClientService gitClientService,
+            IGitClientServiceFactory gitClientFactory,
             IGitService gitService,
             IFileService fileService
             )
         {
-            _gitClientService = gitClientService;
+            _gitClientService = gitClientFactory.GetService();
             _gitService = gitService;
             _fileService = fileService;
             ClonePath = Paths.DefaultRepositoryPath;

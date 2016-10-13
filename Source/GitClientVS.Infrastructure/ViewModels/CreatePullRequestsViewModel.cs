@@ -106,12 +106,12 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         [ImportingConstructor]
         public CreatePullRequestsViewModel(
-            IGitClientService gitClientService,
+            IGitClientServiceFactory gitClientServiceFactory,
             IGitService gitService,
             IPageNavigationService<IPullRequestsWindow> pageNavigationService
             )
         {
-            _gitClientService = gitClientService;
+            _gitClientService = gitClientServiceFactory.GetService();
             _gitService = gitService;
             _pageNavigationService = pageNavigationService;
             CloseSourceBranch = false;
@@ -136,7 +136,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 CloseSourceBranch = CloseSourceBranch
             };
-            await _gitClientService.CreatePullRequest(gitPullRequest, currentRepo.Name, currentRepo.Owner);
+            await _gitClientService.CreatePullRequest(gitPullRequest,currentRepo);
         }
 
         private async Task LoadBranches()
@@ -145,7 +145,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             var activeBranch = _gitService.GetActiveBranchFromActiveRepository();
             var lastCommit = _gitService.GetHeadCommitOfActiveBranch();
 
-            Branches = (await _gitClientService.GetBranches(activeRepo.Name, activeRepo.Owner)).ToList();
+            Branches = (await _gitClientService.GetBranches(activeRepo)).ToList();
             SourceBranch = Branches.FirstOrDefault(x => x.Name.Equals(activeBranch, StringComparison.InvariantCultureIgnoreCase));
 
             if (SourceBranch != null)

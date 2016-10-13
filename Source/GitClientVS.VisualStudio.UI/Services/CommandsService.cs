@@ -24,17 +24,21 @@ namespace GitClientVS.VisualStudio.UI.Services
         private readonly ExportFactory<IDiffWindowControlViewModel> _diffFactory;
         private readonly ExportFactory<IPullRequestsWindowContainerViewModel> _pqFactory;
         private readonly IPageNavigationService<IPullRequestsWindow> _navigationService;
+        private readonly IGitClientServiceFactory _gitClientServiceFactory;
         private Package _package;
 
         [ImportingConstructor]
         public CommandsService(
             ExportFactory<IDiffWindowControlViewModel> diffFactory,
             ExportFactory<IPullRequestsWindowContainerViewModel> pqFactory,
-            IPageNavigationService<IPullRequestsWindow> navigationService)
+            IPageNavigationService<IPullRequestsWindow> navigationService,
+            IGitClientServiceFactory gitClientServiceFactory
+            )
         {
             _diffFactory = diffFactory;
             _pqFactory = pqFactory;
             _navigationService = navigationService;
+            _gitClientServiceFactory = gitClientServiceFactory;
         }
 
         public void Initialize(object package)
@@ -45,9 +49,11 @@ namespace GitClientVS.VisualStudio.UI.Services
 
         public void ShowPullRequestsWindow()
         {
+            var gitClientService = _gitClientServiceFactory.GetService();
             var window = ShowWindow<PullRequestsWindow>();
             var vm = _pqFactory.CreateExport().Value;
             var view = window.Content as IPullRequestsWindowContainer;
+            window.Caption = $"{gitClientService.Origin} - Pull Requests";
             view.DataContext = vm;
             view.Window = window;
             _navigationService.ClearNavigationHistory();

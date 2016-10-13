@@ -29,6 +29,7 @@ namespace GitClientVS.UI.Views
     public partial class LoginDialogView : MetroWindow, ILoginDialogView
     {
         private ControlTemplate _actualPbTemplate;
+        private readonly ILoginDialogViewModel _vm;
 
         [ImportingConstructor]
         public LoginDialogView(ILoginDialogViewModel vm)
@@ -38,6 +39,7 @@ namespace GitClientVS.UI.Views
             Owner = Application.Current.MainWindow;
             vm.Closed += delegate { Close(); };
             Loaded += LoginDialogView_Loaded;
+            _vm = vm;
         }
 
         private void LoginDialogView_Loaded(object sender, RoutedEventArgs e)
@@ -50,5 +52,7 @@ namespace GitClientVS.UI.Views
         {
             Validation.SetErrorTemplate(PasswordBox, _actualPbTemplate);
         }
+
+        public ICommand InitializeCommand => _vm.InitializeCommand;
     }
 }

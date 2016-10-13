@@ -80,13 +80,16 @@
     <Compile Include="Events\ConnectionChangedEvent.cs" />
     <Compile Include="Events\NavigationEvent.cs" />
     <Compile Include="Events\ThemeChangedEvent.cs" />
+    <Compile Include="GitProviderType.cs" />
     <Compile Include="Interfaces\IClosingable.cs" />
+    <Compile Include="Interfaces\IGitClientMetadata.cs" />
     <Compile Include="Interfaces\IViewModelWithCommands.cs" />
     <Compile Include="Interfaces\IViewModelWithErrorMessage.cs" />
     <Compile Include="Interfaces\IWithPageTitle.cs" />
     <Compile Include="Interfaces\Services\ICommandsService.cs" />
     <Compile Include="Interfaces\Services\IDiffFileParser.cs" />
     <Compile Include="Interfaces\Services\ICacheService.cs" />
+    <Compile Include="Interfaces\Services\IGitClientServiceFactory.cs" />
     <Compile Include="Interfaces\Services\IVsTools.cs" />
     <Compile Include="Interfaces\Services\IGitWatcher.cs" />
     <Compile Include="Interfaces\Services\IPageNavigationService.cs" />
@@ -120,6 +123,7 @@
     <Compile Include="Interfaces\Views\IPullRequestsWindow.cs" />
     <Compile Include="Interfaces\Views\IPullRequestsWindowContainerViewModel.cs" />
     <Compile Include="Interfaces\Views\IWorkflowWindow.cs" />
+    <Compile Include="Models\GitClientModels\GitOwner.cs" />
     <Compile Include="Models\GitClientModels\PageIterator.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\Tree\CommentTree.cs" />
@@ -144,7 +148,7 @@
     <Compile Include="Models\GitClientModels\GitLinks.cs" />
     <Compile Include="Models\GitClientModels\GitPullRequest.cs" />
     <Compile Include="Models\GitClientModels\GitPullRequestStatus.cs" />
-    <Compile Include="Models\GitClientModels\GitRemoteRepository.cs" />
+    <Compile Include="Models\GitClientModels\GitRepository.cs" />
     <Compile Include="Models\GitClientModels\GitTeam.cs" />
     <Compile Include="Models\GitClientModels\GitUser.cs" />
     <Compile Include="Models\Tree\ITreeFile.cs" />

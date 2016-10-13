@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using BitBucket.REST.API.Helpers;
 using BitBucket.REST.API.Models;
@@ -8,9 +6,9 @@ using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.Infrastructure.Utils;
 
-namespace GitClientVS.Infrastructure.Mappings
+namespace GitClientVS.Infrastructure.Mappings.Bitbucket
 {
-    public class PullRequestTypeConverter
+    public class BitbucketPullRequestTypeConverter
     : ITypeConverter<PullRequest, GitPullRequest>
     {
         public GitPullRequest Convert(PullRequest source, GitPullRequest destination, ResolutionContext context)
@@ -40,7 +38,7 @@ namespace GitClientVS.Infrastructure.Mappings
         }
     }
 
-    public class ReversePullRequestTypeConverter
+    public class BitbucketReversePullRequestTypeConverter
   : ITypeConverter<GitPullRequest, PullRequest>
     {
         public PullRequest Convert(GitPullRequest source, PullRequest destination, ResolutionContext context)
