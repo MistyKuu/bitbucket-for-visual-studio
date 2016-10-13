@@ -4,30 +4,15 @@ namespace GitClientVS.Contracts.Models
 {
     public class ConnectionData
     {
-        private ConnectionData(string userName, string password)
-        {
-            UserName = userName;
-            Password = password;
-            IsLoggedIn = true;
-        }
-
-        private ConnectionData()
-        {
-            IsLoggedIn = false;
-        }
-
-        public static ConnectionData NotLogged => new ConnectionData();
-
-        public static ConnectionData Create(string userName, string password)
-        {
-            return new ConnectionData(userName, password);
-        }
+        public static ConnectionData NotLogged => new ConnectionData() {IsLoggedIn = false};
 
         [JsonProperty]
-        public bool IsLoggedIn { get; private set; }
+        public bool IsLoggedIn { get; set; }
         [JsonProperty]
-        public string UserName { get; private set; }
+        public string UserName { get; set; }
         [JsonProperty]
-        public string Password { get; private set; }
+        public string Password { get; set; }
+        [JsonProperty]
+        public string Host { get; set; }
     }
 }

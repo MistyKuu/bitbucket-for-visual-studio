@@ -35,5 +35,7 @@ namespace BitBucket.REST.API.Models
         public string Password { get; private set; }
 
         public AuthenticationType AuthenticationType { get; private set; }
+
+        public string Host { get; set; }
     }
 }

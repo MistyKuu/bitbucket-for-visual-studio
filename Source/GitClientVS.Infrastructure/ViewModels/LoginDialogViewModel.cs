@@ -36,6 +36,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _errorMessage;
         private bool _isLoading;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private string _host;
 
         public ICommand ConnectCommand => _connectCommand;
         public IEnumerable<IReactiveCommand> ThrowableCommands => new List<IReactiveCommand> { _connectCommand };
@@ -55,6 +56,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
 
             _connectCommand.Subscribe(_ => OnClose());
+
+            Host = "https://bitbucket.org";
         }
 
 
@@ -65,7 +68,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task Connect()
         {
-            await _gitClientService.LoginAsync(Login, Password);
+            await _gitClientService.LoginAsync(new GitCredentials() { Login = Login, Password = Password, Host = Host });
         }
 
         private IObservable<bool> CanExecuteObservable()
@@ -93,13 +96,27 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _password, value); }
         }
 
+        [Required]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateHost), ErrorMessage = "Url has to be valid and includes schema")]
+        public string Host
+        {
+            get { return _host; }
+            set { this.RaiseAndSetIfChanged(ref _host, value); }
+        }
+
         public string ErrorMessage
         {
             get { return _errorMessage; }
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
+        public bool ValidateHost(string host)
+        {
+            Uri outUri;
 
+            return (Uri.TryCreate(host, UriKind.Absolute, out outUri) &&
+                    (outUri.Scheme == Uri.UriSchemeHttp || outUri.Scheme == Uri.UriSchemeHttps));
+        }
 
         protected void OnClose()
         {

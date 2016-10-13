@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 
 namespace GitClientVS.Contracts.Interfaces.Services
@@ -9,7 +10,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
     {
         string Title { get; }
         string Origin { get; }
-        Task LoginAsync(string login, string password);
+        Task LoginAsync(GitCredentials gitCredentials);
         void Logout();
         Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync();
         Task<IEnumerable<GitRemoteRepository>> GetAllRepositories();

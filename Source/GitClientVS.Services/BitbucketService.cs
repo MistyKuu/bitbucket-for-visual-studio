@@ -38,15 +38,27 @@ namespace GitClientVS.Services
         public string Title => $"{Origin} Extension";
         private readonly string supportedSCM = "git";
 
-        public async Task LoginAsync(string login, string password)
+        public async Task LoginAsync(GitCredentials gitCredentials)
         {
             if (IsConnected)
                 return;
 
-            var credentials = new Credentials(login, password);
+            var credentials = new Credentials(gitCredentials.Login, gitCredentials.Password)
+            {
+                Host = gitCredentials.Host,
+            };
             var bitbucketInitializer = new BitbucketClientInitializer();
             _bitbucketClient = await bitbucketInitializer.Initialize(credentials);
-            OnConnectionChanged(ConnectionData.Create(_bitbucketClient.ApiConnection.Credentials.Login, password));
+
+            var connectionData = new ConnectionData()
+            {
+                IsLoggedIn = true,
+                UserName = _bitbucketClient.ApiConnection.Credentials.Login,
+                Password = credentials.Password,
+                Host = credentials.Host,
+            };
+
+            OnConnectionChanged(connectionData);
         }
 
         public async Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync()
