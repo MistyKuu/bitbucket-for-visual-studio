@@ -60,6 +60,7 @@ namespace GitClientVS.UI.Helpers
                     Environment.NewLine,
                     ex,
                     Environment.NewLine);
+
                
             }
             return null;
