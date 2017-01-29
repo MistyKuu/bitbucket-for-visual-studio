@@ -10,13 +10,13 @@
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              xmlns:ui="clr-namespace:GitClientVS.UI"
-             xmlns:teamExplorer="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;assembly=Microsoft.TeamFoundation.Controls"
+             
              xmlns:infrastructure="clr-namespace:GitClientVS.Infrastructure;assembly=GitClientVS.Infrastructure"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:extensions="clr-namespace:GitClientVS.UI.Extensions"
              xmlns:wpfControls="http://wpfcontrols.com/"
              xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
-             xmlns:framework="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer.Framework;assembly=Microsoft.TeamFoundation.Controls"
+            
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="PrView"

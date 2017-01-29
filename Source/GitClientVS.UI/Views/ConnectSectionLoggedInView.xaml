@@ -8,7 +8,7 @@
              xmlns:prop="clr-namespace:GitClientVS.UI"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
              xmlns:controls="clr-namespace:GitClientVS.UI.Controls"
-             xmlns:teamExplorer="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;assembly=Microsoft.TeamFoundation.Controls"
+            
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:ConnectSectionViewModel,IsDesignTimeCreatable=False}" >
     <UserControl.Resources>
@@ -33,11 +33,11 @@
         </TextBlock>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5">
-            <teamExplorer:TextLink KeyboardNavigation.TabIndex="0"  Text="{x:Static prop:Resources.Clone}" Command="{Binding OpenCloneCommand}"/>
+            <!--<teamExplorer:TextLink KeyboardNavigation.TabIndex="0"  Text="{x:Static prop:Resources.Clone}" Command="{Binding OpenCloneCommand}"/>
             <Separator Style="{StaticResource VerticalSeparator}" />
             <teamExplorer:TextLink KeyboardNavigation.TabIndex="1"  Text="{x:Static prop:Resources.Create}" Command="{Binding OpenCreateCommand}"/>
-            <Separator Style="{StaticResource VerticalSeparator}" />
-            <teamExplorer:TextLink KeyboardNavigation.TabIndex="2"  Text="{x:Static prop:Resources.Logout}" Command="{Binding LogoutCommand}"/>
+            <Separator Style="{StaticResource VerticalSeparator}" />TODO
+            <teamExplorer:TextLink KeyboardNavigation.TabIndex="2"  Text="{x:Static prop:Resources.Logout}" Command="{Binding LogoutCommand}"/>-->
         </StackPanel>
 
         <local:ConnectSectionRepositoriesView Grid.Row="2"/>

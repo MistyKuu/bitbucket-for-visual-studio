@@ -10,7 +10,7 @@
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              xmlns:ui="clr-namespace:GitClientVS.UI"
-             xmlns:teamExplorer="clr-namespace:Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;assembly=Microsoft.TeamFoundation.Controls"
+            
              xmlns:infrastructure="clr-namespace:GitClientVS.Infrastructure;assembly=GitClientVS.Infrastructure"
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              mc:Ignorable="d" 

@@ -9,7 +9,6 @@ using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.Views;
-using Microsoft.TeamFoundation.Controls;
 using Microsoft.VisualStudio.Shell;
 using ReactiveUI;
 

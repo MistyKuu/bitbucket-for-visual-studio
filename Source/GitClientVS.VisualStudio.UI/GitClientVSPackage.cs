@@ -27,8 +27,6 @@ using GitClientVS.VisualStudio.UI.Settings;
 using GitClientVS.VisualStudio.UI.Window;
 using log4net;
 using log4net.Repository.Hierarchy;
-using Microsoft.TeamFoundation.Controls;
-using Microsoft.TeamFoundation.Git.Controls.Extensibility;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.OLE.Interop;

@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.Composition;
 using EnvDTE;
 using GitClientVS.Contracts.Interfaces.Services;
-using GitClientVS.Infrastructure.Extensions;
-using Microsoft.TeamFoundation.Controls;
-using NotificationFlags = GitClientVS.Contracts.NotificationFlags;
-using NotificationType = GitClientVS.Contracts.NotificationType;
 
 namespace GitClientVS.VisualStudio.UI.Services
 {
@@ -19,9 +10,6 @@ namespace GitClientVS.VisualStudio.UI.Services
     {
         private readonly IAppServiceProvider _appServiceProvider;
         private DTE _dte;
-        private ITeamExplorer _teamExplorer;
-
-        private ITeamExplorer TeamExplorer => (_teamExplorer = _teamExplorer ?? _appServiceProvider.GetService<ITeamExplorer>());
 
         [ImportingConstructor]
         public VsTools(IAppServiceProvider appServiceProvider)

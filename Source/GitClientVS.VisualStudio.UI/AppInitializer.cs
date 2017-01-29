@@ -12,12 +12,10 @@ using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure;
 using GitClientVS.Infrastructure.Mappings;
+using GitClientVS.TeamFoundation;
 using GitClientVS.UI.Helpers;
 using log4net;
 using log4net.Repository.Hierarchy;
-using Microsoft.TeamFoundation.Common.Internal;
-using Microsoft.TeamFoundation.Controls;
-using Microsoft.VisualStudio.PlatformUI;
 
 namespace GitClientVS.VisualStudio.UI
 {
@@ -47,7 +45,6 @@ namespace GitClientVS.VisualStudio.UI
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<GitMappingsProfile>();
-                cfg.AddProfile<VisualMappingsProfile>();
             });
 
             await GitClientLogin(result);

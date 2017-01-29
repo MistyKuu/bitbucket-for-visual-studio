@@ -19,6 +19,8 @@ namespace GitClientVS.UI.Helpers
             "GitClientVS.Services",
             "GitClientVS.UI",
             "GitClientVS.VisualStudio.UI",
+            "GitClientVS.TeamFoundation.14",
+            "GitClientVS.TeamFoundation.15",
             "MahApps.Metro",
             "WpfControls",
             "ICSharpCode.AvalonEdit",
