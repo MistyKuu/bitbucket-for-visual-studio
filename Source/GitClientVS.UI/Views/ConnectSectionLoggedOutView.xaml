@@ -19,6 +19,6 @@
     </UserControl.Resources>
 
     <Grid>
-        <!--TODO<teamExplorer:TextLink Margin="5"  KeyboardNavigation.TabIndex="0" Command="{Binding OpenLoginCommand}" Text="{x:Static prop:Resources.Login}"/>-->
+        <Button Style="{StaticResource ActionLinkButton}" Margin="5"  KeyboardNavigation.TabIndex="0" Command="{Binding OpenLoginCommand}" Content="{x:Static prop:Resources.Login}"/>
     </Grid>
 </UserControl>

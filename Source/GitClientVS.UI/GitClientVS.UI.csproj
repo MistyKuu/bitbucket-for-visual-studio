@@ -139,6 +139,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Styles\SharedResourceDictionary.cs" />
+    <Compile Include="Views\ConnectSectionLoggedInView.xaml.cs">
+      <DependentUpon>ConnectSectionLoggedInView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConnectSectionLoggedOutView.xaml.cs">
+      <DependentUpon>ConnectSectionLoggedOutView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PullRequestsWindowContainer.xaml.cs">
       <DependentUpon>PullRequestsWindowContainer.xaml</DependentUpon>
     </Compile>
@@ -154,14 +160,8 @@
     <Compile Include="Views\CreateRepositoriesDialogView.xaml.cs">
       <DependentUpon>CreateRepositoriesDialogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ConnectSectionLoggedInView.xaml.cs">
-      <DependentUpon>ConnectSectionLoggedInView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ConnectSectionRepositoriesView.xaml.cs">
       <DependentUpon>ConnectSectionRepositoriesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ConnectSectionLoggedOutView.xaml.cs">
-      <DependentUpon>ConnectSectionLoggedOutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginDialogView.xaml.cs">
       <DependentUpon>LoginDialogView.xaml</DependentUpon>
@@ -261,6 +261,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\ConnectSectionLoggedInView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ConnectSectionLoggedOutView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\PullRequestsWindowContainer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -281,15 +289,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ConnectSectionLoggedInView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\ConnectSectionRepositoriesView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ConnectSectionLoggedOutView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

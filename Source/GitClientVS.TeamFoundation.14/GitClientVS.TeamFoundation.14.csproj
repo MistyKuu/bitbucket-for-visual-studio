@@ -11,6 +11,8 @@
     <AssemblyName>GitClientVS.TeamFoundation.14</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,12 +31,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper">
       <HintPath>..\..\packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="LibGit2Sharp">
-      <HintPath>..\..\packages\LibGit2Sharp.0.22.0\lib\net40\LibGit2Sharp.dll</HintPath>
+    <Reference Include="LibGit2Sharp, Version=0.22.0.0, Culture=neutral, PublicKeyToken=7cbde695407f0333, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AssemblyReferences\LibGit2Sharp.0.22.0\lib\net40\LibGit2Sharp.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
@@ -104,6 +114,10 @@
     <ProjectReference Include="..\GitClientVS.Contracts\GitClientVS.Contracts.csproj">
       <Project>{528A613A-1D51-4B23-851B-2549261B580E}</Project>
       <Name>GitClientVS.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GitClientVS.Infrastructure\GitClientVS.Infrastructure.csproj">
+      <Project>{cfa26063-e6bd-4189-9e20-13be59ebaf67}</Project>
+      <Name>GitClientVS.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\GitClientVS.UI\GitClientVS.UI.csproj">
       <Project>{6CA4EA39-6F2C-4ADE-8BEE-FEC1B65F3458}</Project>

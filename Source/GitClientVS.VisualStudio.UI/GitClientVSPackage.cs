@@ -95,6 +95,7 @@ namespace GitClientVS.VisualStudio.UI
         protected override async void Initialize()
         {
             base.Initialize();
+
             var encoding = new ASCIIEncoding();
             var grdBytes = encoding.GetBytes(_myXaml);
             var xamlstyle = (DrawingBrush)XamlReader.Load(new MemoryStream(grdBytes));
