@@ -62,7 +62,6 @@ namespace GitClientVS.VisualStudio.UI
                         Password = result.Data.Password,
                         Host = result.Data.Host
                     };
-                    ValidateCredentials(cred);
                     await _gitClient.LoginAsync(cred);
                 }
                 catch (Exception ex)
@@ -71,12 +70,5 @@ namespace GitClientVS.VisualStudio.UI
                 }
             }
         }
-
-        private void ValidateCredentials(GitCredentials cred)
-        {
-            if (string.IsNullOrEmpty(cred.Host) || string.IsNullOrEmpty(cred.Login) || string.IsNullOrEmpty(cred.Password))
-                throw new Exception("Invalid credentials saved in the file.");
-        }
-
     }
 }

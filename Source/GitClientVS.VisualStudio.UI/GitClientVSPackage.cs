@@ -16,6 +16,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -35,6 +36,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Win32;
 using IServiceProvider = System.IServiceProvider;
+using Task = System.Threading.Tasks.Task;
 
 namespace GitClientVS.VisualStudio.UI
 {
@@ -56,15 +58,16 @@ namespace GitClientVS.VisualStudio.UI
     /// </para>
     /// </remarks>
     /// 
-    [PackageRegistration(UseManagedResourcesOnly = true)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [Guid(GuidList.guidBitbuketPkgString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideAutoLoad(GitExtensionsId)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionExists)]
+    [ProvideAutoLoad(UIContextGuids80.NoSolution)]
     [ProvideToolWindow(typeof(DiffWindow), Style = VsDockStyle.MDI, Orientation = ToolWindowOrientation.Left, MultiInstances = true, Transient = true)]
     [ProvideToolWindow(typeof(PullRequestsWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Left, MultiInstances = false, Transient = true, Window = EnvDTE.Constants.vsWindowKindSolutionExplorer)]
-    public sealed class GitClientVSPackage : Package
+    public sealed class GitClientVSPackage : AsyncPackage
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -92,11 +95,16 @@ namespace GitClientVS.VisualStudio.UI
             Logger.Error("Unhandled Dispatcher GitClientVsExtensions Error", e.Exception);
         }
 
-        protected override async void Initialize()
+        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            base.Initialize();
+            await base.InitializeAsync(cancellationToken, progress);
 
-            var componentModel = this.GetService<SComponentModel, IComponentModel>();
+            var componentModel = (IComponentModel)await GetServiceAsync(typeof(SComponentModel));
+            InitializePackage(componentModel);
+        }
+
+        private void InitializePackage(IComponentModel componentModel)
+        {
             var serviceProvider = componentModel.DefaultExportProvider;
             var appInitializer = serviceProvider.GetExportedValue<IAppInitializer>();
             var userService = serviceProvider.GetExportedValue<IUserInformationService>();
@@ -105,7 +113,7 @@ namespace GitClientVS.VisualStudio.UI
             commandsService.Initialize(this);
             userService.StartListening();
             gitWatcher.Initialize();
-            await appInitializer.Initialize();
+            appInitializer.Initialize();
             Logger.Info("Initialized GitClientVsPackage Extension");
         }
 

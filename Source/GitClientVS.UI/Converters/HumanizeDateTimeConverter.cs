@@ -14,9 +14,24 @@ namespace GitClientVS.UI.Converters
         {
             var dateTime = (DateTime)value;
             if ((DateTime.Now - dateTime) <= TimeSpan.FromDays(7))
-                return dateTime.Humanize(false);
+            {
+                return Humanize(dateTime);
+            }
 
             return "on " + dateTime;
+        }
+
+        private static string Humanize(DateTime dateTime)
+        {
+            try
+            {
+
+                return dateTime.Humanize(false);
+            }
+            catch (Exception e)
+            {
+                return "some time ago";
+            }
         }
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

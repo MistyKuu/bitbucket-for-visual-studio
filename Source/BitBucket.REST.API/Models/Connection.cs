@@ -10,12 +10,15 @@ namespace BitBucket.REST.API.Models
             Credentials = credentials;
         }
 
-        public string GetBitbucketUrl()
+        public Uri GetBitbucketUrl()
         {
-            return $"{new Uri(Credentials.Host).Scheme}://{Credentials.Host}";
+            return new Uri(Credentials.Host);
         }
 
-        public string GetHost() { return new Uri(GetBitbucketUrl()).Host; }
+        public string GetHost()
+        {
+            return GetBitbucketUrl().Host;
+        }
 
         public Credentials Credentials { get; private set; }
 

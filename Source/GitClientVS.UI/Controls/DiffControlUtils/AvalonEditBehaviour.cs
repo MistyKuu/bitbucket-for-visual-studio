@@ -148,7 +148,7 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
             if (textEditor?.Document != null)
             {
                 var caretOffset = textEditor.CaretOffset;
-                textEditor.Document.Text = e.NewValue.ToString();
+                textEditor.Document.Text = e.NewValue?.ToString();
                 textEditor.CaretOffset = caretOffset;
             }
         }

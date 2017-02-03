@@ -43,6 +43,10 @@ namespace GitClientVS.Services
             if (IsConnected)
                 return;
 
+            if (string.IsNullOrEmpty(gitCredentials.Host) || string.IsNullOrEmpty(gitCredentials.Login) ||
+                string.IsNullOrEmpty(gitCredentials.Password))
+                throw new Exception("Credentials fields cannot be empty");
+            ;
             var credentials = new Credentials(gitCredentials.Login, gitCredentials.Password)
             {
                 Host = gitCredentials.Host,
