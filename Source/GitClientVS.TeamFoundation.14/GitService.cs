@@ -23,7 +23,16 @@ namespace GitClientVS.TeamFoundation
         private readonly string remoteName;
         private readonly string mainBranch;
 
-        private readonly IAppServiceProvider _appServiceProvider; 
+        private readonly IAppServiceProvider _appServiceProvider;
+
+        /// <summary>
+        /// This MEF export requires specific versions of TeamFoundation. IGitExt is declared here so
+        /// that instances of this type cannot be created if the TeamFoundation dlls are not available
+        /// (otherwise we'll have multiple instances of IVSServices exports, and that would be Bad(tm))
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        IGitExt _gitService;
+
 
         [ImportingConstructor]
         public GitService(IAppServiceProvider appServiceProvider)
@@ -56,8 +65,8 @@ namespace GitClientVS.TeamFoundation
 
         public GitRemoteRepository GetActiveRepository()
         {
-            var gitExt = _appServiceProvider.GetService<IGitExt>();
-            var activeRepository = gitExt.ActiveRepositories.FirstOrDefault();
+            _gitService = _appServiceProvider.GetService<IGitExt>();
+            var activeRepository = _gitService.ActiveRepositories.FirstOrDefault();
             return activeRepository.ToModel();
         }
 
@@ -82,6 +91,7 @@ namespace GitClientVS.TeamFoundation
         private Repository GetRepository()
         {
             var gitExt = _appServiceProvider.GetService<IGitExt>();
+           // _gitService = gitExt;
             var vsRepo = gitExt.ActiveRepositories.FirstOrDefault();
           
             Repository activeRepository;

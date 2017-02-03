@@ -20,7 +20,8 @@ namespace BitBucket.REST.API
             var response = await userClient.GetUser();
             var credentials = new Credentials(response.Username, apiConnection.Credentials.Password);
 
-         
+            apiConnection = new Connection(new Uri($"{uri.Scheme}://api.{uri.Host}/2.0/"), credentials);
+
             var internalApiConnection = new Connection(new Uri($"{uri.Scheme}://{uri.Host}/!api/internal/"), credentials);
 
             return new BitbucketClient(apiConnection, internalApiConnection);
