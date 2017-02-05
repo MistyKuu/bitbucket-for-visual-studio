@@ -18,7 +18,7 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <controls:ProgressRing Grid.Row="0"
+        <controls:ProgressRing x:Name="ProgressRing"  Grid.Row="0"
                                Foreground="{DynamicResource AccentColorBrush}" 
                                HorizontalAlignment="Center" 
                                VerticalAlignment="Center"

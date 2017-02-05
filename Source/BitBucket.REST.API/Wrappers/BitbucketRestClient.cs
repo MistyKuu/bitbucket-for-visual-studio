@@ -104,7 +104,7 @@ namespace BitBucket.REST.API.Wrappers
                         errorMessage = serializer.Deserialize<ErrorWrapper>(response.Content).Error.Message;
                         friendly = true;
                     }
-                    catch (Exception er)
+                    catch (Exception)
                     {
 
                     }

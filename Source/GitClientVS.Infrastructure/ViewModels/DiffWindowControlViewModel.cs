@@ -76,9 +76,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => ShowFileDiff((FileDiff)x));
         }
 
-        private async Task ShowFileDiff(FileDiff fileDiff)
+        private Task ShowFileDiff(FileDiff fileDiff)
         {
             FileDiff = fileDiff;
+            return Task.CompletedTask;
         }
     }
 }

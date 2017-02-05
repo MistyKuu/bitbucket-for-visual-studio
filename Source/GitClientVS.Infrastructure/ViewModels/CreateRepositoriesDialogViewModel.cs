@@ -36,7 +36,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<Unit> _createCommand;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _errorMessage;
-        private GitRemoteRepository _repository;
         private string _localPath;
         private string _name;
         private string _description;

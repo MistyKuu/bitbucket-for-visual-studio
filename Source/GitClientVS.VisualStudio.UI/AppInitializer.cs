@@ -26,20 +26,25 @@ namespace GitClientVS.VisualStudio.UI
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IStorageService _storageService;
         private readonly IGitClientService _gitClient;
+        private readonly IUserInformationService _userInformationService;
 
         [ImportingConstructor]
         public AppInitializer(
             IStorageService storageService,
-            IGitClientService gitClient
+            IGitClientService gitClient,
+            IUserInformationService userInformationService
             )
         {
             _storageService = storageService;
             _gitClient = gitClient;
+            _userInformationService = userInformationService;
         }
 
         public async Task Initialize()
         {
             LoggerConfigurator.Setup();
+            _userInformationService.StartListening();
+
             var result = _storageService.LoadUserData();
 
             Mapper.Initialize(cfg =>

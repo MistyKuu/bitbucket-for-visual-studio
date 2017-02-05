@@ -64,6 +64,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _logoutCommand = ReactiveCommand.Create();
 
             ConnectionData = _userInformationService.ConnectionData;
+
             SetupObservables();
         }
 
@@ -75,6 +76,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _openCreateCommand.Subscribe(_ => _createRepoViewFactory.CreateExport().Value.ShowDialog());
             _openCloneCommand.Subscribe(_ => _cloneRepoViewFactory.CreateExport().Value.ShowDialog());
             _logoutCommand.Subscribe(_ => { _gitClientService.Logout(); });
+
 
             _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
         }

@@ -166,9 +166,10 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         }
 
-        private async Task ShowDiff(FileDiff diff)
+        private Task ShowDiff(FileDiff diff)
         {
             _commandsService.ShowDiffWindow(diff, diff.Id);
+            return Task.CompletedTask;
         }
 
 

@@ -98,7 +98,6 @@ namespace GitClientVS.VisualStudio.UI
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             await base.InitializeAsync(cancellationToken, progress);
-
             var componentModel = (IComponentModel)await GetServiceAsync(typeof(SComponentModel));
             InitializePackage(componentModel);
         }
@@ -107,11 +106,9 @@ namespace GitClientVS.VisualStudio.UI
         {
             var serviceProvider = componentModel.DefaultExportProvider;
             var appInitializer = serviceProvider.GetExportedValue<IAppInitializer>();
-            var userService = serviceProvider.GetExportedValue<IUserInformationService>();
-            var gitWatcher = serviceProvider.GetExportedValue<IGitWatcher>();
             var commandsService = serviceProvider.GetExportedValue<ICommandsService>();
+            var gitWatcher = serviceProvider.GetExportedValue<IGitWatcher>();
             commandsService.Initialize(this);
-            userService.StartListening();
             gitWatcher.Initialize();
             appInitializer.Initialize();
             Logger.Info("Initialized GitClientVsPackage Extension");

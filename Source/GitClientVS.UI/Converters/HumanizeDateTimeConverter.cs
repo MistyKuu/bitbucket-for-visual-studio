@@ -28,7 +28,7 @@ namespace GitClientVS.UI.Converters
 
                 return dateTime.Humanize(false);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return "some time ago";
             }

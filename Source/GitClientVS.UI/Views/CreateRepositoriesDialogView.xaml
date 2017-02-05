@@ -17,8 +17,8 @@
              WindowStartupLocation="CenterOwner"
              WindowTitleBrush="#004f83"
              Background="#004f83"
-             Width="300"
-             Height="260"            
+             SizeToContent="Height"
+             Width="300"          
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:CreateRepositoriesDialogViewModel,IsDesignTimeCreatable=False}"  >
     <controls:MetroWindow.Resources>
         <ResourceDictionary>

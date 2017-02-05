@@ -21,6 +21,29 @@ namespace GitClientVS.UI.Controls
     /// </summary>
     public partial class ProgressBar : UserControl
     {
+        public double? OverrideWidth
+        {
+            get { return (double?)GetValue(OverrideWidthProperty); }
+            set { SetValue(OverrideWidthProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for OverrideWidth.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty OverrideWidthProperty =
+            DependencyProperty.Register("OverrideWidth", typeof(double?), typeof(ProgressBar), new PropertyMetadata(null));
+
+        public double? OverrideHeight
+        {
+            get { return (double?)GetValue(OverrideHeightProperty); }
+            set { SetValue(OverrideHeightProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for OverrideHeight.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty OverrideHeightProperty =
+            DependencyProperty.Register("OverrideHeight", typeof(double?), typeof(ProgressBar), new PropertyMetadata(null));
+
+
+
+
         public UIElement ProgressContent
         {
             get { return (UIElement)GetValue(ProgressContentProperty); }
@@ -41,6 +64,15 @@ namespace GitClientVS.UI.Controls
         {
             InitializeComponent();
             this.IsVisibleChanged += ProgressBar_IsVisibleChanged;
+            this.Loaded += ProgressBar_Loaded;
+        }
+
+        private void ProgressBar_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (OverrideHeight != null)
+                ProgressRing.Height = OverrideHeight.Value;
+            if (OverrideWidth != null)
+                ProgressRing.Width = OverrideWidth.Value;
         }
 
         private void ProgressBar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
