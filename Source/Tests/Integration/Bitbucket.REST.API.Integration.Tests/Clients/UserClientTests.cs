@@ -14,7 +14,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
         {
             // Use USERNAME, not EMAIL ADDRESS, 
             var credentials = new Credentials("test", "test");
-            var connection = new Connection(CredentialsHelper.TestsCredentials.Host, credentials);
+            var connection = new Connection(CredentialsHelper.TestsCredentials.Host,CredentialsHelper.TestsCredentials.Host, credentials);
 
             var bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection, connection);
 
@@ -26,7 +26,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
         {
             // Use USERNAME, not EMAIL ADDRESS, 
             var credentials = new Credentials("test", "test");
-            var connection = new Connection(CredentialsHelper.TestsCredentials.Host,credentials);
+            var connection = new Connection(CredentialsHelper.TestsCredentials.Host,CredentialsHelper.TestsCredentials.Host,credentials);
 
             var bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection, connection);
 

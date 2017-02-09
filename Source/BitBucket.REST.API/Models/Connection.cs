@@ -4,24 +4,18 @@ namespace BitBucket.REST.API.Models
 {
     public class Connection
     {
-        public Connection(Uri apiUrl, Credentials credentials)
+
+        public Connection(Uri mainUrl, Uri apiUrl, Credentials credentials)
         {
+            MainUrl = mainUrl;
             ApiUrl = apiUrl;
             Credentials = credentials;
         }
 
-        public Uri GetBitbucketUrl()
-        {
-            return ApiUrl;
-        }
+        public Credentials Credentials { get; }
 
-        public string GetHost()
-        {
-            return GetBitbucketUrl().Host;
-        }
+        public Uri ApiUrl { get; }
 
-        public Credentials Credentials { get; private set; }
-
-        public Uri ApiUrl { get; private set; }
+        public Uri MainUrl { get; }
     }
 }

@@ -110,7 +110,7 @@ namespace GitClientVS.Services
         {
             if (gitRemoteRepository?.CloneUrl == null) return false;
             Uri uri = new Uri(gitRemoteRepository.CloneUrl);
-            return uri.Host.Contains(_bitbucketClient.ApiConnection.GetHost(), StringComparison.OrdinalIgnoreCase);
+            return _bitbucketClient.ApiConnection.ApiUrl.Host.Contains(uri.Host, StringComparison.OrdinalIgnoreCase);
         }
 
         public async Task<GitRemoteRepository> CreateRepositoryAsync(GitRemoteRepository newRepository)

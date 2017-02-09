@@ -86,7 +86,7 @@ namespace BitBucket.REST.API.Clients
             var data = await RestClient.GetAllPages<Commit>(url);
             foreach (var commit in data.Values)
             {
-                commit.CommitHref = $"{Connection.GetBitbucketUrl()}/{ownerName}/{repositoryName}/commits/{commit.Hash}";
+                commit.CommitHref = $"{Connection.MainUrl}/{ownerName}/{repositoryName}/commits/{commit.Hash}";
             }
             return data;
         }
