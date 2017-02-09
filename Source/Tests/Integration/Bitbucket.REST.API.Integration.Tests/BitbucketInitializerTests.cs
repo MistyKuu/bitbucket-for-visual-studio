@@ -15,7 +15,7 @@ namespace Bitbucket.REST.API.Integration.Tests
         public void Initialize_WithUsername()
         {
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Username, CredentialsHelper.TestsCredentials.Password);
-            var connection = new Connection(CredentialsHelper.TestsCredentials.Host,CredentialsHelper.TestsCredentials.Host, credentials);
+            var connection = new Connection(CredentialsHelper.TestsCredentials.HostUrl,CredentialsHelper.TestsCredentials.ApiUrl, credentials);
 
             var bitbucketClient = new BitbucketClient(connection, connection);
             Assert.AreEqual(CredentialsHelper.TestsCredentials.Username, bitbucketClient.ApiConnection.Credentials.Login);
@@ -28,7 +28,7 @@ namespace Bitbucket.REST.API.Integration.Tests
 
             var bitbucketInitializer = new BitbucketClientInitializer();
 
-            var bitbucketClient = await bitbucketInitializer.Initialize(CredentialsHelper.TestsCredentials.Host,credentials);
+            var bitbucketClient = await bitbucketInitializer.Initialize(CredentialsHelper.TestsCredentials.HostUrl, credentials);
 
             Assert.AreEqual(CredentialsHelper.TestsCredentials.Username, bitbucketClient.ApiConnection.Credentials.Login);
         }
@@ -40,7 +40,7 @@ namespace Bitbucket.REST.API.Integration.Tests
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Email, "asadaszx");
             var bitbucketInitializer = new BitbucketClientInitializer();
 
-            Assert.ThrowsAsync<AuthorizationException>(() => bitbucketInitializer.Initialize(CredentialsHelper.TestsCredentials.Host,credentials));
+            Assert.ThrowsAsync<AuthorizationException>(() => bitbucketInitializer.Initialize(CredentialsHelper.TestsCredentials.HostUrl,credentials));
 
         }
     }

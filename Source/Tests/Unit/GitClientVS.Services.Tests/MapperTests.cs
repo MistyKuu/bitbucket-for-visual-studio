@@ -28,6 +28,7 @@ namespace GitClientVS.Services.Tests
                 IsPrivate = true,
                 Description = "test",
                 HasWiki = false,
+                Owner = new User(),
                 Links = new Links()
                 {
                     Clone = new List<Link>(new Link[]
