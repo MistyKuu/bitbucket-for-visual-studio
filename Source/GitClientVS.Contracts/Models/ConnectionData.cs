@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace GitClientVS.Contracts.Models
 {
@@ -13,6 +14,6 @@ namespace GitClientVS.Contracts.Models
         [JsonProperty]
         public string Password { get; set; }
         [JsonProperty]
-        public string Host { get; set; }
+        public Uri Host { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace BitBucket.REST.API.Models
 
         public Uri GetBitbucketUrl()
         {
-            return new Uri(Credentials.Host);
+            return ApiUrl;
         }
 
         public string GetHost()

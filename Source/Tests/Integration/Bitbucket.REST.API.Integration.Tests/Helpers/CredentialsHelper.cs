@@ -27,5 +27,6 @@ namespace Bitbucket.REST.API.Integration.Tests.Helpers
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public Uri Host { get; set; } = new Uri("https://bitbucket.org");
     }
 }

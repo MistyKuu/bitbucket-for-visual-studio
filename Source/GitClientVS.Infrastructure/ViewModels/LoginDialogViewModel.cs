@@ -68,7 +68,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task Connect()
         {
-            await _gitClientService.LoginAsync(new GitCredentials() { Login = Login, Password = Password, Host = Host });
+            await _gitClientService.LoginAsync(new GitCredentials() { Login = Login, Password = Password, Host = new Uri(Host) });
         }
 
         private IObservable<bool> CanExecuteObservable()

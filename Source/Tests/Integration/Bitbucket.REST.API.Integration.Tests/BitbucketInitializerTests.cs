@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Bitbucket.REST.API.Integration.Tests.Helpers;
 using BitBucket.REST.API;
 using BitBucket.REST.API.Exceptions;
@@ -14,35 +15,32 @@ namespace Bitbucket.REST.API.Integration.Tests
         public void Initialize_WithUsername()
         {
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Username, CredentialsHelper.TestsCredentials.Password);
-            var connection = new Connection(credentials);
+            var connection = new Connection(CredentialsHelper.TestsCredentials.Host, credentials);
 
-            var bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection, connection);
-            Assert.AreEqual(CredentialsHelper.TestsCredentials.Username, bitbucketClient.Connection.Credentials.Login);
+            var bitbucketClient = new BitbucketClient(connection, connection);
+            Assert.AreEqual(CredentialsHelper.TestsCredentials.Username, bitbucketClient.ApiConnection.Credentials.Login);
         }
 
         [Test]
         public async Task Initialize_WithEmail_ShouldFetchUserNameAndOverrideEmail()
         {
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Email, CredentialsHelper.TestsCredentials.Password);
-            var connection = new Connection(credentials);
 
-            var bitbucketInitializer = new BitbucketClientInitializer(connection);
+            var bitbucketInitializer = new BitbucketClientInitializer();
 
-            var bitbucketClient = await bitbucketInitializer.Initialize();
+            var bitbucketClient = await bitbucketInitializer.Initialize(CredentialsHelper.TestsCredentials.Host,credentials);
 
-            Assert.AreEqual(CredentialsHelper.TestsCredentials.Username, bitbucketClient.Connection.Credentials.Login);
+            Assert.AreEqual(CredentialsHelper.TestsCredentials.Username, bitbucketClient.ApiConnection.Credentials.Login);
         }
 
-     
+
         [Test]
         public void Initialize_WithWrongCredentials_ShouldThrowUnauthorizedException()
         {
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Email, "asadaszx");
-            var connection = new Connection(credentials);
+            var bitbucketInitializer = new BitbucketClientInitializer();
 
-            var bitbucketInitializer = new BitbucketClientInitializer(connection);
-        
-            Assert.ThrowsAsync<AuthorizationException>(() => bitbucketInitializer.Initialize());
+            Assert.ThrowsAsync<AuthorizationException>(() => bitbucketInitializer.Initialize(CredentialsHelper.TestsCredentials.Host,credentials));
 
         }
     }

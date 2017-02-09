@@ -18,7 +18,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
         public void GlobalSetup()
         {
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Username, CredentialsHelper.TestsCredentials.Password);
-            var connection = new Connection(credentials);
+            var connection = new Connection(CredentialsHelper.TestsCredentials.Host, credentials);
 
             bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection, connection);
         }
