@@ -10,6 +10,9 @@ namespace BitBucket.REST.API.Mappings.Converters
     {
         public Links Convert(EnterpriseLinks source, Links destination, ResolutionContext context)
         {
+            if(source==null)
+                return new Links();
+
             return new Links()
             {
                 Self = source.Self?.FirstOrDefault()?.MapTo<Link>(),

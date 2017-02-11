@@ -15,6 +15,6 @@ namespace BitBucket.REST.API.Models.Enterprise
         public string LatestCommit { get; set; }
 
         [JsonProperty(PropertyName = "isDefault")]
-        public bool IsDefault { get; set; }
+        public bool? IsDefault { get; set; }
     }
 }
