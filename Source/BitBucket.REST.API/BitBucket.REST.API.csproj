@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -57,6 +60,13 @@
     <Compile Include="BitbucketClient.cs" />
     <Compile Include="BitbucketClientInitializer.cs" />
     <Compile Include="Clients\ApiClient.cs" />
+    <Compile Include="Clients\EnterpriseRepositoriesClient.cs" />
+    <Compile Include="Helpers\EnterpriseApiUrls.cs" />
+    <Compile Include="Interfaces\IBitbucketClient.cs" />
+    <Compile Include="Interfaces\IPullRequestsClient.cs" />
+    <Compile Include="Interfaces\IUserClient.cs" />
+    <Compile Include="Interfaces\IRepositoriesClient.cs" />
+    <Compile Include="Interfaces\ITeamsClient.cs" />
     <Compile Include="Clients\PullRequestsClient.cs" />
     <Compile Include="Clients\RepositoriesClient.cs" />
     <Compile Include="Clients\TeamsClient.cs" />
@@ -67,27 +77,41 @@
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Helpers\ApiHelpers.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
-    <Compile Include="Models\Author.cs" />
-    <Compile Include="Models\Branch.cs" />
-    <Compile Include="Models\Comment.cs" />
-    <Compile Include="Models\Commit.cs" />
-    <Compile Include="Models\Connection.cs" />
-    <Compile Include="Models\Content.cs" />
-    <Compile Include="Models\Error.cs" />
-    <Compile Include="Models\ErrorWrapper.cs" />
-    <Compile Include="Models\Inline.cs" />
-    <Compile Include="Models\IteratorBasedPage.cs" />
-    <Compile Include="Models\Link.cs" />
-    <Compile Include="Models\Links.cs" />
-    <Compile Include="Models\Parent.cs" />
-    <Compile Include="Models\Participant.cs" />
-    <Compile Include="Models\PullRequest.cs" />
-    <Compile Include="Models\PullRequestOptions.cs" />
-    <Compile Include="Models\Repository.cs" />
-    <Compile Include="Models\Source.cs" />
-    <Compile Include="Models\Team.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserShort.cs" />
+    <Compile Include="Mappings\Converters\EnterpriseLinksTypeConverter.cs" />
+    <Compile Include="Mappings\Converters\EnterpriseRepositoryTypeConverter.cs" />
+    <Compile Include="Mappings\Converters\EnterpriseBranchTypeConverter.cs" />
+    <Compile Include="Mappings\EnterpriseToStandardMappingsProfile.cs" />
+    <Compile Include="Mappings\MapperExtensions.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseBranch.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseError.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseProject.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseRepository.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseLinks.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseLink.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseUser.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseParent.cs" />
+    <Compile Include="Models\Standard\Author.cs" />
+    <Compile Include="Models\Standard\Branch.cs" />
+    <Compile Include="Models\Standard\Comment.cs" />
+    <Compile Include="Models\Standard\Commit.cs" />
+    <Compile Include="Models\Standard\Connection.cs" />
+    <Compile Include="Models\Standard\Content.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseIteratorBasedPage.cs" />
+    <Compile Include="Models\Standard\Error.cs" />
+    <Compile Include="Models\Standard\ErrorWrapper.cs" />
+    <Compile Include="Models\Standard\Inline.cs" />
+    <Compile Include="Models\Standard\IteratorBasedPage.cs" />
+    <Compile Include="Models\Standard\Link.cs" />
+    <Compile Include="Models\Standard\Links.cs" />
+    <Compile Include="Models\Standard\Parent.cs" />
+    <Compile Include="Models\Standard\Participant.cs" />
+    <Compile Include="Models\Standard\PullRequest.cs" />
+    <Compile Include="Models\Standard\PullRequestOptions.cs" />
+    <Compile Include="Models\Standard\Repository.cs" />
+    <Compile Include="Models\Standard\Source.cs" />
+    <Compile Include="Models\Standard\Team.cs" />
+    <Compile Include="Models\Standard\User.cs" />
+    <Compile Include="Models\Standard\UserShort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBuilders\IQueryConnector.cs" />
     <Compile Include="QueryBuilders\IQueryParam.cs" />
@@ -98,7 +122,10 @@
     <Compile Include="Serializers\IJsonSerializer.cs" />
     <Compile Include="Serializers\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Wrappers\BitbucketRestClient.cs" />
+    <Compile Include="Wrappers\BitbucketRestClientBase.cs" />
     <Compile Include="Wrappers\BitbucketRestRequest.cs" />
+    <Compile Include="Wrappers\EnterpriseBitbucketRestClient.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseErrorWrapper.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

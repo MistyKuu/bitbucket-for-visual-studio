@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Standard;
 
 namespace BitBucket.REST.API.Helpers
 {

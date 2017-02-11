@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BitBucket.REST.API;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
 using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;

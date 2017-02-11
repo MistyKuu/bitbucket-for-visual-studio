@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GitClientVS.Contracts.Models.GitClientModels;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Standard;
 
 namespace GitClientVS.Infrastructure.Mappings
 {

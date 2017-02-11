@@ -1,5 +1,6 @@
 ﻿using System;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Standard;
 
 namespace BitBucket.REST.API.QueryBuilders
 {

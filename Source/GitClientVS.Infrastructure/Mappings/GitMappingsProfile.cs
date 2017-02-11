@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Standard;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Utils;
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Standard;
 using GitClientVS.Contracts.Models.GitClientModels;
 
 namespace GitClientVS.Infrastructure.Mappings

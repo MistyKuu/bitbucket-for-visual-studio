@@ -1,14 +1,16 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Helpers;
+using BitBucket.REST.API.Interfaces;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Wrappers;
 using RestSharp;
 
 namespace BitBucket.REST.API.Clients
 {
-    public class PullRequestsClient : ApiClient
+    public class PullRequestsClient : ApiClient, IPullRequestsClient
     {
         public PullRequestsClient(BitbucketRestClient restClient, BitbucketRestClient internalRestClient, Connection connection) : base(restClient, internalRestClient, connection)
         {

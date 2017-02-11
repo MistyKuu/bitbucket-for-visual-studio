@@ -3,6 +3,7 @@ using System.Security.Policy;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Clients;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.Wrappers;
 
 namespace BitBucket.REST.API

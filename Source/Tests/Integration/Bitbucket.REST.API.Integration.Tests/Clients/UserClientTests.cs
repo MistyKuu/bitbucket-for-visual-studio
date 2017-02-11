@@ -1,6 +1,7 @@
 ﻿using Bitbucket.REST.API.Integration.Tests.Helpers;
 using BitBucket.REST.API.Exceptions;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Standard;
 using NUnit.Framework;
 
 namespace Bitbucket.REST.API.Integration.Tests.Clients
