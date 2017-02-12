@@ -95,6 +95,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BitbucketConsts.cs" />
     <Compile Include="CacheKeys.cs" />
     <Compile Include="Extensions\ChainingExtensions.cs" />
     <Compile Include="Extensions\CommonExtensions.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Extensions\ServiceProviderExtensions.cs" />
     <Compile Include="Extensions\ViewModelsExtensions.cs" />
     <Compile Include="LoggerConfigurator.cs" />
+    <Compile Include="Mappings\BitBucketEnterpriseMappings.cs" />
     <Compile Include="Mappings\GitMappingsProfile.cs" />
     <Compile Include="Mappings\PullRequestOptionsTypeConverter.cs" />
     <Compile Include="Mappings\PullRequestTypeConverter.cs" />

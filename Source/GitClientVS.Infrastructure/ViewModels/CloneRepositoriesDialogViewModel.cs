@@ -112,12 +112,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _cloneCommand.Subscribe(_ => OnClose());
             _choosePathCommand.Subscribe(_ => ChooseClonePath());
-            this.WhenAnyValue(x => x.SelectedRepository).Subscribe(_ =>
-            {
-                var clonePath = ClonePath;//TODO CHANGE IT LATER, REVALIDATE CLONEPATH WHEN SELECTEDREPOSITORYCHANGED
-                ClonePath = null;
-                ClonePath = clonePath;
-            });
+            this.WhenAnyValue(x => x.SelectedRepository).Subscribe(_ => InvalidateValidationCache());//todo why is it necessary?
         }
         private void ChooseClonePath()
         {
@@ -147,7 +142,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private IObservable<bool> CanExecuteCloneObservable()
         {
-            var obs = this.WhenAnyValue(x => x.ClonePath, x => x.SelectedRepository.Name).Select(x => CanExecute());
+            var obs = this.WhenAnyValue(x => x.ClonePath, x => x.SelectedRepository).Select(x => CanExecute());
             var valObs = ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
             return obs.Merge(valObs);
         }
@@ -167,7 +162,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public bool ClonePathIsPath(string clonePath)
         {
-            return  Path.IsPathRooted(clonePath) && clonePath.IndexOfAny(Path.GetInvalidPathChars()) == -1;
+            return Path.IsPathRooted(clonePath) && clonePath.IndexOfAny(Path.GetInvalidPathChars()) == -1;
         }
 
 

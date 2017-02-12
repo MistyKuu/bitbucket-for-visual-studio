@@ -33,7 +33,6 @@ namespace BitBucket.REST.API.Mappings
             CreateMap<EnterpriseComment, Comment>().ConvertUsing<EnterpriseCommentTypeConverter>();
 
             CreateMap<EnterpriseRepository, Repository>().ConvertUsing<EnterpriseRepositoryTypeConverter>();
-            CreateMap<Repository, EnterpriseRepository>().ConvertUsing<EnterpriseRepositoryTypeConverter>();
             CreateMap(typeof(IteratorBasedPage<>), typeof(IteratorBasedPage<>));
         }
     }

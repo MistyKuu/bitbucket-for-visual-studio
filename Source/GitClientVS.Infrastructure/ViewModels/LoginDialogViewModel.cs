@@ -37,6 +37,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _isLoading;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _host;
+        private bool _isEnterprise;
 
         public ICommand ConnectCommand => _connectCommand;
         public IEnumerable<IReactiveCommand> ThrowableCommands => new List<IReactiveCommand> { _connectCommand };
@@ -55,9 +56,18 @@ namespace GitClientVS.Infrastructure.ViewModels
             _eventAggregator = eventAggregator;
             _gitClientService = gitClientService;
 
-            _connectCommand.Subscribe(_ => OnClose());
+            //Host = "https://bitbucket.org";//todo load from file
+            //IsEnterprise = false;
 
-            Host = "https://bitbucket.org";
+            Host = "http://localhost:7990";//todo load from file
+            IsEnterprise = true;
+            SetupObservables();
+        }
+
+        private void SetupObservables()
+        {
+            _connectCommand.Subscribe(_ => OnClose());
+            this.WhenAnyValue(x => x.IsEnterprise).Where(x => !x).Subscribe(_ => { Host = BitbucketConsts.OfficialHost.ToString(); });
         }
 
 
@@ -68,8 +78,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task Connect()
         {
-            await _gitClientService.LoginAsync(new GitCredentials() { Login = Login, Password = Password, Host = new Uri(Host) });
+            await _gitClientService.LoginAsync(new GitCredentials() { Login = Login, Password = Password, Host = new Uri(Host)});
         }
+
 
         private IObservable<bool> CanExecuteObservable()
         {
@@ -78,7 +89,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private bool CanExecute()
         {
-            return IsObjectValid();
+            return IsObjectValid() && IsNotOfficialIfEnterpriseSelected(Host);
         }
 
 
@@ -97,6 +108,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         [Required]
+        public bool IsEnterprise
+        {
+            get { return _isEnterprise; }
+            set { this.RaiseAndSetIfChanged(ref _isEnterprise, value); }
+        }
+
+        [Required]
         [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateHost), ErrorMessage = "Url has to be valid and includes schema")]
         public string Host
         {
@@ -108,6 +126,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get { return _errorMessage; }
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
+        }
+
+        public bool IsNotOfficialIfEnterpriseSelected(string host)
+        {
+            return !(IsEnterprise && host == BitbucketConsts.OfficialHost.ToString());
         }
 
         public bool ValidateHost(string host)

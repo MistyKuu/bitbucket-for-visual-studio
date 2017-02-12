@@ -39,6 +39,9 @@ namespace BitBucket.REST.API.Models.Enterprise
         [JsonProperty(PropertyName = "id")]
         public long Id { get; set; }
 
+        [JsonProperty(PropertyName = "properties")]
+        public EnterprisePullRequestProperties Properties { get; set; }
+
         //[JsonProperty(PropertyName = "reviewers")]todo add it later
         //public List<EnterpriseUserShort> Reviewers { get; set; }
 

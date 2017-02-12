@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Helpers;
 using BitBucket.REST.API.Interfaces;
@@ -31,7 +32,13 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
             var url = EnterpriseApiUrls.Repositories(Connection.Credentials.Login);
             var request = new BitbucketRestRequest(url, Method.POST);
-            request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(repository.MapTo<EnterpriseRepository>()), ParameterType.RequestBody);
+            var enterpriseRepo = new EnterpriseRepository()
+            {
+                Name = repository.Name,
+                IsPublic = !repository.IsPrivate
+            };
+
+            request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(enterpriseRepo), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<EnterpriseRepository>(request);
             return response.Data.MapTo<Repository>();
         }
@@ -45,7 +52,15 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
             var url = EnterpriseApiUrls.Branches(owner, repoName);
             var branches = await RestClient.GetAllPages<EnterpriseBranch>(url);
-            return branches.MapTo<IteratorBasedPage<Branch>>();
+            var commitsUrl = EnterpriseApiUrls.Commits(owner, repoName);
+            var commits = await RestClient.GetAllPages<EnterpriseCommit>(commitsUrl);
+
+            var result = branches.MapTo<IteratorBasedPage<Branch>>();
+
+            //foreach (var branch in result.Values)
+            //    branch.Target = commits.Values.First(x => x.Id == branch.Target.Hash).MapTo<Commit>();
+            //todo this doesn't work, investigate later. Commit is what on branch? Latest?
+            return result;
         }
     }
 }

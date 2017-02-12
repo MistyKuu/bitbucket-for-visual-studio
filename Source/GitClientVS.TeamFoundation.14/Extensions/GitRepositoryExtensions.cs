@@ -26,7 +26,7 @@ namespace GitClientVS.TeamFoundation.Extensions
                 {
                     var repoUri = new Uri(repoUrl);
                     repoName = repoUri.Segments.Last().TrimEnd('/').TrimEnd(".git");
-                    ownerName = (repoUri.Segments[repoUri.Segments.Length - 2] ?? "").TrimEnd('/');
+                    ownerName = repoUri.UserInfo;
                 } catch (Exception)
                 {
                     // probably ssh remote

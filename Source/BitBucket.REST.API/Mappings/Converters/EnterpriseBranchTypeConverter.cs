@@ -13,8 +13,8 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Name = source.DisplayId,
                 Target = new Commit()
                 {
-                    Hash = source.LatestCommit
-                }
+                    Hash = source.LatestCommitId
+                },
             };
         }
     }

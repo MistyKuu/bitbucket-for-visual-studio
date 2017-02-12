@@ -12,7 +12,7 @@ namespace BitBucket.REST.API.Mappings.Converters
             {
                 Repository = source.Repository.MapTo<Repository>(),
                 Branch = new Branch() { Name = source.DisplayId },
-                Commit = new Commit() { Hash = source.LatestCommit }
+                Commit = new Commit() { Hash = source.LatestCommitId }
             };
         }
 
@@ -22,7 +22,7 @@ namespace BitBucket.REST.API.Mappings.Converters
             {
                 Repository = source.Repository.MapTo<EnterpriseRepository>(),
                 DisplayId = source.Branch.Name,
-                LatestCommit = source.Commit.Hash
+                LatestCommitId = source.Commit.Hash
             };
         }
     }

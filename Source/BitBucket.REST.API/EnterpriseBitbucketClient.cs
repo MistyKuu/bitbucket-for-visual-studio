@@ -15,15 +15,7 @@ namespace BitBucket.REST.API
         public IUserClient UserClient { get; }
         public IPullRequestsClient PullRequestsClient { get; }
         public Connection ApiConnection { get; }
-
-        static EnterpriseBitbucketClient() //todo correct place?
-        {
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<EnterpriseToStandardMappingsProfile>();
-            });
-        }
-
+        
         public EnterpriseBitbucketClient(Connection apiConnection)
         {
             ApiConnection = apiConnection;

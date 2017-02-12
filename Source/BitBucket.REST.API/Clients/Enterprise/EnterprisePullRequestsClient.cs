@@ -109,9 +109,9 @@ namespace BitBucket.REST.API.Clients.Enterprise
         public async Task<IteratorBasedPage<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
         {
             var url = EnterpriseApiUrls.PullRequestActivities(ownerName, repositoryName, id);//todo limit is set to 100 only, THIS IS NOT WORKING CORRECTLY ANYWHERE
-            var activities = await RestClient.GetAllPages<CommentEnterpriseActivity>(url);
+            var activities = await RestClient.GetAllPages<EnterpriseCommentActivity>(url);
             var comments = activities.Values.Where(x => x.Action == EnterpriseActivityType.COMMENTED).Select(x => x.Comment).ToList();
-            //TODO this wont work as comments has other comments nested. Check how we use it and build it properly
+            
             return new IteratorBasedPage<EnterpriseComment>()
             {
                 Size = activities.Size,

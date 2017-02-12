@@ -8,7 +8,7 @@ using GitClientVS.Contracts.Models.GitClientModels;
 
 namespace GitClientVS.Infrastructure.Mappings
 {
-    public class RepositoryTypeConverter: ITypeConverter<Repository, GitRemoteRepository>
+    public class RepositoryTypeConverter : ITypeConverter<Repository, GitRemoteRepository>
     {
         public GitRemoteRepository Convert(Repository source, GitRemoteRepository destination, ResolutionContext context)
         {
@@ -20,7 +20,7 @@ namespace GitClientVS.Infrastructure.Mappings
                 HasWiki = source.HasWiki,
                 HasIssues = source.HasIssues,
                 IsForked = (source.Parent != null),
-                CloneUrl = source.Links.Clone.First().Href,
+                CloneUrl = source.Links.Clone.First(x => x.Name =="http").Href,
                 Owner = source.Owner.Username,
             };
         }
@@ -39,7 +39,7 @@ namespace GitClientVS.Infrastructure.Mappings
                 HasWiki = source.HasWiki,
                 Owner = new User()
                 {
-                  Username  = source.Owner
+                    Username = source.Owner
                 },
                 Links = new Links()
                 {

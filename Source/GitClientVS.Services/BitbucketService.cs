@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BitBucket.REST.API;
+using BitBucket.REST.API.Interfaces;
 using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
@@ -15,6 +16,7 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
+using GitClientVS.Infrastructure;
 using GitClientVS.Infrastructure.Extensions;
 
 namespace GitClientVS.Services
@@ -24,7 +26,7 @@ namespace GitClientVS.Services
     public class BitbucketService : IGitClientService
     {
         private readonly IEventAggregatorService _eventAggregator;
-        private BitbucketClient _bitbucketClient;
+        private IBitbucketClient _bitbucketClient;
 
         public bool IsConnected => _bitbucketClient != null;
 
@@ -48,19 +50,29 @@ namespace GitClientVS.Services
                 string.IsNullOrEmpty(gitCredentials.Password))
                 throw new Exception("Credentials fields cannot be empty");
 
-            var credentials = new Credentials(gitCredentials.Login, gitCredentials.Password);
-            var bitbucketInitializer = new BitbucketClientInitializer();
-            _bitbucketClient = await bitbucketInitializer.Initialize(gitCredentials.Host, credentials);
+            _bitbucketClient = await CreateBitbucketClient(gitCredentials);
 
             var connectionData = new ConnectionData()
             {
                 IsLoggedIn = true,
                 UserName = _bitbucketClient.ApiConnection.Credentials.Login,
-                Password = credentials.Password,
+                Password = gitCredentials.Password,
                 Host = gitCredentials.Host
             };
 
             OnConnectionChanged(connectionData);
+        }
+
+        private async Task<IBitbucketClient> CreateBitbucketClient(GitCredentials gitCredentials)
+        {
+            var bitbucketClientFactory = new BitbucketClientFactory();//todo inject?
+
+            var credentials = new Credentials(gitCredentials.Login, gitCredentials.Password);
+
+            if (gitCredentials.Host == BitbucketConsts.OfficialHost)
+                return await bitbucketClientFactory.CreateStandardBitBucketClient(gitCredentials.Host, credentials);
+            else
+                return await bitbucketClientFactory.CreateEnterpriseBitBucketClient(gitCredentials.Host, credentials);
         }
 
         public async Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync()

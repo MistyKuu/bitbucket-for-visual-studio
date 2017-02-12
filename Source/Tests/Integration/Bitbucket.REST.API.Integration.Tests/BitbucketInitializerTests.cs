@@ -16,7 +16,7 @@ namespace Bitbucket.REST.API.Integration.Tests
         public void Initialize_WithUsername()
         {
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Username, CredentialsHelper.TestsCredentials.Password);
-            var connection = new Connection(CredentialsHelper.TestsCredentials.HostUrl,CredentialsHelper.TestsCredentials.ApiUrl, credentials);
+            var connection = new Connection(CredentialsHelper.TestsCredentials.HostUrl, CredentialsHelper.TestsCredentials.ApiUrl, credentials);
 
             var bitbucketClient = new BitbucketClient(connection, connection);
             Assert.AreEqual(CredentialsHelper.TestsCredentials.Username, bitbucketClient.ApiConnection.Credentials.Login);
@@ -27,9 +27,9 @@ namespace Bitbucket.REST.API.Integration.Tests
         {
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Email, CredentialsHelper.TestsCredentials.Password);
 
-            var bitbucketInitializer = new BitbucketClientInitializer();
+            var bitbucketInitializer = new BitbucketClientFactory();
 
-            var bitbucketClient = await bitbucketInitializer.Initialize(CredentialsHelper.TestsCredentials.HostUrl, credentials);
+            var bitbucketClient = await bitbucketInitializer.CreateStandardBitBucketClient(CredentialsHelper.TestsCredentials.HostUrl, credentials);
 
             Assert.AreEqual(CredentialsHelper.TestsCredentials.Username, bitbucketClient.ApiConnection.Credentials.Login);
         }
@@ -39,9 +39,9 @@ namespace Bitbucket.REST.API.Integration.Tests
         public void Initialize_WithWrongCredentials_ShouldThrowUnauthorizedException()
         {
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Email, "asadaszx");
-            var bitbucketInitializer = new BitbucketClientInitializer();
+            var bitbucketInitializer = new BitbucketClientFactory();
 
-            Assert.ThrowsAsync<AuthorizationException>(() => bitbucketInitializer.Initialize(CredentialsHelper.TestsCredentials.HostUrl,credentials));
+            Assert.ThrowsAsync<AuthorizationException>(() => bitbucketInitializer.CreateStandardBitBucketClient(CredentialsHelper.TestsCredentials.HostUrl, credentials));
 
         }
     }

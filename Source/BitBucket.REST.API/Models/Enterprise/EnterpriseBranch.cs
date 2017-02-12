@@ -12,7 +12,7 @@ namespace BitBucket.REST.API.Models.Enterprise
         public string DisplayId { get; set; }
 
         [JsonProperty(PropertyName = "latestCommit")]
-        public string LatestCommit { get; set; }
+        public string LatestCommitId { get; set; }
 
         [JsonProperty(PropertyName = "isDefault")]
         public bool? IsDefault { get; set; }

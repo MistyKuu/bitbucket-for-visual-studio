@@ -5,7 +5,7 @@ namespace GitClientVS.Contracts.Models
 {
     public class ConnectionData
     {
-        public static ConnectionData NotLogged => new ConnectionData() {IsLoggedIn = false};
+        public static ConnectionData NotLogged => new ConnectionData() { IsLoggedIn = false };
 
         [JsonProperty]
         public bool IsLoggedIn { get; set; }

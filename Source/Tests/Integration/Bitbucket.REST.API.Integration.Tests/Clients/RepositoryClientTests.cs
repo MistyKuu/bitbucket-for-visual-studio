@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Bitbucket.REST.API.Integration.Tests.Helpers;
 using BitBucket.REST.API;
 using BitBucket.REST.API.Clients;
+using BitBucket.REST.API.Mappings;
 using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.Serializers;
@@ -25,6 +27,11 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
             var connection = new Connection(CredentialsHelper.TestsCredentials.HostUrl, CredentialsHelper.TestsCredentials.ApiUrl, credentials);
 
             bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection, connection);
+          
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<EnterpriseToStandardMappingsProfile>();
+            });
         }
 
         [Test]
@@ -63,7 +70,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
         public async Task PullRequest_Enterprise()
         {
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Username, CredentialsHelper.TestsCredentials.Password);
-            var connection = new Connection(new Uri("http://localhost:7990"), new Uri("http://localhost:7990"), credentials);
+            var connection = new Connection(new Uri("http://localhost:7990"), new Uri("http://localhost:7990/rest/api/1.0"), credentials);
 
 
             var bitbucketClient = new EnterpriseBitbucketClient(connection);
@@ -71,7 +78,8 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
            // var test3 = await bitbucketClient.PullRequestsClient.GetAuthors("test2", connection.Credentials.Login);
           //  var test4 = await bitbucketClient.PullRequestsClient.GetPullRequestDiff("test2", connection.Credentials.Login, 1);
          //   var test5 = await bitbucketClient.PullRequestsClient.ApprovePullRequest("test2", connection.Credentials.Login, 1);
-          //  var test6 = await bitbucketClient.PullRequestsClient.GetPullRequestCommits("test2", connection.Credentials.Login, 1);
+            var test6 = await bitbucketClient.PullRequestsClient.GetPullRequestCommits("test2", connection.Credentials.Login, 1);
+            var test7 = await bitbucketClient.UserClient.GetUser();
           
         }
     }

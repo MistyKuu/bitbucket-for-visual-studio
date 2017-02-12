@@ -58,7 +58,7 @@
     <Compile Include="Authentication\Credentials.cs" />
     <Compile Include="Authentication\OAuthAuthenticator.cs" />
     <Compile Include="BitbucketClient.cs" />
-    <Compile Include="BitbucketClientInitializer.cs" />
+    <Compile Include="BitbucketClientFactory.cs" />
     <Compile Include="Clients\ApiClient.cs" />
     <Compile Include="Clients\Enterprise\EnterpriseRepositoriesClient.cs" />
     <Compile Include="Clients\Enterprise\EnterpriseTeamsClient.cs" />
@@ -66,6 +66,7 @@
     <Compile Include="Clients\Enterprise\EnterprisePullRequestsClient.cs" />
     <Compile Include="EnterpriseBitbucketClient.cs" />
     <Compile Include="Helpers\EnterpriseApiUrls.cs" />
+    <Compile Include="Interfaces\IBitbucketClientFactory.cs" />
     <Compile Include="Interfaces\IBitbucketClient.cs" />
     <Compile Include="Interfaces\IPullRequestsClient.cs" />
     <Compile Include="Interfaces\IUserClient.cs" />
@@ -82,7 +83,8 @@
     <Compile Include="Helpers\ApiHelpers.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Mappings\Converters\EnterpriseCommentTypeConverter.cs" />
-    <Compile Include="Models\Enterprise\CommentEnterpriseActivity.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseCommentActivity.cs" />
+    <Compile Include="Models\Enterprise\EnterprisePullRequestProperties.cs" />
     <Compile Include="Models\Enterprise\EnterpriseActivity.cs" />
     <Compile Include="Models\Enterprise\EnterpriseActivityType.cs" />
     <Compile Include="Mappings\Converters\EnterpriseLinksTypeConverter.cs" />

@@ -50,6 +50,7 @@ namespace GitClientVS.VisualStudio.UI
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<GitMappingsProfile>();
+                BitBucketEnterpriseMappings.AddEnterpriseProfile(cfg);
             });
 
             await GitClientLogin(result);
@@ -65,7 +66,7 @@ namespace GitClientVS.VisualStudio.UI
                     {
                         Login = result.Data.UserName,
                         Password = result.Data.Password,
-                        Host = result.Data.Host
+                        Host = result.Data.Host,
                     };
                     await _gitClient.LoginAsync(cred);
                 }
