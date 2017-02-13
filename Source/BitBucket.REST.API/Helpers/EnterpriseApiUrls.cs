@@ -16,9 +16,9 @@ namespace BitBucket.REST.API.Helpers
             return $"projects/~{login}/repos/{repoName}/branches";
         }
 
-        public static string Commits(string login, string repoName)
+        public static string Commits(string login, string repoName, string id)
         {
-            return $"projects/~{login}/repos/{repoName}/commits";
+            return $"projects/~{login}/repos/{repoName}/commits/{id}";
         }
 
         public static string User()

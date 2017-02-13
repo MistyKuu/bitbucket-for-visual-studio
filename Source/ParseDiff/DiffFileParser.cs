@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GitClientVS.Contracts.Interfaces.Services;
-using ParseDiff;
 
-namespace GitClientVS.Services
+namespace ParseDiff
 {
-    [Export(typeof(IDiffFileParser))]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class DiffFileParser : IDiffFileParser
+    public class DiffFileParser
     { // from property holds the name of the file -> no matter what
-        public IEnumerable<FileDiff> Parse(string diff)
+        public static IEnumerable<FileDiff> Parse(string diff)
         {
             var files = Diff.Parse(diff).ToList();
 

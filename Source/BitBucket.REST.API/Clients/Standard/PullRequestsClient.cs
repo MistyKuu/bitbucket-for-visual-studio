@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BitBucket.REST.API.Helpers;
 using BitBucket.REST.API.Interfaces;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Wrappers;
+using ParseDiff;
 using RestSharp;
 
 namespace BitBucket.REST.API.Clients.Standard
@@ -42,17 +44,17 @@ namespace BitBucket.REST.API.Clients.Standard
             return response.Data;
         }
 
-        public async Task<string> GetPullRequestDiff(string repositoryName, long id)
+        public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, long id)
         {
             return await GetPullRequestDiff(repositoryName, Connection.Credentials.Login, id);
         }
 
-        public async Task<string> GetPullRequestDiff(string repositoryName, string owner, long id)
+        public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string owner, long id)
         {
             var url = ApiUrls.PullRequestDiff(owner, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await RestClient.ExecuteTaskAsync(request);
-            return response.Content;
+            return DiffFileParser.Parse(response.Content);
         }
 
         public async Task<Participant> ApprovePullRequest(string repositoryName, long id)
@@ -86,7 +88,7 @@ namespace BitBucket.REST.API.Clients.Standard
             var data = await RestClient.GetAllPages<Commit>(url);
             foreach (var commit in data.Values)
             {
-                commit.CommitHref = $"{Connection.MainUrl}/{ownerName}/{repositoryName}/commits/{commit.Hash}";
+                commit.CommitHref = $"{Connection.MainUrl}{ownerName}/{repositoryName}/commits/{commit.Hash}";
             }
             return data;
         }
@@ -110,7 +112,7 @@ namespace BitBucket.REST.API.Clients.Standard
             return response.Data;
         }
 
-        public async Task<PullRequest> CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner)
+        public async Task CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner)
         {
             pullRequest.Author = new User()
             {
@@ -120,7 +122,6 @@ namespace BitBucket.REST.API.Clients.Standard
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(pullRequest), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<PullRequest>(request);
-            return response.Data;
         }
 
 

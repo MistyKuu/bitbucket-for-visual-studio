@@ -6,6 +6,11 @@ namespace BitBucket.REST.API.Models.Enterprise
 {
     public class EnterpriseIteratorBasedPage<T>
     {
+        public EnterpriseIteratorBasedPage()
+        {
+            IsLastPage = true;
+        }
+
         [JsonProperty(PropertyName = "start")]
         public int Start { get; set; }
 
@@ -13,7 +18,7 @@ namespace BitBucket.REST.API.Models.Enterprise
         public int? Limit { get; set; }
 
         [JsonProperty(PropertyName = "isLastPage")]
-        public bool IsLastPage { get; set; }
+        public bool? IsLastPage { get; set; }
 
         [JsonProperty(PropertyName = "values")]
         public List<T> Values { get; set; }

@@ -66,6 +66,7 @@
     <Compile Include="Clients\Enterprise\EnterprisePullRequestsClient.cs" />
     <Compile Include="EnterpriseBitbucketClient.cs" />
     <Compile Include="Helpers\EnterpriseApiUrls.cs" />
+    <Compile Include="Helpers\LinqExpressions.cs" />
     <Compile Include="Interfaces\IBitbucketClientFactory.cs" />
     <Compile Include="Interfaces\IBitbucketClient.cs" />
     <Compile Include="Interfaces\IPullRequestsClient.cs" />
@@ -84,9 +85,11 @@
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Mappings\Converters\EnterpriseCommentTypeConverter.cs" />
     <Compile Include="Models\Enterprise\EnterpriseCommentActivity.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseDiff.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseDiffResponse.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseDiffSourceDestination.cs" />
     <Compile Include="Models\Enterprise\EnterprisePullRequestProperties.cs" />
     <Compile Include="Models\Enterprise\EnterpriseActivity.cs" />
-    <Compile Include="Models\Enterprise\EnterpriseActivityType.cs" />
     <Compile Include="Mappings\Converters\EnterpriseLinksTypeConverter.cs" />
     <Compile Include="Mappings\Converters\EnterpriseRepositoryTypeConverter.cs" />
     <Compile Include="Mappings\Converters\EnterpriseBranchTypeConverter.cs" />
@@ -110,6 +113,9 @@
     <Compile Include="Models\Enterprise\EnterprisePullRequest.cs" />
     <Compile Include="Models\Enterprise\EnterprisePullRequestOptions.cs" />
     <Compile Include="Models\Enterprise\EnterpriseParticipant.cs" />
+    <Compile Include="Models\Enterprise\Hunk.cs" />
+    <Compile Include="Models\Enterprise\Line.cs" />
+    <Compile Include="Models\Enterprise\Segment.cs" />
     <Compile Include="Models\Standard\Author.cs" />
     <Compile Include="Models\Standard\Branch.cs" />
     <Compile Include="Models\Standard\Comment.cs" />
@@ -147,7 +153,12 @@
     <Compile Include="Wrappers\EnterpriseBitbucketRestClient.cs" />
     <Compile Include="Models\Enterprise\EnterpriseErrorWrapper.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ParseDiff\ParseDiff.csproj">
+      <Project>{65672e92-c353-4d21-a098-6a5beb42cdf4}</Project>
+      <Name>ParseDiff</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

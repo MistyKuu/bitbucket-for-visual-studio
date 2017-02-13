@@ -13,10 +13,11 @@ namespace BitBucket.REST.API.Mappings.Converters
             return new Comment()
             {
                 User = source.User.MapTo<User>(),
-                Content = new Content() { Raw = source.Text },
+                Content = new Content() { Html = source.Text },
                 CreatedOn = source.CreatedOn.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture),
                 UpdatedOn = source.UpdatedOn.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture),
-                Id = source.Id
+                Id = source.Id,
+                Parent = source.Parent !=null ? new Parent() { Id = source.Parent.Id } : null
             };
         }
     }

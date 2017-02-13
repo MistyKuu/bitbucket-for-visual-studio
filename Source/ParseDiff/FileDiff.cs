@@ -16,17 +16,17 @@
 
         public int Id { get; }
 
-        public ICollection<ChunkDiff> Chunks { get; } = new List<ChunkDiff>();
+        public ICollection<ChunkDiff> Chunks { get; set; } = new List<ChunkDiff>();
 
-        public int Deletions { get; internal set; }
-        public int Additions { get; internal set; }
+        public int Deletions { get; set; }
+        public int Additions { get; set; }
 
-        public string To { get; internal set; }
+        public string To { get; set; }
 
        
         public string From { get; set; }
 
-        public FileChangeType Type { get; internal set; }
+        public FileChangeType Type { get; set; }
 
         public bool Deleted => Type == FileChangeType.Delete;
 

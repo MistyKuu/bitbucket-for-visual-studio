@@ -52,14 +52,17 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
             var url = EnterpriseApiUrls.Branches(owner, repoName);
             var branches = await RestClient.GetAllPages<EnterpriseBranch>(url);
-            var commitsUrl = EnterpriseApiUrls.Commits(owner, repoName);
-            var commits = await RestClient.GetAllPages<EnterpriseCommit>(commitsUrl);
 
             var result = branches.MapTo<IteratorBasedPage<Branch>>();
 
-            //foreach (var branch in result.Values)
-            //    branch.Target = commits.Values.First(x => x.Id == branch.Target.Hash).MapTo<Commit>();
-            //todo this doesn't work, investigate later. Commit is what on branch? Latest?
+            foreach (var branch in result.Values)
+            {
+                var commitsUrl = EnterpriseApiUrls.Commits(owner, repoName, branch.Target.Hash);//todo find a better way to do it
+                var request = new BitbucketRestRequest(commitsUrl, Method.GET);
+                branch.Target = (await RestClient.ExecuteTaskAsync<EnterpriseCommit>(request)).Data.MapTo<Commit>();
+            }
+
+
             return result;
         }
     }

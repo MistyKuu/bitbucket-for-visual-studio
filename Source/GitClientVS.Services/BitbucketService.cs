@@ -18,6 +18,7 @@ using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure;
 using GitClientVS.Infrastructure.Extensions;
+using ParseDiff;
 
 namespace GitClientVS.Services
 {
@@ -109,12 +110,12 @@ namespace GitClientVS.Services
             return (await _bitbucketClient.PullRequestsClient.GetPullRequest(repositoryName, ownerName, id)).MapTo<GitPullRequest>();
         }
 
-        public async Task<string> GetPullRequestDiff(string repositoryName, long id)
+        public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, long id)
         {
             return await _bitbucketClient.PullRequestsClient.GetPullRequestDiff(repositoryName, id);
         }
 
-        public async Task<string> GetPullRequestDiff(string repositoryName, string ownerName, long id)
+        public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string ownerName, long id)
         {
             return await _bitbucketClient.PullRequestsClient.GetPullRequestDiff(repositoryName, ownerName, id);
         }
@@ -185,10 +186,9 @@ namespace GitClientVS.Services
             await _bitbucketClient.PullRequestsClient.DisapprovePullRequest(repositoryName, ownerName, id);
         }
 
-        public async Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName, string owner)
+        public async Task CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName, string owner)
         {
-            var responsePullRequest = await _bitbucketClient.PullRequestsClient.CreatePullRequest(gitPullRequest.MapTo<PullRequest>(), repositoryName, owner);
-            return responsePullRequest.MapTo<GitPullRequest>();
+            await _bitbucketClient.PullRequestsClient.CreatePullRequest(gitPullRequest.MapTo<PullRequest>(), repositoryName, owner);
         }
 
         public void Logout()

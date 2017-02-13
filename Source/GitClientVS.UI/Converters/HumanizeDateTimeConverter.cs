@@ -26,7 +26,7 @@ namespace GitClientVS.UI.Converters
             try
             {
 
-                return dateTime.Humanize(false);
+                return dateTime.Humanize(false,culture:CultureInfo.CreateSpecificCulture("en-us"));
             }
             catch (Exception)
             {

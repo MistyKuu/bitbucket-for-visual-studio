@@ -8,7 +8,7 @@ namespace BitBucket.REST.API.Models.Enterprise
         public long Id { get; set; }
 
         [JsonProperty(PropertyName = "action")]
-        public EnterpriseActivityType Action { get; set; }
+        public string Action { get; set; }
 
         [JsonProperty(PropertyName = "commentAction")]
         public string CommentAction { get; set; }

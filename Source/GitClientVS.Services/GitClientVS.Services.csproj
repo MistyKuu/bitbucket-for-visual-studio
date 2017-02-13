@@ -89,7 +89,6 @@
     </Compile>
     <Compile Include="BitbucketService.cs" />
     <Compile Include="MemoryCacheService.cs" />
-    <Compile Include="DiffFileParser.cs" />
     <Compile Include="EventAggregatorService.cs" />
     <Compile Include="FileService.cs" />
     <Compile Include="HashService.cs" />

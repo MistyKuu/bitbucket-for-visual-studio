@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Diff.cs" />
+    <Compile Include="DiffFileParser.cs" />
     <Compile Include="DiffParser.cs" />
     <Compile Include="LineChangeType.cs" />
     <Compile Include="FileChangeType.cs" />

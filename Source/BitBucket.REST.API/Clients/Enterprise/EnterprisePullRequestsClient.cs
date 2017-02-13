@@ -9,6 +9,7 @@ using BitBucket.REST.API.Models.Enterprise;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Wrappers;
+using ParseDiff;
 using RestSharp;
 
 namespace BitBucket.REST.API.Clients.Enterprise
@@ -49,17 +50,69 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return response.Data.MapTo<IteratorBasedPage<PullRequest>>();
         }
 
-        public async Task<string> GetPullRequestDiff(string repositoryName, long id)
+        public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, long id)
         {
             return await GetPullRequestDiff(repositoryName, Connection.Credentials.Login, id);
         }
 
-        public async Task<string> GetPullRequestDiff(string repositoryName, string owner, long id)
-        {//todo this is returning json
+        public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string owner, long id)
+        {
             var url = EnterpriseApiUrls.PullRequestDiff(owner, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.GET);
-            var response = await RestClient.ExecuteTaskAsync(request);
-            return response.Content;
+            var response = await RestClient.ExecuteTaskAsync<EnterpriseDiffResponse>(request);
+            var fileDiffs = new List<FileDiff>();
+            foreach (var diff in response.Data.Diffs)
+            {
+                var fileDiff = new FileDiff
+                {
+                    From = diff.Source?.String,
+                    To = diff.Destination?.String,
+                    Chunks = new List<ChunkDiff>(),
+                };
+
+                fileDiff.Type = fileDiff.From == null
+                    ? FileChangeType.Add
+                    : fileDiff.To == null ? FileChangeType.Delete : FileChangeType.Modified;
+                fileDiff.From = fileDiff.From ?? fileDiff.To;
+
+                fileDiffs.Add(fileDiff);
+
+                foreach (var diffHunk in diff.Hunks)
+                {
+                    var chunkDiff = new ChunkDiff()
+                    {
+                        Changes = new List<LineDiff>(),
+                    };
+                    fileDiff.Chunks.Add(chunkDiff);
+
+                    foreach (var segment in diffHunk.Segments)
+                    {
+                        foreach (var line in segment.Lines)
+                        {
+                            var ld = new LineDiff()
+                            {
+                                Content = line.Text,
+                                OldIndex = line.Source == 0 ? null : (int?) line.Source,
+                                NewIndex = line.Destination == 0 ? null : (int?) line.Destination,
+                                Type = segment.Type == "ADDED"
+                                    ? LineChangeType.Add
+                                    : segment.Type == "REMOVED"
+                                        ? LineChangeType.Delete
+                                        : LineChangeType.Normal
+                            };
+
+
+
+                            chunkDiff.Changes.Add(ld);
+                        }
+                    }
+
+                    fileDiff.Additions = fileDiff.Chunks.Sum(y => y.Changes.Count(z => z.Add));
+                    fileDiff.Deletions = fileDiff.Chunks.Sum(y => y.Changes.Count(z => z.Delete));
+                }
+            }
+
+            return fileDiffs;
         }
 
         public async Task<Participant> ApprovePullRequest(string repositoryName, long id)
@@ -96,7 +149,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var mapped = data.MapTo<IteratorBasedPage<Commit>>();
 
             foreach (var commit in mapped.Values)
-                commit.CommitHref = $"{Connection.MainUrl}/{ownerName}/{repositoryName}/commits/{commit.Hash}";
+                commit.CommitHref = $"{Connection.MainUrl}users/{ownerName}/repos/{repositoryName}/pull-requests/{id}/commits/{commit.Hash}";
 
             return mapped;
         }
@@ -108,10 +161,16 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         public async Task<IteratorBasedPage<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
         {
-            var url = EnterpriseApiUrls.PullRequestActivities(ownerName, repositoryName, id);//todo limit is set to 100 only, THIS IS NOT WORKING CORRECTLY ANYWHERE
+            var url = EnterpriseApiUrls.PullRequestActivities(ownerName, repositoryName, id);
             var activities = await RestClient.GetAllPages<EnterpriseCommentActivity>(url);
-            var comments = activities.Values.Where(x => x.Action == EnterpriseActivityType.COMMENTED).Select(x => x.Comment).ToList();
-            
+            var comments = activities.Values.Where(x => x.Action == "COMMENTED").Select(x => x.Comment).ToList();
+
+            foreach (var comment in comments)
+                AssignCommentParent(comment);
+
+
+            comments = comments.Flatten(x => true, x => x.Comments).ToList();
+
             return new IteratorBasedPage<EnterpriseComment>()
             {
                 Size = activities.Size,
@@ -121,7 +180,6 @@ namespace BitBucket.REST.API.Clients.Enterprise
                 Values = comments
             }.MapTo<IteratorBasedPage<Comment>>();
         }
-
         public async Task<PullRequest> GetPullRequest(string repositoryName, string owner, long id)
         {
             var url = EnterpriseApiUrls.PullRequest(owner, repositoryName, id);
@@ -130,7 +188,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return pullRequest.Data.MapTo<PullRequest>();
         }
 
-        public async Task<PullRequest> CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner)
+        public async Task CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner)
         {
             pullRequest.Author = new User()
             {
@@ -139,10 +197,16 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var url = EnterpriseApiUrls.PullRequests(owner, repositoryName);
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(pullRequest.MapTo<EnterprisePullRequest>()), ParameterType.RequestBody);
-            var response = await RestClient.ExecuteTaskAsync<EnterprisePullRequest>(request);
-            return response.Data.MapTo<PullRequest>();
+            await RestClient.ExecuteTaskAsync(request);
         }
 
-
+        private static void AssignCommentParent(EnterpriseComment parent)
+        {
+            foreach (var child in parent.Comments)
+            {
+                child.Parent = new EnterpriseParent() { Id = parent.Id };
+                AssignCommentParent(child);
+            }
+        }
     }
 }

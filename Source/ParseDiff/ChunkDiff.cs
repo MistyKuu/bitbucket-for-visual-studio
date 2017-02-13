@@ -16,7 +16,12 @@ namespace ParseDiff
             NewLines = newLines;
         }
 
-        public List<LineDiff> Changes { get; } = new List<LineDiff>();
+        public ChunkDiff()
+        {
+            
+        }
+
+        public List<LineDiff> Changes { get; set; } = new List<LineDiff>();
 
         public string Content { get; }
 

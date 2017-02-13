@@ -39,7 +39,7 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
             if (fileDiff == null)
                 return HighlightMappings["xml"];
 
-            var splitted = fileDiff.From.Split('.');
+            var splitted = fileDiff.From.Split('.');//todo this wont work if path contains .
             if (splitted.Length < 2)
                 return HighlightMappings["xml"];
 
@@ -148,7 +148,7 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
             if (textEditor?.Document != null)
             {
                 var caretOffset = textEditor.CaretOffset;
-                textEditor.Document.Text = e.NewValue?.ToString();
+                textEditor.Document.Text = e.NewValue?.ToString() ?? string.Empty;
                 textEditor.CaretOffset = caretOffset;
             }
         }

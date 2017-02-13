@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
+using ParseDiff;
 
 namespace GitClientVS.Contracts.Interfaces.Services
 {
@@ -27,8 +28,8 @@ namespace GitClientVS.Contracts.Interfaces.Services
 
         Task<PageIterator<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit = 20, int page = 1);
 
-        Task<string> GetPullRequestDiff(string repositoryName, string ownerName, long id);
-        Task<string> GetPullRequestDiff(string repositoryName, long id);
+        Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string ownerName, long id);
+        Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, long id);
 
         Task DisapprovePullRequest(string repositoryName, string ownerName, long id);
         Task<bool> ApprovePullRequest(string repositoryName, string ownerName, long id);
@@ -37,7 +38,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
 
         bool IsOriginRepo(GitRemoteRepository gitRemoteRepository);
 
-        Task<GitPullRequest> CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName, string owner);
+        Task CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName, string owner);
         Task<IEnumerable<GitPullRequest>> GetAllPullRequests(string repositoryName, string ownerName);
         Task<GitPullRequest> GetPullRequest(string repositoryName, string ownerName, long id);
     }

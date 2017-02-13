@@ -28,7 +28,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly ICommandsService _commandsService;
-        private readonly IDiffFileParser _diffFileParser;
         private readonly IUserInformationService _userInformationService;
         private readonly IVsTools _vsTools;
         private string _errorMessage;
@@ -118,7 +117,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             IGitClientService gitClientService,
             IGitService gitService,
             ICommandsService commandsService,
-            IDiffFileParser diffFileParser,
             IUserInformationService userInformationService,
             IEventAggregatorService eventAggregatorService
             )
@@ -126,7 +124,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _gitService = gitService;
             _commandsService = commandsService;
-            _diffFileParser = diffFileParser;
             _userInformationService = userInformationService;
             CurrentTheme = userInformationService.CurrentTheme;
             eventAggregatorService.GetEvent<ThemeChangedEvent>().Subscribe(ev =>
@@ -207,8 +204,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CreateDiffContent(GitRemoteRepository currentRepository, long id)
         {
-            var diff = await _gitClientService.GetPullRequestDiff(currentRepository.Name, currentRepository.Owner, id);
-            FileDiffs = _diffFileParser.Parse(diff).ToList();
+            FileDiffs = (await _gitClientService.GetPullRequestDiff(currentRepository.Name, currentRepository.Owner, id)).ToList();
             CreateFileTree(FileDiffs.ToList());
         }
 

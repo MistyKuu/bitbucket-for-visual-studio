@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Globalization;
+using AutoMapper;
+using BitBucket.REST.API.Helpers;
 using BitBucket.REST.API.Models.Enterprise;
 using BitBucket.REST.API.Models.Standard;
 
@@ -14,7 +16,8 @@ namespace BitBucket.REST.API.Mappings.Converters
                 {
                     User = source.Author.MapTo<UserShort>()
                 },
-                Hash = source.Id
+                Hash = source.Id,
+                Date = source.Date.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture)
             };
         }
     }

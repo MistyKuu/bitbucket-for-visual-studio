@@ -22,5 +22,7 @@ namespace BitBucket.REST.API.Models.Enterprise
 
         [JsonProperty(PropertyName = "id")]
         public long Id { get; set; }
+
+        public EnterpriseParent Parent { get; set; }
     }
 }
