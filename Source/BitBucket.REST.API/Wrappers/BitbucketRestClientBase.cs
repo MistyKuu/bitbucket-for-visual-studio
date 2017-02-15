@@ -37,6 +37,7 @@ namespace BitBucket.REST.API.Wrappers
 
         public override async Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)
         {
+            request.AddHeader("X-Atlassian-Token", " no-check");
             var response = await base.ExecuteTaskAsync<T>(request);
             response = await RedirectIfNeededAndGetResponse(response, request);
             this.CheckResponseStatusCode(response);
@@ -45,6 +46,7 @@ namespace BitBucket.REST.API.Wrappers
 
         public override async Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
         {
+            request.AddHeader("X-Atlassian-Token", " no-check");
             var response = await base.ExecuteTaskAsync(request);
             response = await RedirectIfNeededAndGetResponse(response, request);
             this.CheckResponseStatusCode(response);

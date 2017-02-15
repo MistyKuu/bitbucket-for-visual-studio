@@ -73,7 +73,6 @@ namespace BitBucket.REST.API.Clients.Enterprise
                 fileDiff.Type = fileDiff.From == null
                     ? FileChangeType.Add
                     : fileDiff.To == null ? FileChangeType.Delete : FileChangeType.Modified;
-                fileDiff.From = fileDiff.From ?? fileDiff.To;
 
                 fileDiffs.Add(fileDiff);
 
@@ -92,16 +91,14 @@ namespace BitBucket.REST.API.Clients.Enterprise
                             var ld = new LineDiff()
                             {
                                 Content = line.Text,
-                                OldIndex = line.Source == 0 ? null : (int?) line.Source,
-                                NewIndex = line.Destination == 0 ? null : (int?) line.Destination,
+                                OldIndex = segment.Type == "ADDED" ? null : (int?)line.Source,
+                                NewIndex = segment.Type == "REMOVED" ? null : (int?)line.Destination,
                                 Type = segment.Type == "ADDED"
                                     ? LineChangeType.Add
                                     : segment.Type == "REMOVED"
                                         ? LineChangeType.Delete
                                         : LineChangeType.Normal
                             };
-
-
 
                             chunkDiff.Changes.Add(ld);
                         }
@@ -122,7 +119,6 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         public async Task<Participant> ApprovePullRequest(string repositoryName, string ownerName, long id)
         {
-            throw new NotSupportedException("XLSF FAILED");
             var url = EnterpriseApiUrls.PullRequestApprove(ownerName, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.POST);
             var response = await RestClient.ExecuteTaskAsync<EnterpriseParticipant>(request);
@@ -136,7 +132,6 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         public async Task DisapprovePullRequest(string repositoryName, string ownerName, long id)
         {
-            throw new NotSupportedException("XLSF FAILED");
             var url = EnterpriseApiUrls.PullRequestApprove(ownerName, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.DELETE);
             await RestClient.ExecuteTaskAsync(request);

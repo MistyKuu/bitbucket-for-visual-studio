@@ -17,7 +17,8 @@ namespace BitBucket.REST.API.Mappings.Converters
                     User = source.Author.MapTo<UserShort>()
                 },
                 Hash = source.Id,
-                Date = source.Date.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture)
+                Date = source.Date.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture),
+                Message = source.Message
             };
         }
     }

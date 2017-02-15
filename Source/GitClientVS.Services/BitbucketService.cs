@@ -58,7 +58,8 @@ namespace GitClientVS.Services
                 IsLoggedIn = true,
                 UserName = _bitbucketClient.ApiConnection.Credentials.Login,
                 Password = gitCredentials.Password,
-                Host = gitCredentials.Host
+                Host = gitCredentials.Host,
+                IsEnterprise = gitCredentials.IsEnterprise
             };
 
             OnConnectionChanged(connectionData);
@@ -70,7 +71,7 @@ namespace GitClientVS.Services
 
             var credentials = new Credentials(gitCredentials.Login, gitCredentials.Password);
 
-            if (gitCredentials.Host == BitbucketConsts.OfficialHost)
+            if (!gitCredentials.IsEnterprise)
                 return await bitbucketClientFactory.CreateStandardBitBucketClient(gitCredentials.Host, credentials);
             else
                 return await bitbucketClientFactory.CreateEnterpriseBitBucketClient(gitCredentials.Host, credentials);

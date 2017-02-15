@@ -331,11 +331,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var entryFile = new TreeDirectory(rootFileName);
 
-            foreach (var fileDiff in fileDiffs.Where(x => !string.IsNullOrEmpty(x.From.Trim())))
+            foreach (var fileDiff in fileDiffs.Where(x => !string.IsNullOrEmpty(x.DisplayFileName.Trim())))
             {
                 ITreeFile currentFile = entryFile;
 
-                var pathChunks = fileDiff.From.Split(separator);
+                var pathChunks = fileDiff.DisplayFileName.Split(separator);
                 var lastItem = pathChunks.Last();
                 foreach (var pathChunk in pathChunks)
                 {

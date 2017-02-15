@@ -78,8 +78,8 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
            // var test3 = await bitbucketClient.PullRequestsClient.GetAuthors("test2", connection.Credentials.Login);
           //  var test4 = await bitbucketClient.PullRequestsClient.GetPullRequestDiff("test2", connection.Credentials.Login, 1);
          //   var test5 = await bitbucketClient.PullRequestsClient.ApprovePullRequest("test2", connection.Credentials.Login, 1);
-            var test6 = await bitbucketClient.PullRequestsClient.GetPullRequestCommits("test2", connection.Credentials.Login, 1);
-            var test7 = await bitbucketClient.UserClient.GetUser();
+            var test6 = await bitbucketClient.PullRequestsClient.ApprovePullRequest("test2", connection.Credentials.Login, 1);
+          //  var test7 = await bitbucketClient.UserClient.GetUser();
           
         }
     }

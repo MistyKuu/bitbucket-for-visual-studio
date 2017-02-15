@@ -23,8 +23,6 @@ namespace ParseDiff
                 }
                 else if (fileDiff.Type == FileChangeType.Add)
                 {
-                    fileDiff.From = fileDiff.To;
-
                     foreach (var change in fileDiff.Chunks.Select(chunk => chunk.Changes).SelectMany(changes => changes))
                         change.NewIndex = change.Index;
                 }

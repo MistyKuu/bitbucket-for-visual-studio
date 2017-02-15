@@ -42,11 +42,10 @@ namespace BitBucket.REST.API.Models.Enterprise
         [JsonProperty(PropertyName = "properties")]
         public EnterprisePullRequestProperties Properties { get; set; }
 
-        //[JsonProperty(PropertyName = "reviewers")]todo add it later
-        //public List<EnterpriseUserShort> Reviewers { get; set; }
+        [JsonProperty(PropertyName = "reviewers")]
+        public List<EnterpriseParticipant> Reviewers { get; set; }
 
-        //[JsonProperty(PropertyName = "participants")]
-        //public List<EnterpriseParticipant> Participants { get; set; }
-
+        [JsonProperty(PropertyName = "participants")]
+        public List<EnterpriseParticipant> Participants { get; set; }
     }
 }

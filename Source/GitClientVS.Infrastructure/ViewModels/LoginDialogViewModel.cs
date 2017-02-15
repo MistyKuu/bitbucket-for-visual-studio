@@ -30,6 +30,7 @@ namespace GitClientVS.Infrastructure.ViewModels
     {
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitClientService _gitClientService;
+        private readonly IUserInformationService _userInformationService;
         private string _login;
         private string _password;
         private ReactiveCommand<Unit> _connectCommand;
@@ -38,6 +39,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _host;
         private bool _isEnterprise;
+        private string _lastEnterpriseHost;
 
         public ICommand ConnectCommand => _connectCommand;
         public IEnumerable<IReactiveCommand> ThrowableCommands => new List<IReactiveCommand> { _connectCommand };
@@ -51,23 +53,27 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
         [ImportingConstructor]
-        public LoginDialogViewModel(IEventAggregatorService eventAggregator, IGitClientService gitClientService)
+        public LoginDialogViewModel(
+            IEventAggregatorService eventAggregator,
+            IGitClientService gitClientService,
+            IUserInformationService userInformationService)
         {
             _eventAggregator = eventAggregator;
             _gitClientService = gitClientService;
-
-            //Host = "https://bitbucket.org";//todo load from file
-            //IsEnterprise = false;
-
-            Host = "http://localhost:7990";//todo load from file
-            IsEnterprise = true;
+            _userInformationService = userInformationService;
+            Host = BitbucketConsts.OfficialHost.ToString();
+            IsEnterprise = false;
             SetupObservables();
         }
 
         private void SetupObservables()
         {
             _connectCommand.Subscribe(_ => OnClose());
-            this.WhenAnyValue(x => x.IsEnterprise).Where(x => !x).Subscribe(_ => { Host = BitbucketConsts.OfficialHost.ToString(); });
+            this.WhenAnyValue(x => x.IsEnterprise).Subscribe(_ =>
+            {
+                Host = IsEnterprise ? _lastEnterpriseHost : BitbucketConsts.OfficialHost.ToString();
+            });
+            this.WhenAnyValue(x => x.Host).Where(_ => IsEnterprise).Subscribe(_ => { _lastEnterpriseHost = Host; });
         }
 
 
@@ -78,7 +84,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task Connect()
         {
-            await _gitClientService.LoginAsync(new GitCredentials() { Login = Login, Password = Password, Host = new Uri(Host)});
+            await _gitClientService.LoginAsync(new GitCredentials() { Login = Login, Password = Password, Host = new Uri(Host), IsEnterprise = IsEnterprise });
         }
 
 
@@ -130,7 +136,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public bool IsNotOfficialIfEnterpriseSelected(string host)
         {
-            return !(IsEnterprise && host == BitbucketConsts.OfficialHost.ToString());
+            return !(IsEnterprise && !string.IsNullOrEmpty(host) && host.StartsWith(BitbucketConsts.OfficialHost.ToString(), StringComparison.InvariantCultureIgnoreCase));
         }
 
         public bool ValidateHost(string host)

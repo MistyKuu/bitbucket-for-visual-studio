@@ -15,5 +15,7 @@ namespace GitClientVS.Contracts.Models
         public string Password { get; set; }
         [JsonProperty]
         public Uri Host { get; set; }
+        [JsonProperty]
+        public bool IsEnterprise { get; set; }
     }
 }

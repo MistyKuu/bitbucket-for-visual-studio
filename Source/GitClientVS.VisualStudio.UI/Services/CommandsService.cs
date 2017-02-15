@@ -61,7 +61,7 @@ namespace GitClientVS.VisualStudio.UI.Services
             var view = window.Content as IView;
             view.DataContext = vm;
             vm.InitializeCommand.Execute(parameter);
-            vm.WhenAnyValue(x => x.FileDiff).Where(x => x != null).Subscribe(x => window.Caption = $"Diff ({x.From})");
+            vm.WhenAnyValue(x => x.FileDiff).Where(x => x != null).Subscribe(x => window.Caption = $"Diff ({x.DisplayFileName})");
         }
 
         private TWindow ShowWindow<TWindow>(int id = 0) where TWindow : class

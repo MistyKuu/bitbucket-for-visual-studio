@@ -67,6 +67,7 @@ namespace GitClientVS.VisualStudio.UI
                         Login = result.Data.UserName,
                         Password = result.Data.Password,
                         Host = result.Data.Host,
+                        IsEnterprise = result.Data.IsEnterprise
                     };
                     await _gitClient.LoginAsync(cred);
                 }

@@ -9,6 +9,8 @@
     {
         private static int _id = 1;
 
+        public string DisplayFileName => (Type == FileChangeType.Modified || Type == FileChangeType.Delete) ? From : To;
+
         public FileDiff()
         {
             Id = _id++;
@@ -25,7 +27,7 @@
 
        
         public string From { get; set; }
-
+        
         public FileChangeType Type { get; set; }
 
         public bool Deleted => Type == FileChangeType.Delete;

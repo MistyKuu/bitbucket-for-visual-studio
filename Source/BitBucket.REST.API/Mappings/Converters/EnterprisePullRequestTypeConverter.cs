@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -26,8 +27,13 @@ namespace BitBucket.REST.API.Mappings.Converters
                 CreatedOn = source.CreatedOn.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture),
                 UpdatedOn = source.UpdatedOn.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture),
                 Id = source.Id,
-                CommentsCount = source.Properties?.CommentsCount ?? 0
+                CommentsCount = source.Properties?.CommentsCount ?? 0,
+                Participants = source.Participants.MapTo<List<Participant>>(),
+                Reviewers = source.Reviewers.Select(x=>x.User).MapTo<List<UserShort>>().ToList()
             };
+
+            pullRequest.Participants.AddRange(source.Reviewers.MapTo<List<Participant>>());//reviewers are part of participants in v2.0 - compatibility
+
             pullRequest.Links.Html = pullRequest.Links.Html ?? new Link() {Href = source.Links.Self.First().Href};
             return pullRequest;
         }
@@ -40,7 +46,7 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Title = source.Title,
                 Source = source.Source.MapTo<EnterpriseBranchSource>(),
                 Destination = source.Destination.MapTo<EnterpriseBranchSource>(),
-                Id = source.Id
+                Id = source.Id,
             };
         }
     }

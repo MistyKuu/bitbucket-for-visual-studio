@@ -39,7 +39,7 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
             if (fileDiff == null)
                 return HighlightMappings["xml"];
 
-            var splitted = fileDiff.From.Split('.');//todo this wont work if path contains .
+            var splitted = fileDiff.DisplayFileName.Split('.');//todo this wont work if path contains .
             if (splitted.Length < 2)
                 return HighlightMappings["xml"];
 

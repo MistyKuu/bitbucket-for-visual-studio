@@ -46,7 +46,7 @@ namespace BitBucket.REST.API.Helpers
 
         public static string PullRequestApprove(string owner, string repositoryName, long id)
         {
-            return $"projects/~{owner}/repos/{repositoryName}/pull-requests/{id}/participants/{owner}";
+            return $"projects/~{owner}/repos/{repositoryName}/pull-requests/{id}/approve";
         }
 
         public static string PullRequestCommits(string owner, string repositoryName, long id)
