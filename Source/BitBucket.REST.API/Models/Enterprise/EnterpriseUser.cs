@@ -4,6 +4,9 @@ namespace BitBucket.REST.API.Models.Enterprise
 {
     public class EnterpriseUser
     {
+        [JsonProperty(PropertyName = "key")]
+        public string Key { get; set; }
+
         [JsonProperty(PropertyName = "name")]
         public string Username { get; set; }
 

@@ -144,7 +144,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var mapped = data.MapTo<IteratorBasedPage<Commit>>();
 
             foreach (var commit in mapped.Values)
-                commit.CommitHref = $"{Connection.MainUrl}users/{ownerName}/repos/{repositoryName}/pull-requests/{id}/commits/{commit.Hash}";
+                commit.CommitHref = $"{Connection.MainUrl}projects/{ownerName}/repos/{repositoryName}/pull-requests/{id}/commits/{commit.Hash}";
 
             return mapped;
         }
@@ -159,6 +159,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var url = EnterpriseApiUrls.PullRequestActivities(ownerName, repositoryName, id);
             var activities = await RestClient.GetAllPages<EnterpriseCommentActivity>(url);
             var comments = activities.Values.Where(x => x.Action == "COMMENTED").Select(x => x.Comment).ToList();
+
 
             foreach (var comment in comments)
                 AssignCommentParent(comment);

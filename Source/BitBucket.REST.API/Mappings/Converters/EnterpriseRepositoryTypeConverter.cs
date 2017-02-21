@@ -14,7 +14,7 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Links = source.Links.MapTo<Links>(),
                 IsPrivate = !source.IsPublic,
                 ForkPolicy = source.Forkable != null && source.Forkable.Value ? "YES" : "NO", //todo check valid stirng
-                Owner = source.Project.Owner.MapTo<User>(),
+                Owner = new User() { Username = source.Project.Key },
                 Name = source.Name
             };
         }

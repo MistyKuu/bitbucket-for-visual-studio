@@ -6,19 +6,19 @@ namespace BitBucket.REST.API.Helpers
 {
     public static class EnterpriseApiUrls
     {
-        public static string Repositories(string login)
+        public static string Repositories(string ownerName)
         {
-            return $"projects/~{login}/repos";
+            return $"repos";
         }
 
-        public static string Branches(string login, string repoName)
+        public static string Branches(string ownerName, string repoName)
         {
-            return $"projects/~{login}/repos/{repoName}/branches";
+            return $"projects/{ownerName}/repos/{repoName}/branches";
         }
 
-        public static string Commits(string login, string repoName, string id)
+        public static string Commits(string ownerName, string repoName, string id)
         {
-            return $"projects/~{login}/repos/{repoName}/commits/{id}";
+            return $"projects/{ownerName}/repos/{repoName}/commits/{id}";
         }
 
         public static string User()
@@ -26,37 +26,37 @@ namespace BitBucket.REST.API.Helpers
             return "users";
         }
 
-        public static string PullRequests(string login, string repository)
+        public static string PullRequests(string ownerName, string repository)
         {
-            return $"projects/~{login}/repos/{repository}/pull-requests?state=ALL";
+            return $"projects/{ownerName}/repos/{repository}/pull-requests?state=ALL";
         }
-        public static string PullRequest(string login, string repository, long id)
+        public static string PullRequest(string ownerName, string repository, long id)
         {
-            return $"projects/~{login}/repos/{repository}/pull-requests/{id}";
+            return $"projects/{ownerName}/repos/{repository}/pull-requests/{id}";
         }
         public static string PullRequestsAuthors(string ownerName, string repositoryName)
         {
-            return $"projects/~{ownerName}/repos/{repositoryName}/participants";
+            return $"projects/{ownerName}/repos/{repositoryName}/participants";
         }
 
         public static string PullRequestDiff(string owner, string repositoryName, long id)
         {
-            return $"projects/~{owner}/repos/{repositoryName}/pull-requests/{id}/diff?CONTEXTLINES&SRCPATH&WHITESPACE&WITHCOMMENTS";
+            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/diff?CONTEXTLINES&SRCPATH&WHITESPACE&WITHCOMMENTS";
         }
 
         public static string PullRequestApprove(string owner, string repositoryName, long id)
         {
-            return $"projects/~{owner}/repos/{repositoryName}/pull-requests/{id}/approve";
+            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/approve";
         }
 
         public static string PullRequestCommits(string owner, string repositoryName, long id)
         {
-            return $"projects/~{owner}/repos/{repositoryName}/pull-requests/{id}/commits";
+            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/commits";
         }
 
         public static string PullRequestActivities(string owner, string repositoryName, long id)
         {
-            return $"projects/~{owner}/repos/{repositoryName}/pull-requests/{id}/activities";
+            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/activities";
         }
     }
 }
