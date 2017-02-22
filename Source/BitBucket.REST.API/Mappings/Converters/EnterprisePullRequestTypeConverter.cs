@@ -35,6 +35,8 @@ namespace BitBucket.REST.API.Mappings.Converters
             pullRequest.Participants.AddRange(source.Reviewers.MapTo<List<Participant>>());//reviewers are part of participants in v2.0 - compatibility
 
             pullRequest.Links.Html = pullRequest.Links.Html ?? new Link() {Href = source.Links.Self.First().Href};
+            pullRequest.Author.Links.Avatar = new Link() { Href = pullRequest.Author.Links.Self.Href + "/avatar.png" };
+
             return pullRequest;
         }
 

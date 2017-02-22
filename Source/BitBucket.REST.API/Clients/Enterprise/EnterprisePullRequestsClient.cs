@@ -144,9 +144,31 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var mapped = data.MapTo<IteratorBasedPage<Commit>>();
 
             foreach (var commit in mapped.Values)
+            {
                 commit.CommitHref = $"{Connection.MainUrl}projects/{ownerName}/repos/{repositoryName}/pull-requests/{id}/commits/{commit.Hash}";
+                if (commit.Author.User.Links.Avatar == null)
+                    await SetAuthorAvatar(commit);
+            }
 
             return mapped;
+        }
+
+        private async Task SetAuthorAvatar(Commit commit)
+        {
+            var req = new BitbucketRestRequest(EnterpriseApiUrls.User(commit.Author.User.Username), Method.GET);
+
+            var user = (await RestClient
+                .ExecuteTaskAsync<EnterpriseUser>(req))
+                .Data?
+                .MapTo<User>();
+
+            if (user != null)
+            {
+                commit.Author.User.Links.Avatar = new Link
+                {
+                    Href = user.Links.Self?.Href + "/avatar.png"
+                };
+            }
         }
 
         public async Task<IteratorBasedPage<Comment>> GetPullRequestComments(string repositoryName, long id)

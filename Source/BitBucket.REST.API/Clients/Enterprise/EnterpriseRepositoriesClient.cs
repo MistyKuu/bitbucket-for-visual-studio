@@ -16,21 +16,29 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
         }
 
-        public async Task<IteratorBasedPage<Repository>> GetRepositories()
-        {
-            return await GetRepositories(Connection.Credentials.Login);
-        }
-
         public async Task<IteratorBasedPage<Repository>> GetRepositories(string owner)
         {
-            var url = EnterpriseApiUrls.Repositories(owner);
+            return await GetRepositories();
+        }
+        
+        public async Task<IteratorBasedPage<Repository>> GetRepositories()
+        {
+            var url = EnterpriseApiUrls.Repositories();
             var repos = await RestClient.GetAllPages<EnterpriseRepository>(url);
             return repos.MapTo<IteratorBasedPage<Repository>>();
         }
 
+        public async Task<IteratorBasedPage<Repository>> GetRecentRepositories()
+        {
+            var url = EnterpriseApiUrls.RepositoriesRecent();
+            var repos = await RestClient.GetAllPages<EnterpriseRepository>(url);
+            return repos.MapTo<IteratorBasedPage<Repository>>();
+        }
+
+
         public async Task<Repository> CreateRepository(Repository repository)
         {
-            var url = EnterpriseApiUrls.Repositories(Connection.Credentials.Login);
+            var url = EnterpriseApiUrls.Repositories();
             var request = new BitbucketRestRequest(url, Method.POST);
             var enterpriseRepo = new EnterpriseRepository()
             {

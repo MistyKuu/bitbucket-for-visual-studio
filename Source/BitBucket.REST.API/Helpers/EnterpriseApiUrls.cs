@@ -6,9 +6,14 @@ namespace BitBucket.REST.API.Helpers
 {
     public static class EnterpriseApiUrls
     {
-        public static string Repositories(string ownerName)
+        public static string Repositories()
         {
             return $"repos";
+        }
+
+        public static string RepositoriesRecent()
+        {
+            return $"profile/recent/repos";
         }
 
         public static string Branches(string ownerName, string repoName)
@@ -21,9 +26,9 @@ namespace BitBucket.REST.API.Helpers
             return $"projects/{ownerName}/repos/{repoName}/commits/{id}";
         }
 
-        public static string User()
+        public static string User(string id)
         {
-            return "users";
+            return $"users/{id}";
         }
 
         public static string PullRequests(string ownerName, string repository)

@@ -13,11 +13,12 @@ namespace BitBucket.REST.API
 {
     public class BitbucketClientFactory : IBitbucketClientFactory
     {
-        public Task<IBitbucketClient> CreateEnterpriseBitBucketClient(Uri host, Credentials cred)
+        public async Task<IBitbucketClient> CreateEnterpriseBitBucketClient(Uri host, Credentials cred)
         {
             var apiConnection = new Connection(host, new Uri($"{host}rest/api/1.0/"), cred);
-            IBitbucketClient client = new EnterpriseBitbucketClient(apiConnection);
-            return Task.FromResult(client);
+            EnterpriseBitbucketClient client = new EnterpriseBitbucketClient(apiConnection);
+            await ((EnterpriseRepositoriesClient) client.RepositoriesClient).GetRecentRepositories();//will throw exception if not authenticated
+            return client;
         }
 
         public async Task<IBitbucketClient> CreateStandardBitBucketClient(Uri host, Credentials cred)

@@ -119,10 +119,12 @@
       <DependentUpon>RepositoryIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BaseMarkupExtensionConverter.cs" />
+    <Compile Include="Converters\BoolToNonVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\HumanizeDateTimeConverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
     <Compile Include="Converters\NegateVisibilityConverter.cs" />
+    <Compile Include="Converters\NegateBoolConverter.cs" />
     <Compile Include="Converters\NullToNonVisibilityConverter.cs" />
     <Compile Include="Converters\ShortCommitHashConverter.cs" />
     <Compile Include="Converters\SubstractConverter.cs" />

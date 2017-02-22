@@ -32,8 +32,9 @@
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">
-                <Grid Margin="0,5,0,0">
+                <Grid Margin="0,5,0,0" HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -42,23 +43,23 @@
                         <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="B"/>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="C" />
-                        <ColumnDefinition Width="*" MinWidth="100"/>
-                        <ColumnDefinition Width="Auto" SharedSizeGroup="D" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Image Width="30" Height="30" VerticalAlignment="Top" Source="{Binding Author.Links.Avatar.Href}" Margin="0,0,5,0"/>
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Author.DisplayName}" Margin="0,0,10,0" TextWrapping="Wrap"/>
-                    <!--<controls1:HyperlinkButton Grid.Row="0" Grid.Column="2" GoToLink="{Binding CommitHref}" HyperlinkForeground="CornflowerBlue"  HyperlinkContent="{Binding Hash, Converter={converters:ShortCommitHashConverter}}"/>-->
-                    <TextBlock Grid.Row="0" Grid.Column="2">
+                    <Image Width="30" Height="30" VerticalAlignment="Center" Source="{Binding Author.Links.Avatar.Href}" Margin="0,0,5,0"/>
+                    <TextBlock VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Text="{Binding Author.DisplayName}" Margin="0,0,10,0" TextWrapping="Wrap"/>
+                  
+                    <TextBlock Grid.Row="0" Grid.Column="2" VerticalAlignment="Center">
                          <Hyperlink NavigateUri="{Binding CommitHref}" RequestNavigate="GoToCommit">
                               <TextBlock Foreground="CornflowerBlue" Text="{Binding Hash, Converter={converters:ShortCommitHashConverter}}"/>
                         </Hyperlink>
                     </TextBlock>
 
+                    <TextBlock  VerticalAlignment="Center" Grid.Row="0" Grid.Column="3" Text="{Binding Date}" HorizontalAlignment="Right" />
 
-                    <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Message}" TextWrapping="Wrap" Margin="15,0,15,0"/>
-                    <TextBlock Grid.Row="0" Grid.Column="4" Text="{Binding Date}" HorizontalAlignment="Right" />
-                    <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"/>
+
+                    <TextBlock  Grid.Row="1" Grid.Column="1" Text="{Binding Message}" Grid.ColumnSpan="3" TextWrapping="Wrap" Margin="0,5,15,0"/>
+                    <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"/>
                 </Grid>
             </DataTemplate>
         </ResourceDictionary>
@@ -259,9 +260,9 @@
                         </TreeView.Resources>
                     </TreeView>
                 </controls:MetroTabItem>
-                <controls:MetroTabItem controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
+                <controls:MetroTabItem  controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ItemsControl Margin="5" Grid.IsSharedSizeScope="True" ItemsSource="{Binding Commits}" Focusable="False" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                        <ItemsControl HorizontalAlignment="Stretch" Margin="5" Grid.IsSharedSizeScope="True" ItemsSource="{Binding Commits}" Focusable="False" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                              >
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -403,11 +404,11 @@
 
                                 <StackPanel Orientation="Vertical" Margin="0,5,0,5">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
-                                        <TextBlock HorizontalAlignment="Stretch" Text="{Binding Comment.User.Username}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
+                                        <Image VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
+                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.Username}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
                                     </StackPanel>
 
-                                    <wpf:HtmlPanel Text="{Binding Comment.Content.DisplayHtml}" Background="Transparent" Margin="30,0,0,0" />
+                                    <wpf:HtmlPanel Text="{Binding Comment.Content.DisplayHtml}" Background="Transparent" Margin="30,-10,0,0" />
 
                                     <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.CreatedOn}" Foreground="Gray"></TextBlock>
                                 </StackPanel>

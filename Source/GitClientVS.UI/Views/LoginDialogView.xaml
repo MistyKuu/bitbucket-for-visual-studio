@@ -10,6 +10,7 @@
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
+             xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              mc:Ignorable="d" 
              Title=""
              Style="{DynamicResource DefaultMetroWindowStyle}"
@@ -127,12 +128,13 @@
         </Grid.Resources>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="1.2*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Height="60" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Rectangle Height="60" Width="330">
+        <StackPanel Height="30" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,15,0,0">
+            <Rectangle Height="25" Width="175">
                 <Rectangle.Fill>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource bitbucketLogo}"/>
                 </Rectangle.Fill>
@@ -140,8 +142,10 @@
             <TextBlock Text="&#xae;" Foreground="White" VerticalAlignment="Top"></TextBlock>
         </StackPanel>
         <!--<Image Source="../Images/BitbucketWhite.png"/>-->
-        
-        <Grid Grid.Row="1">
+
+        <Label Content="Please log in." Grid.Row="1" Foreground="White" HorizontalAlignment="Center" FontWeight="Bold" />
+
+        <Grid Grid.Row="2" Margin="50,0,50,5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -152,19 +156,21 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-
-            <Label Content="Please log in." Grid.Row="0" Foreground="White" HorizontalAlignment="Center" FontWeight="Bold"/>
-            <CheckBox Grid.Row="1" IsChecked="{bindings:ValidatedBinding IsEnterprise,Mode=TwoWay}" Content="Enterprise Server"/>
-            <TextBox Grid.Row="2" Style="{StaticResource ValidatedTextBoxStyle}" IsEnabled="{Binding IsEnterprise}"  controls:TextBoxHelper.Watermark="Server url" Margin="50,0,50,5"  Text="{bindings:ValidatedBinding Host}"/>
-            <TextBox  x:Name="LoginBox" Grid.Row="3" Style="{StaticResource ValidatedTextBoxStyle}"  controls:TextBoxHelper.Watermark="Login" Margin="50,0,50,5"  Text="{bindings:ValidatedBinding Login}"/>
+            <StackPanel Orientation="Horizontal" Margin="0,15" HorizontalAlignment="Center">
+                <RadioButton Margin="5" IsChecked="{Binding IsEnterprise, Mode=TwoWay,Converter={converters:NegateBoolConverter}}" GroupName="EnterpriseGroup" Content="Bitbucket" Foreground="White"/>
+                <RadioButton Margin="5" IsChecked="{Binding IsEnterprise, Mode=TwoWay}" GroupName="EnterpriseGroup" Content="Enterprise" Foreground="White"/>
+            </StackPanel>
+            
+            <TextBox Margin="3" Grid.Row="2" Style="{StaticResource ValidatedTextBoxStyle}" Visibility="{Binding IsEnterprise,Converter={converters:BoolToVisibilityConverter}}"  controls:TextBoxHelper.Watermark="Server url" Text="{bindings:ValidatedBinding Host}"/>
+            <TextBox Margin="3"  x:Name="LoginBox" Grid.Row="3" Style="{StaticResource ValidatedTextBoxStyle}"  controls:TextBoxHelper.Watermark="Login" Text="{bindings:ValidatedBinding Login}"/>
             <PasswordBox
+                Margin="3"
                 x:Name="PasswordBox"
                 PasswordChanged="PasswordBox_OnPasswordChanged"
                 Grid.Row="4"
                 controls:TextBoxHelper.Watermark="Password"
                 bindings:PasswordHelper.Attach="True" 
                 bindings:PasswordHelper.Password="{bindings:ValidatedBinding Password,Mode=TwoWay}"
-                Margin="50,0,50, 5"
                 >
                 <PasswordBox.Style>
                     <Style TargetType="PasswordBox" BasedOn="{StaticResource {x:Type PasswordBox}}">
@@ -173,8 +179,8 @@
                 </PasswordBox.Style>
                 </PasswordBox>
 
-            <Button IsDefault="True" Style="{StaticResource ConnectButtonStyle}" IsEnabled="True" Grid.Row="5"  Command="{Binding ConnectCommand}" Content="{x:Static ui:Resources.Connect}" HorizontalAlignment="Center"/>
-            <controls1:ErrorView  Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"  />
+            <Button Margin="3" IsDefault="True" Style="{StaticResource ConnectButtonStyle}" IsEnabled="True" Grid.Row="5"  Command="{Binding ConnectCommand}" Content="{x:Static ui:Resources.Connect}" HorizontalAlignment="Center"/>
+            <controls1:ErrorView  Grid.Row="6" Grid.Column="0"  />
             
         </Grid> 
     </Grid>

@@ -121,7 +121,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         [Required]
-        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateHost), ErrorMessage = "Url has to be valid and includes schema")]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateHost), ErrorMessage = "Url is not valid. It must include schema.")]
         public string Host
         {
             get { return _host; }

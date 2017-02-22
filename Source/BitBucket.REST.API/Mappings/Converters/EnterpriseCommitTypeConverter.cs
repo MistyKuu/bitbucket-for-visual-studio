@@ -10,16 +10,17 @@ namespace BitBucket.REST.API.Mappings.Converters
     {
         public Commit Convert(EnterpriseCommit source, Commit destination, ResolutionContext context)
         {
-            return new Commit()
+            var commit = new Commit()
             {
                 Author = new Author()
                 {
-                    User = source.Author.MapTo<UserShort>()
+                    User = source.Author.MapTo<UserShort>(),
                 },
                 Hash = source.Id,
                 Date = source.Date.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture),
                 Message = source.Message
             };
+            return commit;
         }
     }
 }
