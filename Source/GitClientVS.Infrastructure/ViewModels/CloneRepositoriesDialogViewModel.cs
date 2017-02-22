@@ -43,6 +43,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private GitRemoteRepository _selectedRepository;
         private string _clonePath;
         private bool _isLoading;
+        private string _filterRepoName;
+        private ReactiveList<GitRemoteRepository> _filteredRepositories;
 
 
         public bool IsLoading
@@ -100,6 +102,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             var gitClonePath = _gitService.GetDefaultRepoPath();
             ClonePath = !string.IsNullOrEmpty(gitClonePath) ? gitClonePath : Paths.DefaultRepositoryPath;
+
             SetupObservables();
         }
 
@@ -115,7 +118,30 @@ namespace GitClientVS.Infrastructure.ViewModels
             _cloneCommand.Subscribe(_ => OnClose());
             _choosePathCommand.Subscribe(_ => ChooseClonePath());
             this.WhenAnyValue(x => x.SelectedRepository).Subscribe(_ => InvalidateValidationCache());//todo why is it necessary?
+            this.WhenAnyValue(x => x.FilterRepoName, x => x.Repositories)
+                .Where(x => x.Item2 != null && x.Item2.Any())
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ =>
+                {
+                    FilteredRepositories = new ReactiveList<GitRemoteRepository>(Filter().OrderByDescending(x => x.Name));
+                });
         }
+
+        public string FilterRepoName
+        {
+            get { return _filterRepoName; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _filterRepoName, value);
+            }
+        }
+
+        public ReactiveList<GitRemoteRepository> FilteredRepositories
+        {
+            get { return _filteredRepositories; }
+            set { this.RaiseAndSetIfChanged(ref _filteredRepositories, value); }
+        }
+
         private void ChooseClonePath()
         {
             var result = _fileService.OpenDirectoryDialog(ClonePath);
@@ -167,6 +193,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             return Path.IsPathRooted(clonePath) && clonePath.IndexOfAny(Path.GetInvalidPathChars()) == -1;
         }
 
+        private IEnumerable<GitRemoteRepository> Filter()
+        {
+            return string.IsNullOrEmpty(FilterRepoName) ?
+                Repositories :
+                Repositories.Where(repo => repo.Name.Contains(FilterRepoName, StringComparison.InvariantCultureIgnoreCase));
+        }
 
         protected void OnClose()
         {
