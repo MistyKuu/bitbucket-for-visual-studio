@@ -133,6 +133,7 @@
       <Link>TeamFoundation\TeamExplorerBaseSection.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistryHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GitClientVS.Contracts\GitClientVS.Contracts.csproj">

@@ -89,7 +89,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _gitService = gitService;
             _fileService = fileService;
-            LocalPath = Paths.DefaultRepositoryPath;
+            var path = _gitService.GetDefaultRepoPath();
+            LocalPath = !string.IsNullOrEmpty(path) ? path : Paths.DefaultRepositoryPath;
 
             SetupObservables();
         }

@@ -97,7 +97,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _gitService = gitService;
             _fileService = fileService;
-            ClonePath = Paths.DefaultRepositoryPath;
+
+            var gitClonePath = _gitService.GetDefaultRepoPath();
+            ClonePath = !string.IsNullOrEmpty(gitClonePath) ? gitClonePath : Paths.DefaultRepositoryPath;
             SetupObservables();
         }
 

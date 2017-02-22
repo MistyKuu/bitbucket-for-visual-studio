@@ -9,5 +9,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
         void PublishRepository(GitRemoteRepository repository);
         string GetActiveBranchFromActiveRepository();
         string GetHeadCommitOfActiveBranch();
+        string GetDefaultRepoPath();
     }
 }

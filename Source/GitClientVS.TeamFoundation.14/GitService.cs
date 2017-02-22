@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using GitClientVS.Contracts.Interfaces.Services;
@@ -117,6 +118,18 @@ namespace GitClientVS.TeamFoundation
             }
 
             return activeRepository;
+        }
+
+        public string GetDefaultRepoPath()
+        {
+            try
+            {
+                return RegistryHelper.GetLocalClonePath();
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
         }
 
         private void SetRemote(Repository activeRepository, string cloneUrl)
