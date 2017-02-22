@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
@@ -72,6 +73,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         [Required(AllowEmptyStrings = false)]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathHasSelectedRepository), ErrorMessage = "Please select repository")]
         [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathNotExists), ErrorMessage = "Directory already exists")]
         [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathIsPath), ErrorMessage = "Clone Path must be a valid path")]
         public string ClonePath
@@ -117,14 +119,24 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _cloneCommand.Subscribe(_ => OnClose());
             _choosePathCommand.Subscribe(_ => ChooseClonePath());
-            this.WhenAnyValue(x => x.SelectedRepository).Subscribe(_ => InvalidateValidationCache());//todo why is it necessary?
+            this.WhenAnyValue(x => x.SelectedRepository).Subscribe(_ =>
+            {
+                var cp = ClonePath;
+                ClonePath = Guid.NewGuid().ToString();//temporary for validation TODO
+                ClonePath = cp;
+                InvalidateValidationCache();
+            });
             this.WhenAnyValue(x => x.FilterRepoName, x => x.Repositories)
+                .Throttle(TimeSpan.FromMilliseconds(200))
                 .Where(x => x.Item2 != null && x.Item2.Any())
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ =>
+                .Select(_ => Filter().OrderBy(x => x.Name))
+                .Subscribe(filteredRepos =>
                 {
-                    FilteredRepositories = new ReactiveList<GitRemoteRepository>(Filter().OrderByDescending(x => x.Name));
+                    FilteredRepositories = new ReactiveList<GitRemoteRepository>(filteredRepos);
+                    SelectedRepository = FilteredRepositories.FirstOrDefault();
                 });
+
         }
 
         public string FilterRepoName
@@ -165,7 +177,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task RefreshRepositories()
         {
             Repositories = await _gitClientService.GetAllRepositories();
-            SelectedRepository = Repositories.FirstOrDefault();
         }
 
         private IObservable<bool> CanExecuteCloneObservable()
@@ -178,6 +189,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool CanExecute()
         {
             return IsObjectValid();
+        }
+
+        
+
+        public bool ClonePathHasSelectedRepository(string clonePath)
+        {
+            return SelectedRepository != null;
         }
 
         public bool ClonePathNotExists(string clonePath)
