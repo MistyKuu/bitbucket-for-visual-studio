@@ -47,9 +47,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
-     
 
-        [Required]
+        [Required(AllowEmptyStrings = false)]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathHasSelectedRepositoryName), ErrorMessage = "Please enter repository name")]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathIsPath), ErrorMessage = "Clone Path must be a valid path")]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathNotExists), ErrorMessage = "Directory already exists")]
         public string LocalPath
         {
             get { return _localPath; }
@@ -74,6 +76,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _isPrivate; }
             set { this.RaiseAndSetIfChanged(ref _isPrivate, value); }
         }
+
+
 
 
         public ICommand CreateCommand => _createCommand;
@@ -103,6 +107,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void SetupObservables()
         {
             _createCommand.Subscribe(_ => OnClose());
+            this.WhenAnyValue(x => x.Name).Subscribe(_ =>
+            {
+                InvalidateValidationCache();
+            });
         }
 
 
@@ -127,6 +135,24 @@ namespace GitClientVS.Infrastructure.ViewModels
         protected void OnClose()
         {
             Closed?.Invoke(this, new EventArgs());
+        }
+
+        public bool ClonePathHasSelectedRepositoryName(string clonePath)
+        {
+            return !string.IsNullOrEmpty(Name);
+        }
+
+        public bool ClonePathNotExists(string clonePath)
+        {
+            if (string.IsNullOrEmpty(Name))
+                return false;
+
+            return !Directory.Exists(Path.Combine(clonePath, Name));
+        }
+
+        public bool ClonePathIsPath(string clonePath)
+        {
+            return Path.IsPathRooted(clonePath) && clonePath.IndexOfAny(Path.GetInvalidPathChars()) == -1;
         }
 
         public event EventHandler Closed;

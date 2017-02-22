@@ -157,8 +157,8 @@
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" Margin="0,15" HorizontalAlignment="Center">
-                <RadioButton Margin="5" IsChecked="{Binding IsEnterprise, Mode=TwoWay,Converter={converters:NegateBoolConverter}}" GroupName="EnterpriseGroup" Content="Bitbucket" Foreground="White"/>
-                <RadioButton Margin="5" IsChecked="{Binding IsEnterprise, Mode=TwoWay}" GroupName="EnterpriseGroup" Content="Enterprise" Foreground="White"/>
+                <RadioButton Margin="5" IsChecked="{Binding IsEnterprise, Mode=TwoWay,Converter={converters:NegateBoolConverter}}" GroupName="EnterpriseGroup" Content="Bitbucket Cloud" Foreground="White"/>
+                <RadioButton Margin="5" IsChecked="{Binding IsEnterprise, Mode=TwoWay}" GroupName="EnterpriseGroup" Content="Bitbucket Server" Foreground="White"/>
             </StackPanel>
             
             <TextBox Margin="3" Grid.Row="2" Style="{StaticResource ValidatedTextBoxStyle}" Visibility="{Binding IsEnterprise,Converter={converters:BoolToVisibilityConverter}}"  controls:TextBoxHelper.Watermark="Server url" Text="{bindings:ValidatedBinding Host}"/>

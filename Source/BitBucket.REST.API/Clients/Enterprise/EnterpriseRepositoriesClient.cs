@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Helpers;
@@ -38,7 +39,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         public async Task<Repository> CreateRepository(Repository repository)
         {
-            var url = EnterpriseApiUrls.Repositories();
+            var url = EnterpriseApiUrls.CreateRepositories(Connection.Credentials.Login);
             var request = new BitbucketRestRequest(url, Method.POST);
             var enterpriseRepo = new EnterpriseRepository()
             {
@@ -48,6 +49,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(enterpriseRepo), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<EnterpriseRepository>(request);
+
             return response.Data.MapTo<Repository>();
         }
 

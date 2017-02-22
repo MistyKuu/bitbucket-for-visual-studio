@@ -22,7 +22,7 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Avatar = source.Avatar?.FirstOrDefault()?.MapTo<Link>(),
                 Html = source.Html?.FirstOrDefault()?.MapTo<Link>(),
                 Following = source.Following?.FirstOrDefault()?.MapTo<Link>(),
-                Clone = source.Clone?.MapTo<List<Link>>(),
+                Clone = new List<Link>() { source.Clone.First(x => x.Name == "http").MapTo<Link>() }
             };
         }
 

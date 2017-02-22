@@ -18,7 +18,7 @@
              WindowTitleBrush="#004f83"
              Background="#004f83"
              SizeToContent="Height"
-             Width="300"          
+             Width="500"          
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:CreateRepositoriesDialogViewModel,IsDesignTimeCreatable=False}"  >
     <controls:MetroWindow.Resources>
         <ResourceDictionary>
@@ -27,7 +27,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:MetroWindow.Resources>
-    <Grid Margin="20">
+    <Grid Margin="50">
         <Grid.Resources>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MetroFlatButton}" />
         </Grid.Resources>
