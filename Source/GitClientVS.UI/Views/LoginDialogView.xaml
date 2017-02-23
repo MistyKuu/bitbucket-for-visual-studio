@@ -20,8 +20,8 @@
              WindowStartupLocation="CenterOwner"
              WindowTitleBrush="#004f83"
              Background="#004f83"
-             Width="400"
-             Height="420"       
+             Width="450"
+             Height="400"       
              FocusManager.FocusedElement="{Binding ElementName=LoginBox}"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:LoginDialogViewModel,IsDesignTimeCreatable=False}"  >
     <controls:MetroWindow.Resources>
@@ -133,7 +133,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Height="30" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,15,0,0">
+        <StackPanel Height="40" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,15,0,0">
             <Rectangle Height="25" Width="175">
                 <Rectangle.Fill>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource bitbucketLogo}"/>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Windows;
@@ -21,6 +22,13 @@ namespace GitClientVS.UI.Views
         {
             InitializeComponent();
             DataContext = vm;
+            var heightDescriptor = DependencyPropertyDescriptor.FromProperty(RowDefinition.HeightProperty, typeof(RowDefinition));
+            heightDescriptor.AddValueChanged(FirstRow, HeightChanged);
+        }
+
+        private void HeightChanged(object sender, EventArgs e)
+        {
+            FirstRow.MaxHeight = Double.PositiveInfinity;
         }
 
         private void GoToCommit(object sender, RequestNavigateEventArgs e)

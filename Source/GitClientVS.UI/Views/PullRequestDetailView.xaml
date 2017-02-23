@@ -59,7 +59,7 @@
 
 
                     <TextBlock  Grid.Row="1" Grid.Column="1" Text="{Binding Message}" Grid.ColumnSpan="3" TextWrapping="Wrap" Margin="0,5,15,0"/>
-                    <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"/>
+                    <Separator Height="0.5" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"/>
                 </Grid>
             </DataTemplate>
         </ResourceDictionary>
@@ -69,7 +69,7 @@
 
         <Grid x:Name="PrContent">
             <Grid.RowDefinitions>
-                <RowDefinition  Height="200"/>
+                <RowDefinition x:Name="FirstRow" Height="Auto"  MaxHeight="200"/>
                 <RowDefinition Height="3"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -162,7 +162,7 @@
                 </Grid>
             </ScrollViewer>
             
-            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch"/>
+            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" />
 
             <!--<Separator Height="3" Grid.Row="2" Margin="0, 4">
                 <Separator.Resources>
@@ -184,7 +184,7 @@
                 </Separator.Resources>
             </Separator>-->
 
-            <controls:MetroAnimatedTabControl Grid.Row="2" >
+            <controls:MetroAnimatedTabControl Grid.Row="2" Margin="0,0,0,20">
                 <controls:MetroAnimatedTabControl.Resources>
                     <Style TargetType="TextBlock"/>
                 </controls:MetroAnimatedTabControl.Resources>
@@ -408,7 +408,7 @@
                                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.Username}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
                                     </StackPanel>
 
-                                    <wpf:HtmlPanel Text="{Binding Comment.Content.DisplayHtml}" Background="Transparent" Margin="30,-10,0,0" />
+                                    <wpf:HtmlPanel Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.DisplayHtml}" Background="Transparent" Margin="30,-10,0,0" />
 
                                     <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.CreatedOn}" Foreground="Gray"></TextBlock>
                                 </StackPanel>
