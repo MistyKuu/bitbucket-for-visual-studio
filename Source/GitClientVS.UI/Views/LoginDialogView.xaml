@@ -20,7 +20,7 @@
              WindowStartupLocation="CenterOwner"
              WindowTitleBrush="#004f83"
              Background="#004f83"
-             Width="450"
+             Width="400"
              Height="400"       
              FocusManager.FocusedElement="{Binding ElementName=LoginBox}"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:LoginDialogViewModel,IsDesignTimeCreatable=False}"  >
