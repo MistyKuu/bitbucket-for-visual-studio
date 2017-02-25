@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
@@ -24,6 +25,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IPageNavigationService<IPullRequestsWindow> _pageNavigationService;
+        private readonly IEventAggregatorService _eventAggregator;
         private ReactiveCommand<Unit> _initializeCommand;
         private bool _isLoading;
         private string _errorMessage;
@@ -35,14 +37,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _Title;
         private bool _closeSourceBranch;
         private bool _isSync;
+        private string _message;
 
         public string PageTitle { get; } = "Create New Pull Request";
-
-        public bool IsSync
-        {
-            get { return _isSync; }
-            set { this.RaiseAndSetIfChanged(ref _isSync, value); }
-        }
 
         public string ErrorMessage
         {
@@ -57,20 +54,26 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         [Required]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateBranches), ErrorMessage = "Branches must be different")]
         public GitBranch SourceBranch
         {
             get { return _sourceBranch; }
             set { this.RaiseAndSetIfChanged(ref _sourceBranch, value); }
         }
 
-        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateDestinationBranch), ErrorMessage = "Branches must be different")]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateBranches), ErrorMessage = "Branches must be different")]
+        [Required]
         public GitBranch DestinationBranch
         {
             get { return _destinationBranch; }
             set { this.RaiseAndSetIfChanged(ref _destinationBranch, value); }
         }
 
-
+        public string Message
+        {
+            get { return _message; }
+            set { this.RaiseAndSetIfChanged(ref _message, value); }
+        }
 
         public string Description
         {
@@ -94,6 +97,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
         public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
+        public string GitClientType => _gitClientService.GitClientType;
 
         public bool IsLoading
         {
@@ -108,13 +112,23 @@ namespace GitClientVS.Infrastructure.ViewModels
         public CreatePullRequestsViewModel(
             IGitClientService gitClientService,
             IGitService gitService,
-            IPageNavigationService<IPullRequestsWindow> pageNavigationService
+            IPageNavigationService<IPullRequestsWindow> pageNavigationService,
+            IEventAggregatorService eventAggregator
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _pageNavigationService = pageNavigationService;
+            _eventAggregator = eventAggregator;
             CloseSourceBranch = false;
+            SetupObservables();
+        }
+
+        private void SetupObservables()
+        {
+            _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
+                .SelectMany(async _ => await _initializeCommand.ExecuteAsync())
+                .Subscribe();
         }
 
         public void InitializeCommands()
@@ -143,18 +157,25 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var activeRepo = _gitService.GetActiveRepository();
             var activeBranch = _gitService.GetActiveBranchFromActiveRepository();
-            var lastCommit = _gitService.GetHeadCommitOfActiveBranch();
 
             Branches = (await _gitClientService.GetBranches(activeRepo.Name, activeRepo.Owner)).ToList();
             SourceBranch = Branches.FirstOrDefault(x => x.Name.Equals(activeBranch, StringComparison.InvariantCultureIgnoreCase));
 
             if (SourceBranch != null)
             {
-                IsSync = SourceBranch.Target.Hash == lastCommit;
+                var lastCommit = _gitService.GetHeadCommitOfActiveBranch();
+                Message = SourceBranch.Target.Hash == lastCommit
+                    ? string.Empty
+                    : $"Warning! Your local branch {activeBranch} is out of sync with a remote branch.";
+            }
+            else
+            {
+                SourceBranch = Branches.FirstOrDefault();
+                Message = $"Warning! Your local branch {activeBranch} is not a remote branch.";
             }
 
 
-            DestinationBranch = Branches.FirstOrDefault();
+            DestinationBranch = Branches.FirstOrDefault(x => x.Name != SourceBranch?.Name);
         }
 
         private IObservable<bool> CanLoadPullRequests()
@@ -170,14 +191,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool CanExecute()
         {
             return IsObjectValid() &&
-                   !string.IsNullOrEmpty(SourceBranch.Name) &&
-                   !string.IsNullOrEmpty(DestinationBranch.Name);
+                   !string.IsNullOrEmpty(SourceBranch?.Name) &&
+                   !string.IsNullOrEmpty(DestinationBranch?.Name);
 
         }
 
-        public bool ValidateDestinationBranch(GitBranch destBranch)
+        public bool ValidateBranches(GitBranch destBranch)
         {
-            return destBranch.Name != SourceBranch.Name;
+            return DestinationBranch?.Name != SourceBranch?.Name;
         }
     }
 }

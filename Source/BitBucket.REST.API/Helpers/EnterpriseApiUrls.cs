@@ -11,6 +11,11 @@ namespace BitBucket.REST.API.Helpers
             return $"repos";
         }
 
+        public static string Teams()
+        {
+            return $"groups";
+        }
+
         public static string CreateRepositories(string ownerName)
         {
             return $"users/{ownerName}/repos";

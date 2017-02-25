@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,7 +81,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             _nextCommand = ReactiveCommand.Create(_pageNavigationService.CanNavigateForwardObservable);
             _nextCommand.Subscribe(_ => _pageNavigationService.NavigateForward());
             this.WhenAnyValue(x => x.CurrentView).Where(x => x != null).Subscribe(_ => CurrentViewModel = CurrentView.DataContext as IWithPageTitle);
-            _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>().Subscribe(_ => OnClosed());
+            _eventAggregator
+                .GetEvent<ActiveRepositoryChangedEvent>()
+                .Where(x => x.ActiveRepository?.Name != x.PreviousRepository?.Name)
+                .Select(x => Unit.Default)
+                .Merge(_eventAggregator.GetEvent<ConnectionChangedEvent>().Select(x => Unit.Default))
+                .Subscribe(_ => OnClosed());
             var repo = _gitService.GetActiveRepository();
             ActiveRepository = repo.Owner + '/' + repo.Name;
             _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(ev => CurrentTheme = ev.Theme);

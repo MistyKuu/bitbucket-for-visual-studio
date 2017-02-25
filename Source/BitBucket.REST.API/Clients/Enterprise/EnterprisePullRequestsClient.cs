@@ -60,57 +60,12 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var url = EnterpriseApiUrls.PullRequestDiff(owner, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await RestClient.ExecuteTaskAsync<EnterpriseDiffResponse>(request);
-            var fileDiffs = new List<FileDiff>();
-            foreach (var diff in response.Data.Diffs)
-            {
-                var fileDiff = new FileDiff
-                {
-                    From = diff.Source?.String,
-                    To = diff.Destination?.String,
-                    Chunks = new List<ChunkDiff>(),
-                };
-
-                fileDiff.Type = fileDiff.From == null
-                    ? FileChangeType.Add
-                    : fileDiff.To == null ? FileChangeType.Delete : FileChangeType.Modified;
-
-                fileDiffs.Add(fileDiff);
-
-                foreach (var diffHunk in diff.Hunks)
-                {
-                    var chunkDiff = new ChunkDiff()
-                    {
-                        Changes = new List<LineDiff>(),
-                    };
-                    fileDiff.Chunks.Add(chunkDiff);
-
-                    foreach (var segment in diffHunk.Segments)
-                    {
-                        foreach (var line in segment.Lines)
-                        {
-                            var ld = new LineDiff()
-                            {
-                                Content = line.Text,
-                                OldIndex = segment.Type == "ADDED" ? null : (int?)line.Source,
-                                NewIndex = segment.Type == "REMOVED" ? null : (int?)line.Destination,
-                                Type = segment.Type == "ADDED"
-                                    ? LineChangeType.Add
-                                    : segment.Type == "REMOVED"
-                                        ? LineChangeType.Delete
-                                        : LineChangeType.Normal
-                            };
-
-                            chunkDiff.Changes.Add(ld);
-                        }
-                    }
-
-                    fileDiff.Additions = fileDiff.Chunks.Sum(y => y.Changes.Count(z => z.Add));
-                    fileDiff.Deletions = fileDiff.Chunks.Sum(y => y.Changes.Count(z => z.Delete));
-                }
-            }
+            var fileDiffs = ParseFileDiffs(response);
 
             return fileDiffs;
         }
+
+      
 
         public async Task<Participant> ApprovePullRequest(string repositoryName, long id)
         {
@@ -225,6 +180,59 @@ namespace BitBucket.REST.API.Clients.Enterprise
                 child.Parent = new EnterpriseParent() { Id = parent.Id };
                 AssignCommentParent(child);
             }
+        }
+
+        private static List<FileDiff> ParseFileDiffs(IRestResponse<EnterpriseDiffResponse> response)
+        {
+            var fileDiffs = new List<FileDiff>();
+            foreach (var diff in response.Data.Diffs)
+            {
+                var fileDiff = new FileDiff
+                {
+                    From = diff.Source?.String,
+                    To = diff.Destination?.String,
+                    Chunks = new List<ChunkDiff>(),
+                };
+
+                fileDiff.Type = fileDiff.From == null
+                    ? FileChangeType.Add
+                    : fileDiff.To == null ? FileChangeType.Delete : FileChangeType.Modified;
+
+                fileDiffs.Add(fileDiff);
+
+                foreach (var diffHunk in diff.Hunks)
+                {
+                    var chunkDiff = new ChunkDiff()
+                    {
+                        Changes = new List<LineDiff>(),
+                    };
+                    fileDiff.Chunks.Add(chunkDiff);
+
+                    foreach (var segment in diffHunk.Segments)
+                    {
+                        foreach (var line in segment.Lines)
+                        {
+                            var ld = new LineDiff()
+                            {
+                                Content = line.Text,
+                                OldIndex = segment.Type == "ADDED" ? null : (int?)line.Source,
+                                NewIndex = segment.Type == "REMOVED" ? null : (int?)line.Destination,
+                                Type = segment.Type == "ADDED"
+                                    ? LineChangeType.Add
+                                    : segment.Type == "REMOVED"
+                                        ? LineChangeType.Delete
+                                        : LineChangeType.Normal
+                            };
+
+                            chunkDiff.Changes.Add(ld);
+                        }
+                    }
+
+                    fileDiff.Additions = fileDiff.Chunks.Sum(y => y.Changes.Count(z => z.Add));
+                    fileDiff.Deletions = fileDiff.Chunks.Sum(y => y.Changes.Count(z => z.Delete));
+                }
+            }
+            return fileDiffs;
         }
     }
 }

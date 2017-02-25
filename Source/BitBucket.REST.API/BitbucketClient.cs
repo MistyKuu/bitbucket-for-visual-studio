@@ -17,6 +17,7 @@ namespace BitBucket.REST.API
         public IUserClient UserClient { get; }
         public IPullRequestsClient PullRequestsClient { get; }
         public Connection ApiConnection { get; }
+        public BitBucketType BitBucketType { get; } = BitBucketType.Standard;
 
         public BitbucketClient(Connection apiConnection, Connection internalConnection)
         {

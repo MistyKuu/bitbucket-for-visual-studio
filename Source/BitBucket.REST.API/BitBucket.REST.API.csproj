@@ -59,6 +59,7 @@
     <Compile Include="Authentication\OAuthAuthenticator.cs" />
     <Compile Include="BitbucketClient.cs" />
     <Compile Include="BitbucketClientFactory.cs" />
+    <Compile Include="BitBucketType.cs" />
     <Compile Include="Clients\ApiClient.cs" />
     <Compile Include="Clients\Enterprise\EnterpriseRepositoriesClient.cs" />
     <Compile Include="Clients\Enterprise\EnterpriseTeamsClient.cs" />

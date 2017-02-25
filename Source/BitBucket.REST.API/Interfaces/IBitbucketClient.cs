@@ -10,5 +10,6 @@ namespace BitBucket.REST.API.Interfaces
         IUserClient UserClient { get; }
         IPullRequestsClient PullRequestsClient { get; }
         Connection ApiConnection { get; }
+        BitBucketType BitBucketType { get; }
     }
 }

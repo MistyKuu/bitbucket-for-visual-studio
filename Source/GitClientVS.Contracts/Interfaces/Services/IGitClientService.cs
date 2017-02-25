@@ -9,6 +9,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
 {
     public interface IGitClientService
     {
+        string GitClientType { get; }
         string Title { get; }
         string Origin { get; }
         Task LoginAsync(GitCredentials gitCredentials);

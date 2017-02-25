@@ -59,9 +59,9 @@ namespace GitClientVS.TeamFoundation
             get { return activeRepo; }
             private set
             {
+                var previousRepo = activeRepo;
                 activeRepo = value;
-
-                eventAggregatorService.Publish(new ActiveRepositoryChangedEvent(value));
+                eventAggregatorService.Publish(new ActiveRepositoryChangedEvent(value, previousRepo));
             }
         }
     }

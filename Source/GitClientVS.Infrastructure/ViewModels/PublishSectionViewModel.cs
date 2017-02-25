@@ -76,7 +76,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _repositoryName, value); }
         }
 
-        [Required]
         public string Description
         {
             get { return _description; }
@@ -124,6 +123,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 this.RaiseAndSetIfChanged(ref _selectedOwner, value);
             }
         }
+        public string GitClientType => _gitClientService.GitClientType;
 
 
         public void InitializeCommands()

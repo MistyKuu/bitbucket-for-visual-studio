@@ -15,7 +15,8 @@ namespace BitBucket.REST.API
         public IUserClient UserClient { get; }
         public IPullRequestsClient PullRequestsClient { get; }
         public Connection ApiConnection { get; }
-        
+        public BitBucketType BitBucketType { get; } = BitBucketType.Enterprise;
+
         public EnterpriseBitbucketClient(Connection apiConnection)
         {
             ApiConnection = apiConnection;

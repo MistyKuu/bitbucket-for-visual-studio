@@ -77,8 +77,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _isPrivate, value); }
         }
 
-
-
+        public string GitClientType => _gitClientService.GitClientType;
 
         public ICommand CreateCommand => _createCommand;
         public IEnumerable<IReactiveCommand> ThrowableCommands => new List<IReactiveCommand> { _createCommand };

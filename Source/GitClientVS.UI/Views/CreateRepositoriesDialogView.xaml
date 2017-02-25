@@ -27,16 +27,21 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:MetroWindow.Resources>
-    <Grid Margin="50">
+    <Grid Margin="50,0,50,50">
         <Grid.Resources>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MetroFlatButton}" />
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Grid Margin="20">
+            <Label Content="Create your own Bitbucket Repository." Foreground="White" HorizontalAlignment="Center" FontWeight="Bold" />
+        </Grid>
+        
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -46,11 +51,22 @@
             </Grid.RowDefinitions>
 
             <TextBox Grid.Row="0" Margin="5" controls:TextBoxHelper.Watermark="Name" Text="{bindings:ValidatedBinding Name}" Style="{StaticResource ValidatedTextBoxStyle}"/>
-            <TextBox Grid.Row="1" Margin="5" controls:TextBoxHelper.Watermark="Description" Text="{bindings:ValidatedBinding Description}" Style="{StaticResource ValidatedTextBoxStyle}"/>
+            <TextBox Grid.Row="1" Margin="5" controls:TextBoxHelper.Watermark="Description" Text="{bindings:ValidatedBinding Description}" MinLines="3" AcceptsReturn="True" MaxHeight="100">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource ValidatedTextBoxStyle}">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding GitClientType}" Value="Enterprise">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style> 
+            </TextBox>
             <TextBox Grid.Row="2" Margin="5" controls:TextBoxHelper.Watermark="Local path" Text="{bindings:ValidatedBinding LocalPath}" Style="{StaticResource ValidatedTextBoxStyle}"/>
             <CheckBox Grid.Row="3" Margin="5" Foreground="White"  IsChecked="{Binding IsPrivate,Mode=TwoWay}" Content="{x:Static ui:Resources.IsPrivateRepo}"/>
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

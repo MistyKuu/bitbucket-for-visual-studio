@@ -5,9 +5,11 @@ namespace GitClientVS.Contracts.Events
     public class ActiveRepositoryChangedEvent
     {
         public GitRemoteRepository ActiveRepository { get; set; }
+        public GitRemoteRepository PreviousRepository { get; set; }
 
-        public ActiveRepositoryChangedEvent(GitRemoteRepository activeRepository)
+        public ActiveRepositoryChangedEvent(GitRemoteRepository activeRepository,GitRemoteRepository previousRepository)
         {
+            PreviousRepository = previousRepository;
             ActiveRepository = activeRepository;
         }
     }

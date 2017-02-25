@@ -59,7 +59,7 @@
 
             <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <controls1:BranchIcon />
-                <ComboBox SelectedItem="{bindings:ValidatedBinding SourceBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name" IsEnabled="False"/>
+                <ComboBox SelectedItem="{bindings:ValidatedBinding SourceBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name"/>
                 <TextBlock Margin="0,0,5,0" Text="&#x2794;" VerticalAlignment="Center" />
                 <controls1:BranchIcon />
                 <ComboBox SelectedItem="{bindings:ValidatedBinding DestinationBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name">
@@ -84,27 +84,24 @@
 
                 <TextBox Grid.Row="1" Text="{bindings:ValidatedBinding Title}" controls:TextBoxHelper.Watermark="Title" />
                 <TextBox Grid.Row="2" Text="{bindings:ValidatedBinding Description}" controls:TextBoxHelper.Watermark="Description" AcceptsReturn="True" MinLines="3"/>
-                <CheckBox Grid.Row="3" VerticalAlignment="Center" IsChecked="{Binding CloseSourceBranch,Mode=TwoWay}" Content="Close Source Branch?"/>
+                <CheckBox Grid.Row="3" VerticalAlignment="Center" IsChecked="{Binding CloseSourceBranch,Mode=TwoWay}" Content="Close Source Branch?">
+                    <CheckBox.Style>
+                        <Style TargetType="CheckBox" >
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding GitClientType}" Value="Enterprise">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </CheckBox.Style>
+                </CheckBox>
                 <Button Grid.Row="3" Margin="5" Command="{Binding CreateNewPullRequestCommand}" HorizontalAlignment="Right" Content="{x:Static ui:Resources.Create}" >
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource MetroFlatButton}"/>
                     </Button.Style>
                 </Button>
-                <TextBlock Grid.Row="4" Foreground="Red" HorizontalAlignment="Center" TextWrapping="Wrap">
-                    <TextBlock.Resources>
-                        <Style TargetType="TextBlock">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsSync}" Value="True">
-                                    <Setter Property="Visibility" Value="Hidden"></Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Resources>
-                    <Run Text="Warning!"></Run>
-                    <Run Text="Your local branch"></Run>
-                    <Run Text="{Binding SourceBranch.Name}" FontWeight="Bold"></Run>
-                    <Run Text="is out of sync with remote branch."></Run>
-                </TextBlock>
+                <TextBlock Grid.Row="4" Foreground="Red" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Message}"/>
             </Grid>
 
             <Separator Grid.Row="2"/>

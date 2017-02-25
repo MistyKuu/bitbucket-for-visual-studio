@@ -30,6 +30,7 @@ namespace GitClientVS.Services
         private IBitbucketClient _bitbucketClient;
 
         public bool IsConnected => _bitbucketClient != null;
+        public string GitClientType => _bitbucketClient?.BitBucketType.ToString();
 
         [ImportingConstructor]
         public BitbucketService(IEventAggregatorService eventAggregator)
@@ -214,6 +215,5 @@ namespace GitClientVS.Services
             var commits = await _bitbucketClient.PullRequestsClient.GetPullRequestComments(repositoryName, ownerName, id);
             return commits.Values.MapTo<List<GitComment>>();
         }
-
     }
 }
