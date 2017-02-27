@@ -29,7 +29,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+                
             </ResourceDictionary.MergedDictionaries>
+
+            <BitmapImage x:Key="DefaultAvatar" UriSource="pack://application:,,,/GitClientVS.UI;component/Images/defaultAva.png" />
 
             <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">
                 <Grid Margin="0,5,0,0" HorizontalAlignment="Stretch">
@@ -46,7 +49,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Image Width="30" Height="30" VerticalAlignment="Center" Source="{Binding Author.Links.Avatar.Href}" Margin="0,0,5,0"/>
+                    <Image Width="30" Height="30" VerticalAlignment="Center" Margin="0,0,5,0" Source="{Binding Author.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}"/>
                     <TextBlock VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Text="{Binding Author.DisplayName}" Margin="0,0,10,0" TextWrapping="Wrap"/>
                   
                     <TextBlock Grid.Row="0" Grid.Column="2" VerticalAlignment="Center">

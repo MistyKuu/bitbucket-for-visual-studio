@@ -11,6 +11,9 @@ namespace GitClientVS.Infrastructure.Utils
     {
         public static DateTime GetDate(string date)
         {
+            if (string.IsNullOrEmpty(date))
+                return DateTime.MaxValue;
+
             return DateTime.Parse(date, CultureInfo.InvariantCulture).ToLocalTime();
         }
     }

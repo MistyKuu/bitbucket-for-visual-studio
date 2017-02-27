@@ -65,9 +65,7 @@ namespace BitBucket.REST.API.Wrappers
                 throw new ForbiddenException(response.ErrorMessage);
             }
 
-            if (response.StatusCode == HttpStatusCode.BadRequest
-                || response.StatusCode == HttpStatusCode.NotFound
-                || response.StatusCode == HttpStatusCode.InternalServerError)
+            if (((int)response.StatusCode) >= 400)
             {
                 var errorMessage = response.ErrorMessage;
                 var friendly = false;
@@ -86,6 +84,9 @@ namespace BitBucket.REST.API.Wrappers
 
                 throw new RequestFailedException(errorMessage, friendly);
             }
+
+
+
 
         }
 

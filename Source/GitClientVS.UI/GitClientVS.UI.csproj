@@ -348,6 +348,9 @@
     <Resource Include="Images\arrow_forward.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\defaultAva.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Entypo-license.txt" />
     <None Include="Resources\luki.png" />
     <None Include="Resources\PullRequest_24x.png" />

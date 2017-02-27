@@ -65,14 +65,6 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
             var result = branches.MapTo<IteratorBasedPage<Branch>>();
 
-            foreach (var branch in result.Values)
-            {
-                var commitsUrl = EnterpriseApiUrls.Commits(owner, repoName, branch.Target.Hash);//todo find a better way to do it
-                var request = new BitbucketRestRequest(commitsUrl, Method.GET);
-                branch.Target = (await RestClient.ExecuteTaskAsync<EnterpriseCommit>(request)).Data.MapTo<Commit>();
-            }
-
-
             return result;
         }
     }

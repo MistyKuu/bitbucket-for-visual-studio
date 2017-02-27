@@ -54,14 +54,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         [Required]
-        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateBranches), ErrorMessage = "Branches must be different")]
+      
         public GitBranch SourceBranch
         {
             get { return _sourceBranch; }
             set { this.RaiseAndSetIfChanged(ref _sourceBranch, value); }
         }
 
-        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateBranches), ErrorMessage = "Branches must be different")]
+       
         [Required]
         public GitBranch DestinationBranch
         {
@@ -129,6 +129,22 @@ namespace GitClientVS.Infrastructure.ViewModels
             _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
                 .SelectMany(async _ => await _initializeCommand.ExecuteAsync())
                 .Subscribe();
+
+            this.WhenAnyValue(x => x.SourceBranch)
+                .Where(x => x != null)
+                .Subscribe(_ =>
+                {
+                    if (SourceBranch.Name != _gitService.GetActiveBranchFromActiveRepository())
+                    {
+                        Message = String.Empty;
+                        return;
+                    }
+
+                    var lastCommit = _gitService.GetHeadCommitOfActiveBranch();
+                    Message = SourceBranch.Target.Hash == lastCommit
+                        ? string.Empty
+                        : $"Warning! Your local branch {SourceBranch.Name} is out of sync with a remote branch.";
+                });
         }
 
         public void InitializeCommands()
@@ -159,22 +175,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             var activeBranch = _gitService.GetActiveBranchFromActiveRepository();
 
             Branches = (await _gitClientService.GetBranches(activeRepo.Name, activeRepo.Owner)).ToList();
-            SourceBranch = Branches.FirstOrDefault(x => x.Name.Equals(activeBranch, StringComparison.InvariantCultureIgnoreCase));
-
-            if (SourceBranch != null)
-            {
-                var lastCommit = _gitService.GetHeadCommitOfActiveBranch();
-                Message = SourceBranch.Target.Hash == lastCommit
-                    ? string.Empty
-                    : $"Warning! Your local branch {activeBranch} is out of sync with a remote branch.";
-            }
-            else
-            {
-                SourceBranch = Branches.FirstOrDefault();
-                Message = $"Warning! Your local branch {activeBranch} is not a remote branch.";
-            }
-
-
+            SourceBranch = Branches.FirstOrDefault( x => x.Name.Equals(activeBranch, StringComparison.InvariantCultureIgnoreCase))
+                           ?? Branches.FirstOrDefault();
+            
             DestinationBranch = Branches.FirstOrDefault(x => x.Name != SourceBranch?.Name);
         }
 
@@ -192,11 +195,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             return IsObjectValid() &&
                    !string.IsNullOrEmpty(SourceBranch?.Name) &&
-                   !string.IsNullOrEmpty(DestinationBranch?.Name);
-
+                   !string.IsNullOrEmpty(DestinationBranch?.Name) &&
+                   ValidateBranches();
         }
 
-        public bool ValidateBranches(GitBranch destBranch)
+        public bool ValidateBranches()
         {
             return DestinationBranch?.Name != SourceBranch?.Name;
         }

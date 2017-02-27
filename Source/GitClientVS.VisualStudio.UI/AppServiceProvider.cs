@@ -81,7 +81,7 @@ namespace GitClientVS.VisualStudio.UI
             string contract = AttributedModelServices.GetContractName(type);
             //TODO we don't have to match it with assembly and version as long as we don't support vs multiple versions i.e 14.0 and 15.0
             return _appExportProvider
-                .GetExportedValues<object>(contract)
+                .GetExportedValues<object>(contract)//TODO below condition is wrong?
                 .FirstOrDefault(x => !contract.StartsWith("GitClientVS.", StringComparison.OrdinalIgnoreCase) || x.GetType().Assembly.GetName().Version == _currentVersion);
         }
 

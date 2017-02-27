@@ -65,7 +65,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return fileDiffs;
         }
 
-      
+
 
         public async Task<Participant> ApprovePullRequest(string repositoryName, long id)
         {
@@ -112,17 +112,20 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
             var req = new BitbucketRestRequest(EnterpriseApiUrls.User(commit.Author.User.Username), Method.GET);
 
-            var user = (await RestClient
-                .ExecuteTaskAsync<EnterpriseUser>(req))
-                .Data?
-                .MapTo<User>();
-
-            if (user != null)
+            try
             {
+                var user = (await RestClient
+                              .ExecuteTaskAsync<EnterpriseUser>(req))
+                              .Data?
+                              .MapTo<User>();
+
                 commit.Author.User.Links.Avatar = new Link
                 {
                     Href = user.Links.Self?.Href + "/avatar.png"
                 };
+            }
+            catch (Exception e)
+            {
             }
         }
 
