@@ -21,6 +21,7 @@ using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using log4net;
 using log4net.Config;
+using GitClientVS.Infrastructure.Extensions;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
@@ -39,7 +40,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _host;
         private bool _isEnterprise;
-        private string _lastEnterpriseHost;
 
         public ICommand ConnectCommand => _connectCommand;
         public IEnumerable<IReactiveCommand> ThrowableCommands => new List<IReactiveCommand> { _connectCommand };
@@ -61,7 +61,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             _eventAggregator = eventAggregator;
             _gitClientService = gitClientService;
             _userInformationService = userInformationService;
-            Host = BitbucketConsts.OfficialHost.ToString();
             IsEnterprise = false;
             SetupObservables();
         }
@@ -69,11 +68,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void SetupObservables()
         {
             _connectCommand.Subscribe(_ => OnClose());
-            this.WhenAnyValue(x => x.IsEnterprise).Subscribe(_ =>
-            {
-                Host = IsEnterprise ? _lastEnterpriseHost : BitbucketConsts.OfficialHost.ToString();
-            });
-            this.WhenAnyValue(x => x.Host).Where(_ => IsEnterprise).Subscribe(_ => { _lastEnterpriseHost = Host; });
+            this.WhenAnyValue(x => x.IsEnterprise).Subscribe(_ => ForcePropertyValidation(nameof(Host)));
         }
 
 
@@ -84,7 +79,15 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task Connect()
         {
-            await _gitClientService.LoginAsync(new GitCredentials() { Login = Login, Password = Password, Host = new Uri(Host), IsEnterprise = IsEnterprise });
+            var cred = new GitCredentials()
+            {
+                Login = Login,
+                Password = Password,
+                Host = IsEnterprise ? new Uri(Host) : null,
+                IsEnterprise = IsEnterprise
+            };
+
+            await _gitClientService.LoginAsync(cred);
         }
 
 
@@ -95,7 +98,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private bool CanExecute()
         {
-            return IsObjectValid() && IsNotOfficialIfEnterpriseSelected(Host);
+            return IsObjectValid();
         }
 
 
@@ -120,8 +123,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _isEnterprise, value); }
         }
 
-        [Required]
-        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ValidateHost), ErrorMessage = "Url is not valid. It must include schema.")]
+        [ValidatesViaMethod(AllowBlanks = true, AllowNull = true, Name = nameof(ValidateHost), ErrorMessage = "Url is not valid. It must include schema.")]
         public string Host
         {
             get { return _host; }
@@ -134,13 +136,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
-        public bool IsNotOfficialIfEnterpriseSelected(string host)
-        {
-            return !(IsEnterprise && !string.IsNullOrEmpty(host) && host.StartsWith(BitbucketConsts.OfficialHost.ToString(), StringComparison.InvariantCultureIgnoreCase));
-        }
-
         public bool ValidateHost(string host)
         {
+            if (!IsEnterprise)
+                return true;
+
             Uri outUri;
 
             return (Uri.TryCreate(host, UriKind.Absolute, out outUri) &&

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,12 @@ namespace GitClientVS.Infrastructure.Extensions
                     yield return element;
                 }
             }
+        }
+
+        public static string GetPropertyName<T, TResult>(this Expression<Func<T, TResult>> expression)
+        {
+            var member = expression.Body as MemberExpression;
+            return member?.Member?.Name;
         }
 
         public static void AddOrUpdate<K, V>(this ConcurrentDictionary<K, V> dictionary, K key, V value)

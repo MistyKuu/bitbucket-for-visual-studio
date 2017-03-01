@@ -203,7 +203,7 @@
             // ignore possible time stamp
             var t = new Regex(@"\t.*|\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d(.\d+)?\s(\+|-)\d\d\d\d").Match(s);
             if (t.Success)
-            {
+            { 
                 s = s.Substring(0, t.Index).Trim();
             }
 

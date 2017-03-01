@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ReactiveUI;
 using Splat;
+using GitClientVS.Infrastructure.Extensions;
 
 namespace GitClientVS.Infrastructure
 {
@@ -47,6 +48,7 @@ namespace GitClientVS.Infrastructure
 
             });
         }
+
 
         [IgnoreDataMember]
         public string Error
@@ -90,6 +92,8 @@ namespace GitClientVS.Infrastructure
         }
 
 
+      
+
         public bool IsObjectValid()
         {
             if (_validationCache.Count == _validatedPropertyCount.Value)
@@ -125,6 +129,12 @@ namespace GitClientVS.Infrastructure
         protected void InvalidateValidationCache()
         {
             _validationCache.Clear();
+        }
+
+        public void ForcePropertyValidation(string property)
+        {
+            this.RaisePropertyChanging(property);
+            this.RaisePropertyChanged(property);
         }
 
         [IgnoreDataMember]

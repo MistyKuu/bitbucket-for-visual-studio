@@ -27,13 +27,11 @@ namespace GitClientVS.Infrastructure.Extensions
                 });
             }
 
-            var reactiveValidated = vm as ReactiveValidatedObject; // todo don't show at the beginning
-            reactiveValidated?.Changed.Take(1).Subscribe(__ =>
+            var reactiveValidated = vm as ReactiveValidatedObject; // todo don't show at the beginning, play with initializable
+
+            reactiveValidated?.ValidationObservable.Subscribe(_ =>
             {
-                reactiveValidated?.ValidationObservable.Subscribe(_ =>
-                {
-                    vm.ErrorMessage = reactiveValidated.Errors.FirstOrDefault();
-                });
+                vm.ErrorMessage = reactiveValidated.Errors.FirstOrDefault();
             });
         }
 

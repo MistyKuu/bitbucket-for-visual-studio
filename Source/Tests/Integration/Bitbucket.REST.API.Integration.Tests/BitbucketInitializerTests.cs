@@ -29,7 +29,7 @@ namespace Bitbucket.REST.API.Integration.Tests
 
             var bitbucketInitializer = new BitbucketClientFactory();
 
-            var bitbucketClient = await bitbucketInitializer.CreateStandardBitBucketClient(CredentialsHelper.TestsCredentials.HostUrl, credentials);
+            var bitbucketClient = await bitbucketInitializer.CreateStandardBitBucketClient(credentials);
 
             Assert.AreEqual(CredentialsHelper.TestsCredentials.Username, bitbucketClient.ApiConnection.Credentials.Login);
         }
@@ -41,7 +41,7 @@ namespace Bitbucket.REST.API.Integration.Tests
             var credentials = new Credentials(CredentialsHelper.TestsCredentials.Email, "asadaszx");
             var bitbucketInitializer = new BitbucketClientFactory();
 
-            Assert.ThrowsAsync<AuthorizationException>(() => bitbucketInitializer.CreateStandardBitBucketClient(CredentialsHelper.TestsCredentials.HostUrl, credentials));
+            Assert.ThrowsAsync<AuthorizationException>(() => bitbucketInitializer.CreateStandardBitBucketClient(credentials));
 
         }
     }

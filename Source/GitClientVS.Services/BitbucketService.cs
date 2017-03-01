@@ -73,7 +73,7 @@ namespace GitClientVS.Services
             var credentials = new Credentials(gitCredentials.Login, gitCredentials.Password);
 
             if (!gitCredentials.IsEnterprise)
-                return await bitbucketClientFactory.CreateStandardBitBucketClient(gitCredentials.Host, credentials);
+                return await bitbucketClientFactory.CreateStandardBitBucketClient(credentials);
             else
                 return await bitbucketClientFactory.CreateEnterpriseBitBucketClient(gitCredentials.Host, credentials);
         }

@@ -121,7 +121,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
                 commit.Author.User.Links.Avatar = new Link
                 {
-                    Href = user.Links.Self?.Href + "/avatar.png"
+                    Href = user.Links.Self.Href + "/avatar.png"
                 };
             }
             catch (Exception e)

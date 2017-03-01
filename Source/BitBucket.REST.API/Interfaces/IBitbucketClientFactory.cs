@@ -7,6 +7,6 @@ namespace BitBucket.REST.API.Interfaces
     public interface IBitbucketClientFactory
     {
         Task<IBitbucketClient> CreateEnterpriseBitBucketClient(Uri host, Credentials cred);
-        Task<IBitbucketClient> CreateStandardBitBucketClient(Uri host, Credentials cred);
+        Task<IBitbucketClient> CreateStandardBitBucketClient(Credentials cred);
     }
 }

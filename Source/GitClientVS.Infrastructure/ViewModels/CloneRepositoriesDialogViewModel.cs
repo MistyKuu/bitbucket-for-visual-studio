@@ -119,13 +119,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _cloneCommand.Subscribe(_ => OnClose());
             _choosePathCommand.Subscribe(_ => ChooseClonePath());
-            this.WhenAnyValue(x => x.SelectedRepository).Subscribe(_ =>
-            {
-                var cp = ClonePath;
-                ClonePath = Guid.NewGuid().ToString();//temporary for validation TODO
-                ClonePath = cp;
-                InvalidateValidationCache();
-            });
+            this.WhenAnyValue(x => x.SelectedRepository).Subscribe(_ => ForcePropertyValidation(nameof(ClonePath)));
             this.WhenAnyValue(x => x.FilterRepoName, x => x.Repositories)
                 .Throttle(TimeSpan.FromMilliseconds(200))
                 .Where(x => x.Item2 != null && x.Item2.Any())
@@ -191,7 +185,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             return IsObjectValid();
         }
 
-        
+
 
         public bool ClonePathHasSelectedRepository(string clonePath)
         {
