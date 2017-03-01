@@ -8,16 +8,19 @@ using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Serializers;
 using RestSharp;
+using log4net;
 
 namespace BitBucket.REST.API.Wrappers
 {
     public abstract class BitbucketRestClientBase : RestClient
     {
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         protected Connection Connection;
 
         protected BitbucketRestClientBase(Connection connection) : base(connection.ApiUrl)
         {
             Connection = connection;
+
             var serializer = new NewtonsoftJsonSerializer();
             this.AddHandler("application/json", serializer);
             this.AddHandler("text/json", serializer);
@@ -37,6 +40,7 @@ namespace BitBucket.REST.API.Wrappers
 
         public override async Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)
         {
+            Logger.Info($"Calling ExecuteTaskAsync. BaseUrl: {BaseUrl} Resource: {request.Resource}");
             request.AddHeader("X-Atlassian-Token", " no-check");
             var response = await base.ExecuteTaskAsync<T>(request);
             response = await RedirectIfNeededAndGetResponse(response, request);
@@ -46,6 +50,7 @@ namespace BitBucket.REST.API.Wrappers
 
         public override async Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
         {
+            Logger.Info($"Calling ExecuteTaskAsync. BaseUrl: {BaseUrl} Resource: {request.Resource}");
             request.AddHeader("X-Atlassian-Token", " no-check");
             var response = await base.ExecuteTaskAsync(request);
             response = await RedirectIfNeededAndGetResponse(response, request);
@@ -84,9 +89,6 @@ namespace BitBucket.REST.API.Wrappers
 
                 throw new RequestFailedException(errorMessage, friendly);
             }
-
-
-
 
         }
 

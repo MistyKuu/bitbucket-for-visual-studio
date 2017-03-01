@@ -8,13 +8,18 @@ using BitBucket.REST.API.Interfaces;
 using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.Wrappers;
+using log4net;
 
 namespace BitBucket.REST.API
 {
     public class BitbucketClientFactory : IBitbucketClientFactory
     {
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public async Task<IBitbucketClient> CreateEnterpriseBitBucketClient(Uri host, Credentials cred)
         {
+            Logger.Info($"Calling CreateEnterpriseBitBucketClient. Host: {host}");
+
             var apiConnection = new Connection(host, new Uri(host, "rest/api/1.0"), cred);
             EnterpriseBitbucketClient client = new EnterpriseBitbucketClient(apiConnection);
             await ((EnterpriseRepositoriesClient)client.RepositoriesClient).GetRecentRepositories();//will throw exception if not authenticated
@@ -23,6 +28,8 @@ namespace BitBucket.REST.API
 
         public async Task<IBitbucketClient> CreateStandardBitBucketClient(Credentials cred)
         {
+            Logger.Info($"Calling CreateStandardBitBucketClient.");
+
             var host = new Uri("https://bitbucket.org");
             var apiConnection = new Connection(host, new Uri($"{host.Scheme}://api.{host.Host}/2.0/"), cred);
             var client = new BitbucketRestClient(apiConnection);
