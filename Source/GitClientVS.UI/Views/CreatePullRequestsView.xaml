@@ -62,21 +62,7 @@
                 <ComboBox SelectedItem="{bindings:ValidatedBinding SourceBranch,Mode=TwoWay}" ItemsSource="{Binding LocalBranches}" >
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock>
-                                <Run Text="{Binding Name}"/>
-                                <Run>
-                                    <Run.Style>
-                                        <Style TargetType="Run">
-                                            <Setter Property="Text" Value=""/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding TrackedBranch}" Value="{x:Null}">
-                                                    <Setter Property="Text" Value=" (local)"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Run.Style>
-                                    </Run>
-                            </TextBlock>
+                            <TextBlock Text="{Binding Name}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                     <Validation.ErrorTemplate>

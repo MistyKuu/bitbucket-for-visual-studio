@@ -38,6 +38,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _Title;
         private bool _closeSourceBranch;
         private string _message;
+        private GitRemoteRepository _currentRepo;
 
         public string PageTitle { get; } = "Create New Pull Request";
 
@@ -133,20 +134,26 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void SetupObservables()
         {
             _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
-                .SelectMany(async _ => await _initializeCommand.ExecuteAsync())
+                .SelectMany(async _ =>
+                {
+                    return await _initializeCommand.ExecuteAsync();
+                })
                 .Subscribe();
 
             this.WhenAnyValue(x => x.SourceBranch)
                 .Where(x => x != null)
                 .Subscribe(_ =>
                 {
-                    var currentBranch = RemoteBranches.FirstOrDefault(x => SourceBranch.Name == x.Name);
-                    if (currentBranch == null)
+                    if (string.IsNullOrEmpty(SourceBranch.TrackedBranchName))
                         Message = $"Warning! Selected branch {SourceBranch.Name} is not a remote branch.";
-                    else if (currentBranch.Target.Hash != SourceBranch.Target.Hash)
-                        Message = $"Warning! Selected branch {SourceBranch.Name} is out of sync with a remote branch.";
                     else
-                        Message = string.Empty;
+                    {
+                        var remoteBranch = _currentRepo.Branches.FirstOrDefault(x => SourceBranch.TrackedBranchName == "origin/" + x.Name);
+                        if (remoteBranch?.Target.Hash != SourceBranch.Target.Hash)
+                            Message = $"Warning! Selected branch {SourceBranch.Name} is out of sync with a remote branch.";
+                        else
+                            Message = string.Empty;
+                    }
                 });
         }
 
@@ -164,20 +171,19 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CreateNewPullRequest()
         {
-            var currentRepo = _gitService.GetActiveRepository();
             var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.Name, DestinationBranch.Name)
             {
                 CloseSourceBranch = CloseSourceBranch
             };
-            await _gitClientService.CreatePullRequest(gitPullRequest, currentRepo.Name, currentRepo.Owner);
+            await _gitClientService.CreatePullRequest(gitPullRequest, _currentRepo.Name, _currentRepo.Owner);
         }
 
         private async Task LoadBranches()
         {
-            var activeRepo = _gitService.GetActiveRepository();
+            _currentRepo = _gitService.GetActiveRepository();
 
-            LocalBranches = activeRepo.Branches.Where(x => !x.IsRemote).OrderBy(x => x.Name).ToList();
-            RemoteBranches = (await _gitClientService.GetBranches(activeRepo.Name, activeRepo.Owner)).OrderBy(x => x.Name).ToList();
+            LocalBranches = _currentRepo.Branches.Where(x => !x.IsRemote).OrderBy(x => x.Name).ToList();
+            RemoteBranches = (await _gitClientService.GetBranches(_currentRepo.Name, _currentRepo.Owner)).OrderBy(x => x.Name).ToList();
 
             SourceBranch = LocalBranches.FirstOrDefault(x => x.IsHead);
             DestinationBranch = RemoteBranches.FirstOrDefault(x => x.Name != SourceBranch?.Name);
