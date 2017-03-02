@@ -14,7 +14,7 @@ namespace BitBucket.REST.API.Models.Enterprise
         public string DisplayName { get; set; }
 
         [JsonProperty(PropertyName = "emailAddress")]
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
 
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }

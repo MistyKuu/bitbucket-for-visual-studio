@@ -98,30 +98,29 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var data = await RestClient.GetAllPages<EnterpriseCommit>(url);
             var mapped = data.MapTo<IteratorBasedPage<Commit>>();
 
+
+            var authors = await GetAuthors(repositoryName, ownerName);
+
             foreach (var commit in mapped.Values)
             {
                 commit.CommitHref = $"{Connection.MainUrl}projects/{ownerName}/repos/{repositoryName}/pull-requests/{id}/commits/{commit.Hash}";
                 if (commit.Author.User.Links.Avatar == null)
-                    await SetAuthorAvatar(commit);
+                    SetAuthorAvatar(commit, authors.Values);
             }
 
             return mapped;
         }
 
-        private async Task SetAuthorAvatar(Commit commit)
+        private void SetAuthorAvatar(Commit commit, List<UserShort> participants)
         {
-            var req = new BitbucketRestRequest(EnterpriseApiUrls.User(commit.Author.User.Username), Method.GET);
 
             try
             {
-                var user = (await RestClient
-                              .ExecuteTaskAsync<EnterpriseUser>(req))
-                              .Data?
-                              .MapTo<User>();
+                var participant = participants.FirstOrDefault(x => x.Email == commit.Author.User.Email);
 
                 commit.Author.User.Links.Avatar = new Link
                 {
-                    Href = user.Links.Self.Href + "/avatar.png"
+                    Href = participant.Links.Self.Href + "/avatar.png"
                 };
             }
             catch (Exception e)

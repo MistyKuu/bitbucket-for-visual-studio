@@ -12,5 +12,7 @@ namespace BitBucket.REST.API.Models.Standard
 
         [JsonProperty(PropertyName = "links")]
         public Links Links { get; set; }
+
+        public string Email { get; set; }
     }
 }
