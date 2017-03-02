@@ -118,10 +118,11 @@ namespace BitBucket.REST.API.Clients.Enterprise
             {
                 var participant = participants.FirstOrDefault(x => x.Email == commit.Author.User.Email);
 
-                commit.Author.User.Links.Avatar = new Link
-                {
-                    Href = participant.Links.Self.Href + "/avatar.png"
-                };
+                if (participant != null)
+                    commit.Author.User.Links.Avatar = new Link
+                    {
+                        Href = participant.Links.Self.Href + "/avatar.png"
+                    };
             }
             catch (Exception e)
             {
