@@ -38,7 +38,9 @@ namespace GitClientVS.Infrastructure.Mappings
                 .ForMember(dto => dto.IsFile, e => e.MapFrom(o => o.Inline != null));
 
             CreateMap<Content, GitCommentContent>();
-            CreateMap<Branch, GitBranch>();
+            CreateMap<Branch, GitBranch>()
+                .ForMember(dto => dto.IsRemote, e => e.MapFrom(o => true));
+
             CreateMap<User, GitUser>();
             CreateMap<UserShort, GitUser>();
             CreateMap<Links, GitLinks>();

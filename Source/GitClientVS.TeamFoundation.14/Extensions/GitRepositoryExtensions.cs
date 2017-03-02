@@ -27,15 +27,27 @@ namespace GitClientVS.TeamFoundation.Extensions
                     var repoUri = new Uri(repoUrl);
                     repoName = repoUri.Segments.Last().TrimEnd('/').TrimEnd(".git");
                     ownerName = (repoUri.Segments[repoUri.Segments.Length - 2] ?? "").TrimEnd('/');
-                } catch (Exception)
+                }
+                catch (Exception)
                 {
                     // probably ssh remote
                     return null;
                 }
-             
+
             }
-          
-            return new GitRemoteRepository(repoName, ownerName, repoUrl);
+            var branches = repo.Branches
+                .Select(x => new GitBranch()
+                {
+                    Name = x.FriendlyName,
+                    IsRemote = x.IsRemote,
+                    IsHead = x.IsCurrentRepositoryHead,
+                    TrackedBranchName = x.TrackedBranch?.FriendlyName,
+                    Target = new GitCommit() { Hash = x.Tip?.Sha }
+                })
+                .ToList();
+
+            var repository = new GitRemoteRepository(repoName, ownerName, repoUrl, branches);
+            return repository;
         }
     }
 }

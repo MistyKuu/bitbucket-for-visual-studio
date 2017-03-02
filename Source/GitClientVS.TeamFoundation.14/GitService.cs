@@ -13,6 +13,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TeamFoundation.Git.Extensibility;
 using CloneOptions = Microsoft.TeamFoundation.Git.Controls.Extensibility.CloneOptions;
+using System.Collections.Generic;
 
 namespace GitClientVS.TeamFoundation
 {
@@ -53,17 +54,6 @@ namespace GitClientVS.TeamFoundation
             };
         }
 
-        public string GetActiveBranchFromActiveRepository()
-        {
-            return GetRepository().Head.FriendlyName;
-        }
-
-        public string GetHeadCommitOfActiveBranch()
-        {
-            var repo = GetRepository();
-            return repo?.Head?.Tip?.Sha;
-        }
-
         public GitRemoteRepository GetActiveRepository()
         {
             _gitService = _appServiceProvider.GetService<IGitExt>();
@@ -74,6 +64,7 @@ namespace GitClientVS.TeamFoundation
         public void CloneRepository(string cloneUrl, string repositoryName, string repositoryPath)
         {
             var gitExt = _appServiceProvider.GetService<IGitRepositoriesExt>();
+            
             string path = Path.Combine(repositoryPath, repositoryName);
 
             Directory.CreateDirectory(path);

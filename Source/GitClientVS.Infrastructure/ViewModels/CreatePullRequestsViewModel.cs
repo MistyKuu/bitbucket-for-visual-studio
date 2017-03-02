@@ -30,13 +30,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _isLoading;
         private string _errorMessage;
         private ReactiveCommand<Unit> _createNewPullRequestCommand;
-        private IEnumerable<GitBranch> _branches;
+        private IEnumerable<GitBranch> _remoteBranches;
+        private IEnumerable<GitBranch> _localBranches;
         private GitBranch _sourceBranch;
         private GitBranch _destinationBranch;
         private string _description;
         private string _Title;
         private bool _closeSourceBranch;
-        private bool _isSync;
         private string _message;
 
         public string PageTitle { get; } = "Create New Pull Request";
@@ -47,21 +47,27 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
-        public IEnumerable<GitBranch> Branches
+        public IEnumerable<GitBranch> LocalBranches
         {
-            get { return _branches; }
-            set { this.RaiseAndSetIfChanged(ref _branches, value); }
+            get { return _localBranches; }
+            set { this.RaiseAndSetIfChanged(ref _localBranches, value); }
+        }
+
+        public IEnumerable<GitBranch> RemoteBranches
+        {
+            get { return _remoteBranches; }
+            set { this.RaiseAndSetIfChanged(ref _remoteBranches, value); }
         }
 
         [Required]
-      
+
         public GitBranch SourceBranch
         {
             get { return _sourceBranch; }
             set { this.RaiseAndSetIfChanged(ref _sourceBranch, value); }
         }
 
-       
+
         [Required]
         public GitBranch DestinationBranch
         {
@@ -134,16 +140,13 @@ namespace GitClientVS.Infrastructure.ViewModels
                 .Where(x => x != null)
                 .Subscribe(_ =>
                 {
-                    if (SourceBranch.Name != _gitService.GetActiveBranchFromActiveRepository())
-                    {
-                        Message = String.Empty;
-                        return;
-                    }
-
-                    var lastCommit = _gitService.GetHeadCommitOfActiveBranch();
-                    Message = SourceBranch.Target.Hash == lastCommit
-                        ? string.Empty
-                        : $"Warning! Your local branch {SourceBranch.Name} is out of sync with a remote branch.";
+                    var currentBranch = RemoteBranches.FirstOrDefault(x => SourceBranch.Name == x.Name);
+                    if (currentBranch == null)
+                        Message = $"Warning! Selected branch {SourceBranch.Name} is not a remote branch.";
+                    else if (currentBranch.Target.Hash != SourceBranch.Target.Hash)
+                        Message = $"Warning! Selected branch {SourceBranch.Name} is out of sync with a remote branch.";
+                    else
+                        Message = string.Empty;
                 });
         }
 
@@ -172,13 +175,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task LoadBranches()
         {
             var activeRepo = _gitService.GetActiveRepository();
-            var activeBranch = _gitService.GetActiveBranchFromActiveRepository();
 
-            Branches = (await _gitClientService.GetBranches(activeRepo.Name, activeRepo.Owner)).ToList();
-            SourceBranch = Branches.FirstOrDefault( x => x.Name.Equals(activeBranch, StringComparison.InvariantCultureIgnoreCase))
-                           ?? Branches.FirstOrDefault();
-            
-            DestinationBranch = Branches.FirstOrDefault(x => x.Name != SourceBranch?.Name);
+            LocalBranches = activeRepo.Branches.Where(x => !x.IsRemote).OrderBy(x => x.Name).ToList();
+            RemoteBranches = (await _gitClientService.GetBranches(activeRepo.Name, activeRepo.Owner)).OrderBy(x => x.Name).ToList();
+
+            SourceBranch = LocalBranches.FirstOrDefault(x => x.IsHead);
+            DestinationBranch = RemoteBranches.FirstOrDefault(x => x.Name != SourceBranch?.Name);
         }
 
         private IObservable<bool> CanLoadPullRequests()

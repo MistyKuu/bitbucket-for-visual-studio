@@ -59,10 +59,35 @@
 
             <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <controls1:BranchIcon />
-                <ComboBox SelectedItem="{bindings:ValidatedBinding SourceBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name"/>
+                <ComboBox SelectedItem="{bindings:ValidatedBinding SourceBranch,Mode=TwoWay}" ItemsSource="{Binding LocalBranches}" >
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Run Text="{Binding Name}"/>
+                                <Run>
+                                    <Run.Style>
+                                        <Style TargetType="Run">
+                                            <Setter Property="Text" Value=""/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding TrackedBranch}" Value="{x:Null}">
+                                                    <Setter Property="Text" Value=" (local)"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Run.Style>
+                                    </Run>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <AdornedElementPlaceholder />
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+                </ComboBox>
                 <TextBlock Margin="0,0,5,0" Text="&#x2794;" VerticalAlignment="Center" />
                 <controls1:BranchIcon />
-                <ComboBox SelectedItem="{bindings:ValidatedBinding DestinationBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name">
+                <ComboBox SelectedItem="{bindings:ValidatedBinding DestinationBranch,Mode=TwoWay}" ItemsSource="{Binding RemoteBranches}" DisplayMemberPath="Name">
                  <Validation.ErrorTemplate>
                         <ControlTemplate>
                             <AdornedElementPlaceholder />

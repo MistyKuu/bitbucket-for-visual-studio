@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GitClientVS.Contracts.Models.GitClientModels
 {
+
     public class  GitRemoteRepository
     {
         public string Name { get; set; }
@@ -16,25 +17,19 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public bool? IsForked { get; set; }
         public string Owner { get; set; }
         public string CloneUrl { get; set; }
+        public List<GitBranch> Branches { get; set; }
 
         public GitRemoteRepository()
         {
             
         }
 
-        public GitRemoteRepository(string name, string description, string owner, bool isPrivate)
-        {
-            Name = name;
-            Description = description;
-            Owner = owner;
-            IsPrivate = isPrivate;
-        }
-
-        public GitRemoteRepository(string name, string owner, string cloneUrl)
+        public GitRemoteRepository(string name, string owner, string cloneUrl, List<GitBranch> branches)
         {
             Name = name;
             Owner = owner;
             CloneUrl = cloneUrl;
+            Branches = branches;
         }
     }
 }

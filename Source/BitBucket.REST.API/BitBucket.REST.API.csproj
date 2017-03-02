@@ -128,6 +128,7 @@
     <Compile Include="Models\Standard\Content.cs" />
     <Compile Include="Models\Enterprise\EnterpriseIteratorBasedPage.cs" />
     <Compile Include="Models\Standard\Error.cs" />
+    <Compile Include="Models\Standard\ErrorField.cs" />
     <Compile Include="Models\Standard\ErrorWrapper.cs" />
     <Compile Include="Models\Standard\Inline.cs" />
     <Compile Include="Models\Standard\IteratorBasedPage.cs" />

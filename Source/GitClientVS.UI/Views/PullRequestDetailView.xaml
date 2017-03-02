@@ -35,11 +35,11 @@
             <BitmapImage x:Key="DefaultAvatar" UriSource="pack://application:,,,/GitClientVS.UI;component/Images/defaultAva.png" />
 
             <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">
-                <Grid Margin="0,5,0,0" HorizontalAlignment="Stretch">
+                <Grid HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" SharedSizeGroup="SeparatorRow"/>
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -59,10 +59,8 @@
                     </TextBlock>
 
                     <TextBlock  VerticalAlignment="Center" Grid.Row="0" Grid.Column="3" Text="{Binding Date}" HorizontalAlignment="Right" />
-
-
                     <TextBlock  Grid.Row="1" Grid.Column="1" Text="{Binding Message}" Grid.ColumnSpan="3" TextWrapping="Wrap" Margin="0,5,15,0"/>
-                    <Separator Height="0.5" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"/>
+                    <Border Grid.Row="2"  Grid.ColumnSpan="4" Background="White" BorderBrush="LightGray" BorderThickness="0,1,0,0" Height="1"/>
                 </Grid>
             </DataTemplate>
         </ResourceDictionary>

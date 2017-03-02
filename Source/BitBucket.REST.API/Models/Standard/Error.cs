@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace BitBucket.REST.API.Models.Standard
 {
@@ -6,5 +7,8 @@ namespace BitBucket.REST.API.Models.Standard
     {
         [JsonProperty(PropertyName = "message")]
         public string Message { get; set; }
+
+        [JsonProperty(PropertyName = "fields")]
+        public ErrorField Fields { get; set; }
     }
 }

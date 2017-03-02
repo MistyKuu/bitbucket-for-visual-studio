@@ -106,10 +106,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void SetupObservables()
         {
             _createCommand.Subscribe(_ => OnClose());
-            this.WhenAnyValue(x => x.Name).Subscribe(_ =>
-            {
-                InvalidateValidationCache();
-            });
+            this.WhenAnyValue(x => x.Name).Subscribe(_ => ForcePropertyValidation(nameof(LocalPath)));
         }
 
 

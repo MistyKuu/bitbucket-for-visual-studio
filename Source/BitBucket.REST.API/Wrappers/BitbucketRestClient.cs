@@ -6,6 +6,7 @@ using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Serializers;
 using RestSharp;
+using System.Linq;
 
 namespace BitBucket.REST.API.Wrappers
 {
@@ -45,7 +46,12 @@ namespace BitBucket.REST.API.Wrappers
         protected override string DeserializeError(IRestResponse response)
         {
             var serializer = new NewtonsoftJsonSerializer();
-            return serializer.Deserialize<ErrorWrapper>(response.Content).Error.Message;
+            var error = serializer.Deserialize<ErrorWrapper>(response.Content).Error;
+            var message = error.Message;
+            if (error.Fields?.Source != null)
+                message += ". " + string.Join(",", error.Fields?.Source);
+
+            return message;
         }
     }
 }
