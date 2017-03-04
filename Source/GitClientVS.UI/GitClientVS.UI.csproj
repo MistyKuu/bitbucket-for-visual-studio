@@ -116,6 +116,7 @@
     <Compile Include="Controls\RepositoryIcon.xaml.cs">
       <DependentUpon>RepositoryIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BranchNameConverter.cs" />
     <Compile Include="Converters\BaseMarkupExtensionConverter.cs" />
     <Compile Include="Converters\BoolToNonVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />

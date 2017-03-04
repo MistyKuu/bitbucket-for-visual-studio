@@ -50,7 +50,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Width="30" Height="30" VerticalAlignment="Center" Margin="0,0,5,0" Source="{Binding Author.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}"/>
-                    <TextBlock VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Text="{Binding Author.DisplayName}" Margin="0,0,10,0" TextWrapping="Wrap"/>
+                    <TextBlock VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Text="{Binding Author.Username}" Margin="0,0,10,0" TextWrapping="Wrap" FontWeight="Bold" Foreground="CornflowerBlue"/>
                   
                     <TextBlock Grid.Row="0" Grid.Column="2" VerticalAlignment="Center">
                          <Hyperlink NavigateUri="{Binding CommitHref}" RequestNavigate="GoToCommit">
@@ -58,7 +58,7 @@
                         </Hyperlink>
                     </TextBlock>
 
-                    <TextBlock  VerticalAlignment="Center" Grid.Row="0" Grid.Column="3" Text="{Binding Date}" HorizontalAlignment="Right" />
+                    <TextBlock  VerticalAlignment="Center" Grid.Row="0" Grid.Column="3" Text="{Binding Date}" HorizontalAlignment="Right" Foreground="Gray"/>
                     <TextBlock  Grid.Row="1" Grid.Column="1" Text="{Binding Message}" Grid.ColumnSpan="3" TextWrapping="Wrap" Margin="0,5,15,0"/>
                     <Border Grid.Row="2"  Grid.ColumnSpan="4" Background="White" BorderBrush="LightGray" BorderThickness="0,1,0,0" Height="1"/>
                 </Grid>
@@ -108,10 +108,10 @@
                                 <TextBlock Margin="5,0,5,0"  Text="{Binding PullRequest.Status}"></TextBlock>
                                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                                 <controls1:BranchIcon Margin="5,0,0,0"/>
-                                <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.SourceBranch}"/>
+                                <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.SourceBranch,Converter={converters:BranchNameConverter}}"/>
                                 <TextBlock Margin="0,0,5,0" Text="&#x2794;" />
                                 <controls1:BranchIcon />
-                                <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.DestinationBranch}"/>
+                                <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.DestinationBranch,Converter={converters:BranchNameConverter}}"/>
                             </WrapPanel>
                         </Grid>
                         
@@ -360,7 +360,7 @@
                                                     <RowDefinition Height="Auto"/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
-                                                <Border x:Name="Bd" BorderBrush="Gray" BorderThickness="0,1,0,0" Background="{TemplateBinding Background}" Grid.Column="0" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                                <Border x:Name="Bd" BorderBrush="Gray" BorderThickness="0,0,0,0.5" Background="{TemplateBinding Background}" Grid.Column="0" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
                                                     <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                                 </Border>
                                                 <ItemsPresenter Margin="40,0,0,0"  x:Name="ItemsHost" Grid.Column="0" Grid.Row="1"/>

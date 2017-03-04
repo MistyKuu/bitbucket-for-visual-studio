@@ -74,7 +74,7 @@
                             <TextBlock Grid.Column="0" Margin="0,0,7,0" FontWeight="Bold" Foreground="#3572b0" Text="{Binding Title}"  TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
                             <TextBlock  Grid.Column="1" Margin="0,0,5,0" Text="&#x2794;" Foreground="DarkGray" TextTrimming="WordEllipsis" TextWrapping="Wrap" />
                             <controls1:BranchIcon  Grid.Column="2" Margin="0,0,3,0"/>
-                            <TextBlock  Grid.Column="3" Margin="0,0,10,0" Text="{Binding DestinationBranch}" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
+                            <TextBlock  Grid.Column="3" Margin="0,0,10,0" Text="{Binding DestinationBranch,Converter={converters:BranchNameConverter}}" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
                         </Grid>
                         <!--<StackPanel Grid.Row="0" Margin="0, 0, 0, 5" Orientation="Horizontal">
                             <TextBlock Margin="0,0,7,0" FontWeight="Bold" Foreground="#3572b0" Text="{Binding Title}"  TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>

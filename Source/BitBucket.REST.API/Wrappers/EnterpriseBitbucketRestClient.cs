@@ -42,7 +42,7 @@ namespace BitBucket.REST.API.Wrappers
             } while (response.Data?.IsLastPage == false);
 
             return new IteratorBasedPage<T>()
-            {//todo automapper
+            {
                 Next = !result.IsLastPage.HasValue || result.IsLastPage.Value ? null : result.NextPageStart.ToString(),
                 Page = result.Start + 1,
                 PageLen = result.Limit,

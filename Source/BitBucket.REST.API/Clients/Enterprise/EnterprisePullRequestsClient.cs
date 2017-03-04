@@ -36,18 +36,28 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return users.MapTo<IteratorBasedPage<UserShort>>();
         }
 
-        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 10, IQueryConnector query = null, int page = 1)
+        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, IQueryConnector query = null, int page = 1)
         {
             var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName);
             var request = new BitbucketRestRequest(url, Method.GET);
             request.AddQueryParameter("limit", limit.ToString());
-            request.AddQueryParameter("start", (page - 1).ToString());
+            request.AddQueryParameter("start", ((page - 1) * limit).ToString());
             if (query != null)
             {
                 request.AddQueryParameter("q", query.Build());
             }
-            var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<EnterprisePullRequest>>(request);
-            return response.Data.MapTo<IteratorBasedPage<PullRequest>>();
+            var response = await RestClient.ExecuteTaskAsync<EnterpriseIteratorBasedPage<EnterprisePullRequest>>(request);
+
+            var result = response.Data;
+
+            return new IteratorBasedPage<PullRequest>()
+            {
+                Next = !result.IsLastPage.HasValue || result.IsLastPage.Value ? null : result.NextPageStart.ToString(),
+                Page = result.Start + 1,
+                PageLen = result.Limit,
+                Size = result.Size,
+                Values = result.Values.MapTo<List<PullRequest>>()
+            };
         }
 
         public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, long id)
