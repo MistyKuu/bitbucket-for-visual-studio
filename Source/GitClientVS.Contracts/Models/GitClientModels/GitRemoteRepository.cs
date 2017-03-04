@@ -17,14 +17,14 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public bool? IsForked { get; set; }
         public string Owner { get; set; }
         public string CloneUrl { get; set; }
-        public List<GitBranch> Branches { get; set; }
+        public List<GitLocalBranch> Branches { get; set; }
 
         public GitRemoteRepository()
         {
             
         }
 
-        public GitRemoteRepository(string name, string owner, string cloneUrl, List<GitBranch> branches)
+        public GitRemoteRepository(string name, string owner, string cloneUrl, List<GitLocalBranch> branches)
         {
             Name = name;
             Owner = owner;

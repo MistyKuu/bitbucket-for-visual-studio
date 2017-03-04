@@ -11,6 +11,7 @@ namespace BitBucket.REST.API.Mappings.Converters
             return new Branch()
             {
                 Name = source.DisplayId,
+                IsDefault = source.IsDefault ?? false,
                 Target = new Commit()
                 {
                     Hash = source.LatestCommitId

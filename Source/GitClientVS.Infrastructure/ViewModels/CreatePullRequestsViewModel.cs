@@ -31,8 +31,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _errorMessage;
         private ReactiveCommand<Unit> _createNewPullRequestCommand;
         private IEnumerable<GitBranch> _remoteBranches;
-        private IEnumerable<GitBranch> _localBranches;
-        private GitBranch _sourceBranch;
+        private IEnumerable<GitLocalBranch> _localBranches;
+        private GitLocalBranch _sourceBranch;
         private GitBranch _destinationBranch;
         private string _description;
         private string _Title;
@@ -48,7 +48,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
-        public IEnumerable<GitBranch> LocalBranches
+        public IEnumerable<GitLocalBranch> LocalBranches
         {
             get { return _localBranches; }
             set { this.RaiseAndSetIfChanged(ref _localBranches, value); }
@@ -60,9 +60,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _remoteBranches, value); }
         }
 
+
         [Required]
 
-        public GitBranch SourceBranch
+        public GitLocalBranch SourceBranch
         {
             get { return _sourceBranch; }
             set { this.RaiseAndSetIfChanged(ref _sourceBranch, value); }
@@ -148,7 +149,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                         Message = $"Warning! Selected branch {SourceBranch.Name} is not a remote branch.";
                     else
                     {
-                        var remoteBranch = _currentRepo.Branches.FirstOrDefault(x => SourceBranch.TrackedBranchName == "origin/" + x.Name);
+                        var remoteBranch = RemoteBranches.FirstOrDefault(x => SourceBranch.TrackedBranchName == x.Name);
                         if (remoteBranch?.Target.Hash != SourceBranch.Target.Hash)
                             Message = $"Warning! Selected branch {SourceBranch.Name} is out of sync with a remote branch.";
                         else
@@ -171,7 +172,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CreateNewPullRequest()
         {
-            var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.Name, DestinationBranch.Name)
+            var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.TrackedBranchName, DestinationBranch.Name)
             {
                 CloseSourceBranch = CloseSourceBranch
             };
@@ -182,11 +183,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _currentRepo = _gitService.GetActiveRepository();
 
-            LocalBranches = _currentRepo.Branches.Where(x => !x.IsRemote).OrderBy(x => x.Name).ToList();
+            LocalBranches = _currentRepo.Branches.Where(x => !x.IsRemote).ToList();
             RemoteBranches = (await _gitClientService.GetBranches(_currentRepo.Name, _currentRepo.Owner)).OrderBy(x => x.Name).ToList();
 
             SourceBranch = LocalBranches.FirstOrDefault(x => x.IsHead);
-            DestinationBranch = RemoteBranches.FirstOrDefault(x => x.Name != SourceBranch?.Name);
+            DestinationBranch = RemoteBranches.FirstOrDefault(x => x.IsDefault) ?? RemoteBranches.FirstOrDefault(x => x.Name != SourceBranch.Name);
         }
 
         private IObservable<bool> CanLoadPullRequests()
@@ -203,13 +204,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             return IsObjectValid() &&
                    !string.IsNullOrEmpty(SourceBranch?.Name) &&
+                   !string.IsNullOrEmpty(SourceBranch?.TrackedBranchName) &&
                    !string.IsNullOrEmpty(DestinationBranch?.Name) &&
                    ValidateBranches();
         }
 
         public bool ValidateBranches()
         {
-            return DestinationBranch?.Name != SourceBranch?.Name;
+            return DestinationBranch?.Name != SourceBranch?.TrackedBranchName;
         }
     }
 }

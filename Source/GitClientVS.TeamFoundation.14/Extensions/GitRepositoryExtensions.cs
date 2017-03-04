@@ -18,7 +18,7 @@ namespace GitClientVS.TeamFoundation.Extensions
             var repo = repoPath == null ? null : new Repository(repoPath);
             if (repo == null) return null;
 
-            var repoUrl = repo?.Network.Remotes["origin"]?.Url;
+            var repoUrl = repo?.Network.Remotes["origin"]?.Url ?? repo?.Network.Remotes.FirstOrDefault()?.Url;
             string repoName = null, ownerName = null;
             if (repoUrl != null)
             {
@@ -35,16 +35,18 @@ namespace GitClientVS.TeamFoundation.Extensions
                 }
 
             }
+
             var branches = repo.Branches
-                .Select(x => new GitBranch()
+                .Select(x => new GitLocalBranch()
                 {
                     Name = x.FriendlyName,
                     IsRemote = x.IsRemote,
                     IsHead = x.IsCurrentRepositoryHead,
-                    TrackedBranchName = x.TrackedBranch?.FriendlyName,
-                    Target = new GitCommit() { Hash = x.Tip?.Sha }
+                    TrackedBranchName = x.TrackedBranch?.FriendlyName.Replace(x.TrackedBranch?.Remote.Name + "/", string.Empty),
+                    Target = new GitCommit() { Hash = x.Tip?.Sha },
                 })
                 .ToList();
+
 
             var repository = new GitRemoteRepository(repoName, ownerName, repoUrl, branches);
             return repository;

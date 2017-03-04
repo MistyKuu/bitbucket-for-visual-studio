@@ -50,7 +50,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Width="30" Height="30" VerticalAlignment="Center" Margin="0,0,5,0" Source="{Binding Author.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}"/>
-                    <TextBlock VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Text="{Binding Author.Username}" Margin="0,0,10,0" TextWrapping="Wrap" FontWeight="Bold" Foreground="CornflowerBlue"/>
+                    <TextBlock VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Text="{Binding Author.DisplayName}" Margin="0,0,10,0" TextWrapping="Wrap" FontWeight="Bold" Foreground="CornflowerBlue"/>
                   
                     <TextBlock Grid.Row="0" Grid.Column="2" VerticalAlignment="Center">
                          <Hyperlink NavigateUri="{Binding CommitHref}" RequestNavigate="GoToCommit">
@@ -406,7 +406,7 @@
                                 <StackPanel Orientation="Vertical" Margin="0,5,0,5">
                                     <StackPanel Orientation="Horizontal">
                                         <Image VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
-                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.Username}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
+                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
                                     </StackPanel>
 
                                     <wpf:HtmlPanel Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.DisplayHtml}" Background="Transparent" Margin="30,-10,0,0" />
