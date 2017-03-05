@@ -132,6 +132,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                     return await _initializeCommand.ExecuteAsync();
                 })
                 .Subscribe();
+            
         }
 
         public void InitializeCommands()
@@ -165,6 +166,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             SourceBranch = Branches.FirstOrDefault(x => x.Name == currentBranch.TrackedBranchName) ?? Branches.FirstOrDefault();
             DestinationBranch = Branches.FirstOrDefault(x => x.IsDefault) ??
                                 Branches.FirstOrDefault(x => x.Name != SourceBranch.Name);
+
+            if (string.IsNullOrEmpty(currentBranch.TrackedBranchName))
+                Message = $"Warning! Your active local branch {currentBranch.Name} is not tracking any remote branches.";
+            else
+                Message = string.Empty;
         }
 
         private IObservable<bool> CanLoadPullRequests()

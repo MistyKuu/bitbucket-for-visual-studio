@@ -53,7 +53,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return new IteratorBasedPage<PullRequest>()
             {
                 Next = !result.IsLastPage.HasValue || result.IsLastPage.Value ? null : result.NextPageStart.ToString(),
-                Page = result.Start + 1,
+                Page = page,
                 PageLen = result.Limit,
                 Size = result.Size,
                 Values = result.Values.MapTo<List<PullRequest>>()
