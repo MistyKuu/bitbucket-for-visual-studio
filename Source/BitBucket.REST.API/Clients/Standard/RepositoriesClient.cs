@@ -5,6 +5,7 @@ using BitBucket.REST.API.Interfaces;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.Wrappers;
 using RestSharp;
+using System.Collections.Generic;
 
 namespace BitBucket.REST.API.Clients.Standard
 {
@@ -14,23 +15,23 @@ namespace BitBucket.REST.API.Clients.Standard
         {
         }
 
-        public async Task<IteratorBasedPage<Repository>> GetRepositories()
+        public async Task<IEnumerable<Repository>> GetRepositories()
         {
             return await GetRepositories(Connection.Credentials.Login);
         }
 
-        public async Task<IteratorBasedPage<Repository>> GetRepositories(string owner)
+        public async Task<IEnumerable<Repository>> GetRepositories(string owner)
         {
             var url = ApiUrls.Repositories(owner);
             return await RestClient.GetAllPages<Repository>(url);
         }
 
-        public async Task<IteratorBasedPage<Branch>> GetBranches(string repoName)
+        public async Task<IEnumerable<Branch>> GetBranches(string repoName)
         {
             return await GetBranches(Connection.Credentials.Login, repoName);
         }
 
-        public async Task<IteratorBasedPage<Branch>> GetBranches(string owner, string repoName)
+        public async Task<IEnumerable<Branch>> GetBranches(string owner, string repoName)
         {
             var url = ApiUrls.Branches(owner, repoName);
             return await RestClient.GetAllPages<Branch>(url);

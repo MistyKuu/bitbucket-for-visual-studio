@@ -9,6 +9,7 @@ using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Serializers;
 using RestSharp;
 using log4net;
+using System.Collections.Generic;
 
 namespace BitBucket.REST.API.Wrappers
 {
@@ -35,7 +36,7 @@ namespace BitBucket.REST.API.Wrappers
         }
 
 
-        public abstract Task<IteratorBasedPage<T>> GetAllPages<T>(string url, int limit = 100, IQueryConnector query = null);
+        public abstract Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 100, IQueryConnector query = null);
         protected abstract string DeserializeError(IRestResponse response);
 
         public override async Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)

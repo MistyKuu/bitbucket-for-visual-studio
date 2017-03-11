@@ -81,7 +81,7 @@ namespace GitClientVS.Services
         public async Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync()
         {
             var repositories = await _bitbucketClient.RepositoriesClient.GetRepositories();
-            return repositories.Values.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>();
+            return repositories.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>();
         }
 
         public async Task<IEnumerable<GitRemoteRepository>> GetAllRepositories()
@@ -89,13 +89,13 @@ namespace GitClientVS.Services
             var allRepositories = new List<GitRemoteRepository>();
 
             var userRepositories = await _bitbucketClient.RepositoriesClient.GetRepositories();
-            allRepositories.AddRange(userRepositories.Values.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>());
+            allRepositories.AddRange(userRepositories.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>());
 
             var teams = await _bitbucketClient.TeamsClient.GetTeams();
-            foreach (var team in teams.Values)
+            foreach (var team in teams)
             {
                 var teamRepositories = await _bitbucketClient.RepositoriesClient.GetRepositories(team.Username);
-                allRepositories.AddRange(teamRepositories.Values.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>());
+                allRepositories.AddRange(teamRepositories.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>());
             }
 
             return allRepositories;
@@ -104,7 +104,7 @@ namespace GitClientVS.Services
         public async Task<IEnumerable<GitTeam>> GetTeams()
         {
             var teams = await _bitbucketClient.TeamsClient.GetTeams();
-            return teams.Values.MapTo<List<GitTeam>>();
+            return teams.MapTo<List<GitTeam>>();
         }
 
         public async Task<GitPullRequest> GetPullRequest(string repositoryName, string ownerName, long id)
@@ -141,7 +141,7 @@ namespace GitClientVS.Services
         {
             //todo put real repository name
             var pullRequests = await _bitbucketClient.PullRequestsClient.GetAllPullRequests(repositoryName, ownerName);
-            return pullRequests.Values.MapTo<List<GitPullRequest>>();
+            return pullRequests.MapTo<List<GitPullRequest>>();
         }
 
         public async Task<PageIterator<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit = 20, int page = 1)
@@ -168,13 +168,13 @@ namespace GitClientVS.Services
         public async Task<IEnumerable<GitBranch>> GetBranches(string repoName, string owner)
         {
             var repositories = await _bitbucketClient.RepositoriesClient.GetBranches(owner, repoName);
-            return repositories.Values.MapTo<List<GitBranch>>();
+            return repositories.MapTo<List<GitBranch>>();
         }
 
         public async Task<IEnumerable<GitUser>> GetPullRequestsAuthors(string repositoryName, string ownerName)
         {
             var authors = await _bitbucketClient.PullRequestsClient.GetAuthors(repositoryName, ownerName);
-            return authors.Values.MapTo<List<GitUser>>();
+            return authors.MapTo<List<GitUser>>();
         }
 
         public async Task<bool> ApprovePullRequest(string repositoryName, string ownerName, long id)
@@ -207,13 +207,13 @@ namespace GitClientVS.Services
         public async Task<IEnumerable<GitCommit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
         {
             var commits = await _bitbucketClient.PullRequestsClient.GetPullRequestCommits(repositoryName, ownerName, id);
-            return commits.Values.MapTo<List<GitCommit>>();
+            return commits.MapTo<List<GitCommit>>();
         }
 
         public async Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
         {
             var commits = await _bitbucketClient.PullRequestsClient.GetPullRequestComments(repositoryName, ownerName, id);
-            return commits.Values.MapTo<List<GitComment>>();
+            return commits.MapTo<List<GitComment>>();
         }
     }
 }

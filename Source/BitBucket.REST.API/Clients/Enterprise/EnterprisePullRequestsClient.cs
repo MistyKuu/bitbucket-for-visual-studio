@@ -20,20 +20,20 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
 
         }
-
-        public async Task<IteratorBasedPage<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName, IQueryConnector query = null)
+       
+        public async Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName, IQueryConnector query = null)
         {
             var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName);
             var pullRequests = await RestClient.GetAllPages<EnterprisePullRequest>(url, 100, query);
-            return pullRequests.MapTo<IteratorBasedPage<PullRequest>>();
+            return pullRequests.MapTo<List<PullRequest>>();
         }
 
 
-        public async Task<IteratorBasedPage<UserShort>> GetAuthors(string repositoryName, string ownerName)
+        public async Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
         {
             var url = EnterpriseApiUrls.PullRequestsAuthors(ownerName, repositoryName);
             var users = await RestClient.GetAllPages<EnterpriseUser>(url, 100);
-            return users.MapTo<IteratorBasedPage<UserShort>>();
+            return users.MapTo<List<UserShort>>();
         }
 
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, IQueryConnector query = null, int page = 1)
@@ -102,23 +102,22 @@ namespace BitBucket.REST.API.Clients.Enterprise
             await RestClient.ExecuteTaskAsync(request);
         }
 
-        public async Task<IteratorBasedPage<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
+        public async Task<IEnumerable<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
         {
             var url = EnterpriseApiUrls.PullRequestCommits(ownerName, repositoryName, id);
             var data = await RestClient.GetAllPages<EnterpriseCommit>(url);
-            var mapped = data.MapTo<IteratorBasedPage<Commit>>();
+            var commits = data.MapTo<List<Commit>>();
 
+            var authors = (await GetAuthors(repositoryName, ownerName)).ToList();
 
-            var authors = await GetAuthors(repositoryName, ownerName);
-
-            foreach (var commit in mapped.Values)
+            foreach (var commit in commits)
             {
                 commit.CommitHref = $"{Connection.MainUrl}projects/{ownerName}/repos/{repositoryName}/pull-requests/{id}/commits/{commit.Hash}";
                 if (commit.Author.User.Links.Avatar == null)
-                    SetAuthorAvatar(commit, authors.Values);
+                    SetAuthorAvatar(commit, authors);
             }
 
-            return mapped;
+            return commits;
         }
 
         private void SetAuthorAvatar(Commit commit, List<UserShort> participants)
@@ -139,16 +138,16 @@ namespace BitBucket.REST.API.Clients.Enterprise
             }
         }
 
-        public async Task<IteratorBasedPage<Comment>> GetPullRequestComments(string repositoryName, long id)
+        public async Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, long id)
         {
             return await GetPullRequestComments(repositoryName, Connection.Credentials.Login, id);
         }
 
-        public async Task<IteratorBasedPage<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
+        public async Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
         {
             var url = EnterpriseApiUrls.PullRequestActivities(ownerName, repositoryName, id);
             var activities = await RestClient.GetAllPages<EnterpriseCommentActivity>(url);
-            var comments = activities.Values.Where(x => x.Action == "COMMENTED").Select(x => x.Comment).ToList();
+            var comments = activities.Where(x => x.Action == "COMMENTED").Select(x => x.Comment).ToList();
 
 
             foreach (var comment in comments)
@@ -156,15 +155,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
 
             comments = comments.Flatten(x => true, x => x.Comments).ToList();
-
-            return new IteratorBasedPage<EnterpriseComment>()
-            {
-                Size = activities.Size,
-                Next = activities.Next,
-                PageLen = activities.PageLen,
-                Page = activities.Page,
-                Values = comments
-            }.MapTo<IteratorBasedPage<Comment>>();
+            return comments.MapTo<List<Comment>>();
         }
         public async Task<PullRequest> GetPullRequest(string repositoryName, string owner, long id)
         {

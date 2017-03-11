@@ -1,15 +1,16 @@
 using System.Threading.Tasks;
 using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Standard;
+using System.Collections.Generic;
 
 namespace BitBucket.REST.API.Interfaces
 {
     public interface IRepositoriesClient
     {
-        Task<IteratorBasedPage<Repository>> GetRepositories();
-        Task<IteratorBasedPage<Repository>> GetRepositories(string owner);
-        Task<IteratorBasedPage<Branch>> GetBranches(string repoName);
-        Task<IteratorBasedPage<Branch>> GetBranches(string owner, string repoName);
+        Task<IEnumerable<Repository>> GetRepositories();
+        Task<IEnumerable<Repository>> GetRepositories(string owner);
+        Task<IEnumerable<Branch>> GetBranches(string repoName);
+        Task<IEnumerable<Branch>> GetBranches(string owner, string repoName);
         Task<Repository> CreateRepository(Repository repository);
     }
 }

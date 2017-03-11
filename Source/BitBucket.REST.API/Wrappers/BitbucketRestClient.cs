@@ -16,7 +16,7 @@ namespace BitBucket.REST.API.Wrappers
         {
         }
 
-        public override async Task<IteratorBasedPage<T>> GetAllPages<T>(string url, int limit = 100, IQueryConnector query = null)
+        public override async Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 100, IQueryConnector query = null)
         {
             var result = new IteratorBasedPage<T>()
             {
@@ -40,7 +40,7 @@ namespace BitBucket.REST.API.Wrappers
                 pageNumber++;
             } while (response.Data?.Next != null);//todo 99% this value should be used instead of pagenumber
 
-            return result;
+            return result.Values;
         }
 
         protected override string DeserializeError(IRestResponse response)

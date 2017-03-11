@@ -15,6 +15,7 @@ using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
 using ReactiveUI;
+using WpfControls;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
@@ -38,6 +39,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _closeSourceBranch;
         private string _message;
         private GitRemoteRepository _currentRepo;
+        private List<GitUser> _selectedReviewers;
+        private List<GitUser> _reviewers;
 
         public string PageTitle { get; } = "Create New Pull Request";
 
@@ -122,17 +125,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             _eventAggregator = eventAggregator;
             CloseSourceBranch = false;
             SetupObservables();
+            Reviewers = new List<GitUser>() { new GitUser() { DisplayName = "ABC" } };
+            SelectedReviewers = new List<GitUser>();
         }
 
         private void SetupObservables()
         {
             _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
-                .SelectMany(async _ =>
-                {
-                    return await _initializeCommand.ExecuteAsync();
-                })
+                .SelectMany(async _ => await _initializeCommand.ExecuteAsync())
                 .Subscribe();
-            
+
         }
 
         public void InitializeCommands()
@@ -194,6 +196,30 @@ namespace GitClientVS.Infrastructure.ViewModels
         public bool ValidateBranches()
         {
             return DestinationBranch?.Name != SourceBranch?.Name;
+        }
+
+        public List<GitUser> SelectedReviewers
+        {
+            get
+            {
+                return _selectedReviewers;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedReviewers, value);
+            }
+        }
+
+        public List<GitUser> Reviewers
+        {
+            get
+            {
+                return _reviewers;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _reviewers, value);
+            }
         }
     }
 }

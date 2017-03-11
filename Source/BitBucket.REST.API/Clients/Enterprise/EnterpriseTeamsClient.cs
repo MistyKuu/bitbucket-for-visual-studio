@@ -17,20 +17,10 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         }
 
-        public Task<IteratorBasedPage<Team>> GetTeams() // not needed
+        public Task<IEnumerable<Team>> GetTeams() // not needed
         {
-            //var url = EnterpriseApiUrls.Teams();
-            //var teams = await RestClient.GetAllPages<string>(url, 100);
-            var iterator = new IteratorBasedPage<Team>()
-            {
-                Next = null,
-                Values = new List<Team>(),
-                Page = 1,
-                PageLen = 0,
-                Size = 0
-            };
-            //return iterator;
-            return Task.FromResult(iterator);
+            IEnumerable<Team> coll = new List<Team>();
+            return Task.FromResult(coll);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace BitBucket.REST.API.Wrappers
         {
         }
 
-        public override async Task<IteratorBasedPage<T>> GetAllPages<T>(string url, int limit = 100, IQueryConnector query = null)
+        public override async Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 100, IQueryConnector query = null)
         {
             var result = new EnterpriseIteratorBasedPage<T>()
             {
@@ -41,14 +41,7 @@ namespace BitBucket.REST.API.Wrappers
 
             } while (response.Data?.IsLastPage == false);
 
-            return new IteratorBasedPage<T>()
-            {
-                Next = !result.IsLastPage.HasValue || result.IsLastPage.Value ? null : result.NextPageStart.ToString(),
-                Page = result.Start + 1,
-                PageLen = result.Limit,
-                Size = result.Size,
-                Values = result.Values
-            };
+            return result.Values;
         }
 
         protected override string DeserializeError(IRestResponse response)

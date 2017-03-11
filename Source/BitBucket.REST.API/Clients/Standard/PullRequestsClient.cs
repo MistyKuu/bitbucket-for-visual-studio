@@ -17,14 +17,14 @@ namespace BitBucket.REST.API.Clients.Standard
             
         }
 
-        public async Task<IteratorBasedPage<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName, IQueryConnector query = null)
+        public async Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName, IQueryConnector query = null)
         {
             var url = ApiUrls.PullRequests(ownerName, repositoryName);
             return await RestClient.GetAllPages<PullRequest>(url, 100, query);
         }
 
 
-        public async Task<IteratorBasedPage<UserShort>> GetAuthors(string repositoryName, string ownerName)
+        public async Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
         {
             var url = ApiUrls.PullRequestsAuthors(ownerName, repositoryName);
             return await InternalRestClient.GetAllPages<UserShort>(url, 100);
@@ -82,23 +82,23 @@ namespace BitBucket.REST.API.Clients.Standard
             await RestClient.ExecuteTaskAsync(request);
         }
 
-        public async Task<IteratorBasedPage<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
+        public async Task<IEnumerable<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
         {
             var url = ApiUrls.PullRequestCommits(ownerName, repositoryName, id);
-            var data = await RestClient.GetAllPages<Commit>(url);
-            foreach (var commit in data.Values)
+            var commits = await RestClient.GetAllPages<Commit>(url);
+            foreach (var commit in commits)
             {
                 commit.CommitHref = $"{Connection.MainUrl}{ownerName}/{repositoryName}/commits/{commit.Hash}";
             }
-            return data;
+            return commits;
         }
 
-        public async Task<IteratorBasedPage<Comment>> GetPullRequestComments(string repositoryName, long id)
+        public async Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, long id)
         {
             return await GetPullRequestComments(repositoryName, Connection.Credentials.Login, id);
         }
 
-        public async Task<IteratorBasedPage<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
+        public async Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
         {
             var url = ApiUrls.PullRequestComments(ownerName, repositoryName, id);
             return await RestClient.GetAllPages<Comment>(url);
