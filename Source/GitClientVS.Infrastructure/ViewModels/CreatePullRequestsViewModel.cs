@@ -28,6 +28,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IPageNavigationService<IPullRequestsWindow> _pageNavigationService;
         private readonly IEventAggregatorService _eventAggregator;
         private ReactiveCommand<Unit> _initializeCommand;
+        private ReactiveCommand<object> _removeReviewerCommand;
         private bool _isLoading;
         private string _errorMessage;
         private ReactiveCommand<Unit> _createNewPullRequestCommand;
@@ -39,8 +40,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _closeSourceBranch;
         private string _message;
         private GitRemoteRepository _currentRepo;
-        private List<GitUser> _selectedReviewers;
-        private List<GitUser> _reviewers;
+        private ReactiveList<GitUser> _selectedReviewers;
+        private ReactiveList<GitUser> _reviewers;
 
         public string PageTitle { get; } = "Create New Pull Request";
 
@@ -110,6 +111,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand CreateNewPullRequestCommand => _createNewPullRequestCommand;
+        public ICommand RemoveReviewerCommand => _removeReviewerCommand;
 
         [ImportingConstructor]
         public CreatePullRequestsViewModel(
@@ -125,8 +127,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             _eventAggregator = eventAggregator;
             CloseSourceBranch = false;
             SetupObservables();
-            Reviewers = new List<GitUser>() { new GitUser() { DisplayName = "ABC" } };
-            SelectedReviewers = new List<GitUser>();
+            Reviewers = new ReactiveList<GitUser>() { new GitUser() { DisplayName = "ABC" }, new GitUser() { DisplayName = "ABCD" } };
+            SelectedReviewers = new ReactiveList<GitUser>();
         }
 
         private void SetupObservables()
@@ -140,12 +142,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), _ => LoadBranches());
+            _removeReviewerCommand = ReactiveCommand.Create();
             _createNewPullRequestCommand = ReactiveCommand.CreateAsyncTask(CanCreatePullRequest(), _ => CreateNewPullRequest());
 
-            _createNewPullRequestCommand.Subscribe(_ =>
-            {
-                _pageNavigationService.NavigateBack(true);
-            });
+            _createNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.NavigateBack(true); });
+            _removeReviewerCommand.Subscribe((x) => { SelectedReviewers.Remove((GitUser)x); });
         }
 
 
@@ -198,7 +199,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             return DestinationBranch?.Name != SourceBranch?.Name;
         }
 
-        public List<GitUser> SelectedReviewers
+        public ReactiveList<GitUser> SelectedReviewers
         {
             get
             {
@@ -210,7 +211,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
         }
 
-        public List<GitUser> Reviewers
+        public ReactiveList<GitUser> Reviewers
         {
             get
             {
@@ -219,6 +220,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _reviewers, value);
+            }
+        }
+
+        public ISuggestionProvider ReviewersProvider
+        {
+            get
+            {
+                return new SuggestionProvider(x => Reviewers.Where(y =>
+                (y.DisplayName != null && y.DisplayName.Contains(x, StringComparison.InvariantCultureIgnoreCase)) ||
+                (y.Username != null && y.Username.Contains(x, StringComparison.InvariantCultureIgnoreCase))));
             }
         }
     }

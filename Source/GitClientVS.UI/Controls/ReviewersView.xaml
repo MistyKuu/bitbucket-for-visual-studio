@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="GitClientVS.UI.Controls.ReviewersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GitClientVS.UI.Controls"
+             xmlns:wpfControls="http://wpfcontrols.com/"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
+             xmlns:behaviours="clr-namespace:GitClientVS.UI.Behaviours"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ItemsControl x:Name="ReviewersIc"  ItemsSource="{Binding SelectedReviewers}" MaxWidth="200">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="gitClientModels:GitUser">
+                    <Border BorderBrush="Gray" BorderThickness="0.5" Background="WhiteSmoke" Padding="5,0,0,0" Margin="2,0" >
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
+                            <Button Focusable="False" FontSize="14"  VerticalContentAlignment="Center" Padding="0" Margin="5,0,2,0" BorderBrush="Transparent" Background="Transparent" Content="×"
+                                    Command="{Binding ElementName=ReviewersIc,Path=DataContext.RemoveReviewerCommand}"
+                                    CommandParameter="{Binding}"
+                                    />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Border Grid.Column="1" BorderThickness="1" BorderBrush="Gray" Margin="5,0" DockPanel.Dock="Right">
+            <wpfControls:AutoCompleteTextBox x:Name="AutoCompleteTextBox" 
+                BorderThickness="0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                DisplayMember="DisplayName"
+                Watermark="Reviewers"
+                IconPlacement="Right"
+                Provider="{Binding ReviewersProvider}"
+                >
+                <wpfControls:AutoCompleteTextBox.ItemTemplate>
+                    <DataTemplate DataType="gitClientModels:GitUser">
+                        <TextBlock Text="{Binding DisplayName}"/>
+                    </DataTemplate>
+                </wpfControls:AutoCompleteTextBox.ItemTemplate>
+                <i:Interaction.Behaviors>
+                    <behaviours:AutoCompleteBoxDelegateAndResetBehaviour SelectedItems="{Binding SelectedReviewers}" />
+                </i:Interaction.Behaviors>
+
+            </wpfControls:AutoCompleteTextBox>
+        </Border>
+    </Grid>
+</UserControl>

@@ -86,6 +86,7 @@
     <Compile Include="AttachedProperties\HandleMouseWheelInParentBehaviour.cs" />
     <Compile Include="AttachedProperties\SelectTreeViewAfterItemClickBehavior.cs" />
     <Compile Include="AttachedProperties\SetErrorTemplateAfterTouchBehavior.cs" />
+    <Compile Include="Behaviours\AutoCompleteBoxDelegateAndResetBehaviour.cs" />
     <Compile Include="Bindings\PasswordHelper.cs" />
     <Compile Include="Bindings\ValidatedBinding.cs" />
     <Compile Include="Controls\BitbucketLogo.xaml.cs">
@@ -116,12 +117,16 @@
     <Compile Include="Controls\RepositoryIcon.xaml.cs">
       <DependentUpon>RepositoryIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ReviewersView.xaml.cs">
+      <DependentUpon>ReviewersView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BranchNameConverter.cs" />
     <Compile Include="Converters\BaseMarkupExtensionConverter.cs" />
     <Compile Include="Converters\BoolToNonVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\HumanizeDateTimeConverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
+    <Compile Include="Converters\ListToSeparatedStringConverter.cs" />
     <Compile Include="Converters\NegateVisibilityConverter.cs" />
     <Compile Include="Converters\NegateBoolConverter.cs" />
     <Compile Include="Converters\NullToNonVisibilityConverter.cs" />
@@ -235,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\RepositoryIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ReviewersView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
