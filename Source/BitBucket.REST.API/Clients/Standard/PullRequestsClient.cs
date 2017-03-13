@@ -131,15 +131,16 @@ namespace BitBucket.REST.API.Clients.Standard
             var response = await RestClient.ExecuteTaskAsync<PullRequest>(request);
         }
 
-        public async Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName)
+        public  Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName)
         {
-            var repoUrl = ApiUrls.Repository(ownerName, repositoryName);
-            var repositoryResponse = await RestClient.ExecuteTaskAsync<Repository>(new BitbucketRestRequest(repoUrl, Method.GET));
+            return GetAuthors(repositoryName, ownerName);//todo this is wrong
+            //var repoUrl = ApiUrls.Repository(ownerName, repositoryName);
+            //var repositoryResponse = await RestClient.ExecuteTaskAsync<Repository>(new BitbucketRestRequest(repoUrl, Method.GET));
 
-            var url = ApiUrls.RepositoryUsers(ownerName, repositoryName);
-            var repoPrivileges = await _versionOneClient.ExecuteTaskAsync<List<RepositoryPrivilege>>(new BitbucketRestRequest(url, Method.GET));
+            //var url = ApiUrls.RepositoryUsers(ownerName, repositoryName);
+            //var repoPrivileges = await _versionOneClient.ExecuteTaskAsync<List<RepositoryPrivilege>>(new BitbucketRestRequest(url, Method.GET));
 
-            return repoPrivileges.Data.Select(x => x.User).Concat(new[] { repositoryResponse.Data.Owner.MapTo<UserShort>() }).ToList();
+            //return repoPrivileges.Data.Select(x => x.User).Concat(new[] { repositoryResponse.Data.Owner.MapTo<UserShort>() }).ToList();
         }
     }
 }
