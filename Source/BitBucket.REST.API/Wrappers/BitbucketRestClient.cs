@@ -7,6 +7,8 @@ using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Serializers;
 using RestSharp;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BitBucket.REST.API.Wrappers
 {
@@ -16,7 +18,7 @@ namespace BitBucket.REST.API.Wrappers
         {
         }
 
-        public override async Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 100, IQueryConnector query = null)
+        public override async Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 100, QueryString query = null)
         {
             var result = new IteratorBasedPage<T>()
             {
@@ -28,15 +30,15 @@ namespace BitBucket.REST.API.Wrappers
             {
                 var request = new BitbucketRestRequest(url, Method.GET);
                 request.AddQueryParameter("pagelen", limit.ToString()).AddQueryParameter("page", pageNumber.ToString());
+
                 if (query != null)
-                {
-                    request.AddQueryParameter("q", query.Build());
-                }
+                    foreach (var par in query)
+                        request.AddQueryParameter(par.Key, par.Value);
+
                 response = await this.ExecuteTaskAsync<IteratorBasedPage<T>>(request);
                 if (response.Data.Values != null)
-                {
                     result.Values.AddRange(response.Data.Values);
-                }
+
                 pageNumber++;
             } while (response.Data?.Next != null);//todo 99% this value should be used instead of pagenumber
 
@@ -45,11 +47,19 @@ namespace BitBucket.REST.API.Wrappers
 
         protected override string DeserializeError(IRestResponse response)
         {
-            var serializer = new NewtonsoftJsonSerializer();
-            var error = serializer.Deserialize<ErrorWrapper>(response.Content).Error;
-            var message = error.Message;
-            if (error.Fields?.Source != null)
-                message += ". " + string.Join(",", error.Fields?.Source);
+            var errorObject = JObject.Parse(response.Content);
+
+            var error = (JObject)errorObject["error"];
+            var message = error["message"].Value<string>();
+            var fields = error["fields"];
+
+            string fieldsMessage = string.Empty;
+
+            if (fields != null)
+            {
+                fieldsMessage = string.Join(", ", fields.SelectMany(x => ((JProperty)x).Value.Values<string>()));
+                message += ". " + fieldsMessage;
+            }
 
             return message;
         }

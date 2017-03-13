@@ -51,7 +51,7 @@ namespace BitBucket.REST.API.Models.Standard
         public int CommentsCount { get; set; }
 
         [JsonProperty(PropertyName = "reviewers")]
-        public List<UserShort> Reviewers { get; set; }
+        public List<User> Reviewers { get; set; }
 
         [JsonProperty(PropertyName = "participants")]
         public List<Participant> Participants { get; set; }

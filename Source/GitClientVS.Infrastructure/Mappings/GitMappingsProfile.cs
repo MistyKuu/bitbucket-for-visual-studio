@@ -42,6 +42,7 @@ namespace GitClientVS.Infrastructure.Mappings
                  .ForMember(dto => dto.IsDefault, e => e.MapFrom(o => o.IsDefault ?? (o.Name == "master")));
 
             CreateMap<User, GitUser>();
+            CreateMap<User, UserShort>();
             CreateMap<UserShort, GitUser>();
             CreateMap<Links, GitLinks>();
             CreateMap<Link, GitLink>();

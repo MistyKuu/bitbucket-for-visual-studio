@@ -15,7 +15,7 @@ namespace BitBucket.REST.API.Mappings.Converters
     {
         public PullRequest Convert(EnterprisePullRequest source, PullRequest destination, ResolutionContext context)
         {
-            var pullRequest= new PullRequest()
+            var pullRequest = new PullRequest()
             {
                 Description = source.Description,
                 Links = source.Links.MapTo<Links>(),
@@ -29,12 +29,12 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Id = source.Id,
                 CommentsCount = source.Properties?.CommentsCount ?? 0,
                 Participants = source.Participants.MapTo<List<Participant>>(),
-                Reviewers = source.Reviewers.Select(x=>x.User).MapTo<List<UserShort>>().ToList()
+                Reviewers = source.Reviewers.Select(x => x.User).MapTo<List<User>>().ToList()
             };
 
             pullRequest.Participants.AddRange(source.Reviewers.MapTo<List<Participant>>());//reviewers are part of participants in v2.0 - compatibility
 
-            pullRequest.Links.Html = pullRequest.Links.Html ?? new Link() {Href = source.Links.Self.First().Href};
+            pullRequest.Links.Html = pullRequest.Links.Html ?? new Link() { Href = source.Links.Self.First().Href };
             pullRequest.Author.Links.Avatar = new Link() { Href = pullRequest.Author.Links.Self.Href + "/avatar.png" };
 
             return pullRequest;
@@ -49,6 +49,7 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Source = source.Source.MapTo<EnterpriseBranchSource>(),
                 Destination = source.Destination.MapTo<EnterpriseBranchSource>(),
                 Id = source.Id,
+                Reviewers = source.Reviewers?.Select(x => new EnterpriseParticipant() { User = new EnterpriseUser() { Username = x.Username } }).ToList()
             };
         }
     }

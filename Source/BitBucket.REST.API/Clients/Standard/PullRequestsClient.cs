@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Helpers;
 using BitBucket.REST.API.Interfaces;
+using BitBucket.REST.API.Mappings;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Wrappers;
@@ -12,25 +14,29 @@ namespace BitBucket.REST.API.Clients.Standard
 {
     public class PullRequestsClient : ApiClient, IPullRequestsClient
     {
-        public PullRequestsClient(BitbucketRestClient restClient, BitbucketRestClient internalRestClient, Connection connection) : base(restClient, internalRestClient, connection)
+        private readonly BitbucketRestClient _internalRestClient;
+        private readonly BitbucketRestClient _versionOneClient;
+
+        public PullRequestsClient(BitbucketRestClient restClient, BitbucketRestClient internalRestClient, BitbucketRestClient versionOneClient, Connection connection) : base(restClient, connection)
         {
-            
+            _internalRestClient = internalRestClient;
+            _versionOneClient = versionOneClient;
         }
 
-        public async Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName, IQueryConnector query = null)
+        public async Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
         {
             var url = ApiUrls.PullRequests(ownerName, repositoryName);
-            return await RestClient.GetAllPages<PullRequest>(url, 100, query);
+            return await RestClient.GetAllPages<PullRequest>(url, 100);
         }
 
 
         public async Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
         {
             var url = ApiUrls.PullRequestsAuthors(ownerName, repositoryName);
-            return await InternalRestClient.GetAllPages<UserShort>(url, 100);
+            return await _internalRestClient.GetAllPages<UserShort>(url, 100);
         }
 
-        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 10, IQueryConnector query = null, int page = 1)
+        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector query = null)
         {
             var url = ApiUrls.PullRequests(ownerName, repositoryName);
             var request = new BitbucketRestRequest(url, Method.GET);
@@ -118,12 +124,22 @@ namespace BitBucket.REST.API.Clients.Standard
             {
                 Username = Connection.Credentials.Login
             };
+
             var url = ApiUrls.PullRequests(owner, repositoryName);
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(pullRequest), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<PullRequest>(request);
         }
 
+        public async Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName)
+        {
+            var repoUrl = ApiUrls.Repository(ownerName, repositoryName);
+            var repositoryResponse = await RestClient.ExecuteTaskAsync<Repository>(new BitbucketRestRequest(repoUrl, Method.GET));
 
+            var url = ApiUrls.RepositoryUsers(ownerName, repositoryName);
+            var repoPrivileges = await _versionOneClient.ExecuteTaskAsync<List<RepositoryPrivilege>>(new BitbucketRestRequest(url, Method.GET));
+
+            return repoPrivileges.Data.Select(x => x.User).Concat(new[] { repositoryResponse.Data.Owner.MapTo<UserShort>() }).ToList();
+        }
     }
 }

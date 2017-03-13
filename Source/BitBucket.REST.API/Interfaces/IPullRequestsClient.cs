@@ -9,9 +9,9 @@ namespace BitBucket.REST.API.Interfaces
 {
     public interface IPullRequestsClient
     {
-        Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName, IQueryConnector query = null);
+        Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName);
         Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName);
-        Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 10, IQueryConnector query = null, int page = 1);
+        Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector query = null);
         Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, long id);
         Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string owner, long id);
         Task<Participant> ApprovePullRequest(string repositoryName, long id);
@@ -23,5 +23,6 @@ namespace BitBucket.REST.API.Interfaces
         Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id);
         Task<PullRequest> GetPullRequest(string repositoryName, string owner, long id);
         Task CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner);
+        Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName);
     }
 }

@@ -25,7 +25,7 @@ namespace BitBucket.REST.API.Helpers
             return $"repositories/{login}/{repoName}/refs/branches";
         }
 
-        public static string CreateRepository(string login, string repoName)
+        public static string Repository(string login, string repoName)
         {
             return $"repositories/{login}/{repoName}";
         }
@@ -38,6 +38,11 @@ namespace BitBucket.REST.API.Helpers
         public static string PullRequestsAuthors(string username, string repository)
         {
             return $"repositories/{username}/{repository}/pr-authors/";
+        }
+
+        public static string RepositoryUsers(string username, string repository)
+        {
+            return $"privileges/{username}/{repository}";
         }
 
         public static string PullRequest(string username, string repository, long id)

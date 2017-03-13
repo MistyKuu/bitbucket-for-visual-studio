@@ -12,5 +12,7 @@ namespace GitClientVS.Contracts.Events
             PreviousRepository = previousRepository;
             ActiveRepository = activeRepository;
         }
+
+        public bool IsRepositoryDifferent => ActiveRepository?.Name != PreviousRepository?.Name;
     }
 }

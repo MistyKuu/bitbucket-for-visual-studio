@@ -83,7 +83,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             this.WhenAnyValue(x => x.CurrentView).Where(x => x != null).Subscribe(_ => CurrentViewModel = CurrentView.DataContext as IWithPageTitle);
             _eventAggregator
                 .GetEvent<ActiveRepositoryChangedEvent>()
-                .Where(x => x.ActiveRepository?.Name != x.PreviousRepository?.Name)
+                .Where(x => x.IsRepositoryDifferent)
                 .Select(x => Unit.Default)
                 .Merge(_eventAggregator.GetEvent<ConnectionChangedEvent>().Select(x => Unit.Default))
                 .Subscribe(_ => OnClosed());

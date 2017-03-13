@@ -24,7 +24,7 @@ namespace GitClientVS.Infrastructure.Mappings
                     reviewers.Add(reviewer.Username, ApiHelpers.GetApproveStatus(reviewer.Username, source.Participants));
                 }
             }
-           
+
             return new GitPullRequest(source.Title, source.Description, source.Source.Branch.Name, source.Destination.Branch.Name)
             {
                 Id = source.Id,
@@ -65,7 +65,8 @@ namespace GitClientVS.Infrastructure.Mappings
                     }
                 },
                 State = source.Status.MapTo<PullRequestOptions>(),
-                CloseSourceBranch = source.CloseSourceBranch
+                CloseSourceBranch = source.CloseSourceBranch,
+                Reviewers = source.Reviewers?.Select(x => new User() { Username = x.Key, Type = "user" }).ToList()
             };
         }
     }

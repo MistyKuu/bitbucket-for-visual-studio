@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -41,7 +42,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _message;
         private GitRemoteRepository _currentRepo;
         private ReactiveList<GitUser> _selectedReviewers;
-        private ReactiveList<GitUser> _reviewers;
+        private List<GitUser> _reviewers;
+        private List<GitUser> _allReviewers;
 
         public string PageTitle { get; } = "Create New Pull Request";
 
@@ -127,21 +129,28 @@ namespace GitClientVS.Infrastructure.ViewModels
             _eventAggregator = eventAggregator;
             CloseSourceBranch = false;
             SetupObservables();
-            Reviewers = new ReactiveList<GitUser>() { new GitUser() { DisplayName = "ABC" }, new GitUser() { DisplayName = "ABCD" } };
-            SelectedReviewers = new ReactiveList<GitUser>();
         }
 
         private void SetupObservables()
         {
             _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
-                .SelectMany(async _ => await _initializeCommand.ExecuteAsync())
+                .SelectMany(_ => LoadBranches().ToObservable())
                 .Subscribe();
 
+            this.WhenAnyObservable(x => x.SelectedReviewers.Changed).Subscribe(_ =>
+            {
+                Reviewers = AllReviewers.Except(SelectedReviewers).ToList();
+            });
         }
 
         public void InitializeCommands()
         {
-            _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), _ => LoadBranches());
+            _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), async _ =>
+            {
+                await LoadBranches();
+                await SetReviewers();
+            });
+
             _removeReviewerCommand = ReactiveCommand.Create();
             _createNewPullRequestCommand = ReactiveCommand.CreateAsyncTask(CanCreatePullRequest(), _ => CreateNewPullRequest());
 
@@ -154,7 +163,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.Name, DestinationBranch.Name)
             {
-                CloseSourceBranch = CloseSourceBranch
+                CloseSourceBranch = CloseSourceBranch,
+                Reviewers = SelectedReviewers.ToDictionary(x => x.Username, x => true)
             };
             await _gitClientService.CreatePullRequest(gitPullRequest, _currentRepo.Name, _currentRepo.Owner);
         }
@@ -170,10 +180,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             DestinationBranch = Branches.FirstOrDefault(x => x.IsDefault) ??
                                 Branches.FirstOrDefault(x => x.Name != SourceBranch.Name);
 
-            if (string.IsNullOrEmpty(currentBranch.TrackedBranchName))
-                Message = $"Warning! Your active local branch {currentBranch.Name} is not tracking any remote branches.";
-            else
-                Message = string.Empty;
+            Message = string.IsNullOrEmpty(currentBranch.TrackedBranchName) ?
+                $"Warning! Your active local branch {currentBranch.Name} is not tracking any remote branches." :
+                string.Empty;
+        }
+
+        private async Task SetReviewers()
+        {
+            AllReviewers = new List<GitUser>(await _gitClientService.GetRepositoryUsers(_currentRepo.Name, _currentRepo.Owner));
+            Reviewers = AllReviewers.ToList();
+            SelectedReviewers = new ReactiveList<GitUser>();
         }
 
         private IObservable<bool> CanLoadPullRequests()
@@ -211,7 +227,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
         }
 
-        public ReactiveList<GitUser> Reviewers
+        public List<GitUser> Reviewers
         {
             get
             {
@@ -220,6 +236,18 @@ namespace GitClientVS.Infrastructure.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _reviewers, value);
+            }
+        }
+
+        public List<GitUser> AllReviewers
+        {
+            get
+            {
+                return _allReviewers;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _allReviewers, value);
             }
         }
 

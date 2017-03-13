@@ -20,11 +20,11 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
 
         }
-       
-        public async Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName, IQueryConnector query = null)
+
+        public async Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
         {
             var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName);
-            var pullRequests = await RestClient.GetAllPages<EnterprisePullRequest>(url, 100, query);
+            var pullRequests = await RestClient.GetAllPages<EnterprisePullRequest>(url, 100);
             return pullRequests.MapTo<List<PullRequest>>();
         }
 
@@ -36,16 +36,14 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return users.MapTo<List<UserShort>>();
         }
 
-        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, IQueryConnector query = null, int page = 1)
+        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector queryConnector = null)
         {
             var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName);
             var request = new BitbucketRestRequest(url, Method.GET);
+
             request.AddQueryParameter("limit", limit.ToString());
             request.AddQueryParameter("start", ((page - 1) * limit).ToString());
-            if (query != null)
-            {
-                request.AddQueryParameter("q", query.Build());
-            }
+
             var response = await RestClient.ExecuteTaskAsync<EnterpriseIteratorBasedPage<EnterprisePullRequest>>(request);
 
             var result = response.Data;
@@ -175,6 +173,22 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(pullRequest.MapTo<EnterprisePullRequest>()), ParameterType.RequestBody);
             await RestClient.ExecuteTaskAsync(request);
+        }
+
+        public async Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName)
+        {
+            var url = EnterpriseApiUrls.Users();
+            var queryString = new QueryString()
+            {
+                {"permission","LICENSED_USER" },
+                {"permission.1","REPO_READ" },
+                {"permission.1.projectKey",ownerName },
+                {"permission.1.repositorySlug",repositoryName },
+            };
+
+            var response = await RestClient.GetAllPages<EnterpriseUser>(url, query: queryString);
+
+            return response.MapTo<List<UserShort>>();
         }
 
         private static void AssignCommentParent(EnterpriseComment parent)

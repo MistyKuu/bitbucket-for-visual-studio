@@ -15,7 +15,7 @@ namespace BitBucket.REST.API.Wrappers
         {
         }
 
-        public override async Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 100, IQueryConnector query = null)
+        public override async Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 100, QueryString query = null)
         {
             var result = new EnterpriseIteratorBasedPage<T>()
             {
@@ -27,10 +27,11 @@ namespace BitBucket.REST.API.Wrappers
             {
                 var request = new BitbucketRestRequest(url, Method.GET);
                 request.AddQueryParameter("limit", limit.ToString()).AddQueryParameter("start", pageNumber.ToString());
+
                 if (query != null)
-                {
-                    request.AddQueryParameter("q", query.Build());
-                }
+                    foreach (var par in query)
+                        request.AddQueryParameter(par.Key, par.Value);
+
                 response = await this.ExecuteTaskAsync<EnterpriseIteratorBasedPage<T>>(request);
                 if (response.Data.Values != null)
                 {

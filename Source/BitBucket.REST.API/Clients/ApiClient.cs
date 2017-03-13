@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BitBucket.REST.API.Helpers;
+using BitBucket.REST.API.Mappings;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Enterprise;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Wrappers;
@@ -16,17 +19,9 @@ namespace BitBucket.REST.API.Clients
             Connection = connection;
         }
 
-        protected ApiClient(BitbucketRestClientBase restClient, BitbucketRestClient internalRestClient,  Connection connection)
-        {
-            RestClient = restClient;
-            Connection = connection;
-            InternalRestClient = internalRestClient;
-        }
-
-
         protected Connection Connection { get; private set; }
 
         protected BitbucketRestClientBase RestClient { get; private set; }
-        protected BitbucketRestClientBase InternalRestClient { get; private set; }
+
     }
 }

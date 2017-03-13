@@ -10,10 +10,11 @@ namespace BitBucket.REST.API.Mappings.Converters
         {
             return new Repository()
             {
+                Id = source.Id,
                 Scm = source.Scm,
                 Links = source.Links.MapTo<Links>(),
                 IsPrivate = !source.IsPublic,
-                ForkPolicy = source.Forkable != null && source.Forkable.Value ? "YES" : "NO", //todo check valid stirng
+                ForkPolicy = source.Forkable != null && source.Forkable.Value ? "allow_forks" : "no_forks",
                 Owner = new User() { Username = source.Project.Key },
                 Name = source.Name
             };

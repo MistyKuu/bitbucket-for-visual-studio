@@ -84,6 +84,11 @@ namespace GitClientVS.Services
             return repositories.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>();
         }
 
+        public async Task<IEnumerable<GitUser>> GetRepositoryUsers(string repositoryName, string ownerName)
+        {
+            return (await _bitbucketClient.PullRequestsClient.GetRepositoryUsers(repositoryName, ownerName)).MapTo<List<GitUser>>();
+        }
+
         public async Task<IEnumerable<GitRemoteRepository>> GetAllRepositories()
         {
             var allRepositories = new List<GitRemoteRepository>();
@@ -149,20 +154,6 @@ namespace GitClientVS.Services
             //todo put real repository name
             var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(repositoryName, ownerName, limit: limit, page: page);
             return pullRequests.MapTo<PageIterator<GitPullRequest>>();
-        }
-
-        public async Task<IEnumerable<GitPullRequest>> GetPullRequestsAfterDate(string repositoryName, string ownerName)
-        {
-            //todo put real repository name
-            var fakeDate = DateTime.ParseExact("2016-08-01", "yyyy-MM-dd",
-                                  CultureInfo.InvariantCulture);
-            PullRequestQueryBuilder queryBuilder = new PullRequestQueryBuilder();
-            var readyQuery = queryBuilder.StartBuilding().CreatedOn(fakeDate, Operators.Greater);
-            //with state
-            // queryBuilder.StartBuilding().CreatedOn(fakeDate, Operators.Greater).And().State(PullRequestOptions.MERGED);
-
-            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(repositoryName, ownerName, 50, readyQuery);
-            return pullRequests.Values.MapTo<List<GitPullRequest>>();
         }
 
         public async Task<IEnumerable<GitBranch>> GetBranches(string repoName, string owner)

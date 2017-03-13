@@ -36,7 +36,7 @@ namespace BitBucket.REST.API.Wrappers
         }
 
 
-        public abstract Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 100, IQueryConnector query = null);
+        public abstract Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 100, QueryString query = null);
         protected abstract string DeserializeError(IRestResponse response);
 
         public override async Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)
@@ -87,6 +87,8 @@ namespace BitBucket.REST.API.Wrappers
 
                     }
                 }
+
+                Logger.Error($"Error in request: {response.Content}");
 
                 throw new RequestFailedException(errorMessage, friendly);
             }

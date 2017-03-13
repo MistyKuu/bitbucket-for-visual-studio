@@ -120,6 +120,7 @@
     <Compile Include="Models\Enterprise\Hunk.cs" />
     <Compile Include="Models\Enterprise\Line.cs" />
     <Compile Include="Models\Enterprise\Segment.cs" />
+    <Compile Include="Models\Standard\RepositoryPrivilege.cs" />
     <Compile Include="Models\Standard\Author.cs" />
     <Compile Include="Models\Standard\Branch.cs" />
     <Compile Include="Models\Standard\Comment.cs" />
@@ -127,9 +128,6 @@
     <Compile Include="Models\Standard\Connection.cs" />
     <Compile Include="Models\Standard\Content.cs" />
     <Compile Include="Models\Enterprise\EnterpriseIteratorBasedPage.cs" />
-    <Compile Include="Models\Standard\Error.cs" />
-    <Compile Include="Models\Standard\ErrorField.cs" />
-    <Compile Include="Models\Standard\ErrorWrapper.cs" />
     <Compile Include="Models\Standard\Inline.cs" />
     <Compile Include="Models\Standard\IteratorBasedPage.cs" />
     <Compile Include="Models\Standard\Link.cs" />
@@ -149,6 +147,7 @@
     <Compile Include="QueryBuilders\Operators.cs" />
     <Compile Include="QueryBuilders\PullRequestQueryBuilder.cs" />
     <Compile Include="QueryBuilders\QueryBuilder.cs" />
+    <Compile Include="QueryBuilders\QueryString.cs" />
     <Compile Include="Serializers\BitbucketPropertyNamesContractResolver.cs" />
     <Compile Include="Serializers\IJsonSerializer.cs" />
     <Compile Include="Serializers\NewtonsoftJsonSerializer.cs" />

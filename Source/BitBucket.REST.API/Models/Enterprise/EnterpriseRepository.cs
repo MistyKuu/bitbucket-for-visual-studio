@@ -5,6 +5,9 @@ namespace BitBucket.REST.API.Models.Enterprise
 {
     public class EnterpriseRepository
     {
+        [JsonProperty(PropertyName = "id")]
+        public int? Id { get; set; }
+
         [JsonProperty(PropertyName = "scmId")]
         public string Scm { get; set; }
 

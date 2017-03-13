@@ -36,9 +36,9 @@ namespace BitBucket.REST.API.Helpers
             return $"projects/{ownerName}/repos/{repoName}/commits/{id}";
         }
 
-        public static string User(string id)
+        public static string Users()
         {
-            return $"users/{id}";
+            return $"users";
         }
 
         public static string PullRequests(string ownerName, string repository)
