@@ -94,6 +94,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <TextBox Grid.Row="1" Text="{bindings:ValidatedBinding Title}" controls:TextBoxHelper.Watermark="Title" />
@@ -121,6 +122,7 @@
                     </Button.Style>
                 </Button>
                 <TextBlock Grid.Row="5" Foreground="Red" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Message}"/>
+                <TextBlock Grid.Row="6" Text="{Binding RemotePullRequest.Id}"/>
             </Grid>
 
             <Separator Grid.Row="2"/>

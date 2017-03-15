@@ -16,7 +16,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public DateTime Updated { get; set; }
         public bool? CloseSourceBranch { get; set; }
         public string Url { get; set; }
-        public Dictionary<string, bool> Reviewers { get; set; }
+        public Dictionary<GitUser, bool> Reviewers { get; set; }
         public string Link { get; set; }
         public int CommentsCount { get; set; }
 
@@ -25,7 +25,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         {
         }
 
-        public GitPullRequest(string title, string description, string sourceBranch, string destinationBranch, Dictionary<string, bool> reviewers)
+        public GitPullRequest(string title, string description, string sourceBranch, string destinationBranch, Dictionary<GitUser, bool> reviewers)
         {
             Title = title;
             Description = description;

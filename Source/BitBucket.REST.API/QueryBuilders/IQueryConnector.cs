@@ -2,8 +2,6 @@
 {
     public interface IQueryConnector
     {
-        IQueryParam And();
-        IQueryParam Or();
         string Build();
     }
 }

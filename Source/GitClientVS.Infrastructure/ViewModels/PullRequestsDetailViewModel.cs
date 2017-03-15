@@ -213,7 +213,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             IsApproved = true;
             foreach (var Reviewer in PullRequest.Reviewers)
             {
-                if (Reviewer.Key == _userInformationService.ConnectionData.UserName)
+                if (Reviewer.Key.Username == _userInformationService.ConnectionData.UserName)
                 {
                     IsApproveAvailable = true;
                     IsApproved = Reviewer.Value;

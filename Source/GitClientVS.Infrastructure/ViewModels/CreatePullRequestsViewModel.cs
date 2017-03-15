@@ -40,13 +40,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         private GitBranch _sourceBranch;
         private GitBranch _destinationBranch;
         private string _description;
-        private string _Title;
+        private string _title;
         private bool _closeSourceBranch;
         private string _message;
         private GitRemoteRepository _currentRepo;
         private ReactiveList<GitUser> _selectedReviewers;
-        private List<GitUser> _reviewers;
-        private List<GitUser> _allReviewers;
+        private GitPullRequest _remotePullRequest;
 
         public string PageTitle { get; } = "Create New Pull Request";
 
@@ -93,8 +92,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         [Required]
         public string Title
         {
-            get { return _Title; }
-            set { this.RaiseAndSetIfChanged(ref _Title, value); }
+            get { return _title; }
+            set { this.RaiseAndSetIfChanged(ref _title, value); }
         }
 
         [Required]
@@ -105,9 +104,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         public IEnumerable<IReactiveCommand> ThrowableCommands
-            => new[] {_initializeCommand, _createNewPullRequestCommand};
+            => new[] { _initializeCommand, _createNewPullRequestCommand };
 
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] {_initializeCommand, _createNewPullRequestCommand}
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand }
             ;
 
         public string GitClientType => _gitClientService.GitClientType;
@@ -143,6 +142,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
                 .SelectMany(_ => LoadBranches().ToObservable())
                 .Subscribe();
+
+            this.WhenAnyValue(x => x.SourceBranch, x => x.DestinationBranch)
+                .Where((x, y) => x.Item1 != null && x.Item2 != null)
+                .SelectMany(_ => CheckPullRequestExistence().ToObservable())
+                .Subscribe();
         }
 
         public void InitializeCommands()
@@ -154,11 +158,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             });
 
             _removeReviewerCommand = ReactiveCommand.Create();
-            _createNewPullRequestCommand = ReactiveCommand.CreateAsyncTask(CanCreatePullRequest(),
-                _ => CreateNewPullRequest());
+            _createNewPullRequestCommand = ReactiveCommand.CreateAsyncTask(CanCreatePullRequest(), _ => CreateNewPullRequest());
 
             _createNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.NavigateBack(true); });
-            _removeReviewerCommand.Subscribe((x) => { SelectedReviewers.Remove((GitUser) x); });
+            _removeReviewerCommand.Subscribe((x) => { SelectedReviewers.Remove((GitUser)x); });
         }
 
 
@@ -167,7 +170,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.Name, DestinationBranch.Name)
             {
                 CloseSourceBranch = CloseSourceBranch,
-                Reviewers = SelectedReviewers.ToDictionary(x => x.Username, x => true)
+                Reviewers = SelectedReviewers.ToDictionary(x => x, x => true)
             };
             await _gitClientService.CreatePullRequest(gitPullRequest, _currentRepo.Name, _currentRepo.Owner);
         }
@@ -177,9 +180,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _currentRepo = _gitService.GetActiveRepository();
             var currentBranch = _currentRepo.Branches.First(x => x.IsHead);
 
-            Branches =
-                (await _gitClientService.GetBranches(_currentRepo.Name, _currentRepo.Owner)).OrderBy(x => x.Name)
-                    .ToList();
+            Branches = (await _gitClientService.GetBranches(_currentRepo.Name, _currentRepo.Owner)).OrderBy(x => x.Name).ToList();
 
             SourceBranch = Branches.FirstOrDefault(x => x.Name == currentBranch.TrackedBranchName) ??
                            Branches.FirstOrDefault();
@@ -189,6 +190,20 @@ namespace GitClientVS.Infrastructure.ViewModels
             Message = string.IsNullOrEmpty(currentBranch.TrackedBranchName)
                 ? $"Warning! Your active local branch {currentBranch.Name} is not tracking any remote branches."
                 : string.Empty;
+        }
+
+        private async Task CheckPullRequestExistence()
+        {
+            var pullRequest = await _gitClientService.GetPullRequestForBranches(_currentRepo.Name, _currentRepo.Owner, SourceBranch.Name, DestinationBranch.Name);
+            if (pullRequest != null)
+            {
+                Title = pullRequest.Title;
+                Description = pullRequest.Description;
+                SelectedReviewers.Clear();
+                SelectedReviewers.AddRange(pullRequest.Reviewers.Select(x => x.Key));
+            }
+
+            RemotePullRequest = pullRequest;
         }
 
         private IObservable<bool> CanLoadPullRequests()
@@ -218,6 +233,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get { return _selectedReviewers; }
             set { this.RaiseAndSetIfChanged(ref _selectedReviewers, value); }
+        }
+
+        public GitPullRequest RemotePullRequest
+        {
+            get { return _remotePullRequest; }
+            set { this.RaiseAndSetIfChanged(ref _remotePullRequest, value); }
         }
 
         public ISuggestionProvider ReviewersProvider => new SuggestionProvider(Filter);

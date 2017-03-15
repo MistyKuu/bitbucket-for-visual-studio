@@ -25,7 +25,7 @@ namespace BitBucket.REST.API.Clients.Standard
 
         public async Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
         {
-            var url = ApiUrls.PullRequests(ownerName, repositoryName);
+            var url = ApiUrls.PullRequestsAllStates(ownerName, repositoryName);
             return await RestClient.GetAllPages<PullRequest>(url, 100);
         }
 
@@ -38,7 +38,7 @@ namespace BitBucket.REST.API.Clients.Standard
 
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector query = null)
         {
-            var url = ApiUrls.PullRequests(ownerName, repositoryName);
+            var url = ApiUrls.PullRequestsAllStates(ownerName, repositoryName);
             var request = new BitbucketRestRequest(url, Method.GET);
             request.AddQueryParameter("pagelen", limit.ToString());
             request.AddQueryParameter("page", page.ToString());
@@ -118,6 +118,13 @@ namespace BitBucket.REST.API.Clients.Standard
             return response.Data;
         }
 
+        public async Task<PullRequest> GetPullRequestForBranches(string repositoryName, string ownerName, string sourceBranch, string destBranch)
+        {
+            var url = ApiUrls.PullRequests(ownerName, repositoryName);
+            var response = await RestClient.GetAllPages<PullRequest>(url, query: new QueryString() { { "q", $@"source.branch.name=""{sourceBranch}""" } }, limit: 20);
+            return response.FirstOrDefault(x => x.Destination.Branch.Name == destBranch);
+        }
+
         public async Task CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner)
         {
             pullRequest.Author = new User()
@@ -140,9 +147,9 @@ namespace BitBucket.REST.API.Clients.Standard
             };
 
             var request = new BitbucketRestRequest(url, Method.GET);
-            
-                foreach (var par in query)
-                    request.AddQueryParameter(par.Key, par.Value);
+
+            foreach (var par in query)
+                request.AddQueryParameter(par.Key, par.Value);
 
             var response = await _webClient.ExecuteTaskAsync<List<UserShort>>(request);
             return response.Data;

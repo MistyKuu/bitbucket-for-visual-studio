@@ -43,7 +43,7 @@ namespace BitBucket.REST.API.Helpers
 
         public static string PullRequests(string ownerName, string repository)
         {
-            return $"projects/{ownerName}/repos/{repository}/pull-requests?state=ALL";
+            return $"projects/{ownerName}/repos/{repository}/pull-requests";
         }
         public static string PullRequest(string ownerName, string repository, long id)
         {
@@ -56,7 +56,7 @@ namespace BitBucket.REST.API.Helpers
 
         public static string PullRequestDiff(string owner, string repositoryName, long id)
         {
-            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/diff?CONTEXTLINES&SRCPATH&WHITESPACE&WITHCOMMENTS";
+            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/diff";
         }
 
         public static string PullRequestApprove(string owner, string repositoryName, long id)

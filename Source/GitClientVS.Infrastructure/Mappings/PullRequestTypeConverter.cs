@@ -16,12 +16,12 @@ namespace GitClientVS.Infrastructure.Mappings
     {
         public GitPullRequest Convert(PullRequest source, GitPullRequest destination, ResolutionContext context)
         {
-            Dictionary<string, bool> reviewers = new Dictionary<string, bool>();
+            Dictionary<GitUser, bool> reviewers = new Dictionary<GitUser, bool>();
             if (source.Reviewers != null)
             {
                 foreach (var reviewer in source.Reviewers)
                 {
-                    reviewers.Add(reviewer.Username, ApiHelpers.GetApproveStatus(reviewer.Username, source.Participants));
+                    reviewers.Add(reviewer.MapTo<GitUser>(), ApiHelpers.GetApproveStatus(reviewer.Username, source.Participants));
                 }
             }
 
@@ -66,7 +66,7 @@ namespace GitClientVS.Infrastructure.Mappings
                 },
                 State = source.Status.MapTo<PullRequestOptions>(),
                 CloseSourceBranch = source.CloseSourceBranch,
-                Reviewers = source.Reviewers?.Select(x => new User() { Username = x.Key, Type = "user" }).ToList()
+                Reviewers = source.Reviewers?.Select(x => new User() { Username = x.Key.Username, Type = "user" }).ToList()
             };
         }
     }

@@ -23,7 +23,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         public async Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
         {
-            var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName);
+            var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName) + "?state=ALL";
             var pullRequests = await RestClient.GetAllPages<EnterprisePullRequest>(url, 100);
             return pullRequests.MapTo<List<PullRequest>>();
         }
@@ -38,7 +38,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector queryConnector = null)
         {
-            var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName);
+            var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName) + "?state=ALL";
             var request = new BitbucketRestRequest(url, Method.GET);
 
             request.AddQueryParameter("limit", limit.ToString());
@@ -163,6 +163,14 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return pullRequest.Data.MapTo<PullRequest>();
         }
 
+        public async Task<PullRequest> GetPullRequestForBranches(string repositoryName, string ownerName, string sourceBranch, string destBranch)
+        {
+            var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName);
+            //at works only for destbranch xD
+            var response = await RestClient.GetAllPages<EnterprisePullRequest>(url, query: new QueryString() { { "at", "refs/heads/" + destBranch } });
+            return response.FirstOrDefault(x => x.Source.DisplayId == sourceBranch)?.MapTo<PullRequest>();
+        }
+
         public async Task CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner)
         {
             pullRequest.Author = new User()
@@ -191,6 +199,8 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
             return response.MapTo<List<UserShort>>();
         }
+
+
 
         private static void AssignCommentParent(EnterpriseComment parent)
         {

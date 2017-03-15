@@ -141,6 +141,11 @@ namespace GitClientVS.Services
             return result.MapTo<GitRemoteRepository>();
         }
 
+        public async Task<GitPullRequest> GetPullRequestForBranches(string repositoryName, string ownerName, string sourceBranch, string destBranch)
+        {
+            var pullRequest = await _bitbucketClient.PullRequestsClient.GetPullRequestForBranches(repositoryName, ownerName, sourceBranch, destBranch);
+            return pullRequest?.MapTo<GitPullRequest>();
+        }
 
         public async Task<IEnumerable<GitPullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
         {
