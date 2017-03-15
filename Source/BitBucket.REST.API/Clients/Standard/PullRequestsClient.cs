@@ -15,12 +15,12 @@ namespace BitBucket.REST.API.Clients.Standard
     public class PullRequestsClient : ApiClient, IPullRequestsClient
     {
         private readonly BitbucketRestClient _internalRestClient;
-        private readonly BitbucketRestClient _versionOneClient;
+        private readonly BitbucketRestClient _webClient;
 
-        public PullRequestsClient(BitbucketRestClient restClient, BitbucketRestClient internalRestClient, BitbucketRestClient versionOneClient, Connection connection) : base(restClient, connection)
+        public PullRequestsClient(BitbucketRestClient restClient, BitbucketRestClient internalRestClient, BitbucketRestClient webClient, Connection connection) : base(restClient, connection)
         {
             _internalRestClient = internalRestClient;
-            _versionOneClient = versionOneClient;
+            _webClient = webClient;
         }
 
         public async Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
@@ -131,16 +131,21 @@ namespace BitBucket.REST.API.Clients.Standard
             var response = await RestClient.ExecuteTaskAsync<PullRequest>(request);
         }
 
-        public  Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName)
+        public async Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName, string filter)
         {
-            return GetAuthors(repositoryName, ownerName);//todo this is wrong
-            //var repoUrl = ApiUrls.Repository(ownerName, repositoryName);
-            //var repositoryResponse = await RestClient.ExecuteTaskAsync<Repository>(new BitbucketRestRequest(repoUrl, Method.GET));
+            var url = ApiUrls.Mentions(ownerName, repositoryName);
+            var query = new QueryString()
+            {
+                {"term",filter }
+            };
 
-            //var url = ApiUrls.RepositoryUsers(ownerName, repositoryName);
-            //var repoPrivileges = await _versionOneClient.ExecuteTaskAsync<List<RepositoryPrivilege>>(new BitbucketRestRequest(url, Method.GET));
+            var request = new BitbucketRestRequest(url, Method.GET);
+            
+                foreach (var par in query)
+                    request.AddQueryParameter(par.Key, par.Value);
 
-            //return repoPrivileges.Data.Select(x => x.User).Concat(new[] { repositoryResponse.Data.Owner.MapTo<UserShort>() }).ToList();
+            var response = await _webClient.ExecuteTaskAsync<List<UserShort>>(request);
+            return response.Data;
         }
     }
 }

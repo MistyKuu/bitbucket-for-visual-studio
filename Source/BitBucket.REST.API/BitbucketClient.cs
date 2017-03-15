@@ -19,16 +19,17 @@ namespace BitBucket.REST.API
         public Connection ApiConnection { get; }
         public BitBucketType BitBucketType { get; } = BitBucketType.Standard;
 
-        public BitbucketClient(Connection apiConnection, Connection internalConnection, Connection versionOneApiConnection)
+        public BitbucketClient(Connection apiConnection, Connection internalConnection, Connection versionOneApiConnection,Connection webConnection)
         {
             ApiConnection = apiConnection;
             var client = new BitbucketRestClient(apiConnection);
             var internalClient = new BitbucketRestClient(internalConnection);
             var versionOneClient = new BitbucketRestClient(versionOneApiConnection);
+            var webClient = new BitbucketRestClient(webConnection);
 
             RepositoriesClient = new RepositoriesClient(client, ApiConnection);
             UserClient = new UserClient(client, ApiConnection);
-            PullRequestsClient = new PullRequestsClient(client, internalClient, versionOneClient, ApiConnection);
+            PullRequestsClient = new PullRequestsClient(client, internalClient, webClient, ApiConnection);
             TeamsClient = new TeamsClient(client, ApiConnection);
         }
     }

@@ -98,6 +98,7 @@
     <Compile Include="CacheKeys.cs" />
     <Compile Include="Extensions\ChainingExtensions.cs" />
     <Compile Include="Extensions\CommonExtensions.cs" />
+    <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\MapperExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\ServiceProviderExtensions.cs" />

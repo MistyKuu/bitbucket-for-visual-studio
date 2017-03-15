@@ -10,6 +10,11 @@ namespace BitBucket.REST.API.Helpers
             return new Uri(string.Format(CultureInfo.InvariantCulture, pattern, args), UriKind.Relative);
         }
 
+        public static string Mentions(string username, string repository)
+        {
+            return $"mentions/repositories/{username}/{repository}";
+        }
+
         public static string Repositories(string login)
         {
             return $"repositories/{login}";

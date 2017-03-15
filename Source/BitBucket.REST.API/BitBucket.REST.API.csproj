@@ -70,7 +70,7 @@
     <Compile Include="Clients\Enterprise\EnterprisePullRequestsClient.cs" />
     <Compile Include="EnterpriseBitbucketClient.cs" />
     <Compile Include="Helpers\EnterpriseApiUrls.cs" />
-    <Compile Include="Helpers\LinqExpressions.cs" />
+    <Compile Include="Helpers\LinqExtensions.cs" />
     <Compile Include="Interfaces\IBitbucketClientFactory.cs" />
     <Compile Include="Interfaces\IBitbucketClient.cs" />
     <Compile Include="Interfaces\IPullRequestsClient.cs" />

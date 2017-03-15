@@ -175,7 +175,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             await RestClient.ExecuteTaskAsync(request);
         }
 
-        public async Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName)
+        public async Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName, string filter)
         {
             var url = EnterpriseApiUrls.Users();
             var queryString = new QueryString()
@@ -184,6 +184,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
                 {"permission.1","REPO_READ" },
                 {"permission.1.projectKey",ownerName },
                 {"permission.1.repositorySlug",repositoryName },
+                {"filter",filter }
             };
 
             var response = await RestClient.GetAllPages<EnterpriseUser>(url, query: queryString);

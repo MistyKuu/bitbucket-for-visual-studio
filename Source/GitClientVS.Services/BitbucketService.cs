@@ -84,9 +84,9 @@ namespace GitClientVS.Services
             return repositories.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>();
         }
 
-        public async Task<IEnumerable<GitUser>> GetRepositoryUsers(string repositoryName, string ownerName)
+        public async Task<IEnumerable<GitUser>> GetRepositoryUsers(string repositoryName, string ownerName, string filter)
         {
-            return (await _bitbucketClient.PullRequestsClient.GetRepositoryUsers(repositoryName, ownerName)).MapTo<List<GitUser>>();
+            return (await _bitbucketClient.PullRequestsClient.GetRepositoryUsers(repositoryName, ownerName, filter)).MapTo<List<GitUser>>();
         }
 
         public async Task<IEnumerable<GitRemoteRepository>> GetAllRepositories()

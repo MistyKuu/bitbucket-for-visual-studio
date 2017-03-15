@@ -17,7 +17,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
             var credentials = new Credentials("test", "test");
             var connection = new Connection(CredentialsHelper.TestsCredentials.HostUrl, CredentialsHelper.TestsCredentials.ApiUrl, credentials);
 
-            var bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection, connection, connection);
+            var bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection, connection, connection, connection);
 
             Assert.ThrowsAsync<AuthorizationException>(() => bitbucketClient.UserClient.GetUser());
         }
@@ -29,7 +29,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
             var credentials = new Credentials("test", "test");
             var connection = new Connection(CredentialsHelper.TestsCredentials.HostUrl, CredentialsHelper.TestsCredentials.ApiUrl, credentials);
 
-            var bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection, connection, connection);
+            var bitbucketClient = new BitBucket.REST.API.BitbucketClient(connection, connection, connection, connection);
 
             Assert.ThrowsAsync<AuthorizationException>(() => bitbucketClient.UserClient.GetUser());
         }

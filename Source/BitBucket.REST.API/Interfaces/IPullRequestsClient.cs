@@ -23,6 +23,7 @@ namespace BitBucket.REST.API.Interfaces
         Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id);
         Task<PullRequest> GetPullRequest(string repositoryName, string owner, long id);
         Task CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner);
-        Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName);
+        Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName, string filter);
+
     }
 }

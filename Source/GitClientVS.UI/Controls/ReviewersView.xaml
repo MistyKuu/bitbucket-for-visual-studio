@@ -25,6 +25,7 @@
                 Watermark="Reviewers"
                 IconPlacement="Right"
                 Provider="{Binding ReviewersProvider}"
+                Delay="300"
                 >
                 <wpfControls:AutoCompleteTextBox.ItemTemplate>
                     <DataTemplate DataType="gitClientModels:GitUser">

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,7 @@ using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
+using log4net;
 using ReactiveUI;
 using WpfControls;
 
@@ -24,6 +26,7 @@ namespace GitClientVS.Infrastructure.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CreatePullRequestsViewModel : ViewModelBase, ICreatePullRequestsViewModel
     {
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IPageNavigationService<IPullRequestsWindow> _pageNavigationService;
@@ -101,8 +104,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _closeSourceBranch, value); }
         }
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
+        public IEnumerable<IReactiveCommand> ThrowableCommands
+            => new[] {_initializeCommand, _createNewPullRequestCommand};
+
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] {_initializeCommand, _createNewPullRequestCommand}
+            ;
+
         public string GitClientType => _gitClientService.GitClientType;
 
         public bool IsLoading
@@ -121,7 +128,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             IGitService gitService,
             IPageNavigationService<IPullRequestsWindow> pageNavigationService,
             IEventAggregatorService eventAggregator
-            )
+        )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
@@ -136,26 +143,22 @@ namespace GitClientVS.Infrastructure.ViewModels
             _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
                 .SelectMany(_ => LoadBranches().ToObservable())
                 .Subscribe();
-
-            this.WhenAnyObservable(x => x.SelectedReviewers.Changed).Subscribe(_ =>
-            {
-                Reviewers = AllReviewers.Except(SelectedReviewers).ToList();
-            });
         }
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), async _ =>
             {
+                SelectedReviewers = new ReactiveList<GitUser>();
                 await LoadBranches();
-                await SetReviewers();
             });
 
             _removeReviewerCommand = ReactiveCommand.Create();
-            _createNewPullRequestCommand = ReactiveCommand.CreateAsyncTask(CanCreatePullRequest(), _ => CreateNewPullRequest());
+            _createNewPullRequestCommand = ReactiveCommand.CreateAsyncTask(CanCreatePullRequest(),
+                _ => CreateNewPullRequest());
 
             _createNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.NavigateBack(true); });
-            _removeReviewerCommand.Subscribe((x) => { SelectedReviewers.Remove((GitUser)x); });
+            _removeReviewerCommand.Subscribe((x) => { SelectedReviewers.Remove((GitUser) x); });
         }
 
 
@@ -174,22 +177,18 @@ namespace GitClientVS.Infrastructure.ViewModels
             _currentRepo = _gitService.GetActiveRepository();
             var currentBranch = _currentRepo.Branches.First(x => x.IsHead);
 
-            Branches = (await _gitClientService.GetBranches(_currentRepo.Name, _currentRepo.Owner)).OrderBy(x => x.Name).ToList();
+            Branches =
+                (await _gitClientService.GetBranches(_currentRepo.Name, _currentRepo.Owner)).OrderBy(x => x.Name)
+                    .ToList();
 
-            SourceBranch = Branches.FirstOrDefault(x => x.Name == currentBranch.TrackedBranchName) ?? Branches.FirstOrDefault();
+            SourceBranch = Branches.FirstOrDefault(x => x.Name == currentBranch.TrackedBranchName) ??
+                           Branches.FirstOrDefault();
             DestinationBranch = Branches.FirstOrDefault(x => x.IsDefault) ??
                                 Branches.FirstOrDefault(x => x.Name != SourceBranch.Name);
 
-            Message = string.IsNullOrEmpty(currentBranch.TrackedBranchName) ?
-                $"Warning! Your active local branch {currentBranch.Name} is not tracking any remote branches." :
-                string.Empty;
-        }
-
-        private async Task SetReviewers()
-        {
-            AllReviewers = new List<GitUser>(await _gitClientService.GetRepositoryUsers(_currentRepo.Name, _currentRepo.Owner));
-            Reviewers = AllReviewers.ToList();
-            SelectedReviewers = new ReactiveList<GitUser>();
+            Message = string.IsNullOrEmpty(currentBranch.TrackedBranchName)
+                ? $"Warning! Your active local branch {currentBranch.Name} is not tracking any remote branches."
+                : string.Empty;
         }
 
         private IObservable<bool> CanLoadPullRequests()
@@ -217,47 +216,26 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public ReactiveList<GitUser> SelectedReviewers
         {
-            get
-            {
-                return _selectedReviewers;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _selectedReviewers, value);
-            }
+            get { return _selectedReviewers; }
+            set { this.RaiseAndSetIfChanged(ref _selectedReviewers, value); }
         }
 
-        public List<GitUser> Reviewers
-        {
-            get
-            {
-                return _reviewers;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _reviewers, value);
-            }
-        }
+        public ISuggestionProvider ReviewersProvider => new SuggestionProvider(Filter);
 
-        public List<GitUser> AllReviewers
+        private IEnumerable Filter(string arg)
         {
-            get
-            {
-                return _allReviewers;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _allReviewers, value);
-            }
-        }
+            if (arg.Length < 3)
+                return Enumerable.Empty<GitUser>();
 
-        public ISuggestionProvider ReviewersProvider
-        {
-            get
+            try
             {
-                return new SuggestionProvider(x => Reviewers.Where(y =>
-                (y.DisplayName != null && y.DisplayName.Contains(x, StringComparison.InvariantCultureIgnoreCase)) ||
-                (y.Username != null && y.Username.Contains(x, StringComparison.InvariantCultureIgnoreCase))));
+                var suggestions = _gitClientService.GetRepositoryUsers(_currentRepo.Name, _currentRepo.Owner, arg).Result;
+                return suggestions.Except(SelectedReviewers, x => x.Username).ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Enumerable.Empty<GitUser>();
             }
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BitBucket.REST.API.Helpers
 {
-    public static class LinqExpressions
+    public static class LinqExtensions
     {
         public static IEnumerable<TSource> Flatten<TSource>(
                  this IEnumerable<TSource> source,
