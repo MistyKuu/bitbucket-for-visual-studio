@@ -291,13 +291,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             if (commits.Count == 1)
             {
-                Title = commits.First().Message;
+                Title = commits.First().Message.Trim();
                 Description = string.Empty;
             }
             else
             {
                 Title = SourceBranch.Name;
-                Description = string.Join(Environment.NewLine, commits.Select((x) => $"* " + x.Message).Reverse());
+                Description = string.Join(Environment.NewLine, commits.Select((x) => $"* " + x.Message.Trim()).Reverse());
             }
         }
 

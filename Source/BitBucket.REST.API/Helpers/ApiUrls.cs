@@ -25,6 +25,11 @@ namespace BitBucket.REST.API.Helpers
             return $"repositories/{ownerName}/{repoName}/commits";
         }
 
+        public static string CommitsDiff(string ownerName, string repoName, string fromHash, string toHash)
+        {
+            return $"repositories/{ownerName}/{repoName}/diff/{fromHash}..{toHash}";
+        }
+
         public static string Commits(string ownerName, string repoName, string branch)
         {
             return $"repositories/{ownerName}/{repoName}/commits/{branch}";
