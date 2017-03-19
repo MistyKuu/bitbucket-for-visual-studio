@@ -1,0 +1,298 @@
+﻿<UserControl x:Class="GitClientVS.UI.Controls.PullRequestDiffView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GitClientVS.UI.Controls"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
+             xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
+             xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
+             xmlns:models="clr-namespace:GitClientVS.Contracts.Models;assembly=GitClientVS.Contracts"
+             xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
+             xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
+             xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+            d:DataContext="{d:DesignInstance models:PullRequestDiffModel,IsDesignTimeCreatable=False}" 
+             x:Name="PqDiffView"
+             >
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
+                    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+
+                </ResourceDictionary.MergedDictionaries>
+
+                <BitmapImage x:Key="DefaultAvatar" UriSource="pack://application:,,,/GitClientVS.UI;component/Images/defaultAva.png" />
+
+                <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto" SharedSizeGroup="SeparatorRow"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="B"/>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="C" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image Width="30" Height="30" VerticalAlignment="Center" Margin="0,0,5,0" Source="{Binding Author.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}"/>
+                        <TextBlock VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Text="{Binding Author.DisplayName}" Margin="0,0,10,0" TextWrapping="Wrap" FontWeight="Bold" Foreground="CornflowerBlue"/>
+
+                        <TextBlock Grid.Row="0" Grid.Column="2" VerticalAlignment="Center">
+                         <Hyperlink NavigateUri="{Binding CommitHref}" RequestNavigate="GoToCommit">
+                              <TextBlock Foreground="CornflowerBlue" Text="{Binding Hash, Converter={converters:ShortCommitHashConverter}}"/>
+                        </Hyperlink>
+                    </TextBlock>
+
+                        <TextBlock  VerticalAlignment="Center" Grid.Row="0" Grid.Column="3" Text="{Binding Date}" HorizontalAlignment="Right" Foreground="Gray"/>
+                        <TextBlock  Grid.Row="1" Grid.Column="1" Text="{Binding Message}" Grid.ColumnSpan="3" TextWrapping="Wrap" Margin="0,5,15,0"/>
+                        <Border Grid.Row="2"  Grid.ColumnSpan="4" Background="White" BorderBrush="LightGray" BorderThickness="0,1,0,0" Height="1"/>
+                    </Grid>
+                </DataTemplate>
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <controls:MetroAnimatedTabControl >
+            <controls:MetroAnimatedTabControl.Resources>
+                <Style TargetType="TextBlock"/>
+            </controls:MetroAnimatedTabControl.Resources>
+            <controls:MetroTabItem Visibility="{Binding FileDiffs,Converter={converters:NullToNonVisibilityConverter}}" controls:ControlsHelper.HeaderFontSize="14"  Header="{Binding FileDiffs.Count,FallbackValue=0}" HeaderStringFormat="{}Files Changed ({0})" >
+
+                <TreeView ItemsSource="{Binding FilesTree}" x:Name="FilesTree" Margin="0,4,0,0" >
+                    <TreeView.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"  Color="LightBlue" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="LightBlue" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />
+
+                        <Style TargetType="{x:Type TreeViewItem}" >
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay}"/>
+                            <Setter Property="IsSelected" Value="{Binding IsSelected,Mode=TwoWay}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding GetTreeType}" Value="{x:Type models:TreeDirectory}">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Focusable" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                        <HierarchicalDataTemplate DataType="{x:Type models:TreeDirectory}" ItemsSource="{Binding Files}">
+                            <StackPanel Orientation="Horizontal" Margin="2">
+                                <Image Source="{Binding IsExpanded, Converter={converters:TreeViewFolderIconConverter}}"
+                                               Width="16"
+                                               Height="16"
+                                               SnapsToDevicePixels="True"
+                                               />
+                                <TextBlock Text="{Binding Path=Name}" Margin="5,0"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+
+                        <DataTemplate DataType="{x:Type models:TreeFile}" >
+                            <StackPanel Orientation="Horizontal" Margin="2">
+                                <Image Source="../Images/File.png"
+                                               Width="16"
+                                               Height="16"
+                                               SnapsToDevicePixels="True"
+                                               />
+                                <TextBlock Margin="5,0">
+                                            <Hyperlink 
+                                                attachedProperties:SelectTreeViewAfterItemClickBehavior.TreeViewItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}"
+                                                Command="{Binding ElementName=PqDiffView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" TextDecorations="None">
+                                                  <TextBlock Text="{Binding Path=Name}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsAdded}" Value="True">
+                                                            <Setter Property="Foreground" Value="Green" />
+                                                            <Setter Property="FontWeight" Value="Bold" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsRemoved}" Value="True">
+                                                            <Setter Property="Foreground" Value="Red" />
+                                                            <Setter Property="FontWeight" Value="Bold" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                                  </TextBlock>
+                                            </Hyperlink>
+                                        </TextBlock>
+                                <TextBlock Margin="5,0" FontWeight="Bold" Foreground="Green">
+                                            <Run Text="+"/><Run Text="{Binding Added}"/>
+                                </TextBlock>
+                                <TextBlock FontWeight="Bold" Foreground="Red">
+                                            <Run Text="-"/><Run Text="{Binding Removed}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+            </controls:MetroTabItem>
+            <controls:MetroTabItem Visibility="{Binding Commits,Converter={converters:NullToNonVisibilityConverter}}"  controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Commits.Count,FallbackValue=0}" HeaderStringFormat="{}Commits ({0})">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl HorizontalAlignment="Stretch" Margin="5" Grid.IsSharedSizeScope="True" ItemsSource="{Binding Commits}" Focusable="False" HorizontalContentAlignment="Stretch"  ItemTemplate="{StaticResource CommitsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                             >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel VirtualizationMode="Recycling"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Focusable" Value="False"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ItemsControl.Resources>
+                    </ItemsControl>
+                </ScrollViewer>
+            </controls:MetroTabItem>
+
+            <controls:MetroTabItem Visibility="{Binding Comments,Converter={converters:NullToNonVisibilityConverter}}"  controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Comments.Count,FallbackValue=0}"  HeaderStringFormat="{}Comments ({0})">
+                <TreeView  ItemsSource="{Binding CommentTree}" x:Name="CommentsTree" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <TreeView.Resources>
+                        <Style x:Key="TreeViewItemFocusVisual">
+                            <Setter Property="Control.Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Rectangle/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <PathGeometry x:Key="TreeArrow" Figures="M0,0 L0,6 L6,0 z"/>
+                        <Style x:Key="ExpandCollapseToggleStyle" TargetType="{x:Type ToggleButton}">
+                            <Setter Property="Focusable" Value="False"/>
+                            <Setter Property="Width" Value="16"/>
+                            <Setter Property="Height" Value="16"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <Border Background="Transparent" Height="16" Padding="5,5,5,5" Width="16">
+                                            <Path x:Name="ExpandPath" Data="{StaticResource TreeArrow}" Fill="Transparent" Stroke="#FF989898">
+                                                <Path.RenderTransform>
+                                                    <RotateTransform Angle="135" CenterY="3" CenterX="3"/>
+                                                </Path.RenderTransform>
+                                            </Path>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Stroke" TargetName="ExpandPath" Value="#FF1BBBFA"/>
+                                                <Setter Property="Fill" TargetName="ExpandPath" Value="Transparent"/>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="RenderTransform" TargetName="ExpandPath">
+                                                    <Setter.Value>
+                                                        <RotateTransform Angle="180" CenterY="3" CenterX="3"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="Fill" TargetName="ExpandPath" Value="#FF595959"/>
+                                                <Setter Property="Stroke" TargetName="ExpandPath" Value="#FF262626"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+
+
+
+
+                        </Style>
+                        <Style TargetType="{x:Type TreeViewItem}" >
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                            <Setter Property="IsExpanded" Value="True"/>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Focusable" Value="False"/>
+                            <Setter Property="Padding" Value="0,0,0,0"/>
+                            <Setter Property="Margin" Value="0,0,0,0"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Border x:Name="Bd" BorderBrush="Gray" BorderThickness="0,0,0,0.5" Background="{TemplateBinding Background}" Grid.Column="0" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                                <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            </Border>
+                                            <ItemsPresenter Margin="40,0,0,0"  x:Name="ItemsHost" Grid.Column="0" Grid.Row="1"/>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsExpanded" Value="false">
+                                                <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
+                                            </Trigger>
+
+                                            <Trigger Property="IsSelected" Value="true">
+                                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                            </Trigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsSelected" Value="true"/>
+                                                    <Condition Property="IsSelectionActive" Value="false"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                            </MultiTrigger>
+                                            <Trigger Property="IsEnabled" Value="false">
+                                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="VirtualizingStackPanel.IsVirtualizing" Value="true">
+                                    <Setter Property="ItemsPanel">
+                                        <Setter.Value>
+                                            <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel/>
+                                            </ItemsPanelTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                        <HierarchicalDataTemplate DataType="{x:Type models:CommentTree}" ItemsSource="{Binding Comments}">
+
+                            <StackPanel Orientation="Vertical" Margin="0,5,0,5">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
+                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
+                                </StackPanel>
+
+                                <wpf:HtmlPanel Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.DisplayHtml}" Background="Transparent" Margin="30,-10,0,0" />
+
+                                <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.CreatedOn}" Foreground="Gray"></TextBlock>
+                            </StackPanel>
+
+                        </HierarchicalDataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+            </controls:MetroTabItem>
+        </controls:MetroAnimatedTabControl>
+    </Grid>
+</UserControl>

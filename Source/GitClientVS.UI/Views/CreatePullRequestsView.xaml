@@ -57,7 +57,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="3"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" Grid.Row="0">
@@ -120,7 +121,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBox Grid.Row="1" Text="{bindings:ValidatedBinding Title}" controls:TextBoxHelper.Watermark="Title" />
-                <TextBox Grid.Row="2" Text="{bindings:ValidatedBinding Description}" controls:TextBoxHelper.Watermark="Description" AcceptsReturn="True" MinLines="3" MaxLines="8"/>
+                <TextBox Grid.Row="2" Text="{bindings:ValidatedBinding Description}" controls:TextBoxHelper.Watermark="Description" AcceptsReturn="True" MinLines="3" MaxLines="6"/>
 
                 <controls1:ReviewersView Grid.Row="3" />
 
@@ -146,7 +147,9 @@
                 <TextBlock Grid.Row="5" Foreground="Red" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Message}"/>
             </Grid>
 
-            <Separator Grid.Row="3"/>
+            <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch" />
+
+            <controls1:PullRequestDiffView Grid.Row="4" Margin="0,0,0,20" DataContext="{Binding PullRequestDiffModel}"/>
 
         </Grid>
     </Grid>

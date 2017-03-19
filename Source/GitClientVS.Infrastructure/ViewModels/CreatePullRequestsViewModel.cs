@@ -52,24 +52,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveList<GitUser> _selectedReviewers;
         private GitPullRequest _remotePullRequest;
         private ReactiveCommand<object> _goToDetailsCommand;
-        private List<FileDiff> _fileDiffs;
-        private List<ITreeFile> _filesTree;
-        private List<GitCommit> _commitsDiff;
 
         public string PageTitle { get; } = "Create New Pull Request";
 
-
-        public List<ITreeFile> FilesTree
-        {
-            get { return _filesTree; }
-            set { this.RaiseAndSetIfChanged(ref _filesTree, value); }
-        }
-
-        public List<FileDiff> FileDiffs
-        {
-            get { return _fileDiffs; }
-            set { this.RaiseAndSetIfChanged(ref _fileDiffs, value); }
-        }
 
         public string ErrorMessage
         {
@@ -83,11 +68,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _branches, value); }
         }
 
-        public List<GitCommit> CommitsDiff
-        {
-            get { return _commitsDiff; }
-            set { this.RaiseAndSetIfChanged(ref _commitsDiff, value); }
-        }
 
         [Required]
 
@@ -131,7 +111,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _closeSourceBranch, value); }
         }
 
-        public string ExistingBranchText => RemotePullRequest == null ? null : $"#{RemotePullRequest.Id} {RemotePullRequest.Title} (created ({RemotePullRequest.Created})";
+        public PullRequestDiffModel PullRequestDiffModel { get; set; }
+
+        public string ExistingBranchText => RemotePullRequest == null ? null : $"#{RemotePullRequest.Id} {RemotePullRequest.Title} (created {RemotePullRequest.Created})";
 
         public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
 
@@ -156,7 +138,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             IGitService gitService,
             IPageNavigationService<IPullRequestsWindow> pageNavigationService,
             IEventAggregatorService eventAggregator,
-            ITreeStructureGenerator treeStructureGenerator
+            ITreeStructureGenerator treeStructureGenerator,
+            ICommandsService commandsService
         )
         {
             _gitClientService = gitClientService;
@@ -164,10 +147,13 @@ namespace GitClientVS.Infrastructure.ViewModels
             _pageNavigationService = pageNavigationService;
             _eventAggregator = eventAggregator;
             _treeStructureGenerator = treeStructureGenerator;
+            PullRequestDiffModel = new PullRequestDiffModel(commandsService);
+
             CloseSourceBranch = false;
             SelectedReviewers = new ReactiveList<GitUser>();
             SetupObservables();
         }
+
 
         private void SetupObservables()
         {
@@ -226,7 +212,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task CheckPullRequestExistence()
         {
             var pullRequest = await _gitClientService.GetPullRequestForBranches(SourceBranch.Name, DestinationBranch.Name);
-            CommitsDiff = (await _gitClientService.GetCommitsRange(SourceBranch, DestinationBranch)).ToList();
+            PullRequestDiffModel.Commits = (await _gitClientService.GetCommitsRange(SourceBranch, DestinationBranch)).ToList();
 
             await CreateDiffContent(SourceBranch.Target.Hash, DestinationBranch.Target.Hash);
 
@@ -240,7 +226,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
             else
             {
-                SetPullRequestDataFromCommits(CommitsDiff);
+                SetPullRequestDataFromCommits(PullRequestDiffModel.Commits);
             }
 
             RemotePullRequest = pullRequest;
@@ -301,25 +287,25 @@ namespace GitClientVS.Infrastructure.ViewModels
                 return Enumerable.Empty<GitUser>();
             }
         }
-        private void SetPullRequestDataFromCommits(List<GitCommit> commitsDiff)
+        private void SetPullRequestDataFromCommits(List<GitCommit> commits)
         {
-            if (commitsDiff.Count == 1)
+            if (commits.Count == 1)
             {
-                Title = commitsDiff.First().Message;
+                Title = commits.First().Message;
                 Description = string.Empty;
             }
             else
             {
                 Title = SourceBranch.Name;
-                Description = string.Join(Environment.NewLine, commitsDiff.Select((x) => $"* " + x.Message).Reverse());
+                Description = string.Join(Environment.NewLine, commits.Select((x) => $"* " + x.Message).Reverse());
             }
         }
 
         private async Task CreateDiffContent(string fromCommit, string toCommit)
         {
             var fileDiffs = (await _gitClientService.GetCommitsDiff(fromCommit, toCommit)).ToList();
-            FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
-            FileDiffs = fileDiffs;
+            PullRequestDiffModel.FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
+            PullRequestDiffModel.FileDiffs = fileDiffs;
         }
     }
 }

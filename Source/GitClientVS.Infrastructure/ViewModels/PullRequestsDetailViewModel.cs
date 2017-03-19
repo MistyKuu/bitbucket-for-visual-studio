@@ -27,21 +27,12 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class PullRequestsDetailViewModel : ViewModelBase, IPullRequestsDetailViewModel
     {
         private readonly IGitClientService _gitClientService;
-        private readonly IGitService _gitService;
-        private readonly ICommandsService _commandsService;
         private readonly IUserInformationService _userInformationService;
         private readonly ITreeStructureGenerator _treeStructureGenerator;
-        private readonly IVsTools _vsTools;
         private string _errorMessage;
         private bool _isLoading;
         private ReactiveCommand<Unit> _initializeCommand;
         private ReactiveCommand<Unit> _approveCommand;
-        private IEnumerable<GitCommit> _commits;
-        private IEnumerable<GitComment> _comments;
-        private ReactiveCommand<Unit> _showDiffCommand;
-        private IEnumerable<FileDiff> _fileDiffs;
-        private List<ITreeFile> _filesTree;
-        private List<ICommentTree> _commentTree;
         private GitPullRequest _pullRequest;
         private string _mainSectionCommandText;
         private bool _isApproveAvailable;
@@ -69,36 +60,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _mainSectionCommandText, value); }
         }
 
-        public IEnumerable<GitComment> Comments
-        {
-            get { return _comments; }
-            set { this.RaiseAndSetIfChanged(ref _comments, value); }
-        }
-
-        public IEnumerable<GitCommit> Commits
-        {
-            get { return _commits; }
-            set { this.RaiseAndSetIfChanged(ref _commits, value); }
-        }
-
-        public IEnumerable<FileDiff> FileDiffs
-        {
-            get { return _fileDiffs; }
-            set { this.RaiseAndSetIfChanged(ref _fileDiffs, value); }
-        }
-
-        public List<ICommentTree> CommentTree
-        {
-            get { return _commentTree; }
-            set { this.RaiseAndSetIfChanged(ref _commentTree, value); }
-        }
-
-        public List<ITreeFile> FilesTree
-        {
-            get { return _filesTree; }
-            set { this.RaiseAndSetIfChanged(ref _filesTree, value); }
-        }
-
         public GitPullRequest PullRequest
         {
             get { return _pullRequest; }
@@ -110,6 +71,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             get { return _currentTheme; }
             set { this.RaiseAndSetIfChanged(ref _currentTheme, value); }
         }
+
+        public PullRequestDiffModel PullRequestDiffModel { get; set; }
 
 
         [ImportingConstructor]
@@ -123,27 +86,25 @@ namespace GitClientVS.Infrastructure.ViewModels
             )
         {
             _gitClientService = gitClientService;
-            _gitService = gitService;
-            _commandsService = commandsService;
             _userInformationService = userInformationService;
             _treeStructureGenerator = treeStructureGenerator;
             CurrentTheme = userInformationService.CurrentTheme;
+            PullRequestDiffModel = new PullRequestDiffModel(commandsService);
+
             eventAggregatorService.GetEvent<ThemeChangedEvent>().Subscribe(ev =>
             {
                 CurrentTheme = ev.Theme;
-                CommentTree = _treeStructureGenerator.CreateCommentTree(Comments.ToList(), CurrentTheme).ToList();
+                PullRequestDiffModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffModel.Comments.ToList(), CurrentTheme).ToList();
             });
             this.WhenAnyValue(x => x._pullRequest).Subscribe(_ => this.RaisePropertyChanged(nameof(PageTitle)));
         }
 
         public ICommand InitializeCommand => _initializeCommand;
-        public ICommand ShowDiffCommand => _showDiffCommand;
         public ICommand ApproveCommand => _approveCommand;
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((long)x));
-            _showDiffCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), (x) => ShowDiff((FileDiff)x));
             _approveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => Approve());
         }
 
@@ -159,11 +120,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         }
 
-        private Task ShowDiff(FileDiff diff)
-        {
-            _commandsService.ShowDiffWindow(diff, diff.Id);
-            return Task.CompletedTask;
-        }
 
 
         private async Task LoadPullRequestData(long id)
@@ -187,20 +143,20 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CreateComments(long id)
         {
-            Comments = (await _gitClientService.GetPullRequestComments(id)).Where(comment => comment.IsFile == false);
-            CommentTree = _treeStructureGenerator.CreateCommentTree(Comments.ToList(), CurrentTheme).ToList();
+            PullRequestDiffModel.Comments = (await _gitClientService.GetPullRequestComments(id)).Where(comment => comment.IsFile == false).ToList();
+            PullRequestDiffModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffModel.Comments.ToList(), CurrentTheme).ToList();
         }
 
         private async Task CreateCommits(long id)
         {
-            Commits = await _gitClientService.GetPullRequestCommits(id);
+            PullRequestDiffModel.Commits = (await _gitClientService.GetPullRequestCommits(id)).ToList();
         }
 
         private async Task CreateDiffContent(long id)
         {
             var fileDiffs = (await _gitClientService.GetPullRequestDiff(id)).ToList();
-            FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
-            FileDiffs = fileDiffs;
+            PullRequestDiffModel.FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
+            PullRequestDiffModel.FileDiffs = fileDiffs;
         }
 
         private void CheckReviewers()
@@ -216,8 +172,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
         }
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _showDiffCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _showDiffCommand };
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand };
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand };
 
         public string ErrorMessage
         {
