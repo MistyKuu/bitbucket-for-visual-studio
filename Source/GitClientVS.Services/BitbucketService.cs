@@ -220,6 +220,11 @@ namespace GitClientVS.Services
             await _bitbucketClient.PullRequestsClient.CreatePullRequest(gitPullRequest.MapTo<PullRequest>(), _gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner);
         }
 
+        public async Task UpdatePullRequest(GitPullRequest gitPullRequest)
+        {
+            await _bitbucketClient.PullRequestsClient.UpdatePullRequest(gitPullRequest.MapTo<PullRequest>(), _gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner);
+        }
+
         public void Logout()
         {
             _bitbucketClient = null;

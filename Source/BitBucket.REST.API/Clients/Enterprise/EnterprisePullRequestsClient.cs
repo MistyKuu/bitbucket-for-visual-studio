@@ -201,6 +201,21 @@ namespace BitBucket.REST.API.Clients.Enterprise
             await RestClient.ExecuteTaskAsync(request);
         }
 
+        public async Task UpdatePullRequest(PullRequest pullRequest, string repoName, string owner)
+        {
+            pullRequest.Author = new User()
+            {
+                Username = Connection.Credentials.Login
+            };
+
+            pullRequest.Destination = null;//throws exception if the same dest is set. Unless we allow to change it, leave it null
+
+            var url = EnterpriseApiUrls.PullRequest(owner, repoName, pullRequest.Id);
+            var request = new BitbucketRestRequest(url, Method.PUT);
+            request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(pullRequest.MapTo<EnterprisePullRequest>()), ParameterType.RequestBody);
+            await RestClient.ExecuteTaskAsync(request);
+        }
+
         public async Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName, string filter)
         {
             var url = EnterpriseApiUrls.Users();

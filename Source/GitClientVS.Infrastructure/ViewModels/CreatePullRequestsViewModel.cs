@@ -186,10 +186,18 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.Name, DestinationBranch.Name)
             {
+                Id = RemotePullRequest?.Id ?? 0,
                 CloseSourceBranch = CloseSourceBranch,
-                Reviewers = SelectedReviewers.ToDictionary(x => x, x => true)
+                Reviewers = SelectedReviewers.ToDictionary(x => x, x => true),
+                Version = RemotePullRequest?.Version,
             };
-            await _gitClientService.CreatePullRequest(gitPullRequest);
+
+            if (RemotePullRequest == null)
+                await _gitClientService.CreatePullRequest(gitPullRequest);
+            else
+            {
+                await _gitClientService.UpdatePullRequest(gitPullRequest);
+            }
         }
 
         private async Task LoadBranches()

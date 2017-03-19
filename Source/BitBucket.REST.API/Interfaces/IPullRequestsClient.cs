@@ -25,6 +25,6 @@ namespace BitBucket.REST.API.Interfaces
         Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName, string filter);
         Task<PullRequest> GetPullRequestForBranches(string repositoryName, string ownerName, string sourceBranch, string destBranch);
         Task<IEnumerable<FileDiff>> GetCommitsDiff(string repoName, string owner, string fromCommit, string toCommit);
-
+        Task UpdatePullRequest(PullRequest pullRequest, string repoName, string owner);
     }
 }

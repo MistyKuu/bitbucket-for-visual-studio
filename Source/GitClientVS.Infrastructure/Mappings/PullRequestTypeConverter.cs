@@ -36,7 +36,8 @@ namespace GitClientVS.Infrastructure.Mappings
                 CloseSourceBranch = source.CloseSourceBranch,
                 Url = source.Links.Html.Href,
                 Reviewers = reviewers,
-                CommentsCount = source.CommentsCount
+                CommentsCount = source.CommentsCount,
+                Version = source.Version
             };
         }
     }
@@ -48,6 +49,7 @@ namespace GitClientVS.Infrastructure.Mappings
         {
             return new PullRequest()
             {
+                Id = source.Id,
                 Title = source.Title,
                 Description = source.Description,
                 Source = new Source
@@ -66,7 +68,8 @@ namespace GitClientVS.Infrastructure.Mappings
                 },
                 State = source.Status.MapTo<PullRequestOptions>(),
                 CloseSourceBranch = source.CloseSourceBranch,
-                Reviewers = source.Reviewers?.Select(x => new User() { Username = x.Key.Username, Type = "user" }).ToList()
+                Reviewers = source.Reviewers?.Select(x => new User() { Username = x.Key.Username, Type = "user" }).ToList(),
+                Version = source.Version
             };
         }
     }

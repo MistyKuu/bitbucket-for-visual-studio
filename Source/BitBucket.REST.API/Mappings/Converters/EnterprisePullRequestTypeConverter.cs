@@ -29,7 +29,8 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Id = source.Id,
                 CommentsCount = source.Properties?.CommentsCount ?? 0,
                 Participants = source.Participants.MapTo<List<Participant>>(),
-                Reviewers = source.Reviewers.Select(x => x.User).MapTo<List<User>>().ToList()
+                Reviewers = source.Reviewers.Select(x => x.User).MapTo<List<User>>().ToList(),
+                Version = source.Version
             };
 
             pullRequest.Participants.AddRange(source.Reviewers.MapTo<List<Participant>>());//reviewers are part of participants in v2.0 - compatibility
@@ -47,9 +48,10 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Description = source.Description,
                 Title = source.Title,
                 Source = source.Source.MapTo<EnterpriseBranchSource>(),
-                Destination = source.Destination.MapTo<EnterpriseBranchSource>(),
+                Destination = source.Destination?.MapTo<EnterpriseBranchSource>(),
                 Id = source.Id,
-                Reviewers = source.Reviewers?.Select(x => new EnterpriseParticipant() { User = new EnterpriseUser() { Username = x.Username } }).ToList()
+                Reviewers = source.Reviewers?.Select(x => new EnterpriseParticipant() { User = new EnterpriseUser() { Username = x.Username } }).ToList(),
+                Version = source.Version
             };
         }
     }

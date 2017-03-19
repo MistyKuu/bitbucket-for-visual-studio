@@ -56,5 +56,7 @@ namespace BitBucket.REST.API.Models.Standard
         [JsonProperty(PropertyName = "participants")]
         public List<Participant> Participants { get; set; }
 
+        [JsonProperty(PropertyName = "version")]
+        public string Version { get; set; }
     }
 }
