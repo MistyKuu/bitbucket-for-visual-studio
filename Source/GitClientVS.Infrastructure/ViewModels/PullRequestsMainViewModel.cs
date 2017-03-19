@@ -163,7 +163,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task LoadPullRequests()
         {
             GitPullRequests.Clear();
-            Authors = (await _gitClientService.GetPullRequestsAuthors(_currentRepository.Name, _currentRepository.Owner)).ToList();
+            Authors = (await _gitClientService.GetPullRequestsAuthors()).ToList();
 
             var result = _cacheService.Get<IEnumerable<GitPullRequest>>(CacheKeys.PullRequestCacheKey);
             if (result.IsSuccess)
@@ -185,7 +185,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             do
             {
-                iterator = await _gitClientService.GetPullRequests(_currentRepository.Name, _currentRepository.Owner, page: startPage);
+                iterator = await _gitClientService.GetPullRequests(page: startPage);
                 allPullRequests.AddRange(iterator.Values);
                 startPage = iterator.Page + 1;
 

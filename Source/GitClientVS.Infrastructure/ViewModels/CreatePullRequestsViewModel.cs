@@ -177,7 +177,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 CloseSourceBranch = CloseSourceBranch,
                 Reviewers = SelectedReviewers.ToDictionary(x => x, x => true)
             };
-            await _gitClientService.CreatePullRequest(gitPullRequest, _currentRepo.Name, _currentRepo.Owner);
+            await _gitClientService.CreatePullRequest(gitPullRequest);
         }
 
         private async Task LoadBranches()
@@ -185,7 +185,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _currentRepo = _gitService.GetActiveRepository();
             var currentBranch = _currentRepo.Branches.First(x => x.IsHead);
 
-            Branches = (await _gitClientService.GetBranches(_currentRepo.Name, _currentRepo.Owner)).OrderBy(x => x.Name).ToList();
+            Branches = (await _gitClientService.GetBranches()).OrderBy(x => x.Name).ToList();
 
             SourceBranch = Branches.FirstOrDefault(x => x.Name == currentBranch.TrackedBranchName) ??
                            Branches.FirstOrDefault();
@@ -199,7 +199,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CheckPullRequestExistence()
         {
-            var pullRequest = await _gitClientService.GetPullRequestForBranches(_currentRepo.Name, _currentRepo.Owner, SourceBranch.Name, DestinationBranch.Name);
+            var pullRequest = await _gitClientService.GetPullRequestForBranches(SourceBranch.Name, DestinationBranch.Name);
             if (pullRequest != null)
             {
                 Title = pullRequest.Title;
@@ -263,7 +263,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             try
             {
-                var suggestions = _gitClientService.GetRepositoryUsers(_currentRepo.Name, _currentRepo.Owner, arg).Result;
+                var suggestions = _gitClientService.GetRepositoryUsers(arg).Result;
                 return suggestions.Except(SelectedReviewers, x => x.Username).ToList();
             }
             catch (Exception ex)
@@ -275,7 +275,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task SetPullRequestDataFromBranches()
         {
             var commitsDiff =
-                (await _gitClientService.GetCommitsRange(_currentRepo.Name, _currentRepo.Owner, SourceBranch, DestinationBranch)).ToList();
+                (await _gitClientService.GetCommitsRange(SourceBranch, DestinationBranch)).ToList();
 
             if (commitsDiff.Count == 1)
             {

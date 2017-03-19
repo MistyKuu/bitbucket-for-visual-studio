@@ -17,34 +17,22 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync();
         Task<IEnumerable<GitRemoteRepository>> GetAllRepositories();
         Task<GitRemoteRepository> CreateRepositoryAsync(GitRemoteRepository newRepository);
-        Task<IEnumerable<GitBranch>> GetBranches(string repoName, string owner);
-
-
+        Task<IEnumerable<GitBranch>> GetBranches();
         Task<IEnumerable<GitTeam>> GetTeams();
-
-        Task<IEnumerable<GitCommit>> GetPullRequestCommits(string repositoryName, string ownerName, long id);
-
-        Task<IEnumerable<GitComment>> GetPullRequestComments(string repositoryName, string ownerName, long id);
-   
-
-        Task<PageIterator<GitPullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit = 20, int page = 1);
-
-        Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string ownerName, long id);
-        Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, long id);
-
-        Task DisapprovePullRequest(string repositoryName, string ownerName, long id);
-        Task<bool> ApprovePullRequest(string repositoryName, string ownerName, long id);
-
-        Task<IEnumerable<GitUser>> GetPullRequestsAuthors(string repositoryName, string ownerName);
-
+        Task<IEnumerable<GitCommit>> GetPullRequestCommits(long id);
+        Task<IEnumerable<GitComment>> GetPullRequestComments(long id);
+        Task<PageIterator<GitPullRequest>> GetPullRequests(int limit = 20, int page = 1);
+        Task<IEnumerable<FileDiff>> GetPullRequestDiff(long id);
+        Task DisapprovePullRequest(long id);
+        Task<bool> ApprovePullRequest(long id);
+        Task<IEnumerable<GitUser>> GetPullRequestsAuthors();
         bool IsOriginRepo(GitRemoteRepository gitRemoteRepository);
-
-        Task CreatePullRequest(GitPullRequest gitPullRequest, string repositoryName, string owner);
-        Task<IEnumerable<GitPullRequest>> GetAllPullRequests(string repositoryName, string ownerName);
-        Task<GitPullRequest> GetPullRequest(string repositoryName, string ownerName, long id);
-        Task<IEnumerable<GitUser>> GetRepositoryUsers(string repositoryName, string ownerName, string filter);
-        Task<GitPullRequest> GetPullRequestForBranches(string repositoryName, string ownerName, string sourceBranch, string destBranch);
-        Task<GitCommit> GetCommitById(string repoName, string owner,string id);
-        Task<IEnumerable<GitCommit>> GetCommitsRange(string repoName, string owner, GitBranch fromBranch, GitBranch toBranch);
+        Task CreatePullRequest(GitPullRequest gitPullRequest);
+        Task<IEnumerable<GitPullRequest>> GetAllPullRequests();
+        Task<GitPullRequest> GetPullRequest(long id);
+        Task<IEnumerable<GitUser>> GetRepositoryUsers(string filter);
+        Task<GitPullRequest> GetPullRequestForBranches(string sourceBranch, string destBranch);
+        Task<GitCommit> GetCommitById(string id);
+        Task<IEnumerable<GitCommit>> GetCommitsRange(GitBranch fromBranch, GitBranch toBranch);
     }
 }

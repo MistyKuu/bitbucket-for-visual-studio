@@ -58,11 +58,6 @@ namespace BitBucket.REST.API.Clients.Enterprise
             };
         }
 
-        public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, long id)
-        {
-            return await GetPullRequestDiff(repositoryName, Connection.Credentials.Login, id);
-        }
-
         public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string owner, long id)
         {
             var url = EnterpriseApiUrls.PullRequestDiff(owner, repositoryName, id);

@@ -77,12 +77,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return response.MapTo<List<Commit>>();
         }
 
-        public async Task<IEnumerable<Branch>> GetBranches(string repoName)
-        {
-            return await GetBranches(Connection.Credentials.Login, repoName);
-        }
-
-        public async Task<IEnumerable<Branch>> GetBranches(string owner, string repoName)
+        public async Task<IEnumerable<Branch>> GetBranches(string repoName, string owner)
         {
             var url = EnterpriseApiUrls.Branches(owner, repoName);
             var branches = await RestClient.GetAllPages<EnterpriseBranch>(url);

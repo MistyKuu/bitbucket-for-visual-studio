@@ -12,7 +12,6 @@ namespace BitBucket.REST.API.Interfaces
         Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName);
         Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName);
         Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector query = null);
-        Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, long id);
         Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string owner, long id);
         Task<Participant> ApprovePullRequest(string repositoryName, long id);
         Task<Participant> ApprovePullRequest(string repositoryName, string ownerName, long id);

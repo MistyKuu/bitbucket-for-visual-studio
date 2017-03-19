@@ -18,23 +18,13 @@ namespace BitBucket.REST.API.Clients.Standard
         {
         }
 
-        public async Task<IEnumerable<Repository>> GetRepositories()
-        {
-            return await GetRepositories(Connection.Credentials.Login);
-        }
-
         public async Task<IEnumerable<Repository>> GetRepositories(string owner)
         {
             var url = ApiUrls.Repositories(owner);
             return await RestClient.GetAllPages<Repository>(url);
         }
 
-        public async Task<IEnumerable<Branch>> GetBranches(string repoName)
-        {
-            return await GetBranches(Connection.Credentials.Login, repoName);
-        }
-
-        public async Task<IEnumerable<Branch>> GetBranches(string owner, string repoName)
+        public async Task<IEnumerable<Branch>> GetBranches(string repoName, string owner)
         {
             var url = ApiUrls.Branches(owner, repoName);
             return await RestClient.GetAllPages<Branch>(url);
