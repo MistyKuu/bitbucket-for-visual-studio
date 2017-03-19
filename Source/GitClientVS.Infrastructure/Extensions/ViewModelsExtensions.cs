@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Infrastructure.Utils;
 using log4net;
@@ -41,7 +42,10 @@ namespace GitClientVS.Infrastructure.Extensions
 
         public static void SetupLoadingCommands(this ILoadableViewModel vm)
         {
-            vm.LoadingCommands.Select(x => x.IsExecuting).Merge().Subscribe(x => { vm.IsLoading = x; });
+            vm.LoadingCommands.Select(x => x.IsExecuting).Merge().Subscribe(_ =>
+            {
+                vm.IsLoading = vm.LoadingCommands.Any(x => x.IsExecuting.FirstAsync().Wait());
+            });
         }
     }
 }

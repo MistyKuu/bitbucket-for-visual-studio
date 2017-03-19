@@ -52,6 +52,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveList<GitUser> _selectedReviewers;
         private GitPullRequest _remotePullRequest;
         private ReactiveCommand<object> _goToDetailsCommand;
+        private ReactiveCommand<Unit> _setPullRequestDataCommand;
 
         public string PageTitle { get; } = "Create New Pull Request";
 
@@ -115,9 +116,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public string ExistingBranchText => RemotePullRequest == null ? null : $"#{RemotePullRequest.Id} {RemotePullRequest.Title} (created {RemotePullRequest.Created})";
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand };
 
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand };
 
         public string GitClientType => _gitClientService.GitClientType;
 
@@ -158,13 +159,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void SetupObservables()
         {
             _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
-                .SelectMany(_ => _initializeCommand.ExecuteAsyncTask())
-                .Subscribe();
+                .Subscribe(_ => _initializeCommand.Execute(null));
 
             this.WhenAnyValue(x => x.SourceBranch, x => x.DestinationBranch)
                 .Where((x, y) => x.Item1 != null && x.Item2 != null)
-                .SelectMany(_ => CheckPullRequestExistence().ToObservable())
-                .Subscribe();
+                .Subscribe(_ => _setPullRequestDataCommand.Execute(null));
         }
 
         public void InitializeCommands()
@@ -173,6 +172,8 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             _removeReviewerCommand = ReactiveCommand.Create();
             _createNewPullRequestCommand = ReactiveCommand.CreateAsyncTask(CanCreatePullRequest(), _ => CreateNewPullRequest());
+            _setPullRequestDataCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => SetPullRequestData());
+
 
             _createNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.NavigateBack(true); });
             _removeReviewerCommand.Subscribe((x) => { SelectedReviewers.Remove((GitUser)x); });
@@ -217,7 +218,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 : string.Empty;
         }
 
-        private async Task CheckPullRequestExistence()
+        private async Task SetPullRequestData()
         {
             var pullRequest = await _gitClientService.GetPullRequestForBranches(SourceBranch.Name, DestinationBranch.Name);
             PullRequestDiffModel.Commits = (await _gitClientService.GetCommitsRange(SourceBranch, DestinationBranch)).ToList();
