@@ -20,6 +20,21 @@ namespace BitBucket.REST.API.Helpers
             return $"repositories/{login}";
         }
 
+        public static string Commits(string ownerName, string repoName)
+        {
+            return $"repositories/{ownerName}/{repoName}/commits";
+        }
+
+        public static string Commits(string ownerName, string repoName, string branch)
+        {
+            return $"repositories/{ownerName}/{repoName}/commits/{branch}";
+        }
+
+        public static string Commit(string ownerName, string repoName, string id)
+        {
+            return $"repositories/{ownerName}/{repoName}/commit/{id}";
+        }
+
         public static string Teams(string role = "member")
         {
             return $"teams?role={role}";
@@ -89,6 +104,5 @@ namespace BitBucket.REST.API.Helpers
         {
             return "repositories";
         }
-
     }
 }

@@ -20,6 +20,7 @@
              
               FocusManager.FocusedElement="{Binding ElementName=TitleBox}"
              d:DataContext="{d:DesignInstance viewModels:CreatePullRequestsViewModel,IsDesignTimeCreatable=False}" 
+             x:Name="CreatePullRequestView"
              >
     <UserControl.Resources>
         <ResourceDictionary>
@@ -84,8 +85,29 @@
                 </ComboBox>
             </StackPanel>
 
+            <GroupBox Grid.Row="1" Visibility="{Binding RemotePullRequest,Converter={converters:NullToNonVisibilityConverter}}">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <Rectangle HorizontalAlignment="Left"  Width="15" Height="15">
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_information_circle}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <TextBlock  DataContext="{Binding RemotePullRequest}">
+                 <Run Text="An existing pull request will be updated" FontWeight="Bold"/>
+                    <LineBreak/>
+                   <Button Content="{Binding ElementName=CreatePullRequestView, Path=DataContext.ExistingBranchText}" 
+                           Style="{StaticResource ActionLinkButton}" 
+                           Command="{Binding ElementName=CreatePullRequestView,Path=DataContext.GoToDetailsCommand}" 
+                           CommandParameter="{Binding Id}"/>
 
-            <Grid Grid.Row="1">
+                </TextBlock>
+            </GroupBox>
+
+
+            <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -98,7 +120,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBox Grid.Row="1" Text="{bindings:ValidatedBinding Title}" controls:TextBoxHelper.Watermark="Title" />
-                <TextBox Grid.Row="2" Text="{bindings:ValidatedBinding Description}" controls:TextBoxHelper.Watermark="Description" AcceptsReturn="True" MinLines="3"/>
+                <TextBox Grid.Row="2" Text="{bindings:ValidatedBinding Description}" controls:TextBoxHelper.Watermark="Description" AcceptsReturn="True" MinLines="3" MaxLines="8"/>
 
                 <controls1:ReviewersView Grid.Row="3" />
 
@@ -122,10 +144,9 @@
                     </Button.Style>
                 </Button>
                 <TextBlock Grid.Row="5" Foreground="Red" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Message}"/>
-                <TextBlock Grid.Row="6" Text="{Binding RemotePullRequest.Id}"/>
             </Grid>
 
-            <Separator Grid.Row="2"/>
+            <Separator Grid.Row="3"/>
 
         </Grid>
     </Grid>

@@ -9,6 +9,7 @@ using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.Wrappers;
 using RestSharp;
 using System.Collections.Generic;
+using BitBucket.REST.API.QueryBuilders;
 
 namespace BitBucket.REST.API.Clients.Enterprise
 {
@@ -22,7 +23,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
             return await GetRepositories();
         }
-        
+
         public async Task<IEnumerable<Repository>> GetRepositories()
         {
             var url = EnterpriseApiUrls.Repositories();
@@ -52,6 +53,28 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var response = await RestClient.ExecuteTaskAsync<EnterpriseRepository>(request);
 
             return response.Data.MapTo<Repository>();
+        }
+
+        public async Task<Commit> GetCommitById(string repoName, string owner, string id)
+        {
+            var url = EnterpriseApiUrls.Commit(owner, repoName, id);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await RestClient.ExecuteTaskAsync<EnterpriseCommit>(request);
+            return response.Data.MapTo<Commit>();
+        }
+
+        public async Task<IEnumerable<Commit>> GetCommitsRange(string repoName, string owner, Branch fromBranch, Branch toBranch)
+        {
+            var url = EnterpriseApiUrls.Commits(owner, repoName);
+
+            var queryString = new QueryString()
+            {
+                {"until", fromBranch.Target.Hash   },
+                {"since",toBranch.Target.Hash },
+            };
+
+            var response = await RestClient.GetAllPages<EnterpriseCommit>(url, query: queryString);
+            return response.MapTo<List<Commit>>();
         }
 
         public async Task<IEnumerable<Branch>> GetBranches(string repoName)

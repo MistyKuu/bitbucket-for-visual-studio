@@ -166,8 +166,10 @@ namespace BitBucket.REST.API.Clients.Enterprise
         public async Task<PullRequest> GetPullRequestForBranches(string repositoryName, string ownerName, string sourceBranch, string destBranch)
         {
             var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName);
-            //at works only for destbranch xD
-            var response = await RestClient.GetAllPages<EnterprisePullRequest>(url, query: new QueryString() { { "at", "refs/heads/" + destBranch } });
+            var response = await RestClient.GetAllPages<EnterprisePullRequest>(url, query: new QueryString() {
+            {  "at", "refs/heads/" + destBranch},
+                {"state","open" }
+            });
             return response.FirstOrDefault(x => x.Source.DisplayId == sourceBranch)?.MapTo<PullRequest>();
         }
 

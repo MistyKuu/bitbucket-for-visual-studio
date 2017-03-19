@@ -14,7 +14,6 @@ namespace GitClientVS.Infrastructure
             (this as IViewModelWithCommands)?.InitializeCommands();
             (this as ILoadableViewModel)?.SetupLoadingCommands();
             (this as IViewModelWithErrorMessage)?.CatchCommandErrors();
-
           
         }
     }

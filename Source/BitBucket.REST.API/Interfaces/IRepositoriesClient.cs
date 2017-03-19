@@ -12,5 +12,7 @@ namespace BitBucket.REST.API.Interfaces
         Task<IEnumerable<Branch>> GetBranches(string repoName);
         Task<IEnumerable<Branch>> GetBranches(string owner, string repoName);
         Task<Repository> CreateRepository(Repository repository);
+        Task<Commit> GetCommitById(string repoName, string owner, string id);
+        Task<IEnumerable<Commit>> GetCommitsRange(string repoName, string owner, Branch fromBranch, Branch toBranch);
     }
 }

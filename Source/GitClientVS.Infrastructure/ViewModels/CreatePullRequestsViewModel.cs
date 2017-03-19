@@ -46,6 +46,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private GitRemoteRepository _currentRepo;
         private ReactiveList<GitUser> _selectedReviewers;
         private GitPullRequest _remotePullRequest;
+        private ReactiveCommand<object> _goToDetailsCommand;
 
         public string PageTitle { get; } = "Create New Pull Request";
 
@@ -103,11 +104,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _closeSourceBranch, value); }
         }
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands
-            => new[] { _initializeCommand, _createNewPullRequestCommand };
+        public string ExistingBranchText => RemotePullRequest == null ? null : $"#{RemotePullRequest.Id} {RemotePullRequest.Title} (created ({RemotePullRequest.Created})";
 
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand }
-            ;
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
+
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand };
 
         public string GitClientType => _gitClientService.GitClientType;
 
@@ -120,6 +121,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand CreateNewPullRequestCommand => _createNewPullRequestCommand;
         public ICommand RemoveReviewerCommand => _removeReviewerCommand;
+        public ICommand GoToDetailsCommand => _goToDetailsCommand;
 
         [ImportingConstructor]
         public CreatePullRequestsViewModel(
@@ -162,6 +164,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             _createNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.NavigateBack(true); });
             _removeReviewerCommand.Subscribe((x) => { SelectedReviewers.Remove((GitUser)x); });
+
+            _goToDetailsCommand = ReactiveCommand.Create(Observable.Return(true));
+            _goToDetailsCommand.Subscribe(id => { _pageNavigationService.Navigate<IPullRequestDetailView>(id); });
         }
 
 
@@ -200,11 +205,19 @@ namespace GitClientVS.Infrastructure.ViewModels
                 Title = pullRequest.Title;
                 Description = pullRequest.Description;
                 SelectedReviewers.Clear();
-                SelectedReviewers.AddRange(pullRequest.Reviewers.Select(x => x.Key));
+                foreach (var reviewer in pullRequest.Reviewers.Select(x => x.Key))
+                    SelectedReviewers.Add(reviewer);
+            }
+            else
+            {
+                await SetPullRequestDataFromBranches();
             }
 
             RemotePullRequest = pullRequest;
+            this.RaisePropertyChanged(nameof(ExistingBranchText));
         }
+
+
 
         private IObservable<bool> CanLoadPullRequests()
         {
@@ -257,6 +270,22 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 Logger.Error(ex);
                 return Enumerable.Empty<GitUser>();
+            }
+        }
+        private async Task SetPullRequestDataFromBranches()
+        {
+            var commitsDiff =
+                (await _gitClientService.GetCommitsRange(_currentRepo.Name, _currentRepo.Owner, SourceBranch, DestinationBranch)).ToList();
+
+            if (commitsDiff.Count == 1)
+            {
+                Title = commitsDiff.First().Message;
+                Description = string.Empty;
+            }
+            else
+            {
+                Title = SourceBranch.Name;
+                Description = string.Join(Environment.NewLine, commitsDiff.Select((x) => $"* " + x.Message).Reverse());
             }
         }
     }

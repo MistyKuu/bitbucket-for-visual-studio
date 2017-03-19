@@ -121,8 +121,21 @@ namespace BitBucket.REST.API.Clients.Standard
         public async Task<PullRequest> GetPullRequestForBranches(string repositoryName, string ownerName, string sourceBranch, string destBranch)
         {
             var url = ApiUrls.PullRequests(ownerName, repositoryName);
-            var response = await RestClient.GetAllPages<PullRequest>(url, query: new QueryString() { { "q", $@"source.branch.name=""{sourceBranch}""" } }, limit: 20);
-            return response.FirstOrDefault(x => x.Destination.Branch.Name == destBranch);
+
+            var queryBuilderString = new QueryBuilder()
+                .Add("source.branch.name", sourceBranch)
+                .And()
+                .Add("destination.branch.name", destBranch)
+                .And()
+                .State(PullRequestOptions.OPEN)
+                .Build();
+
+            var query = new QueryString()
+            {
+                {"q", queryBuilderString},
+            };
+            var response = await RestClient.GetAllPages<PullRequest>(url, query: query, limit: 20);
+            return response.SingleOrDefault();
         }
 
         public async Task CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner)

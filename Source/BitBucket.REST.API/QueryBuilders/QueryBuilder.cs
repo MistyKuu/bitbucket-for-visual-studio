@@ -6,62 +6,68 @@ using BitBucket.REST.API.Models.Standard;
 
 namespace BitBucket.REST.API.QueryBuilders
 {
-    public class QueryBuilder : IQueryConnector, IQueryParam
+    public class QueryBuilder : IQueryConnector
     {
-        private StringBuilder query;
+        private readonly StringBuilder _query;
 
         public QueryBuilder()
         {
-            query = new StringBuilder();
+            _query = new StringBuilder();
         }
 
         public IQueryParam And()
         {
-            query.Append(" and ");
+            _query.Append(" and ");
             return this;
         }
 
         public IQueryParam Or()
         {
-            query.Append(" or ");
+            _query.Append(" or ");
             return this;
         }
 
         public IQueryConnector UpdatedOn(DateTime date, Operators queryOperator)
         {
             var dateInProperFormat = date.ToString("yyyy-MM-dd");
-            query.Append($" updated_on {OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
+            _query.Append($" updated_on {OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
             return this;
         }
 
         public IQueryConnector CreatedOn(DateTime date, Operators queryOperator)
         {
             var dateInProperFormat = date.ToString("yyyy-MM-dd");
-            query.Append($" created_on {OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
+            _query.Append($" created_on {OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
             return this;
         }
 
         public IQueryConnector SortAsc(string fieldName)
         {
-            query.Append($" sort=-{fieldName}");
+            _query.Append($" sort=-{fieldName}");
             return this;
         }
 
         public IQueryConnector SortDesc(string fieldName)
         {
-            query.Append($" sort={fieldName}");
+            _query.Append($" sort={fieldName}");
             return this;
         }
 
         public IQueryConnector State(PullRequestOptions option)
         {
-            query.Append($" state='{option}'");
+            _query.Append($@" state=""{option}""");
+            return this;
+        }
+
+        public IQueryConnector Add(string prop,string value)
+        {
+            _query.Append($@" {prop}=""{value}""");
             return this;
         }
 
         public string Build()
         {
-            return query.ToString();
+            return _query.ToString();
         }
     }
 }

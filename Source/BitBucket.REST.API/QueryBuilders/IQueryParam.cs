@@ -9,5 +9,6 @@ namespace BitBucket.REST.API.QueryBuilders
         IQueryConnector UpdatedOn(DateTime date, Operators queryOperator);
         IQueryConnector CreatedOn(DateTime date, Operators queryOperator);
         IQueryConnector State(PullRequestOptions option);
+        IQueryConnector Add(string prop, string value);
     }
 }

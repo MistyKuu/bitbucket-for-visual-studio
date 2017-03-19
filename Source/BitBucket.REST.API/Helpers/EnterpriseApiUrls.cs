@@ -31,14 +31,19 @@ namespace BitBucket.REST.API.Helpers
             return $"projects/{ownerName}/repos/{repoName}/branches";
         }
 
-        public static string Commits(string ownerName, string repoName, string id)
-        {
-            return $"projects/{ownerName}/repos/{repoName}/commits/{id}";
-        }
-
         public static string Users()
         {
             return $"users";
+        }
+
+        public static string Commits(string ownerName, string repository)
+        {
+            return $"projects/{ownerName}/repos/{repository}/commits";
+        }
+
+        public static string Commit(string ownerName, string repository, string id)
+        {
+            return $"projects/{ownerName}/repos/{repository}/commits/{id}";
         }
 
         public static string PullRequests(string ownerName, string repository)

@@ -140,7 +140,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public void InitializeCommands()
         {
-            _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((GitPullRequest)x));
+            _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((long)x));
             _showDiffCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), (x) => ShowDiff((FileDiff)x));
             _approveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => Approve());
         }
@@ -170,9 +170,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
 
-        private async Task LoadPullRequestData(GitPullRequest pr)
+        private async Task LoadPullRequestData(long id)
         {
-            var id = pr.Id;
             var currentRepository = _gitService.GetActiveRepository();
             var tasks = new[]
             {

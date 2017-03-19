@@ -44,5 +44,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<GitPullRequest> GetPullRequest(string repositoryName, string ownerName, long id);
         Task<IEnumerable<GitUser>> GetRepositoryUsers(string repositoryName, string ownerName, string filter);
         Task<GitPullRequest> GetPullRequestForBranches(string repositoryName, string ownerName, string sourceBranch, string destBranch);
+        Task<GitCommit> GetCommitById(string repoName, string owner,string id);
+        Task<IEnumerable<GitCommit>> GetCommitsRange(string repoName, string owner, GitBranch fromBranch, GitBranch toBranch);
     }
 }

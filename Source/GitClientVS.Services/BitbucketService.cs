@@ -147,6 +147,26 @@ namespace GitClientVS.Services
             return pullRequest?.MapTo<GitPullRequest>();
         }
 
+
+        public async Task<IEnumerable<GitCommit>> GetCommitsRange(string repoName, string owner, GitBranch fromBranch, GitBranch toBranch)
+        {
+            var from = new Branch()
+            {
+                Name = fromBranch.Name,
+                Target = new Commit() {Hash = fromBranch.Target.Hash}
+            };
+
+            var to = new Branch()
+            {
+                Name = toBranch.Name,
+                Target = new Commit() { Hash = toBranch.Target.Hash }
+            };
+
+            var commits = await _bitbucketClient.RepositoriesClient.GetCommitsRange(repoName, owner, from, to);
+            return commits.MapTo<List<GitCommit>>();
+        }
+
+
         public async Task<IEnumerable<GitPullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
         {
             //todo put real repository name
@@ -165,6 +185,12 @@ namespace GitClientVS.Services
         {
             var repositories = await _bitbucketClient.RepositoriesClient.GetBranches(owner, repoName);
             return repositories.MapTo<List<GitBranch>>();
+        }
+
+        public async Task<GitCommit> GetCommitById(string repoName, string owner, string id)
+        {
+            var commit = await _bitbucketClient.RepositoriesClient.GetCommitById(repoName, owner, id);
+            return commit.MapTo<GitCommit>();
         }
 
         public async Task<IEnumerable<GitUser>> GetPullRequestsAuthors(string repositoryName, string ownerName)

@@ -6,6 +6,9 @@ using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.Wrappers;
 using RestSharp;
 using System.Collections.Generic;
+using BitBucket.REST.API.Mappings;
+using BitBucket.REST.API.Models.Enterprise;
+using BitBucket.REST.API.QueryBuilders;
 
 namespace BitBucket.REST.API.Clients.Standard
 {
@@ -37,9 +40,32 @@ namespace BitBucket.REST.API.Clients.Standard
             return await RestClient.GetAllPages<Branch>(url);
         }
 
+
+
+        public async Task<Commit> GetCommitById(string repoName, string owner, string id)
+        {
+            var url = ApiUrls.Commit(owner, repoName, id);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await RestClient.ExecuteTaskAsync<Commit>(request);
+            return response.Data;
+        }
+
+        public async Task<IEnumerable<Commit>> GetCommitsRange(string repoName, string owner, Branch fromBranch, Branch toBranch)
+        {
+            var url = ApiUrls.Commits(owner, repoName, fromBranch.Name);
+
+            var queryString = new QueryString()
+            {
+                {"exclude",toBranch.Name },
+            };
+
+            var response = await RestClient.GetAllPages<Commit>(url, query: queryString);
+            return response;
+        }
+
         public async Task<Repository> CreateRepository(Repository repository)
         {
-            var url = ApiUrls.Repository(Connection.Credentials.Login, repository.Name.Replace(' ','-').ToLower(CultureInfo.InvariantCulture));
+            var url = ApiUrls.Repository(Connection.Credentials.Login, repository.Name.Replace(' ', '-').ToLower(CultureInfo.InvariantCulture));
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(repository), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<Repository>(request);

@@ -157,7 +157,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _goToCreateNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.Navigate<ICreatePullRequestsView>(); });
 
             _goToDetailsCommand = ReactiveCommand.Create(Observable.Return(true));
-            _goToDetailsCommand.Subscribe(x => { _pageNavigationService.Navigate<IPullRequestDetailView>(x); });
+            _goToDetailsCommand.Subscribe(x => { _pageNavigationService.Navigate<IPullRequestDetailView>(((GitPullRequest)x).Id); });
         }
 
         private async Task LoadPullRequests()
