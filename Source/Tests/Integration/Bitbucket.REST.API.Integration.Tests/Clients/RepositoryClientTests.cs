@@ -37,7 +37,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
         [Test]
         public void GetAllRepositories()
         {
-            var repositories = bitbucketClient.RepositoriesClient.GetRepositories();
+            var repositories = bitbucketClient.RepositoriesClient.GetRepositories(CredentialsHelper.TestsCredentials.Username);
         }
         [Test]
         public async Task GetAllRepositories_Enterprise()
@@ -46,8 +46,8 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
             var connection = new Connection(new Uri("http://localhost:7990"), new Uri("http://localhost:7990"), credentials);
 
             var bitbucketClient = new EnterpriseBitbucketClient(connection);
-            var test = (await bitbucketClient.RepositoriesClient.GetRepositories()).ToList();
-            var test2 = await bitbucketClient.RepositoriesClient.GetBranches(test[0].Name);
+            var test = (await bitbucketClient.RepositoriesClient.GetRepositories(CredentialsHelper.TestsCredentials.Username)).ToList();
+            var test2 = await bitbucketClient.RepositoriesClient.GetBranches(test[0].Name, CredentialsHelper.TestsCredentials.Username);
             var test3 = await bitbucketClient.RepositoriesClient.CreateRepository(new Repository()
             {
                 Name = "ADS",
@@ -78,7 +78,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
            // var test3 = await bitbucketClient.PullRequestsClient.GetAuthors("test2", connection.Credentials.Login);
           //  var test4 = await bitbucketClient.PullRequestsClient.GetPullRequestDiff("test2", connection.Credentials.Login, 1);
          //   var test5 = await bitbucketClient.PullRequestsClient.ApprovePullRequest("test2", connection.Credentials.Login, 1);
-            var test6 = await bitbucketClient.RepositoriesClient.GetBranches("test2");
+         //   var test6 = await bitbucketClient.RepositoriesClient.GetBranches("test2");
             //  var test7 = await bitbucketClient.UserClient.GetUser();
         }
     }

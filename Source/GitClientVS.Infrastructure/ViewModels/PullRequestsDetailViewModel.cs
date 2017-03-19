@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GitClientVS.Contracts.Events;
+using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
@@ -29,6 +30,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitService _gitService;
         private readonly ICommandsService _commandsService;
         private readonly IUserInformationService _userInformationService;
+        private readonly ITreeStructureGenerator _treeStructureGenerator;
         private readonly IVsTools _vsTools;
         private string _errorMessage;
         private bool _isLoading;
@@ -40,8 +42,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private IEnumerable<FileDiff> _fileDiffs;
         private List<ITreeFile> _filesTree;
         private List<ICommentTree> _commentTree;
-        private string _title;
-        private string _description;
         private GitPullRequest _pullRequest;
         private string _mainSectionCommandText;
         private bool _isApproveAvailable;
@@ -118,18 +118,20 @@ namespace GitClientVS.Infrastructure.ViewModels
             IGitService gitService,
             ICommandsService commandsService,
             IUserInformationService userInformationService,
-            IEventAggregatorService eventAggregatorService
+            IEventAggregatorService eventAggregatorService,
+            ITreeStructureGenerator treeStructureGenerator
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _commandsService = commandsService;
             _userInformationService = userInformationService;
+            _treeStructureGenerator = treeStructureGenerator;
             CurrentTheme = userInformationService.CurrentTheme;
             eventAggregatorService.GetEvent<ThemeChangedEvent>().Subscribe(ev =>
             {
                 CurrentTheme = ev.Theme;
-                ReloadCommentsTree();
+                CommentTree = _treeStructureGenerator.CreateCommentTree(Comments.ToList(), CurrentTheme).ToList();
             });
             this.WhenAnyValue(x => x._pullRequest).Subscribe(_ => this.RaisePropertyChanged(nameof(PageTitle)));
         }
@@ -186,7 +188,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task CreateComments(long id)
         {
             Comments = (await _gitClientService.GetPullRequestComments(id)).Where(comment => comment.IsFile == false);
-            ReloadCommentsTree();
+            CommentTree = _treeStructureGenerator.CreateCommentTree(Comments.ToList(), CurrentTheme).ToList();
         }
 
         private async Task CreateCommits(long id)
@@ -196,8 +198,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CreateDiffContent(long id)
         {
-            FileDiffs = (await _gitClientService.GetPullRequestDiff(id)).ToList();
-            CreateFileTree(FileDiffs.ToList());
+            var fileDiffs = (await _gitClientService.GetPullRequestDiff(id)).ToList();
+            FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
+            FileDiffs = fileDiffs;
         }
 
         private void CheckReviewers()
@@ -212,164 +215,6 @@ namespace GitClientVS.Infrastructure.ViewModels
                 }
             }
         }
-
-        public void ReloadCommentsTree()
-        {
-            CreateCommentTree(Comments.ToList());
-        }
-
-        public void WrapComment(GitComment comment)
-        {
-            var foregroundColor = CurrentTheme == Theme.Light ? "black" : "white";
-            comment.Content.DisplayHtml = $"<body style='background-color:transparent;color:{foregroundColor};font-size:13px'>" + comment.Content.Html + "</body>";
-        }
-
-        public void CreateCommentTree(List<GitComment> gitComments)
-        {
-            Dictionary<long, GitComment> searchableGitComments = new Dictionary<long, GitComment>();
-
-            foreach (var comment in gitComments)
-            {
-                WrapComment(comment);
-
-                searchableGitComments.Add(comment.Id, comment);
-            }
-
-            Dictionary<int, List<ObjectTree>> result = new Dictionary<int, List<ObjectTree>>();
-
-            var separator = '/';
-            var maxLevel = -1;
-            foreach (var comment in Comments)
-            {
-                var level = 0;
-                List<long> ids = new List<long>();
-                StringBuilder path = new StringBuilder();
-
-                ids.Add(comment.Id);
-                var tmpComment = comment;
-                while (tmpComment.Parent != null)
-                {
-                    ids.Add(tmpComment.Parent.Id);
-                    level++;
-
-                    tmpComment = searchableGitComments[tmpComment.Parent.Id];
-                }
-
-                if (!result.ContainsKey(level))
-                {
-                    result[level] = new List<ObjectTree>();
-                    if (level > maxLevel)
-                    {
-                        maxLevel = level;
-                    }
-                }
-
-                for (var pathIndex = ids.Count - 1; pathIndex > -1; pathIndex -= 1)
-                {
-                    path.Append(ids[pathIndex]);
-
-                    if (pathIndex > 0)
-                    {
-                        path.Append(separator);
-                    }
-                }
-
-                result[level].Add(new ObjectTree(path.ToString(), new GitComment()
-                {
-                    Content = comment.Content,
-                    CreatedOn = comment.CreatedOn,
-                    Id = comment.Id,
-                    Parent = comment.Parent,
-                    User = comment.User,
-                    UpdatedOn = comment.UpdatedOn
-                }));
-            }
-
-
-
-            ICommentTree entryComment = new CommentTree();
-            for (var i = 0; i <= maxLevel; i++)
-            {
-                List<ObjectTree> preparedComments = result[i];
-                foreach (var objectTree in preparedComments)
-                {
-                    ICommentTree currentComment = entryComment;
-                    var pathChunks = objectTree.Path.Split(separator);
-                    foreach (var pathChunk in pathChunks)
-                    {
-                        var tmp = currentComment.Comments.Where(x => x.Comment.Id.Equals(long.Parse(pathChunk)));
-                        if (tmp.Count() > 0)
-                        {
-                            currentComment = tmp.Single();
-                        }
-                        else
-                        {
-                            ICommentTree newItem = new CommentTree(objectTree.GitComment);
-                            currentComment.Comments.Add(newItem);
-                            currentComment = newItem;
-                        }
-                    }
-
-                }
-            }
-
-            CommentTree = entryComment.Comments;
-
-        }
-
-
-
-        public void CreateFileTree(List<FileDiff> fileDiffs, string rootFileName = "test", char separator = '/')
-        {
-            var entryFile = new TreeDirectory(rootFileName);
-
-            foreach (var fileDiff in fileDiffs.Where(x => !string.IsNullOrEmpty(x.DisplayFileName.Trim())))
-            {
-                ITreeFile currentFile = entryFile;
-
-                var pathChunks = fileDiff.DisplayFileName.Split(separator);
-                var lastItem = pathChunks.Last();
-                foreach (var pathChunk in pathChunks)
-                {
-                    var tmp = currentFile.Files.Where(x => x.Name.Equals(pathChunk));
-                    if (tmp.Count() > 0)
-                    {
-                        currentFile = tmp.Single();
-                    }
-                    else
-                    {
-                        ITreeFile newItem;
-                        if (lastItem.Equals(pathChunk))
-                        {
-                            newItem = new TreeFile(pathChunk, fileDiff);
-                        }
-                        else
-                        {
-                            newItem = new TreeDirectory(pathChunk);
-                        }
-
-                        currentFile.Files.Add(newItem);
-                        currentFile = newItem;
-                    }
-                }
-            }
-
-
-            FilesTree = entryFile.Files;
-            ExpandTree(FilesTree);
-        }
-
-        private void ExpandTree(List<ITreeFile> files)
-        {
-            foreach (var treeFile in files)
-            {
-                if (treeFile.Files.Any())
-                    ExpandTree(treeFile.Files);
-
-                treeFile.IsExpanded = true;
-            }
-        }
-
 
         public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _showDiffCommand };
         public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _showDiffCommand };

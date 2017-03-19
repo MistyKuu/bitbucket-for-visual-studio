@@ -81,6 +81,7 @@
     <Compile Include="Events\NavigationEvent.cs" />
     <Compile Include="Events\ThemeChangedEvent.cs" />
     <Compile Include="Interfaces\IClosingable.cs" />
+    <Compile Include="Interfaces\ITreeStructureGenerator.cs" />
     <Compile Include="Interfaces\IViewModelWithCommands.cs" />
     <Compile Include="Interfaces\IViewModelWithErrorMessage.cs" />
     <Compile Include="Interfaces\IWithPageTitle.cs" />
