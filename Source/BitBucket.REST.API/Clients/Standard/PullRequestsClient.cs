@@ -138,6 +138,11 @@ namespace BitBucket.REST.API.Clients.Standard
             return response.SingleOrDefault();
         }
 
+        public Task<IEnumerable<FileDiff>> GetCommitsDiff(string repoName, string owner, string fromCommit, string toCommit)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner)
         {
             pullRequest.Author = new User()

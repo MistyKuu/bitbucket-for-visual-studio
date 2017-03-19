@@ -10,6 +10,7 @@ using BitBucket.REST.API.Wrappers;
 using RestSharp;
 using System.Collections.Generic;
 using BitBucket.REST.API.QueryBuilders;
+using ParseDiff;
 
 namespace BitBucket.REST.API.Clients.Enterprise
 {
@@ -76,6 +77,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var response = await RestClient.GetAllPages<EnterpriseCommit>(url, query: queryString);
             return response.MapTo<List<Commit>>();
         }
+
 
         public async Task<IEnumerable<Branch>> GetBranches(string repoName, string owner)
         {

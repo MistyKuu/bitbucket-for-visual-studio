@@ -34,5 +34,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<GitPullRequest> GetPullRequestForBranches(string sourceBranch, string destBranch);
         Task<GitCommit> GetCommitById(string id);
         Task<IEnumerable<GitCommit>> GetCommitsRange(GitBranch fromBranch, GitBranch toBranch);
+        Task<IEnumerable<FileDiff>> GetCommitsDiff(string fromCommit, string toCommit);
     }
 }

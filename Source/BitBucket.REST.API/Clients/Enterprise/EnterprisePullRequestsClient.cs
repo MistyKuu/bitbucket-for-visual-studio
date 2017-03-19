@@ -62,12 +62,33 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
             var url = EnterpriseApiUrls.PullRequestDiff(owner, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.GET);
+
             var response = await RestClient.ExecuteTaskAsync<EnterpriseDiffResponse>(request);
             var fileDiffs = ParseFileDiffs(response);
 
             return fileDiffs;
         }
 
+
+        public async Task<IEnumerable<FileDiff>> GetCommitsDiff(string repoName, string owner, string fromCommit, string toCommit)
+        {
+            var url = EnterpriseApiUrls.CommitsDiff(owner, repoName);
+
+            var queryString = new QueryString()
+            {
+                {"from", fromCommit   },
+                {"to", toCommit},
+            };
+
+            var request = new BitbucketRestRequest(url, Method.GET);
+            foreach (var param in queryString)
+                request.AddQueryParameter(param.Key, param.Value);
+
+            var response = await RestClient.ExecuteTaskAsync<EnterpriseDiffResponse>(request);
+            var fileDiffs = ParseFileDiffs(response);
+
+            return fileDiffs;
+        }
 
 
         public async Task<Participant> ApprovePullRequest(string repositoryName, long id)

@@ -128,6 +128,11 @@ namespace GitClientVS.Services
             return await _bitbucketClient.PullRequestsClient.GetPullRequestDiff(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, id);
         }
 
+        public async Task<IEnumerable<FileDiff>> GetCommitsDiff(string fromCommit, string toCommit)
+        {
+            return await _bitbucketClient.PullRequestsClient.GetCommitsDiff(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, fromCommit, toCommit);
+        }
+
         public bool IsOriginRepo(GitRemoteRepository gitRemoteRepository)
         {
             if (gitRemoteRepository?.CloneUrl == null) return false;

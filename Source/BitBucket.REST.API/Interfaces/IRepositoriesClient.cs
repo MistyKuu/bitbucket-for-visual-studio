@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Standard;
 using System.Collections.Generic;
+using ParseDiff;
 
 namespace BitBucket.REST.API.Interfaces
 {

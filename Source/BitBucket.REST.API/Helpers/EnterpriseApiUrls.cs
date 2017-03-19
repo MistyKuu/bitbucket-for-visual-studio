@@ -46,6 +46,11 @@ namespace BitBucket.REST.API.Helpers
             return $"projects/{ownerName}/repos/{repository}/commits/{id}";
         }
 
+        public static string CommitsDiff(string owner, string repoName)
+        {
+            return $"projects/{owner}/repos/{repoName}/compare/diff";
+        }
+
         public static string PullRequests(string ownerName, string repository)
         {
             return $"projects/{ownerName}/repos/{repository}/pull-requests";
