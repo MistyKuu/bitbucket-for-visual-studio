@@ -30,10 +30,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
-                
+
             </ResourceDictionary.MergedDictionaries>
 
-          
+            <BitmapImage x:Key="DefaultAvatar" UriSource="pack://application:,,,/GitClientVS.UI;component/Images/defaultAva.png" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="0" >
@@ -43,6 +43,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition x:Name="FirstRow" Height="Auto"  MaxHeight="200"/>
                 <RowDefinition Height="3"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -59,7 +60,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        
+
                         <Grid Grid.Column="0" >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
@@ -85,7 +86,7 @@
                                 <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.DestinationBranch,Converter={converters:BranchNameConverter}}"/>
                             </WrapPanel>
                         </Grid>
-                        
+
                         <Button Grid.Column="1"  VerticalAlignment="Center" Grid.RowSpan="2" HorizontalAlignment="Right" Command="{Binding ApproveCommand}">
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource MetroFlatButton}">
@@ -108,8 +109,8 @@
                         </Button>
                     </Grid>
 
-                   
-                   
+
+
                     <Separator Grid.Row="1" Margin="-5, 5">
                         <Separator.Resources>
                             <Style TargetType="Separator">
@@ -133,11 +134,50 @@
                     <TextBlock VerticalAlignment="Top" Grid.Row="2" Text="{Binding PullRequest.Description}" TextWrapping="Wrap" TextTrimming="WordEllipsis" />
                 </Grid>
             </ScrollViewer>
-            
+
             <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" />
 
-            <controls1:PullRequestDiffView Grid.Row="2" Margin="0,0,0,20" DataContext="{Binding PullRequestDiffModel}"/>
-           
+            <Grid Grid.Row="2" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock  Grid.Row="0" Grid.Column="0" Text="Author" VerticalAlignment="Center" FontWeight="SemiBold"/>
+
+                <Image HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1" Width="30" Height="30" Margin="5" Source="{Binding PullRequest.Author.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}">
+                    <Image.ToolTip>
+                        <TextBlock Text="{Binding PullRequest.Author.DisplayName}"/>
+                    </Image.ToolTip>
+                </Image>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Reviewers" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding PullRequest.Reviewers.Keys}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Width="30" Height="30" Margin="5" Source="{Binding Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}">
+                            <Image.ToolTip>
+                                <TextBlock Text="{Binding DisplayName}"/>
+                            </Image.ToolTip>    
+                            </Image>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+
+
+            <controls1:PullRequestDiffView Grid.Row="3" DataContext="{Binding PullRequestDiffModel}"/>
         </Grid>
     </Grid>
 

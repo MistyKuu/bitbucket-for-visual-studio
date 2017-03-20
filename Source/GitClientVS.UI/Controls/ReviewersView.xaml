@@ -8,15 +8,18 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
              xmlns:behaviours="clr-namespace:GitClientVS.UI.Behaviours"
+             xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="RevView"
+             >
     <Grid Margin="5,0" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-      
-        <Border Grid.Row="0" BorderThickness="1" BorderBrush="LightGray" Padding="5">
+
+        <Border Grid.Row="0" BorderThickness="1" BorderBrush="LightGray" Padding="5" Visibility="{Binding ElementName=RevView,Path=IsEditable, Converter={converters:BoolToVisibilityConverter}}">
             <wpfControls:AutoCompleteTextBox x:Name="AutoCompleteTextBox" 
                 BorderThickness="0"
                 HorizontalAlignment="Stretch"
@@ -25,7 +28,6 @@
                 Watermark="Reviewers"
                 IconPlacement="Right"
                 Provider="{Binding ReviewersProvider}"
-                Delay="300"
                 >
                 <wpfControls:AutoCompleteTextBox.ItemTemplate>
                     <DataTemplate DataType="gitClientModels:GitUser">
@@ -49,10 +51,11 @@
                 <DataTemplate DataType="gitClientModels:GitUser">
                     <Border BorderBrush="Gray" BorderThickness="0.5" Background="WhiteSmoke" Padding="5,0,0,0" Margin="2,0" >
                         <StackPanel Orientation="Horizontal" >
-                            <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
-                            <Button Focusable="False" FontSize="14"  VerticalContentAlignment="Center" Padding="0" Margin="5,0,2,0" BorderBrush="Transparent" Background="Transparent" Content="×"
+                            <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" Padding="3"/>
+                            <Button Focusable="False" FontSize="14"  VerticalContentAlignment="Top" Padding="0,2" Margin="5,0,2,0" BorderBrush="Transparent" Background="Transparent" Content="×"
                                     Command="{Binding ElementName=ReviewersIc,Path=DataContext.RemoveReviewerCommand}"
                                     CommandParameter="{Binding}"
+                                    Visibility="{Binding ElementName=RevView,Path=IsEditable,Converter={converters:BoolToVisibilityConverter}}"
                                     />
                         </StackPanel>
                     </Border>

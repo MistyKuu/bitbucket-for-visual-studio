@@ -38,6 +38,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _isApproveAvailable;
         private bool _isApproved;
         private Theme _currentTheme;
+        private List<GitUser> _selectedReviewers;
 
 
         public string PageTitle => "Pull Request Details";
@@ -96,7 +97,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 CurrentTheme = ev.Theme;
                 PullRequestDiffModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffModel.Comments.ToList(), CurrentTheme).ToList();
             });
-            this.WhenAnyValue(x => x._pullRequest).Subscribe(_ => this.RaisePropertyChanged(nameof(PageTitle)));
+            this.WhenAnyValue(x => x.PullRequest).Subscribe(_ => this.RaisePropertyChanged(nameof(PageTitle)));
         }
 
         public ICommand InitializeCommand => _initializeCommand;

@@ -140,6 +140,9 @@ namespace BitBucket.REST.API.Clients.Standard
 
         public async Task<IEnumerable<FileDiff>> GetCommitsDiff(string repoName, string owner, string fromCommit, string toCommit)
         {
+            if (fromCommit == toCommit) //otherwise it produces diff againsnt it parent
+                return Enumerable.Empty<FileDiff>();
+
             var url = ApiUrls.CommitsDiff(owner, repoName, fromCommit, toCommit);
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await RestClient.ExecuteTaskAsync(request);
