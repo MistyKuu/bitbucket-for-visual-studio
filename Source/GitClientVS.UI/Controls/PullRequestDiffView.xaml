@@ -26,6 +26,7 @@
 
                 </ResourceDictionary.MergedDictionaries>
 
+
                 <BitmapImage x:Key="DefaultAvatar" UriSource="pack://application:,,,/GitClientVS.UI;component/Images/defaultAva.png" />
 
                 <DataTemplate x:Key="CommitsTemplate" DataType="gitClientModels:GitCommit">

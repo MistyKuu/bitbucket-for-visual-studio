@@ -688,7 +688,7 @@
     </Canvas>
 
     <Canvas x:Key="appbar_check" Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
-        <Path Width="37.9998" Height="31.6665" Canvas.Left="19.0001" Canvas.Top="22.1668" Stretch="Fill" Fill="{DynamicResource BlackBrush}" Data="F1 M 23.7501,33.25L 34.8334,44.3333L 52.2499,22.1668L 56.9999,26.9168L 34.8334,53.8333L 19.0001,38L 23.7501,33.25 Z "/>
+        <Path Width="37.9998" Height="31.6665" Canvas.Left="19.0001" Canvas.Top="22.1668" Stretch="Fill" Fill="Green" Data="F1 M 23.7501,33.25L 34.8334,44.3333L 52.2499,22.1668L 56.9999,26.9168L 34.8334,53.8333L 19.0001,38L 23.7501,33.25 Z "/>
     </Canvas>
 
     <Canvas x:Key="appbar_checkmark_cross" Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">

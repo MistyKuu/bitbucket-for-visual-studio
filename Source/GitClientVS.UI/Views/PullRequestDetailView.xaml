@@ -18,6 +18,7 @@
              xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
              xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
              xmlns:views="clr-namespace:GitClientVS.UI.Views"
+             xmlns:infrastructure="clr-namespace:GitClientVS.Infrastructure;assembly=GitClientVS.Infrastructure"
 
 
              mc:Ignorable="d" 
@@ -34,6 +35,11 @@
             </ResourceDictionary.MergedDictionaries>
 
             <BitmapImage x:Key="DefaultAvatar" UriSource="pack://application:,,,/GitClientVS.UI;component/Images/defaultAva.png" />
+
+
+            <Canvas x:Key="appbar_check_green" Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
+                <Path Width="37.9998" Height="31.6665" Canvas.Left="19.0001" Canvas.Top="22.1668" Stretch="Fill" Fill="#72BB72" Data="F1 M 23.7501,33.25L 34.8334,44.3333L 52.2499,22.1668L 56.9999,26.9168L 34.8334,53.8333L 19.0001,38L 23.7501,33.25 Z "/>
+            </Canvas>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="0" >
@@ -95,9 +101,9 @@
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate >
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Style="{StaticResource ActionLinkButton}" Content="{Binding Key}" Command="{Binding Value}"/>
+                                            <Button Style="{StaticResource ActionLinkButton}" Content="{Binding Label}" Command="{Binding Command}"/>
                                             <Separator Style="{StaticResource VerticalSeparator}" />
                                         </StackPanel>
                                     </DataTemplate>
@@ -167,7 +173,11 @@
                                         <TextBlock Text="{Binding Key.DisplayName}"/>
                                     </Image.ToolTip>
                                 </Image>
-                                <TextBlock Text="{Binding Value}"/>
+                                <Rectangle Margin="-2,0" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="{Binding Value,Converter={converters:BoolToVisibilityConverter}}">
+                                    <Rectangle.Fill>
+                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_check_green}" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

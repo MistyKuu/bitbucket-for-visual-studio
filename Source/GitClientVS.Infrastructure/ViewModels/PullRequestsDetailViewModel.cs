@@ -41,21 +41,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _isApproveAvailable;
         private bool _isApproved;
         private Theme _currentTheme;
+        private ReactiveList<PullRequestActionModel> _actionCommands;
 
 
         public string PageTitle => "Pull Request Details";
-
-        public bool IsApproveAvailable
-        {
-            get { return _isApproveAvailable; }
-            set { this.RaiseAndSetIfChanged(ref _isApproveAvailable, value); }
-        }
-
-        public bool IsApproved
-        {
-            get { return _isApproved; }
-            set { this.RaiseAndSetIfChanged(ref _isApproved, value); }
-        }
 
         public string MainSectionCommandText
         {
@@ -75,7 +64,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _currentTheme, value); }
         }
 
-        public List<KeyValuePair<string, IReactiveCommand>> ActionCommands { get; set; }
+        public ReactiveList<PullRequestActionModel> ActionCommands
+        {
+            get { return _actionCommands; }
+            set { this.RaiseAndSetIfChanged(ref _actionCommands, value); }
+        }
 
         public PullRequestDiffModel PullRequestDiffModel { get; set; }
 
@@ -104,6 +97,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             this.WhenAnyValue(x => x.PullRequest).Subscribe(_ => this.RaisePropertyChanged(nameof(PageTitle)));
             this.WhenAnyObservable(x => x._approveCommand, x => x._declineCommand, x => x._disapproveCommand, x => x._mergeCommand)
                 .Subscribe(_ => _initializeCommand.Execute(PullRequest.Id));
+
+            this.WhenAnyValue(x => x.PullRequest).Where(x => x != null).Subscribe(_ => { CreatePullRequestCommands(); });
         }
 
         public ICommand InitializeCommand => _initializeCommand;
@@ -115,15 +110,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             _disapproveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DisapprovePullRequest(PullRequest.Id); });
             _declineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version); });
             _mergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => MergePullRequest());
-
-            ActionCommands = new List<KeyValuePair<string, IReactiveCommand>>()
-            {
-               new KeyValuePair<string, IReactiveCommand>("Merge",_mergeCommand),
-               new KeyValuePair<string, IReactiveCommand>("Decline",_declineCommand),
-               new KeyValuePair<string, IReactiveCommand>("Approve",_approveCommand),
-               new KeyValuePair<string, IReactiveCommand>("Unapprove",_disapproveCommand),
-            };
-
         }
 
 
@@ -144,7 +130,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task GetPullRequestInfo(long id)
         {
             PullRequest = await _gitClientService.GetPullRequest(id);
-            CheckReviewers();
         }
 
         private async Task CreateComments(long id)
@@ -165,16 +150,31 @@ namespace GitClientVS.Infrastructure.ViewModels
             PullRequestDiffModel.FileDiffs = fileDiffs;
         }
 
-        private void CheckReviewers()
+        private void CreatePullRequestCommands()
         {
-            IsApproved = true;
+            var isApproved = true;
+            bool isApproveAvailable = false;
+
             foreach (var reviewer in PullRequest.Reviewers)
             {
                 if (reviewer.Key.Username == _userInformationService.ConnectionData.UserName)
                 {
-                    IsApproveAvailable = true;
-                    IsApproved = reviewer.Value;
+                    isApproveAvailable = true;
+                    isApproved = reviewer.Value;
                 }
+            }
+
+            ActionCommands = new ReactiveList<PullRequestActionModel>()
+            {
+                new PullRequestActionModel("Merge",_mergeCommand),
+                new PullRequestActionModel("Decline",_declineCommand),
+            };
+
+            if (isApproveAvailable)
+            {
+                ActionCommands.Add(!isApproved
+                    ? new PullRequestActionModel("Approve", _approveCommand)
+                    : new PullRequestActionModel("Unapprove", _disapproveCommand));
             }
         }
 

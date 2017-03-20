@@ -125,6 +125,7 @@
     <Compile Include="Models\GitClientModels\GitMergeRequest.cs" />
     <Compile Include="Models\GitClientModels\PageIterator.cs" />
     <Compile Include="Models\GitCredentials.cs" />
+    <Compile Include="Models\PullRequestActionModel.cs" />
     <Compile Include="Models\PullRequestDiffModel.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\Tree\CommentTree.cs" />
