@@ -33,12 +33,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _isLoading;
         private ReactiveCommand<Unit> _initializeCommand;
         private ReactiveCommand<Unit> _approveCommand;
+        private ReactiveCommand<Unit> _disapproveCommand;
+        private ReactiveCommand<Unit> _declineCommand;
+        private ReactiveCommand<Unit> _mergeCommand;
         private GitPullRequest _pullRequest;
         private string _mainSectionCommandText;
         private bool _isApproveAvailable;
         private bool _isApproved;
         private Theme _currentTheme;
-        private List<GitUser> _selectedReviewers;
 
 
         public string PageTitle => "Pull Request Details";
@@ -73,6 +75,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _currentTheme, value); }
         }
 
+        public List<KeyValuePair<string, IReactiveCommand>> ActionCommands { get; set; }
+
         public PullRequestDiffModel PullRequestDiffModel { get; set; }
 
 
@@ -98,26 +102,27 @@ namespace GitClientVS.Infrastructure.ViewModels
                 PullRequestDiffModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffModel.Comments.ToList(), CurrentTheme).ToList();
             });
             this.WhenAnyValue(x => x.PullRequest).Subscribe(_ => this.RaisePropertyChanged(nameof(PageTitle)));
+            this.WhenAnyObservable(x => x._approveCommand, x => x._declineCommand, x => x._disapproveCommand, x => x._mergeCommand)
+                .Subscribe(_ => _initializeCommand.Execute(PullRequest.Id));
         }
 
         public ICommand InitializeCommand => _initializeCommand;
-        public ICommand ApproveCommand => _approveCommand;
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((long)x));
-            _approveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => Approve());
-        }
+            _approveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.ApprovePullRequest(PullRequest.Id); });
+            _disapproveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DisapprovePullRequest(PullRequest.Id); });
+            _declineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version); });
+            _mergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => MergePullRequest());
 
-        private async Task Approve()
-        {
-            if (IsApproved)
-                await _gitClientService.DisapprovePullRequest(PullRequest.Id);
-            else
-                await _gitClientService.ApprovePullRequest(PullRequest.Id);
-
-            // no exception means we did it!
-            IsApproved = !IsApproved;
+            ActionCommands = new List<KeyValuePair<string, IReactiveCommand>>()
+            {
+               new KeyValuePair<string, IReactiveCommand>("Merge",_mergeCommand),
+               new KeyValuePair<string, IReactiveCommand>("Decline",_declineCommand),
+               new KeyValuePair<string, IReactiveCommand>("Approve",_approveCommand),
+               new KeyValuePair<string, IReactiveCommand>("Unapprove",_disapproveCommand),
+            };
 
         }
 
@@ -163,18 +168,31 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void CheckReviewers()
         {
             IsApproved = true;
-            foreach (var Reviewer in PullRequest.Reviewers)
+            foreach (var reviewer in PullRequest.Reviewers)
             {
-                if (Reviewer.Key.Username == _userInformationService.ConnectionData.UserName)
+                if (reviewer.Key.Username == _userInformationService.ConnectionData.UserName)
                 {
                     IsApproveAvailable = true;
-                    IsApproved = Reviewer.Value;
+                    IsApproved = reviewer.Value;
                 }
             }
         }
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand };
+        private async Task MergePullRequest()
+        {
+            var gitMergeRequest = new GitMergeRequest()
+            {
+                CloseSourceBranch = PullRequest.CloseSourceBranch,
+                Id = PullRequest.Id,
+                MergeStrategy = "merge_commit",
+                Version = PullRequest.Version
+            };
+
+            await _gitClientService.MergePullRequest(gitMergeRequest);
+        }
+
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand };
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand };
 
         public string ErrorMessage
         {

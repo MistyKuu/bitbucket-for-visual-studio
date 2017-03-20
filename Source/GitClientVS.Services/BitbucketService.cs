@@ -210,6 +210,19 @@ namespace GitClientVS.Services
             return (result != null && result.Approved);
         }
 
+        public async Task<bool> DeclinePullRequest(long id, string version)
+        {
+            await _bitbucketClient.PullRequestsClient.DeclinePullRequest(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, id, version);
+            return true;
+        }
+
+        public async Task<bool> MergePullRequest(GitMergeRequest request)
+        {
+            var req = request.MapTo<MergeRequest>();
+            await _bitbucketClient.PullRequestsClient.MergePullRequest(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, req);
+            return true;
+        }
+
         public async Task DisapprovePullRequest(long id)
         {
             await _bitbucketClient.PullRequestsClient.DisapprovePullRequest(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, id);

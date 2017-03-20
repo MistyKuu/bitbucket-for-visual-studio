@@ -13,9 +13,7 @@ namespace BitBucket.REST.API.Interfaces
         Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName);
         Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector query = null);
         Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string owner, long id);
-        Task<Participant> ApprovePullRequest(string repositoryName, long id);
         Task<Participant> ApprovePullRequest(string repositoryName, string ownerName, long id);
-        Task DisapprovePullRequest(string repositoryName, long id);
         Task DisapprovePullRequest(string repositoryName, string ownerName, long id);
         Task<IEnumerable<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id);
         Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, long id);
@@ -26,5 +24,7 @@ namespace BitBucket.REST.API.Interfaces
         Task<PullRequest> GetPullRequestForBranches(string repositoryName, string ownerName, string sourceBranch, string destBranch);
         Task<IEnumerable<FileDiff>> GetCommitsDiff(string repoName, string owner, string fromCommit, string toCommit);
         Task UpdatePullRequest(PullRequest pullRequest, string repoName, string owner);
+        Task DeclinePullRequest(string repositoryName, string ownerName, long id, string version);
+        Task MergePullRequest(string repositoryName, string ownerName, MergeRequest mergeRequest);
     }
 }

@@ -90,12 +90,6 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return fileDiffs;
         }
 
-
-        public async Task<Participant> ApprovePullRequest(string repositoryName, long id)
-        {
-            return await ApprovePullRequest(repositoryName, Connection.Credentials.Login, id);
-        }
-
         public async Task<Participant> ApprovePullRequest(string repositoryName, string ownerName, long id)
         {
             var url = EnterpriseApiUrls.PullRequestApprove(ownerName, repositoryName, id);
@@ -104,15 +98,24 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return response.Data.MapTo<Participant>();
         }
 
-        public async Task DisapprovePullRequest(string repositoryName, long id)
-        {
-            await DisapprovePullRequest(repositoryName, Connection.Credentials.Login, id);
-        }
-
         public async Task DisapprovePullRequest(string repositoryName, string ownerName, long id)
         {
             var url = EnterpriseApiUrls.PullRequestApprove(ownerName, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.DELETE);
+            await RestClient.ExecuteTaskAsync(request);
+        }
+
+        public async Task DeclinePullRequest(string repositoryName, string ownerName, long id, string version)
+        {
+            var url = EnterpriseApiUrls.PullRequestDecline(ownerName, repositoryName, id, version);
+            var request = new BitbucketRestRequest(url, Method.POST);
+            await RestClient.ExecuteTaskAsync(request);
+        }
+
+        public async Task MergePullRequest(string repositoryName, string ownerName, MergeRequest mergeRequest)
+        {
+            var url = EnterpriseApiUrls.PullRequestMerge(ownerName, repositoryName, mergeRequest.Id, mergeRequest.Version);
+            var request = new BitbucketRestRequest(url, Method.POST);
             await RestClient.ExecuteTaskAsync(request);
         }
 

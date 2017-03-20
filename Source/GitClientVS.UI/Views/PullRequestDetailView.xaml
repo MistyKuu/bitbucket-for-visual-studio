@@ -87,29 +87,24 @@
                             </WrapPanel>
                         </Grid>
 
-                        <Button Grid.Column="1"  VerticalAlignment="Center" Grid.RowSpan="2" HorizontalAlignment="Right" Command="{Binding ApproveCommand}">
-                            <Button.Style>
-                                <Style TargetType="Button" BasedOn="{StaticResource MetroFlatButton}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsApproved}" Value="True">
-                                            <Setter Property="Content" Value="Unapprove"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsApproved}" Value="False">
-                                            <Setter Property="Content" Value="Approve"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsApproveAvailable}" Value="False">
-                                            <Setter Property="Visibility" Value="Hidden"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsApproveAvailable}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
+                        <StackPanel Grid.Column="1"  VerticalAlignment="Bottom" Grid.RowSpan="2">
+                            <ItemsControl ItemsSource="{Binding ActionCommands}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Style="{StaticResource ActionLinkButton}" Content="{Binding Key}" Command="{Binding Value}"/>
+                                            <Separator Style="{StaticResource VerticalSeparator}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
                     </Grid>
-
-
 
                     <Separator Grid.Row="1" Margin="-5, 5">
                         <Separator.Resources>
@@ -151,14 +146,14 @@
 
                 <TextBlock  Grid.Row="0" Grid.Column="0" Text="Author" VerticalAlignment="Center" FontWeight="SemiBold"/>
 
-                <Image HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1" Width="30" Height="30" Margin="5" Source="{Binding PullRequest.Author.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}">
-                    <Image.ToolTip>
-                        <TextBlock Text="{Binding PullRequest.Author.DisplayName}"/>
-                    </Image.ToolTip>
-                </Image>
+                <StackPanel HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1"  Orientation="Horizontal">
+                    <Image Width="30" Height="30" Margin="5" Source="{Binding PullRequest.Author.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}"/>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding PullRequest.Author.DisplayName}"/>
+                </StackPanel>
+
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Reviewers" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding PullRequest.Reviewers.Keys}">
+                <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding PullRequest.Reviewers}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Orientation="Horizontal"/>
@@ -166,11 +161,14 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Image Width="30" Height="30" Margin="5" Source="{Binding Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}">
-                            <Image.ToolTip>
-                                <TextBlock Text="{Binding DisplayName}"/>
-                            </Image.ToolTip>    
-                            </Image>
+                            <Grid>
+                                <Image Width="30" Height="30" Margin="5" Source="{Binding Key.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}">
+                                    <Image.ToolTip>
+                                        <TextBlock Text="{Binding Key.DisplayName}"/>
+                                    </Image.ToolTip>
+                                </Image>
+                                <TextBlock Text="{Binding Value}"/>
+                            </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

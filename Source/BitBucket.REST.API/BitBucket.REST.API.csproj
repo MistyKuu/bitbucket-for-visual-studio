@@ -68,6 +68,7 @@
     <Compile Include="Clients\Enterprise\EnterpriseTeamsClient.cs" />
     <Compile Include="Clients\Enterprise\EnterpriseUserClient.cs" />
     <Compile Include="Clients\Enterprise\EnterprisePullRequestsClient.cs" />
+    <Compile Include="Models\Standard\MergeRequest.cs" />
     <Compile Include="EnterpriseBitbucketClient.cs" />
     <Compile Include="Helpers\EnterpriseApiUrls.cs" />
     <Compile Include="Helpers\LinqExtensions.cs" />

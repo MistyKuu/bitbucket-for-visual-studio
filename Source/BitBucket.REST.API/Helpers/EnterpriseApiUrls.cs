@@ -74,6 +74,16 @@ namespace BitBucket.REST.API.Helpers
             return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/approve";
         }
 
+        public static string PullRequestDecline(string owner, string repositoryName, long id, string version)
+        {
+            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/decline?version={version}";
+        }
+
+        public static string PullRequestMerge(string owner, string repositoryName, long id, string version)
+        {
+            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/merge?version={version}";
+        }
+
         public static string PullRequestCommits(string owner, string repositoryName, long id)
         {
             return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/commits";

@@ -50,22 +50,12 @@ namespace BitBucket.REST.API.Clients.Standard
             return response.Data;
         }
 
-        public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, long id)
-        {
-            return await GetPullRequestDiff(repositoryName, Connection.Credentials.Login, id);
-        }
-
         public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string owner, long id)
         {
             var url = ApiUrls.PullRequestDiff(owner, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await RestClient.ExecuteTaskAsync(request);
             return DiffFileParser.Parse(response.Content);
-        }
-
-        public async Task<Participant> ApprovePullRequest(string repositoryName, long id)
-        {
-            return await ApprovePullRequest(repositoryName, Connection.Credentials.Login, id);
         }
 
         public async Task<Participant> ApprovePullRequest(string repositoryName, string ownerName, long id)
@@ -76,15 +66,25 @@ namespace BitBucket.REST.API.Clients.Standard
             return response.Data;
         }
 
-        public async Task DisapprovePullRequest(string repositoryName, long id)
-        {
-            await DisapprovePullRequest(repositoryName, Connection.Credentials.Login, id);
-        }
-
         public async Task DisapprovePullRequest(string repositoryName, string ownerName, long id)
         {
             var url = ApiUrls.PullRequestApprove(ownerName, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.DELETE);
+            await RestClient.ExecuteTaskAsync(request);
+        }
+
+        public async Task DeclinePullRequest(string repositoryName, string ownerName, long id, string version)
+        {
+            var url = ApiUrls.PullRequestDecline(ownerName, repositoryName, id);
+            var request = new BitbucketRestRequest(url, Method.POST);
+            await RestClient.ExecuteTaskAsync(request);
+        }
+
+        public async Task MergePullRequest(string repositoryName, string ownerName, MergeRequest mergeRequest)
+        {
+            var url = ApiUrls.PullRequestMerge(ownerName, repositoryName, mergeRequest.Id);
+            var request = new BitbucketRestRequest(url, Method.POST);
+            request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(mergeRequest), ParameterType.RequestBody);
             await RestClient.ExecuteTaskAsync(request);
         }
 
@@ -140,7 +140,7 @@ namespace BitBucket.REST.API.Clients.Standard
 
         public async Task<IEnumerable<FileDiff>> GetCommitsDiff(string repoName, string owner, string fromCommit, string toCommit)
         {
-            if (fromCommit == toCommit) //otherwise it produces diff againsnt it parent
+            if (fromCommit == toCommit) //otherwise it produces diff against its parent
                 return Enumerable.Empty<FileDiff>();
 
             var url = ApiUrls.CommitsDiff(owner, repoName, fromCommit, toCommit);

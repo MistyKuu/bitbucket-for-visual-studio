@@ -25,6 +25,8 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<IEnumerable<FileDiff>> GetPullRequestDiff(long id);
         Task DisapprovePullRequest(long id);
         Task<bool> ApprovePullRequest(long id);
+        Task<bool> DeclinePullRequest(long id, string version);
+        Task<bool> MergePullRequest(GitMergeRequest request);
         Task<IEnumerable<GitUser>> GetPullRequestsAuthors();
         bool IsOriginRepo(GitRemoteRepository gitRemoteRepository);
         Task CreatePullRequest(GitPullRequest gitPullRequest);

@@ -49,6 +49,7 @@ namespace GitClientVS.Infrastructure.Mappings
             CreateMap<UserShort, GitUser>();
             CreateMap<Links, GitLinks>();
             CreateMap<Link, GitLink>();
+            CreateMap<GitMergeRequest, MergeRequest>();
         }
     }
 
