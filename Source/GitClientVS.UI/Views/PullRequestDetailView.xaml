@@ -153,7 +153,14 @@
                 <TextBlock  Grid.Row="0" Grid.Column="0" Text="Author" VerticalAlignment="Center" FontWeight="SemiBold"/>
 
                 <StackPanel HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1"  Orientation="Horizontal">
-                    <Image Width="30" Height="30" Margin="5" Source="{Binding PullRequest.Author.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}"/>
+                    <Grid>
+                        <Image Width="30" Height="30" Margin="5" Source="{Binding PullRequest.Author.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}"/>
+                        <Rectangle Margin="-2,0" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="{Binding HasAuthorApproved,Converter={converters:BoolToVisibilityConverter}}">
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_check_green}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
                     <TextBlock VerticalAlignment="Center" Text="{Binding PullRequest.Author.DisplayName}"/>
                 </StackPanel>
 

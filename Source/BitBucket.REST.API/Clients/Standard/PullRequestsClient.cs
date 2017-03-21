@@ -135,7 +135,11 @@ namespace BitBucket.REST.API.Clients.Standard
                 {"q", queryBuilderString},
             };
             var response = await RestClient.GetAllPages<PullRequest>(url, query: query, limit: 20);
-            return response.SingleOrDefault();
+            var pq = response.SingleOrDefault();
+            if (pq == null)
+                return null;
+
+            return await GetPullRequest(repositoryName, ownerName, pq.Id); // we need reviewers and participants
         }
 
         public async Task<IEnumerable<FileDiff>> GetCommitsDiff(string repoName, string owner, string fromCommit, string toCommit)

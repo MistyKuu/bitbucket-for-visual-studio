@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +51,9 @@ namespace GitClientVS.Services
         {
             try
             {
+                if(!File.Exists(Paths.GitClientUserDataPath))
+                    return Result<ConnectionData>.Fail();
+
                 return _fileService
                     .Read(Paths.GitClientUserDataPath)
                     .Then(_hashService.Decrypt)

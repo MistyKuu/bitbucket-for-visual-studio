@@ -54,6 +54,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<object> _goToDetailsCommand;
         private ReactiveCommand<Unit> _setPullRequestDataCommand;
 
+
         public string PageTitle { get; } = "Create New Pull Request";
 
 
@@ -230,7 +231,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 Title = pullRequest.Title;
                 Description = pullRequest.Description;
                 SelectedReviewers.Clear();
-                foreach (var reviewer in pullRequest.Reviewers.Select(x => x.Key))
+                foreach (var reviewer in pullRequest.Reviewers.Where(x => x.Key.Username != pullRequest.Author.Username).Select(x => x.Key))
                     SelectedReviewers.Add(reviewer);
             }
             else

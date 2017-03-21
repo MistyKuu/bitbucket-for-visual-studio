@@ -16,13 +16,11 @@ namespace GitClientVS.Infrastructure.Mappings
     {
         public GitPullRequest Convert(PullRequest source, GitPullRequest destination, ResolutionContext context)
         {
-            Dictionary<GitUser, bool> reviewers = new Dictionary<GitUser, bool>();
-            if (source.Reviewers != null)
+            var reviewers = new Dictionary<GitUser, bool>();
+            if (source.Participants != null)
             {
-                foreach (var reviewer in source.Reviewers)
-                {
-                    reviewers.Add(reviewer.MapTo<GitUser>(), ApiHelpers.GetApproveStatus(reviewer.Username, source.Participants));
-                }
+                foreach (var user in source.Participants.Select(x => new { User = x.User.MapTo<GitUser>(), Approved = x.Approved }))
+                    reviewers.Add(user.User, user.Approved);
             }
 
             return new GitPullRequest(source.Title, source.Description, source.Source.Branch.Name, source.Destination.Branch.Name)
