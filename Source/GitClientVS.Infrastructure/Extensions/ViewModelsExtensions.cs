@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GitClientVS.Contracts.Interfaces;
+using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Infrastructure.Utils;
 using log4net;
 using Microsoft.VisualStudio.Shell;

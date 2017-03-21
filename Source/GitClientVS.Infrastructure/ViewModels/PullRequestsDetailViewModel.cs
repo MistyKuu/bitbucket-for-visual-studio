@@ -91,6 +91,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _userInformationService = userInformationService;
             _treeStructureGenerator = treeStructureGenerator;
+
             CurrentTheme = userInformationService.CurrentTheme;
             PullRequestDiffModel = new PullRequestDiffModel(commandsService);
 
