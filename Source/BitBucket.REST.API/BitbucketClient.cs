@@ -27,7 +27,7 @@ namespace BitBucket.REST.API
             var versionOneClient = new BitbucketRestClient(versionOneApiConnection);
             var webClient = new BitbucketRestClient(webConnection);
 
-            RepositoriesClient = new RepositoriesClient(client, ApiConnection);
+            RepositoriesClient = new RepositoriesClient(client, versionOneClient, ApiConnection);
             UserClient = new UserClient(client, ApiConnection);
             PullRequestsClient = new PullRequestsClient(client, internalClient, webClient, ApiConnection);
             TeamsClient = new TeamsClient(client, ApiConnection);

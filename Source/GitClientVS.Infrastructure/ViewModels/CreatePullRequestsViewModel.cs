@@ -205,9 +205,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task LoadBranches()
         {
             _currentRepo = _gitService.GetActiveRepository();
-            var currentBranch = _currentRepo.Branches.First(x => x.IsHead);
 
             Branches = (await _gitClientService.GetBranches()).OrderBy(x => x.Name).ToList();
+
+            
+            var currentBranch = _currentRepo.Branches.FirstOrDefault(x => x.IsHead) ?? _currentRepo.Branches.First();
 
             SourceBranch = Branches.FirstOrDefault(x => x.Name == currentBranch.TrackedBranchName) ??
                            Branches.FirstOrDefault();

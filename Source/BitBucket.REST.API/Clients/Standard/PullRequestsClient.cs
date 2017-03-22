@@ -30,10 +30,12 @@ namespace BitBucket.REST.API.Clients.Standard
         }
 
 
-        public async Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
+        public  Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
         {
-            var url = ApiUrls.PullRequestsAuthors(ownerName, repositoryName);
-            return await _internalRestClient.GetAllPages<UserShort>(url, 100);
+            //var url = ApiUrls.PullRequestsAuthors(ownerName, repositoryName);
+            //return await _internalRestClient.GetAllPages<UserShort>(url, 100);
+
+            return GetRepositoryUsers(repositoryName, ownerName, string.Empty);
         }
 
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector query = null)

@@ -11,6 +11,8 @@ namespace GitClientVS.Infrastructure.Mappings
     {
         public GitMappingsProfile()
         {
+            CreateMap<RepositoryV1, Repository>().ConvertUsing<RepositoryV1TypeConverter>();
+
             CreateMap<Repository, GitRemoteRepository>().ConvertUsing<RepositoryTypeConverter>();
             CreateMap<GitRemoteRepository, Repository>().ConvertUsing<ReverseRepositoryTypeConverter>();
 
@@ -39,7 +41,7 @@ namespace GitClientVS.Infrastructure.Mappings
 
             CreateMap<Content, GitCommentContent>();
             CreateMap<Branch, GitBranch>()
-                 .ForMember(dto => dto.IsDefault, e => e.MapFrom(o => o.IsDefault ?? (o.Name == "master")));
+                 .ForMember(dto => dto.IsDefault, e => e.MapFrom(o => o.IsDefault));
 
 
             CreateMap<GitUser, UserShort>();
@@ -52,5 +54,4 @@ namespace GitClientVS.Infrastructure.Mappings
             CreateMap<GitMergeRequest, MergeRequest>();
         }
     }
-
 }

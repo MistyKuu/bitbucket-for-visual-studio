@@ -40,7 +40,7 @@ namespace BitBucket.REST.API
             apiConnection = new Connection(host, new Uri($"{host.Scheme}://api.{host.Host}/2.0/"), credentials);
 
             var internalApiConnection = new Connection(host, new Uri($"{host.Scheme}://{host.Host}/!api/internal/"), credentials);
-            var versionOneApiConnection = new Connection(host, new Uri($"{host.Scheme}://{host.Host}/!api/1.0/"), credentials);
+            var versionOneApiConnection = new Connection(host, new Uri($"{host.Scheme}://api.{host.Host}/1.0/"), credentials);
             var webApiConnection = new Connection(host, new Uri(host, "xhr"), credentials);
 
             return new BitbucketClient(apiConnection, internalApiConnection, versionOneApiConnection, webApiConnection);

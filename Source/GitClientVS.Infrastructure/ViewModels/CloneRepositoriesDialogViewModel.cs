@@ -35,6 +35,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IFileService _fileService;
+        private readonly IUserInformationService _userInformationService;
         private ReactiveCommand<Unit> _cloneCommand;
         private ReactiveCommand<object> _choosePathCommand;
         private ReactiveCommand<Unit> _initializeCommand;
@@ -95,12 +96,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         public CloneRepositoriesDialogViewModel(
             IGitClientService gitClientService,
             IGitService gitService,
-            IFileService fileService
+            IFileService fileService,
+            IUserInformationService userInformationService
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _fileService = fileService;
+            _userInformationService = userInformationService;
 
             var gitClonePath = _gitService.GetDefaultRepoPath();
             ClonePath = !string.IsNullOrEmpty(gitClonePath) ? gitClonePath : Paths.DefaultRepositoryPath;

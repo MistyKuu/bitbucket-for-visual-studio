@@ -80,11 +80,6 @@ namespace GitClientVS.Services
                 return await bitbucketClientFactory.CreateEnterpriseBitBucketClient(gitCredentials.Host, credentials);
         }
 
-        public async Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync()
-        {
-            var repositories = await _bitbucketClient.RepositoriesClient.GetRepositories(_gitWatcher.ActiveRepo.Owner);
-            return repositories.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>();
-        }
 
         public async Task<IEnumerable<GitUser>> GetRepositoryUsers(string filter)
         {
@@ -95,19 +90,11 @@ namespace GitClientVS.Services
 
         public async Task<IEnumerable<GitRemoteRepository>> GetAllRepositories()
         {
-            var allRepositories = new List<GitRemoteRepository>();
+            var userRepositories = (await _bitbucketClient.RepositoriesClient.GetUserRepositories())
+                .Where(repo => repo.Scm == supportedSCM)
+                .MapTo<List<GitRemoteRepository>>();
 
-            var userRepositories = await _bitbucketClient.RepositoriesClient.GetRepositories(_gitWatcher.ActiveRepo.Owner);
-            allRepositories.AddRange(userRepositories.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>());
-
-            var teams = await _bitbucketClient.TeamsClient.GetTeams();
-            foreach (var team in teams)
-            {
-                var teamRepositories = await _bitbucketClient.RepositoriesClient.GetRepositories(team.Username);
-                allRepositories.AddRange(teamRepositories.Where(repo => repo.Scm == supportedSCM).MapTo<List<GitRemoteRepository>>());
-            }
-
-            return allRepositories;
+            return userRepositories;
         }
 
         public async Task<IEnumerable<GitTeam>> GetTeams()

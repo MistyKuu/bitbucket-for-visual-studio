@@ -15,6 +15,11 @@ namespace BitBucket.REST.API.Helpers
             return $"mentions/repositories/{username}/{repository}";
         }
 
+        public static string RepositoriesV1()
+        {
+            return $"user/repositories";
+        }
+
         public static string Repositories(string login)
         {
             return $"repositories/{login}";
@@ -44,10 +49,14 @@ namespace BitBucket.REST.API.Helpers
         {
             return $"teams?role={role}";
         }
-
         public static string Branches(string login, string repoName)
         {
             return $"repositories/{login}/{repoName}/refs/branches";
+        }
+
+        public static string DefaultBranch(string login, string repoName)
+        {
+            return $"repositories/{login}/{repoName}/main-branch";
         }
 
         public static string Repository(string login, string repoName)

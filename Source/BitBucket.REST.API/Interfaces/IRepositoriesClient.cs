@@ -8,7 +8,7 @@ namespace BitBucket.REST.API.Interfaces
 {
     public interface IRepositoriesClient
     {
-        Task<IEnumerable<Repository>> GetRepositories(string owner);
+        Task<IEnumerable<Repository>> GetUserRepositories();
         Task<IEnumerable<Branch>> GetBranches(string repoName, string owner);
         Task<Repository> CreateRepository(Repository repository);
         Task<Commit> GetCommitById(string repoName, string owner, string id);

@@ -68,6 +68,7 @@
     <Compile Include="Clients\Enterprise\EnterpriseTeamsClient.cs" />
     <Compile Include="Clients\Enterprise\EnterpriseUserClient.cs" />
     <Compile Include="Clients\Enterprise\EnterprisePullRequestsClient.cs" />
+    <Compile Include="Models\Standard\DefaultBranch.cs" />
     <Compile Include="Models\Standard\MergeRequest.cs" />
     <Compile Include="EnterpriseBitbucketClient.cs" />
     <Compile Include="Helpers\EnterpriseApiUrls.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Models\Standard\PullRequest.cs" />
     <Compile Include="Models\Standard\PullRequestOptions.cs" />
     <Compile Include="Models\Standard\Repository.cs" />
+    <Compile Include="Models\Standard\RepositoryV1.cs" />
     <Compile Include="Models\Standard\Source.cs" />
     <Compile Include="Models\Standard\Team.cs" />
     <Compile Include="Models\Standard\User.cs" />

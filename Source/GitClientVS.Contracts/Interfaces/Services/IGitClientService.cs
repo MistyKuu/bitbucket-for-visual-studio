@@ -14,7 +14,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
         string Origin { get; }
         Task LoginAsync(GitCredentials gitCredentials);
         void Logout();
-        Task<IEnumerable<GitRemoteRepository>> GetUserRepositoriesAsync();
         Task<IEnumerable<GitRemoteRepository>> GetAllRepositories();
         Task<GitRemoteRepository> CreateRepositoryAsync(GitRemoteRepository newRepository);
         Task<IEnumerable<GitBranch>> GetBranches();

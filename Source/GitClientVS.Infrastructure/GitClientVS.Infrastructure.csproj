@@ -112,6 +112,7 @@
     <Compile Include="Mappings\PullRequestOptionsTypeConverter.cs" />
     <Compile Include="Mappings\PullRequestTypeConverter.cs" />
     <Compile Include="Mappings\RepositoryTypeConverter.cs" />
+    <Compile Include="Mappings\RepositoryV1TypeConverter.cs" />
     <Compile Include="Mappings\TeamTypeConverter.cs" />
     <Compile Include="PageIds.cs" />
     <Compile Include="Paths.cs" />

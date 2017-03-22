@@ -37,7 +37,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
         [Test]
         public void GetAllRepositories()
         {
-            var repositories = bitbucketClient.RepositoriesClient.GetRepositories(CredentialsHelper.TestsCredentials.Username);
+            var repositories = bitbucketClient.RepositoriesClient.GetUserRepositories();
         }
         [Test]
         public async Task GetAllRepositories_Enterprise()
@@ -46,7 +46,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Clients
             var connection = new Connection(new Uri("http://localhost:7990"), new Uri("http://localhost:7990"), credentials);
 
             var bitbucketClient = new EnterpriseBitbucketClient(connection);
-            var test = (await bitbucketClient.RepositoriesClient.GetRepositories(CredentialsHelper.TestsCredentials.Username)).ToList();
+            var test = (await bitbucketClient.RepositoriesClient.GetUserRepositories()).ToList();
             var test2 = await bitbucketClient.RepositoriesClient.GetBranches(test[0].Name, CredentialsHelper.TestsCredentials.Username);
             var test3 = await bitbucketClient.RepositoriesClient.CreateRepository(new Repository()
             {

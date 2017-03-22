@@ -10,6 +10,6 @@ namespace BitBucket.REST.API.Models.Standard
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
         
-        public bool? IsDefault { get; set; }
+        public bool IsDefault { get; set; }
     }
 }

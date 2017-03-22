@@ -20,12 +20,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
         }
 
-        public async Task<IEnumerable<Repository>> GetRepositories(string owner)
-        {
-            return await GetRepositories();
-        }
-
-        public async Task<IEnumerable<Repository>> GetRepositories()
+        public async Task<IEnumerable<Repository>> GetUserRepositories()
         {
             var url = EnterpriseApiUrls.Repositories();
             var repos = await RestClient.GetAllPages<EnterpriseRepository>(url);

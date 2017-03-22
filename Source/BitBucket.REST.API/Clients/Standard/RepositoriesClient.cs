@@ -6,6 +6,7 @@ using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.Wrappers;
 using RestSharp;
 using System.Collections.Generic;
+using System.Linq;
 using BitBucket.REST.API.Mappings;
 using BitBucket.REST.API.Models.Enterprise;
 using BitBucket.REST.API.QueryBuilders;
@@ -14,21 +15,63 @@ namespace BitBucket.REST.API.Clients.Standard
 {
     public class RepositoriesClient : ApiClient, IRepositoriesClient
     {
-        public RepositoriesClient(BitbucketRestClient restClient, Connection connection) : base(restClient, connection)
+        private readonly BitbucketRestClient _versionOneClient;
+
+        public RepositoriesClient(BitbucketRestClient restClient, BitbucketRestClient versionOneClient, Connection connection) : base(restClient, connection)
         {
+            _versionOneClient = versionOneClient;
         }
 
-        public async Task<IEnumerable<Repository>> GetRepositories(string owner)
+        public Task<IEnumerable<Repository>> GetUserRepositories()
         {
-            var url = ApiUrls.Repositories(owner);
-            return await RestClient.GetAllPages<Repository>(url);
+            return GetUserRepositoriesV1();
+        }
+
+        public async Task<IEnumerable<Repository>> GetUserRepositoriesV2()
+        {
+            var url = ApiUrls.Repositories();
+            return await RestClient.GetAllPages<Repository>(url); // this one doesn't return all repositories i.e where you are not owner but you are admin.
+        }
+
+        public async Task<IEnumerable<Repository>> GetUserRepositoriesV1()
+        {
+            var repositories = new List<Repository>();
+            var url = ApiUrls.RepositoriesV1();
+            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await _versionOneClient.ExecuteTaskAsync<List<RepositoryV1>>(request);
+            if (response.Data != null)
+                repositories.AddRange(response.Data.MapTo<List<Repository>>());
+
+            foreach (var repository in repositories) // sadly it doesn't have clone url
+                repository.Links = new Links
+                {
+                    Clone =
+                        new List<Link>()
+                        {
+                            new Link()
+                            {
+                                Href = $"https://{Connection.Credentials.Login}@{Connection.MainUrl.Host}/{repository.Owner.Username}/{repository.Name.Replace(" ","-")}.git"
+                            }
+                        }
+                };
+
+            return repositories;
         }
 
         public async Task<IEnumerable<Branch>> GetBranches(string repoName, string owner)
         {
             var url = ApiUrls.Branches(owner, repoName);
-            return await RestClient.GetAllPages<Branch>(url);
+            var branches = (await RestClient.GetAllPages<Branch>(url)).ToList();
+
+            var defaultBranchResponse = await DefaultBranch(repoName, owner);
+
+            var defaultBranch = branches.FirstOrDefault(x => x.Name == defaultBranchResponse?.Name);
+            if (defaultBranch != null)
+                defaultBranch.IsDefault = true;
+
+            return branches;
         }
+
 
 
 
@@ -59,6 +102,14 @@ namespace BitBucket.REST.API.Clients.Standard
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(repository), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<Repository>(request);
+            return response.Data;
+        }
+
+        private async Task<DefaultBranch> DefaultBranch(string repoName, string owner)
+        {
+            var url = ApiUrls.DefaultBranch(repoName, owner);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await _versionOneClient.ExecuteTaskAsync<DefaultBranch>(request);
             return response.Data;
         }
     }
