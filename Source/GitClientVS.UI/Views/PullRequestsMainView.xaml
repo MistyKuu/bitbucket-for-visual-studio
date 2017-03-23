@@ -139,7 +139,7 @@
                 >
                     <wpfControls:AutoCompleteTextBox.ItemTemplate>
                         <DataTemplate DataType="gitClientModels:GitUser">
-                            <TextBlock Text="{Binding DisplayName}"/>
+                            <TextBlock Foreground="Black" Background="White"  Text="{Binding DisplayName}"/>
                         </DataTemplate>
                     </wpfControls:AutoCompleteTextBox.ItemTemplate>
                     <wpfControls:AutoCompleteTextBox.Icon>

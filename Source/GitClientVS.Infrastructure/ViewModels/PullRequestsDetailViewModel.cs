@@ -29,6 +29,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IUserInformationService _userInformationService;
         private readonly ITreeStructureGenerator _treeStructureGenerator;
+        private readonly IMessageBoxService _messageBoxService;
         private string _errorMessage;
         private bool _isLoading;
         private ReactiveCommand<Unit> _initializeCommand;
@@ -85,12 +86,14 @@ namespace GitClientVS.Infrastructure.ViewModels
             ICommandsService commandsService,
             IUserInformationService userInformationService,
             IEventAggregatorService eventAggregatorService,
-            ITreeStructureGenerator treeStructureGenerator
+            ITreeStructureGenerator treeStructureGenerator,
+            IMessageBoxService messageBoxService
             )
         {
             _gitClientService = gitClientService;
             _userInformationService = userInformationService;
             _treeStructureGenerator = treeStructureGenerator;
+            _messageBoxService = messageBoxService;
 
             CurrentTheme = userInformationService.CurrentTheme;
             PullRequestDiffModel = new PullRequestDiffModel(commandsService);
@@ -113,8 +116,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((long)x));
             _approveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.ApprovePullRequest(PullRequest.Id); });
             _disapproveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DisapprovePullRequest(PullRequest.Id); });
-            _declineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version); });
-            _mergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => MergePullRequest());
+            _declineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ =>
+            {
+                if (_messageBoxService.ShowDialogYesNo("Declining Pull Request", "Do you really want to decline this pull request?"))
+                    await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version);
+            });
+            _mergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ =>
+            {
+                if (_messageBoxService.ShowDialogYesNo("Merging Pull Request", "Do you really want to merge this pull request?"))
+                    await MergePullRequest();
+            });
         }
 
 
