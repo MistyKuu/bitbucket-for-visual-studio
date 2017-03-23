@@ -119,6 +119,11 @@ namespace BitBucket.REST.API.Clients.Enterprise
             await RestClient.ExecuteTaskAsync(request);
         }
 
+        public Task<IEnumerable<UserShort>> GetDefaultReviewers(string repositoryName, string ownerName)
+        {
+            return Task.FromResult(Enumerable.Empty<UserShort>()); //todo in different API do later: http://localhost:7990/rest/default-reviewers/latest/projects/~MISTYK/repos/tttttttttt-df/reviewers?sourceRepoId=72&sourceRefId=refs%2Fheads%2FSECOND-BRANCH&targetRepoId=72&targetRefId=refs%2Fheads%2Fmaster
+        }
+
         public async Task<IEnumerable<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
         {
             var url = EnterpriseApiUrls.PullRequestCommits(ownerName, repositoryName, id);

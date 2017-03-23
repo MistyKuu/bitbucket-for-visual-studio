@@ -89,6 +89,12 @@ namespace BitBucket.REST.API.Clients.Standard
             await RestClient.ExecuteTaskAsync(request);
         }
 
+        public async Task<IEnumerable<UserShort>> GetDefaultReviewers(string repositoryName, string ownerName)
+        {
+            var url = ApiUrls.DefaultReviewers(ownerName, repositoryName);
+            return await RestClient.GetAllPages<UserShort>(url, 100);
+        }
+
         public async Task<IEnumerable<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
         {
             var url = ApiUrls.PullRequestCommits(ownerName, repositoryName, id);

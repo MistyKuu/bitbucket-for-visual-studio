@@ -128,5 +128,10 @@ namespace BitBucket.REST.API.Helpers
         {
             return "repositories";
         }
+
+        public static string DefaultReviewers(string username, string repository)
+        {
+            return $"repositories/{username}/{repository}/default-reviewers";
+        }
     }
 }

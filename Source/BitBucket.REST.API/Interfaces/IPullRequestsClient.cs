@@ -26,5 +26,6 @@ namespace BitBucket.REST.API.Interfaces
         Task UpdatePullRequest(PullRequest pullRequest, string repoName, string owner);
         Task DeclinePullRequest(string repositoryName, string ownerName, long id, string version);
         Task MergePullRequest(string repositoryName, string ownerName, MergeRequest mergeRequest);
+        Task<IEnumerable<UserShort>> GetDefaultReviewers(string repositoryName, string ownerName);
     }
 }

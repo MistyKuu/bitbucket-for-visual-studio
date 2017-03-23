@@ -93,5 +93,10 @@ namespace BitBucket.REST.API.Helpers
         {
             return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/activities";
         }
+
+        public static string DefaultReviewers(string ownerName, string repositoryName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
