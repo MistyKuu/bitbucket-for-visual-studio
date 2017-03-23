@@ -29,6 +29,7 @@ namespace GitClientVS.UI.Helpers
             "HtmlRenderer.WPF",
             "System.Windows.Interactivity",
             "Humanizer",
+            "Svg",
         };
 
         public static void InitializeAssemblyResolver()

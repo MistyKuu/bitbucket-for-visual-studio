@@ -25,5 +25,10 @@ namespace GitClientVS.TeamFoundation.Extensions
 
             return s.Substring(0, s.Length - suffix.Length);
         }
+
+        public static bool Contains(this string str,string subStr, StringComparison comparisonType)
+        {
+            return str.IndexOf(subStr, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
     }
 }

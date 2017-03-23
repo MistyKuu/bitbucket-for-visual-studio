@@ -55,6 +55,9 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -136,6 +139,7 @@
     <Compile Include="Converters\ShortCommitHashConverter.cs" />
     <Compile Include="Converters\SubstractConverter.cs" />
     <Compile Include="Converters\TreeViewFolderIconConverter.cs" />
+    <Compile Include="Converters\UrlToImageSourceConverter.cs" />
     <Compile Include="Extensions\EnumToItemsSource.cs" />
     <Compile Include="Helpers\AssemblyResolver.cs" />
     <Compile Include="Helpers\TreeViewHelpers.cs" />

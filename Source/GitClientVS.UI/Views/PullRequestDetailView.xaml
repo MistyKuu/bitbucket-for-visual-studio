@@ -175,7 +175,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <Image Width="30" Height="30" Margin="5" Source="{Binding Key.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}">
+                                <Image Width="30" Height="30" Margin="5" Source="{Binding Key.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar},Converter={converters:UrlToImageSourceConverter},IsAsync=True}">
                                     <Image.ToolTip>
                                         <TextBlock Text="{Binding Key.DisplayName}"/>
                                     </Image.ToolTip>
