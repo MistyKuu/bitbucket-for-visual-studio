@@ -208,15 +208,15 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             Branches = (await _gitClientService.GetBranches()).OrderBy(x => x.Name).ToList();
 
-            
-            var currentBranch = _currentRepo.Branches.FirstOrDefault(x => x.IsHead) ?? _currentRepo.Branches.First();
 
-            SourceBranch = Branches.FirstOrDefault(x => x.Name == currentBranch.TrackedBranchName) ??
+            var currentBranch = _currentRepo.Branches.FirstOrDefault(x => x.IsHead) ?? _currentRepo.Branches.FirstOrDefault();
+
+            SourceBranch = Branches.FirstOrDefault(x => x.Name == currentBranch?.TrackedBranchName) ??
                            Branches.FirstOrDefault();
             DestinationBranch = Branches.FirstOrDefault(x => x.IsDefault) ??
                                 Branches.FirstOrDefault(x => x.Name != SourceBranch.Name);
 
-            Message = string.IsNullOrEmpty(currentBranch.TrackedBranchName)
+            Message = currentBranch != null && string.IsNullOrEmpty(currentBranch.TrackedBranchName)
                 ? $"Warning! Your active local branch {currentBranch.Name} is not tracking any remote branches."
                 : string.Empty;
         }
@@ -301,16 +301,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
         private void SetPullRequestDataFromCommits(List<GitCommit> commits)
         {
-            if (commits.Count == 1)
-            {
-                Title = commits.First().Message.Trim();
-                Description = string.Empty;
-            }
-            else
-            {
-                Title = SourceBranch.Name;
-                Description = string.Join(Environment.NewLine, commits.Select((x) => $"* " + x.Message.Trim()).Reverse());
-            }
+            Title = SourceBranch.Name;
+            Description = string.Join(Environment.NewLine, commits.Select((x) => $"* " + x.Message.Trim()).Reverse());
         }
 
         private async Task CreateDiffContent(string fromCommit, string toCommit)

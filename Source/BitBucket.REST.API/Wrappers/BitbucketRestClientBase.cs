@@ -10,6 +10,7 @@ using BitBucket.REST.API.Serializers;
 using RestSharp;
 using log4net;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace BitBucket.REST.API.Wrappers
 {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Helpers;
@@ -30,12 +31,10 @@ namespace BitBucket.REST.API.Clients.Standard
         }
 
 
-        public  Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
+        public async Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
         {
-            //var url = ApiUrls.PullRequestsAuthors(ownerName, repositoryName);
-            //return await _internalRestClient.GetAllPages<UserShort>(url, 100);
-
-            return GetRepositoryUsers(repositoryName, ownerName, string.Empty);
+            var url = ApiUrls.PullRequestsAuthors(ownerName, repositoryName);
+            return await _internalRestClient.GetAllPages<UserShort>(url, 100);
         }
 
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector query = null)

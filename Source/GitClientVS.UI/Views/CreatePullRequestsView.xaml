@@ -86,14 +86,17 @@
                 </ComboBox>
             </StackPanel>
 
-            <GroupBox Grid.Row="1" Visibility="{Binding RemotePullRequest,Converter={converters:NullToNonVisibilityConverter}}">
+            <GroupBox Header="Info" Grid.Row="1" Visibility="{Binding RemotePullRequest,Converter={converters:NullToNonVisibilityConverter}}">
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
-                        <Rectangle HorizontalAlignment="Left"  Width="15" Height="15">
-                            <Rectangle.Fill>
-                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_information_circle}" />
-                            </Rectangle.Fill>
-                        </Rectangle>
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle HorizontalAlignment="Left"  Width="15" Height="15">
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_information_circle}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock Padding="0" Margin="5,0" Foreground="White" Text="{Binding}"/>
+                        </StackPanel>
                     </DataTemplate>
                 </GroupBox.HeaderTemplate>
                 <TextBlock  DataContext="{Binding RemotePullRequest}">

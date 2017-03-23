@@ -26,7 +26,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
 
         public GitRemoteRepository(string name, string owner, string cloneUrl, List<GitLocalBranch> branches)
         {
-            Name = name;
+            Name = name.ToLowerInvariant();
             Owner = owner;
             CloneUrl = cloneUrl;
             Branches = branches;

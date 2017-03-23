@@ -145,7 +145,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var gitRemoteRepository = new GitRemoteRepository()
             {
-                Name = RepositoryName,
+                Name = RepositoryName.Replace(' ', '-'),
                 Description = Description,
                 IsPrivate = IsPrivate,
                 Owner = SelectedOwner

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Helpers;
 using BitBucket.REST.API.Interfaces;
@@ -17,7 +18,8 @@ namespace BitBucket.REST.API.Clients.Standard
     {
         private readonly BitbucketRestClient _versionOneClient;
 
-        public RepositoriesClient(BitbucketRestClient restClient, BitbucketRestClient versionOneClient, Connection connection) : base(restClient, connection)
+        public RepositoriesClient(BitbucketRestClient restClient, BitbucketRestClient versionOneClient,
+            Connection connection) : base(restClient, connection)
         {
             _versionOneClient = versionOneClient;
         }
@@ -30,7 +32,8 @@ namespace BitBucket.REST.API.Clients.Standard
         public async Task<IEnumerable<Repository>> GetUserRepositoriesV2()
         {
             var url = ApiUrls.Repositories();
-            return await RestClient.GetAllPages<Repository>(url); // this one doesn't return all repositories i.e where you are not owner but you are admin.
+            return await RestClient.GetAllPages<Repository>(url);
+            // this one doesn't return all repositories i.e where you are not owner but you are admin.
         }
 
         public async Task<IEnumerable<Repository>> GetUserRepositoriesV1()
@@ -50,7 +53,7 @@ namespace BitBucket.REST.API.Clients.Standard
                         {
                             new Link()
                             {
-                                Href = $"https://{Connection.Credentials.Login}@{Connection.MainUrl.Host}/{repository.Owner.Username}/{repository.Name.Replace(" ","-")}.git"
+                                Href =  $"{Connection.MainUrl.Scheme}://{Connection.Credentials.Login}@{Connection.MainUrl.Host}/{repository.Owner.Username}/{repository.Name.Replace(" ", "-")}.git"
                             }
                         }
                 };
@@ -63,11 +66,17 @@ namespace BitBucket.REST.API.Clients.Standard
             var url = ApiUrls.Branches(owner, repoName);
             var branches = (await RestClient.GetAllPages<Branch>(url)).ToList();
 
-            var defaultBranchResponse = await DefaultBranch(repoName, owner);
-
-            var defaultBranch = branches.FirstOrDefault(x => x.Name == defaultBranchResponse?.Name);
-            if (defaultBranch != null)
-                defaultBranch.IsDefault = true;
+            try
+            {
+                var defaultBranchResponse = await DefaultBranch(repoName, owner);
+                var defaultBranch = branches.FirstOrDefault(x => x.Name == defaultBranchResponse?.Name);
+                if (defaultBranch != null)
+                    defaultBranch.IsDefault = true;
+            }
+            catch (Exception)
+            {
+                // no default branch
+            }
 
             return branches;
         }
@@ -98,7 +107,7 @@ namespace BitBucket.REST.API.Clients.Standard
 
         public async Task<Repository> CreateRepository(Repository repository)
         {
-            var url = ApiUrls.Repository(Connection.Credentials.Login, repository.Name.Replace(' ', '-').ToLower(CultureInfo.InvariantCulture));
+            var url = ApiUrls.Repository(Connection.Credentials.Login, repository.Name);
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(repository), ParameterType.RequestBody);
             var response = await RestClient.ExecuteTaskAsync<Repository>(request);
@@ -107,7 +116,7 @@ namespace BitBucket.REST.API.Clients.Standard
 
         private async Task<DefaultBranch> DefaultBranch(string repoName, string owner)
         {
-            var url = ApiUrls.DefaultBranch(repoName, owner);
+            var url = ApiUrls.DefaultBranch(owner, repoName);
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await _versionOneClient.ExecuteTaskAsync<DefaultBranch>(request);
             return response.Data;

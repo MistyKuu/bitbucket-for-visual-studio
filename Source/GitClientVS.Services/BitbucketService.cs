@@ -130,6 +130,7 @@ namespace GitClientVS.Services
         public async Task<GitRemoteRepository> CreateRepositoryAsync(GitRemoteRepository newRepository)
         {
             var repository = newRepository.MapTo<Repository>();
+            repository.Name = repository.Name.Replace(' ', '-');
             var result = await _bitbucketClient.RepositoriesClient.CreateRepository(repository);
             return result.MapTo<GitRemoteRepository>();
         }
