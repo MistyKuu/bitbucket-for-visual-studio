@@ -6,52 +6,52 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Cache;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Interactivity;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
+using GitClientVS.Infrastructure;
+using GitClientVS.UI.AttachedProperties;
 using Svg;
+using Image = System.Drawing.Image;
 
 namespace GitClientVS.UI.Converters
 {
     public class UrlToImageSourceConverter : BaseMarkupExtensionConverter
     {
-        private readonly Dictionary<string, object> _cache = new Dictionary<string, object>();
+        private static readonly HttpClient Client;
+
+        static UrlToImageSourceConverter()
+        {
+            Client = new HttpClient();
+        }
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            try
-            {
-                var url = (string)value;
-                if (_cache.ContainsKey(url))
-                    return _cache[url];
+            var url = (string)value;
+            var notifier = new TaskCompletionNotifier<BitmapImage>();
+            notifier.StartAsync(GetImage(url));
 
-                var client = new HttpClient();
-                var response = client.GetAsync(url).Result;
-                var filetype = response.Content.Headers.ContentType.MediaType;
-                var buffer = response.Content.ReadAsByteArrayAsync().Result;
-
-                object res;
-                if (filetype.Contains("svg", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    res = GetSvgImage(buffer);
-                    _cache.Add(url, res);
-                    return res;
-                }
-
-                res = GetImage(buffer);
-                _cache.Add(url, res);
-                return res;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return notifier;
         }
 
-        private object GetSvgImage(byte[] buffer)
+        private async Task<BitmapImage> GetImage(string url)
+        {
+            var response = await Client.GetAsync(url);
+            var filetype = response.Content.Headers.ContentType.MediaType;
+            var buffer = await response.Content.ReadAsByteArrayAsync();
+
+            return filetype.Contains("svg", StringComparison.InvariantCultureIgnoreCase) ? GetSvgImage(buffer) : UrlToBitmap(url);
+        }
+
+        private BitmapImage GetSvgImage(byte[] buffer)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(Encoding.Default.GetString(buffer));
@@ -63,19 +63,14 @@ namespace GitClientVS.UI.Converters
             }
         }
 
-        private object GetImage(byte[] buffer)
+        BitmapImage UrlToBitmap(string url)
         {
-            var bitmap = new BitmapImage();
-            using (var stream = new MemoryStream(buffer))
-            {
-                bitmap.BeginInit();
-                bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.StreamSource = stream;
-                bitmap.EndInit();
-                bitmap.Freeze();
-            }
-
-            return bitmap;
+            var bitmapimage = new BitmapImage();
+            bitmapimage.BeginInit();
+            bitmapimage.UriSource = new Uri(url);
+            bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+            bitmapimage.EndInit();
+            return bitmapimage;
         }
 
         BitmapImage BitmapToImageSource(Bitmap bitmap)
@@ -83,6 +78,7 @@ namespace GitClientVS.UI.Converters
             using (MemoryStream memory = new MemoryStream())
             {
                 bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+
                 memory.Position = 0;
                 BitmapImage bitmapimage = new BitmapImage();
                 bitmapimage.BeginInit();
@@ -94,7 +90,6 @@ namespace GitClientVS.UI.Converters
                 return bitmapimage;
             }
         }
-
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

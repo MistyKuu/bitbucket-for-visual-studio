@@ -138,6 +138,7 @@
     <Compile Include="Converters\NullToNonVisibilityConverter.cs" />
     <Compile Include="Converters\ShortCommitHashConverter.cs" />
     <Compile Include="Converters\SubstractConverter.cs" />
+    <Compile Include="Converters\TaskCompletionNotifier.cs" />
     <Compile Include="Converters\TreeViewFolderIconConverter.cs" />
     <Compile Include="Converters\UrlToImageSourceConverter.cs" />
     <Compile Include="Extensions\EnumToItemsSource.cs" />

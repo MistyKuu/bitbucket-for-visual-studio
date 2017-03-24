@@ -45,6 +45,7 @@ namespace GitClientVS.Infrastructure.Mappings
 
 
             CreateMap<GitUser, UserShort>();
+            CreateMap<GitUser, GitUser>();
 
             CreateMap<User, GitUser>();
             CreateMap<User, UserShort>();

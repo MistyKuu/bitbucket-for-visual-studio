@@ -154,7 +154,7 @@
 
                 <StackPanel HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1"  Orientation="Horizontal">
                     <Grid>
-                        <Image Width="30" Height="30" Margin="5" Source="{Binding PullRequest.Author.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar}}"/>
+                        <Image Width="30" Height="30" Margin="5" Tag="{Binding PullRequest.Author.Links.Avatar.Href, TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar},Converter={converters:UrlToImageSourceConverter}}" Source="{Binding RelativeSource={RelativeSource Self},Path= Tag.Result}" />
                         <Rectangle Margin="-2,0" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="{Binding HasAuthorApproved,Converter={converters:BoolToVisibilityConverter}}">
                             <Rectangle.Fill>
                                 <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_check_green}" />
@@ -175,7 +175,9 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <Image Width="30" Height="30" Margin="5" Source="{Binding Key.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar},Converter={converters:UrlToImageSourceConverter},IsAsync=True}">
+                                <Image Width="30" Height="30" Margin="5" 
+                                       Source="{Binding RelativeSource={RelativeSource Self},Path= Tag.Result}" 
+                                       Tag="{Binding Key.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar},Converter={converters:UrlToImageSourceConverter}}">
                                     <Image.ToolTip>
                                         <TextBlock Text="{Binding Key.DisplayName}"/>
                                     </Image.ToolTip>
