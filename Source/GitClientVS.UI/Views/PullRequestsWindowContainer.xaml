@@ -41,7 +41,7 @@
 
         
 
-            <StackPanel Orientation="Horizontal" Grid.Row="0" >
+            <StackPanel Orientation="Horizontal">
                 <StackPanel.Style>
                     <Style TargetType="StackPanel">
                         <Setter Property="Background" Value="#CED5E4"/>
@@ -64,7 +64,7 @@
                     </Style>
                 </StackPanel.Resources>
 
-                <Button Command="{Binding PrevCommand}">
+                <Button Command="{Binding PrevCommand}" Margin="0,5">
                     <Image Source="../Images/arrow_back.png"
 
                                                Width="16"
@@ -72,7 +72,7 @@
                                                SnapsToDevicePixels="True"
                                                />
                 </Button>
-                <Button Command="{Binding NextCommand}" >
+                <Button Command="{Binding NextCommand}" Margin="0,5">
                     <Image Source="../Images/arrow_forward.png"
                                                Width="16"
                                                Height="16"
@@ -83,8 +83,8 @@
 
             <StackPanel Grid.Row="0" HorizontalAlignment="Right" Canvas.ZIndex="10" Orientation="Horizontal" DataContext="{Binding ConfirmationViewModel}" Visibility="{Binding Event, Converter={converters:NullToNonVisibilityConverter}}">
                 <TextBlock Text="{Binding Event.Message}" VerticalAlignment="Center"/>
-                <Button Margin="5,5" Content="Yes" Command="{Binding SetResultCommand}" CommandParameter="{StaticResource TrueValue}"/>
-                <Button Margin="0,5,5,5" Content="No" Command="{Binding SetResultCommand}" CommandParameter="{StaticResource FalseValue}"/>
+                <Button Margin="5,5" Content="Yes" Command="{Binding SetResultCommand}" CommandParameter="{StaticResource TrueValue}" />
+                <Button Margin="0,5,5,5" Content="No" Command="{Binding SetResultCommand}" CommandParameter="{StaticResource FalseValue}" />
             </StackPanel>
 
             <Grid Grid.Row="1" Margin="5">

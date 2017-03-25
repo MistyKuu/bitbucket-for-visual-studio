@@ -223,12 +223,14 @@ namespace GitClientVS.Services
 
         public async Task UpdatePullRequest(GitPullRequest gitPullRequest)
         {
-            await _bitbucketClient.PullRequestsClient.UpdatePullRequest(gitPullRequest.MapTo<PullRequest>(), _gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner);
+            await _bitbucketClient.PullRequestsClient
+                .UpdatePullRequest(gitPullRequest.MapTo<PullRequest>(), _gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner);
         }
 
         public async Task<IEnumerable<GitUser>> GetDefaultReviewers()
         {
-            return (await _bitbucketClient.PullRequestsClient.GetDefaultReviewers(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner))
+            return (await _bitbucketClient.PullRequestsClient
+                .GetDefaultReviewers(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner))
                 .MapTo<List<GitUser>>();
         }
 
