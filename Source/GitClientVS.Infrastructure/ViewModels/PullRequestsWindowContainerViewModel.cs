@@ -90,6 +90,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             var repo = _gitService.GetActiveRepository();
             ActiveRepository = repo.Owner + '/' + repo.Name;
             _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(ev => CurrentTheme = ev.Theme);
+
             CurrentTheme = _userInfoService.CurrentTheme;
         }
 

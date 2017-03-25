@@ -42,6 +42,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private Theme _currentTheme;
         private ReactiveList<PullRequestActionModel> _actionCommands;
         private bool _hasAuthorApproved;
+        private ReactiveCommand<bool> _confirmationMergeCommand;
+        private ReactiveCommand<bool> _confirmationDeclineCommand;
 
 
         public string PageTitle => "Pull Request Details";
@@ -116,18 +118,31 @@ namespace GitClientVS.Infrastructure.ViewModels
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((long)x));
             _approveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.ApprovePullRequest(PullRequest.Id); });
             _disapproveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DisapprovePullRequest(PullRequest.Id); });
-            _declineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ =>
-            {
-                if (_messageBoxService.ShowDialogYesNo("Declining Pull Request", "Do you really want to decline this pull request?"))
-                    await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version);
-            });
-            _mergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ =>
-            {
-                if (_messageBoxService.ShowDialogYesNo("Merging Pull Request", "Do you really want to merge this pull request?"))
-                    await MergePullRequest();
-            });
+            _declineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version); });
+            _mergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await MergePullRequest(); });
+
+            _confirmationMergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => RunMergeConfirmation());
+            _confirmationMergeCommand
+                .Where(confirmed => confirmed)
+                .Subscribe(_ => _mergeCommand.Execute(null));
+
+            _confirmationDeclineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => RunDeclineConfirmation());
+            _confirmationDeclineCommand
+                .Where(confirmed => confirmed)
+                .Subscribe(_ => _declineCommand.Execute(null));
         }
 
+        private Task<bool> RunDeclineConfirmation()
+        {
+            var res = (_messageBoxService.ShowDialogYesNo("Declining Pull Request", "Do you really want to decline this pull request?"));
+            return Task.FromResult(res);
+        }
+
+        private Task<bool> RunMergeConfirmation()
+        {
+            var res = _messageBoxService.ShowDialogYesNo("Merging Pull Request", "Do you really want to merge this pull request?");
+            return Task.FromResult(res);
+        }
 
 
         private async Task LoadPullRequestData(long id)
@@ -188,8 +203,8 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             ActionCommands = new ReactiveList<PullRequestActionModel>
             {
-                new PullRequestActionModel("Merge", _mergeCommand),
-                new PullRequestActionModel("Decline", _declineCommand),
+                new PullRequestActionModel("Merge", _confirmationMergeCommand),
+                new PullRequestActionModel("Decline", _confirmationDeclineCommand),
                 !isApproveAvailable || !isApproved
                     ? new PullRequestActionModel($"Approve ({approvesCount})", _approveCommand)
                     : new PullRequestActionModel($"Unapprove ({approvesCount})", _disapproveCommand)
@@ -211,7 +226,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand };
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand };
 
         public string ErrorMessage
         {

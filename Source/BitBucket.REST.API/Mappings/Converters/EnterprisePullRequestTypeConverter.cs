@@ -33,12 +33,18 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Version = source.Version
             };
 
+            
+
 
             pullRequest.Participants = pullRequest.Participants.Where(x => x.Approved).ToList(); // this is sick logic but its complaint with bitbucket server, done by trial and error
             pullRequest.Participants.AddRange(source.Reviewers.MapTo<List<Participant>>());//reviewers are part of participants in v2.0 - compatibility
 
             pullRequest.Links.Html = pullRequest.Links.Html ?? new Link() { Href = source.Links.Self.First().Href };
             pullRequest.Author.Links.Avatar = new Link() { Href = pullRequest.Author.Links.Self.Href + "/avatar.png" };
+            foreach (var participant in pullRequest.Participants)
+            {
+                participant.User.Links.Avatar = new Link() { Href = participant.User.Links.Self.Href + "/avatar.png" };
+            }
 
             return pullRequest;
         }
