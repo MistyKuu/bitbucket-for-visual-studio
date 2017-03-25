@@ -8,7 +8,7 @@ namespace GitClientVS.UI.Helpers
 {
     public static class AssemblyResolver
     {
-        static bool resolverInitialized;
+        static bool _resolverInitialized;
 
         // list of assemblies to be loaded from the extension installation path
         static readonly string[] OurAssemblies =
@@ -34,10 +34,10 @@ namespace GitClientVS.UI.Helpers
 
         public static void InitializeAssemblyResolver()
         {
-            if (resolverInitialized)
+            if (_resolverInitialized)
                 return;
             AppDomain.CurrentDomain.AssemblyResolve += LoadAssemblyFromRunDir;
-            resolverInitialized = true;
+            _resolverInitialized = true;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]

@@ -8,83 +8,101 @@
              xmlns:controls="clr-namespace:GitClientVS.UI.Controls"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
              xmlns:models="clr-namespace:GitClientVS.Contracts.Models;assembly=GitClientVS.Contracts"
+             xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModels:PullRequestsWindowContainerViewModel,IsDesignTimeCreatable=False}">
-  
     <Grid>
         <Grid.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
+            <system:Boolean x:Key="FalseValue">False</system:Boolean>
+            <system:Boolean x:Key="TrueValue">True</system:Boolean>
         </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+      
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" >
-            <StackPanel.Style>
-                <Style TargetType="StackPanel">
-                    <Setter Property="Background" Value="#CED5E4"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding CurrentTheme}" Value="{x:Static models:Theme.Dark}">
-                            <Setter Property="Background" Value="#2D2D30"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Style>
-            <StackPanel.Resources>
-                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Height" Value="22"/>
-                    <Setter Property="Width" Value="22"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                    <Setter Property="VerticalContentAlignment" Value="Center"/>
-                    <Setter Property="Padding" Value="2"/>
-                    <Setter Property="Margin" Value="0,2"/>
-                </Style>
-            </StackPanel.Resources>
-            
-            <Button Command="{Binding PrevCommand}">
-                <Image Source="../Images/arrow_back.png"
-                                               Width="16"
-                                               Height="16"
-                                               SnapsToDevicePixels="True"
-                                               />
-            </Button>
-            <Button Command="{Binding NextCommand}" >
-                <Image Source="../Images/arrow_forward.png"
-                                               Width="16"
-                                               Height="16"
-                                               SnapsToDevicePixels="True"
-                                               />
-            </Button>
-        </StackPanel>
-
-        <Grid Grid.Row="1" Margin="5">
+        <Grid>
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <WrapPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding CurrentViewModel.PageTitle,Mode=OneWay}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap"/>
-                <Separator Style="{StaticResource VerticalSeparator}" Margin="5,0"/>
-                <TextBlock Text="{Binding ActiveRepository}" FontSize="11" VerticalAlignment="Center" Foreground="#6D6D6D"/>
-            </WrapPanel>
-        </Grid>
 
-        <controls:ErrorView Background="#FEFEE0" Grid.Row="2" DataContext="{Binding CurrentViewModel}" />
         
-        <Separator Grid.Row="3" Margin="0,2"/>
 
-        <ContentControl Grid.Row="4" Content="{Binding CurrentView}"  />
+            <StackPanel Orientation="Horizontal" Grid.Row="0" >
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Background" Value="#CED5E4"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentTheme}" Value="{x:Static models:Theme.Dark}">
+                                <Setter Property="Background" Value="#2D2D30"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <StackPanel.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Height" Value="22"/>
+                        <Setter Property="Width" Value="22"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Padding" Value="2"/>
+                        <Setter Property="Margin" Value="0,2"/>
+                    </Style>
+                </StackPanel.Resources>
+
+                <Button Command="{Binding PrevCommand}">
+                    <Image Source="../Images/arrow_back.png"
+
+                                               Width="16"
+                                               Height="16"
+                                               SnapsToDevicePixels="True"
+                                               />
+                </Button>
+                <Button Command="{Binding NextCommand}" >
+                    <Image Source="../Images/arrow_forward.png"
+                                               Width="16"
+                                               Height="16"
+                                               SnapsToDevicePixels="True"
+                                               />
+                </Button>
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" HorizontalAlignment="Right" Canvas.ZIndex="10" Orientation="Horizontal" DataContext="{Binding ConfirmationViewModel}" Visibility="{Binding Event, Converter={converters:NullToNonVisibilityConverter}}">
+                <TextBlock Text="{Binding Event.Message}" VerticalAlignment="Center"/>
+                <Button Margin="5,5" Content="Yes" Command="{Binding SetResultCommand}" CommandParameter="{StaticResource TrueValue}"/>
+                <Button Margin="0,5,5,5" Content="No" Command="{Binding SetResultCommand}" CommandParameter="{StaticResource FalseValue}"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <WrapPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding CurrentViewModel.PageTitle,Mode=OneWay}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                    <Separator Style="{StaticResource VerticalSeparator}" Margin="5,0"/>
+                    <TextBlock Text="{Binding ActiveRepository}" FontSize="11" VerticalAlignment="Center" Foreground="#6D6D6D"/>
+                </WrapPanel>
+            </Grid>
+
+            <controls:ErrorView Background="#FEFEE0" Grid.Row="2" DataContext="{Binding CurrentViewModel}" />
+
+            <Separator Grid.Row="3" Margin="0,2"/>
+
+            <ContentControl Grid.Row="4" Content="{Binding CurrentView}"  />
+        </Grid>
     </Grid>
 </UserControl>

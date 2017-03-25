@@ -146,7 +146,6 @@
     <Compile Include="Helpers\TreeViewHelpers.cs" />
     <Compile Include="Helpers\VisualTreeHelpers.cs" />
     <Compile Include="Helpers\VSHelpers.cs" />
-    <Compile Include="MessageBoxService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

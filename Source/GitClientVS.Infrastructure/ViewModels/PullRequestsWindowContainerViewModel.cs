@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GitClientVS.Contracts.Events;
@@ -31,6 +32,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private IWithPageTitle _currentViewModel;
         private Theme _currentTheme;
 
+        public ShowConfirmationEventViewModel ConfirmationViewModel { get; }
         public string ActiveRepository { get; set; }
 
         public IView CurrentView
@@ -87,12 +89,19 @@ namespace GitClientVS.Infrastructure.ViewModels
                 .Select(x => Unit.Default)
                 .Merge(_eventAggregator.GetEvent<ConnectionChangedEvent>().Select(x => Unit.Default))
                 .Subscribe(_ => OnClosed());
+
             var repo = _gitService.GetActiveRepository();
             ActiveRepository = repo.Owner + '/' + repo.Name;
             _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(ev => CurrentTheme = ev.Theme);
+            _eventAggregator.GetEvent<ShowConfirmationEvent>().Subscribe(ShowConfirmation);
 
             CurrentTheme = _userInfoService.CurrentTheme;
+            ConfirmationViewModel = new ShowConfirmationEventViewModel();
+
+            this.WhenAnyObservable(x => x._nextCommand, x => x._prevCommand).Subscribe(_ => ConfirmationViewModel.Event = null);
         }
+
+
 
         private void ChangeView(NavigationEvent navEvent)
         {
@@ -106,6 +115,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             _cacheService.Delete(CacheKeys.PullRequestCacheKey);
             _pageNavigationService.ClearNavigationHistory();
             Closed?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void ShowConfirmation(ShowConfirmationEvent ev)
+        {
+            ConfirmationViewModel.Event = ev;
         }
     }
 }

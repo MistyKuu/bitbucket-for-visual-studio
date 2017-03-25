@@ -79,6 +79,7 @@
     <Compile Include="Events\ActiveRepositoryChangedEvent.cs" />
     <Compile Include="Events\ConnectionChangedEvent.cs" />
     <Compile Include="Events\NavigationEvent.cs" />
+    <Compile Include="Events\ShowConfirmationEvent.cs" />
     <Compile Include="Events\ThemeChangedEvent.cs" />
     <Compile Include="Interfaces\IClosingable.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />

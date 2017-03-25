@@ -42,8 +42,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private Theme _currentTheme;
         private ReactiveList<PullRequestActionModel> _actionCommands;
         private bool _hasAuthorApproved;
-        private ReactiveCommand<bool> _confirmationMergeCommand;
-        private ReactiveCommand<bool> _confirmationDeclineCommand;
+        private ReactiveCommand<Unit> _confirmationMergeCommand;
+        private ReactiveCommand<Unit> _confirmationDeclineCommand;
 
 
         public string PageTitle => "Pull Request Details";
@@ -122,26 +122,29 @@ namespace GitClientVS.Infrastructure.ViewModels
             _mergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await MergePullRequest(); });
 
             _confirmationMergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => RunMergeConfirmation());
-            _confirmationMergeCommand
-                .Where(confirmed => confirmed)
-                .Subscribe(_ => _mergeCommand.Execute(null));
-
             _confirmationDeclineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => RunDeclineConfirmation());
-            _confirmationDeclineCommand
-                .Where(confirmed => confirmed)
-                .Subscribe(_ => _declineCommand.Execute(null));
         }
 
-        private Task<bool> RunDeclineConfirmation()
+        private Task RunDeclineConfirmation()
         {
-            var res = (_messageBoxService.ShowDialogYesNo("Declining Pull Request", "Do you really want to decline this pull request?"));
-            return Task.FromResult(res);
+            _messageBoxService.ExecuteCommandWithConfirmation(
+               "Declining Pull Request",
+               "Do you really want to decline this pull request?",
+               _declineCommand
+               );
+
+            return Task.CompletedTask;
         }
 
-        private Task<bool> RunMergeConfirmation()
+        private Task RunMergeConfirmation()
         {
-            var res = _messageBoxService.ShowDialogYesNo("Merging Pull Request", "Do you really want to merge this pull request?");
-            return Task.FromResult(res);
+            _messageBoxService.ExecuteCommandWithConfirmation(
+               "Merging Pull Request",
+               "Do you really want to merge this pull request?",
+               _mergeCommand
+               );
+
+            return Task.CompletedTask;
         }
 
 

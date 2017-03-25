@@ -132,6 +132,7 @@
     <Compile Include="ViewModels\ConnectSectionViewModel.cs" />
     <Compile Include="ViewModels\PullRequestsMainViewModel.cs" />
     <Compile Include="ViewModels\PullRequestsWindowContainerViewModel.cs" />
+    <Compile Include="ViewModels\ShowConfirmationEventViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
