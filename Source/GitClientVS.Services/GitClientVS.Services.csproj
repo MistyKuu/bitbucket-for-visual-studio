@@ -42,10 +42,6 @@
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ParseDiff, Version=1.0.16220.1946, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ParseDiff\bin\Debug\ParseDiff.dll</HintPath>
-    </Reference>
     <Reference Include="Reactive.EventAggregator, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Reactive.EventAggregator.2.0.0\lib\net45\Reactive.EventAggregator.dll</HintPath>
       <Private>True</Private>
@@ -109,6 +105,10 @@
     <ProjectReference Include="..\GitClientVS.Infrastructure\GitClientVS.Infrastructure.csproj">
       <Project>{cfa26063-e6bd-4189-9e20-13be59ebaf67}</Project>
       <Name>GitClientVS.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ParseDiff\ParseDiff.csproj">
+      <Project>{65672e92-c353-4d21-a098-6a5beb42cdf4}</Project>
+      <Name>ParseDiff</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

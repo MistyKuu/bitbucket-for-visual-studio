@@ -61,12 +61,15 @@ namespace GitClientVS.VisualStudio.UI
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [Guid(GuidList.guidBitbuketPkgString)]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+         Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists)]
     [ProvideAutoLoad(UIContextGuids80.NoSolution)]
-    [ProvideToolWindow(typeof(DiffWindow), Style = VsDockStyle.MDI, Orientation = ToolWindowOrientation.Left, MultiInstances = true, Transient = true)]
-    [ProvideToolWindow(typeof(PullRequestsWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Left, MultiInstances = false, Transient = true, Window = EnvDTE.Constants.vsWindowKindSolutionExplorer)]
+    [ProvideToolWindow(typeof(DiffWindow), Style = VsDockStyle.MDI, Orientation = ToolWindowOrientation.Left,
+         MultiInstances = true, Transient = true)]
+    [ProvideToolWindow(typeof(PullRequestsWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Left,
+         MultiInstances = false, Transient = true, Window = EnvDTE.Constants.vsWindowKindSolutionExplorer)]
     public sealed class GitClientVSPackage : AsyncPackage
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -86,11 +89,14 @@ namespace GitClientVS.VisualStudio.UI
         }
 
         #region Package Members
+
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Logger.Error("Unhandled GitClientVsExtensions Error: " + e.ExceptionObject);
         }
-        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+
+        private void Current_DispatcherUnhandledException(object sender,
+            System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             Logger.Error("Unhandled Dispatcher GitClientVsExtensions Error", e.Exception);
         }
@@ -98,20 +104,28 @@ namespace GitClientVS.VisualStudio.UI
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             await base.InitializeAsync(cancellationToken, progress);
-            var componentModel = (IComponentModel)await GetServiceAsync(typeof(SComponentModel));
+            var componentModel = (IComponentModel) await GetServiceAsync(typeof(SComponentModel));
             InitializePackage(componentModel);
         }
 
         private void InitializePackage(IComponentModel componentModel)
         {
-            var serviceProvider = componentModel.DefaultExportProvider;
-            var appInitializer = serviceProvider.GetExportedValue<IAppInitializer>();
-            var commandsService = serviceProvider.GetExportedValue<ICommandsService>();
-            var gitWatcher = serviceProvider.GetExportedValue<IGitWatcher>();
-            commandsService.Initialize(this);
-            gitWatcher.Initialize();
-            appInitializer.Initialize();
-            Logger.Info("Initialized GitClientVsPackage Extension");
+            try
+            {
+                var serviceProvider = componentModel.DefaultExportProvider;
+                var appInitializer = serviceProvider.GetExportedValue<IAppInitializer>();
+                var commandsService = serviceProvider.GetExportedValue<ICommandsService>();
+                var gitWatcher = serviceProvider.GetExportedValue<IGitWatcher>();
+                commandsService.Initialize(this);
+                gitWatcher.Initialize();
+                appInitializer.Initialize();
+
+                Logger.Info("Initialized GitClientVsPackage Extension");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Error Loading GitClientVsExtensionPackage: {ex}");
+            }
         }
 
         #endregion

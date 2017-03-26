@@ -48,7 +48,7 @@ namespace GitClientVS.UI.Converters
             var filetype = response.Content.Headers.ContentType.MediaType;
             var buffer = await response.Content.ReadAsByteArrayAsync();
 
-            return filetype.Contains("svg", StringComparison.InvariantCultureIgnoreCase) ? GetSvgImage(buffer) : UrlToBitmap(url);
+            return filetype.Contains("svg", StringComparison.InvariantCultureIgnoreCase) ? GetSvgImage(buffer) : UrlToBitmap(buffer);
         }
 
         private BitmapImage GetSvgImage(byte[] buffer)
@@ -63,14 +63,17 @@ namespace GitClientVS.UI.Converters
             }
         }
 
-        BitmapImage UrlToBitmap(string url)
+        BitmapImage UrlToBitmap(byte[] buffer)
         {
-            var bitmapimage = new BitmapImage();
-            bitmapimage.BeginInit();
-            bitmapimage.UriSource = new Uri(url);
-            bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-            bitmapimage.EndInit();
-            return bitmapimage;
+            using (var stream = new MemoryStream(buffer))
+            {
+                var bitmapimage = new BitmapImage();
+                bitmapimage.BeginInit();
+                bitmapimage.StreamSource = stream;
+                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapimage.EndInit();
+                return bitmapimage;
+            }
         }
 
         BitmapImage BitmapToImageSource(Bitmap bitmap)
