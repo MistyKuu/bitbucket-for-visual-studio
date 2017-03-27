@@ -28,6 +28,10 @@
                 <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+            <DataTemplate x:Key="ComboboxBranchTemplate">
+                <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+            
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -71,7 +75,7 @@
                 </Grid.ColumnDefinitions>
                 
                 <controls1:BranchIcon />
-                <ComboBox Grid.Column="1" SelectedItem="{bindings:ValidatedBinding SourceBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" >
+                <ComboBox Grid.Column="1" SelectedItem="{bindings:ValidatedBinding SourceBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" ItemTemplate="{StaticResource ComboboxBranchTemplate}">
                     <Validation.ErrorTemplate>
                         <ControlTemplate>
                             <AdornedElementPlaceholder />
@@ -80,7 +84,7 @@
                 </ComboBox>
                 <TextBlock Grid.Column="2" Margin="0,0,5,0" Text="&#x2794;" VerticalAlignment="Center" />
                 <controls1:BranchIcon Grid.Column="3" />
-                <ComboBox Grid.Column="4" SelectedItem="{bindings:ValidatedBinding DestinationBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" >
+                <ComboBox Grid.Column="4" SelectedItem="{bindings:ValidatedBinding DestinationBranch,Mode=TwoWay}" ItemsSource="{Binding Branches}" ItemTemplate="{StaticResource ComboboxBranchTemplate}">
                     <Validation.ErrorTemplate>
                         <ControlTemplate>
                             <AdornedElementPlaceholder />

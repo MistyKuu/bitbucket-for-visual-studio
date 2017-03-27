@@ -161,13 +161,6 @@ namespace GitClientVS.Services
             return commits.MapTo<List<GitCommit>>();
         }
 
-
-        public async Task<IEnumerable<GitPullRequest>> GetAllPullRequests()
-        {
-            var pullRequests = await _bitbucketClient.PullRequestsClient.GetAllPullRequests(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner);
-            return pullRequests.MapTo<List<GitPullRequest>>();
-        }
-
         public async Task<PageIterator<GitPullRequest>> GetPullRequests(int limit = 20, int page = 1)
         {
             var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, limit: limit, page: page);

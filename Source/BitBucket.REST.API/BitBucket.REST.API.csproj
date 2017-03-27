@@ -148,7 +148,6 @@
     <Compile Include="QueryBuilders\IQueryConnector.cs" />
     <Compile Include="QueryBuilders\IQueryParam.cs" />
     <Compile Include="QueryBuilders\Operators.cs" />
-    <Compile Include="QueryBuilders\PullRequestQueryBuilder.cs" />
     <Compile Include="QueryBuilders\QueryBuilder.cs" />
     <Compile Include="QueryBuilders\QueryString.cs" />
     <Compile Include="Serializers\BitbucketPropertyNamesContractResolver.cs" />

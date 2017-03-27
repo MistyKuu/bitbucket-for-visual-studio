@@ -29,7 +29,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<IEnumerable<GitUser>> GetPullRequestsAuthors();
         bool IsOriginRepo(GitRemoteRepository gitRemoteRepository);
         Task CreatePullRequest(GitPullRequest gitPullRequest);
-        Task<IEnumerable<GitPullRequest>> GetAllPullRequests();
         Task<GitPullRequest> GetPullRequest(long id);
         Task<IEnumerable<GitUser>> GetRepositoryUsers(string filter);
         Task<GitPullRequest> GetPullRequestForBranches(string sourceBranch, string destBranch);
