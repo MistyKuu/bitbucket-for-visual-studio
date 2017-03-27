@@ -137,6 +137,7 @@
     <Compile Include="Converters\NegateBoolConverter.cs" />
     <Compile Include="Converters\NullToNonVisibilityConverter.cs" />
     <Compile Include="Converters\ShortCommitHashConverter.cs" />
+    <Compile Include="Converters\StringToShortStringConverter.cs" />
     <Compile Include="Converters\SubstractConverter.cs" />
     <Compile Include="Converters\TaskCompletionNotifier.cs" />
     <Compile Include="Converters\TreeViewFolderIconConverter.cs" />
