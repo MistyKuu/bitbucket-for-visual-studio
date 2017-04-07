@@ -67,9 +67,12 @@ namespace BitBucket.REST.API.QueryBuilders
 
             var res= new Dictionary<string, string>()
             {
-                ["q"] = queryBuilder.Build(),
                 ["sort"] = _order == Order.Newest ? "-updated_on" : "updated_on"
             };
+
+            var queryBuilderString = queryBuilder.Build();
+            if (!string.IsNullOrEmpty(queryBuilderString))
+                res["q"] = queryBuilderString;
 
             if (!string.IsNullOrEmpty(_status))
                 res["state"] = $"{_status.ToUpper()}";

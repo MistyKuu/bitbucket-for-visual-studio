@@ -14,11 +14,27 @@ namespace GitClientVS.UI.Behaviours
 {
     public class ScrollViewerMonitor
     {
+        public static DependencyProperty SaveScrollPositionProperty
+           = DependencyProperty.RegisterAttached(
+               "SaveScrollPosition", typeof(bool),
+               typeof(ScrollViewerMonitor),
+               new PropertyMetadata(OnDpdChanged));
+
+        public static bool GetSaveScrollPositionProperty(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(SaveScrollPositionProperty);
+        }
+
+        public static void SetSaveScrollPositionProperty(DependencyObject obj, bool value)
+        {
+            obj.SetValue(SaveScrollPositionProperty, value);
+        }
+
         public static DependencyProperty AtEndCommandProperty
             = DependencyProperty.RegisterAttached(
                 "AtEndCommand", typeof(ICommand),
                 typeof(ScrollViewerMonitor),
-                new PropertyMetadata(OnAtEndCommandChanged));
+                new PropertyMetadata(OnDpdChanged));
 
         public static ICommand GetAtEndCommand(DependencyObject obj)
         {
@@ -31,21 +47,48 @@ namespace GitClientVS.UI.Behaviours
         }
 
 
-        public static void OnAtEndCommandChanged(
+        public static void OnDpdChanged(
             DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             FrameworkElement element = (FrameworkElement)d;
             if (element != null)
             {
-                element.Loaded -= element_Loaded;
-                element.Loaded += element_Loaded;
+                element.Loaded -= AssignCommand;
+                element.Loaded += AssignCommand;
+                element.Loaded -= SetPreviousScrollPosition;
+                element.Loaded += SetPreviousScrollPosition;
+                element.Unloaded -= Unloaded;
+                element.Unloaded += Unloaded;
             }
         }
 
-        static void element_Loaded(object sender, RoutedEventArgs e)
+        private static void Unloaded(object sender, RoutedEventArgs e)
         {
             FrameworkElement element = (FrameworkElement)sender;
-            element.Loaded -= element_Loaded;
+            ScrollViewer scrollViewer = GetDescendantByType<ScrollViewer>(element);
+            scrollViewer.Tag = scrollViewer.VerticalOffset;
+        }
+
+        static void SetPreviousScrollPosition(object sender, RoutedEventArgs e)
+        {
+            FrameworkElement element = (FrameworkElement)sender;
+            ScrollViewer scrollViewer = GetDescendantByType<ScrollViewer>(element);
+
+            if (GetSaveScrollPositionProperty(element))
+            {
+                double offset;
+                if (scrollViewer.Tag != null
+                     && double.TryParse(scrollViewer.Tag.ToString(), out offset))
+                {
+                    scrollViewer.ScrollToVerticalOffset(offset);
+                }
+            }
+        }
+
+        static void AssignCommand(object sender, RoutedEventArgs e)
+        {
+            FrameworkElement element = (FrameworkElement)sender;
+            element.Loaded -= AssignCommand;
             ScrollViewer scrollViewer = GetDescendantByType<ScrollViewer>(element);
             if (scrollViewer == null)
             {

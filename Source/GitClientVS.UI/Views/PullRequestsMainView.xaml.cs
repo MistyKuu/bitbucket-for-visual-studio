@@ -15,7 +15,7 @@ namespace GitClientVS.UI.Views
     /// Interaction logic for PullRequestsMainView.xaml
     /// </summary>
     [Export(typeof(IPullRequestsMainView))]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
+    [PartCreationPolicy(CreationPolicy.Shared)]
     public partial class PullRequestsMainView : UserControl, IPullRequestsMainView
     {
         private readonly IPullRequestsMainViewModel _vm;
@@ -26,12 +26,6 @@ namespace GitClientVS.UI.Views
             _vm = vm;
             DataContext = vm;
             InitializeComponent();
-            this.Loaded += PullRequestsMainView_Loaded;
-        }
-
-        private void PullRequestsMainView_Loaded(object sender, RoutedEventArgs e)
-        {
-            
         }
     }
 }
