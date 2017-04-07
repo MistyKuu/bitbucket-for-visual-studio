@@ -43,20 +43,25 @@ namespace BitBucket.REST.API.Clients.Standard
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await _versionOneClient.ExecuteTaskAsync<List<RepositoryV1>>(request);
             if (response.Data != null)
-                repositories.AddRange(response.Data.MapTo<List<Repository>>());
-
-            foreach (var repository in repositories) // sadly it doesn't have clone url
-                repository.Links = new Links
+            {
+                foreach (var repositoryV1 in response.Data)
                 {
-                    Clone =
-                        new List<Link>()
-                        {
+                    var repo = repositoryV1.MapTo<Repository>();
+                    repo.Links = new Links
+                    {
+                        Clone =
+                       new List<Link>()
+                       {
                             new Link()
                             {
-                                Href =  $"{Connection.MainUrl.Scheme}://{Connection.Credentials.Login}@{Connection.MainUrl.Host}/{repository.Owner.Username}/{repository.Name.Replace(" ", "-")}.git"
+                                Href =  $"{Connection.MainUrl.Scheme}://{Connection.Credentials.Login}@{Connection.MainUrl.Host}/{repositoryV1.Owner}/{repositoryV1.Slug}.git"
                             }
-                        }
-                };
+                       }
+                    };
+                    repositories.Add(repo);
+                }
+            }
+          
 
             return repositories;
         }

@@ -37,7 +37,7 @@ namespace BitBucket.REST.API.Wrappers
         }
 
 
-        public abstract Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 100, QueryString query = null);
+        public abstract Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 50, QueryString query = null);
         protected abstract string DeserializeError(IRestResponse response);
 
         public override async Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)

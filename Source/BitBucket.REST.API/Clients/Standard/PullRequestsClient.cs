@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BitBucket.REST.API.Helpers;
 using BitBucket.REST.API.Interfaces;
 using BitBucket.REST.API.Mappings;
+using BitBucket.REST.API.Models.Enterprise;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Wrappers;
@@ -24,31 +25,39 @@ namespace BitBucket.REST.API.Clients.Standard
             _webClient = webClient;
         }
 
-        public async Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
-        {
-            var url = ApiUrls.PullRequestsAllStates(ownerName, repositoryName);
-            return await RestClient.GetAllPages<PullRequest>(url, 100);
-        }
-
-
         public async Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
         {
             var url = ApiUrls.PullRequestsAuthors(ownerName, repositoryName);
             return await _internalRestClient.GetAllPages<UserShort>(url, 100);
         }
 
-        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector query = null)
+        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int page, int limit = 50,
+            IPullRequestQueryBuilder builder = null)
         {
-            var url = ApiUrls.PullRequestsAllStates(ownerName, repositoryName);
+            var url = ApiUrls.PullRequests(ownerName, repositoryName);
             var request = new BitbucketRestRequest(url, Method.GET);
-            request.AddQueryParameter("pagelen", limit.ToString());
-            request.AddQueryParameter("page", page.ToString());
-            if (query != null)
-            {
-                request.AddQueryParameter("q", query.Build());
-            }
+
+            if (builder != null)
+                foreach (var param in builder.GetQueryParameters())
+                    request.AddQueryParameter(param.Key, param.Value);
+
+            request.AddQueryParameter("pagelen", limit.ToString()).AddQueryParameter("page", page.ToString());
+
             var response = await RestClient.ExecuteTaskAsync<IteratorBasedPage<PullRequest>>(request);
             return response.Data;
+        }
+
+        public async Task<IEnumerable<PullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit = 50, IPullRequestQueryBuilder queryBuilder = null)
+        {
+            var url = ApiUrls.PullRequests(ownerName, repositoryName);
+
+            var queryString = new QueryString();
+
+            if (queryBuilder != null)
+                foreach (var param in queryBuilder.GetQueryParameters())
+                    queryString.Add(param.Key, param.Value);
+
+            return await RestClient.GetAllPages<PullRequest>(url, limit, queryString);
         }
 
         public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string owner, long id)
@@ -95,6 +104,11 @@ namespace BitBucket.REST.API.Clients.Standard
             return await RestClient.GetAllPages<UserShort>(url, 100);
         }
 
+        public IPullRequestQueryBuilder GetPullRequestQueryBuilder()
+        {
+            return new PullRequestQueryBuilder();
+        }
+
         public async Task<IEnumerable<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
         {
             var url = ApiUrls.PullRequestCommits(ownerName, repositoryName, id);
@@ -131,9 +145,7 @@ namespace BitBucket.REST.API.Clients.Standard
 
             var queryBuilderString = new QueryBuilder()
                 .Add("source.branch.name", sourceBranch)
-                .And()
                 .Add("destination.branch.name", destBranch)
-                .And()
                 .State(PullRequestOptions.OPEN)
                 .Build();
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Enterprise;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
 using ParseDiff;
@@ -9,9 +10,9 @@ namespace BitBucket.REST.API.Interfaces
 {
     public interface IPullRequestsClient
     {
-        Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName);
         Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName);
-        Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector query = null);
+        Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int page, int limit = 50, IPullRequestQueryBuilder builder = null);
+        Task<IEnumerable<PullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit = 50, IPullRequestQueryBuilder builder = null);
         Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string owner, long id);
         Task<Participant> ApprovePullRequest(string repositoryName, string ownerName, long id);
         Task DisapprovePullRequest(string repositoryName, string ownerName, long id);
@@ -27,5 +28,6 @@ namespace BitBucket.REST.API.Interfaces
         Task DeclinePullRequest(string repositoryName, string ownerName, long id, string version);
         Task MergePullRequest(string repositoryName, string ownerName, MergeRequest mergeRequest);
         Task<IEnumerable<UserShort>> GetDefaultReviewers(string repositoryName, string ownerName);
+        IPullRequestQueryBuilder GetPullRequestQueryBuilder();
     }
 }

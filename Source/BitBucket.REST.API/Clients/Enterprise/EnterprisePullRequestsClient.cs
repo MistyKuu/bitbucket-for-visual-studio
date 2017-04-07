@@ -21,14 +21,6 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         }
 
-        public async Task<IEnumerable<PullRequest>> GetAllPullRequests(string repositoryName, string ownerName)
-        {
-            var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName) + "?state=ALL";
-            var pullRequests = await RestClient.GetAllPages<EnterprisePullRequest>(url, 100);
-            return pullRequests.MapTo<List<PullRequest>>();
-        }
-
-
         public async Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
         {
             var url = EnterpriseApiUrls.PullRequestsAuthors(ownerName, repositoryName);
@@ -36,26 +28,38 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return users.MapTo<List<UserShort>>();
         }
 
-        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int limit = 20, int page = 1, IQueryConnector queryConnector = null)
+        public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int page, int limit = 50,
+            IPullRequestQueryBuilder builder = null)
         {
-            var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName) + "?state=ALL";
+            var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName);
             var request = new BitbucketRestRequest(url, Method.GET);
 
-            request.AddQueryParameter("limit", limit.ToString());
-            request.AddQueryParameter("start", ((page - 1) * limit).ToString());
+            if (builder != null)
+                foreach (var param in builder.GetQueryParameters())
+                    request.AddQueryParameter(param.Key, param.Value);
 
-            var response = await RestClient.ExecuteTaskAsync<EnterpriseIteratorBasedPage<EnterprisePullRequest>>(request);
 
-            var result = response.Data;
+            request.AddQueryParameter("limit", limit.ToString()).AddQueryParameter("start", ((page - 1) * limit).ToString());
 
+            var res = (await RestClient.ExecuteTaskAsync<EnterpriseIteratorBasedPage<EnterprisePullRequest>>(request)).Data;
             return new IteratorBasedPage<PullRequest>()
             {
-                Next = !result.IsLastPage.HasValue || result.IsLastPage.Value ? null : result.NextPageStart.ToString(),
-                Page = page,
-                PageLen = result.Limit,
-                Size = result.Size,
-                Values = result.Values.MapTo<List<PullRequest>>()
+                Values = res.Values.MapTo<List<PullRequest>>() //todo add rest
             };
+        }
+
+        public async Task<IEnumerable<PullRequest>> GetPullRequests(string repositoryName, string ownerName, int limit = 50, IPullRequestQueryBuilder queryBuilder = null)
+        {
+            var url = EnterpriseApiUrls.PullRequests(ownerName, repositoryName);
+
+            var queryString = new QueryString();
+
+            if (queryBuilder != null)
+                foreach (var param in queryBuilder.GetQueryParameters())
+                    queryString.Add(param.Key, param.Value);
+
+            return (await RestClient.GetAllPages<EnterprisePullRequest>(url, limit, queryString))
+                .MapTo<List<PullRequest>>();
         }
 
         public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(string repositoryName, string owner, long id)
@@ -122,6 +126,11 @@ namespace BitBucket.REST.API.Clients.Enterprise
         public Task<IEnumerable<UserShort>> GetDefaultReviewers(string repositoryName, string ownerName)
         {
             return Task.FromResult(Enumerable.Empty<UserShort>()); //todo in different API do later: http://localhost:7990/rest/default-reviewers/latest/projects/~MISTYK/repos/tttttttttt-df/reviewers?sourceRepoId=72&sourceRefId=refs%2Fheads%2FSECOND-BRANCH&targetRepoId=72&targetRefId=refs%2Fheads%2Fmaster
+        }
+
+        public IPullRequestQueryBuilder GetPullRequestQueryBuilder()
+        {
+            return new EnterprisePullRequestQueryBuilder();
         }
 
         public async Task<IEnumerable<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)

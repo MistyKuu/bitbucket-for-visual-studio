@@ -20,7 +20,6 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<IEnumerable<GitTeam>> GetTeams();
         Task<IEnumerable<GitCommit>> GetPullRequestCommits(long id);
         Task<IEnumerable<GitComment>> GetPullRequestComments(long id);
-        Task<PageIterator<GitPullRequest>> GetPullRequests(int limit = 20, int page = 1);
         Task<IEnumerable<FileDiff>> GetPullRequestDiff(long id);
         Task DisapprovePullRequest(long id);
         Task<bool> ApprovePullRequest(long id);
@@ -37,5 +36,24 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<IEnumerable<FileDiff>> GetCommitsDiff(string fromCommit, string toCommit);
         Task UpdatePullRequest(GitPullRequest gitPullRequest);
         Task<IEnumerable<GitUser>> GetDefaultReviewers();
+
+        Task<IEnumerable<GitPullRequest>> GetPullRequests(
+            int limit = 50,
+            GitPullRequestStatus? state = null,
+            string fromBranch = null,
+            string toBranch = null,
+            bool isDescSorted = true,
+            string author = null
+        );
+
+        Task<PageIterator<GitPullRequest>> GetPullRequestsPage(
+           int page,
+           int limit = 50,
+           GitPullRequestStatus? state = null,
+           string fromBranch = null,
+           string toBranch = null,
+           bool isDescSorted = true,
+           string author = null
+       );
     }
 }

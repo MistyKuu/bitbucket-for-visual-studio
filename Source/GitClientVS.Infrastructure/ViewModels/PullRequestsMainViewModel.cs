@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GitClientVS.Contracts;
@@ -22,6 +24,44 @@ using SuggestionProvider = WpfControls.SuggestionProvider;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
+    public interface ISupportIncrementalLoading
+    {
+        Task LoadNextPageAsync();
+    }
+
+    public class PagedCollection<TData> : ReactiveList<TData>, ISupportIncrementalLoading
+    {
+        private readonly Func<int, int, Task<IEnumerable<TData>>> _loadTask;
+        private readonly int _pageSize;
+        private readonly object _locker = new object();
+
+        public PagedCollection(Func<int, int, Task<IEnumerable<TData>>> loadTask, int pageSize)
+        {
+            _loadTask = loadTask;
+            _pageSize = pageSize;
+        }
+
+        public async Task LoadNextPageAsync()
+        {
+            try
+            {
+                Monitor.Enter(_locker); // todo do we really need monitor here?
+
+                var pageNumber = (Count / _pageSize) + 1;
+
+                var data = (await _loadTask(_pageSize, pageNumber)).ToList();
+                int count = Count;
+                foreach (var item in data.Skip(count % _pageSize))
+                    Add(item);
+            }
+            finally
+            {
+                Monitor.Exit(_locker);
+            }
+        }
+    }
+
+
     [Export(typeof(IPullRequestsMainViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class PullRequestsMainViewModel : ViewModelBase, IPullRequestsMainViewModel
@@ -30,12 +70,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitService _gitService;
         private readonly IPageNavigationService<IPullRequestsWindow> _pageNavigationService;
         private readonly ICacheService _cacheService;
-        private readonly IVsTools _vsTools;
         private ReactiveCommand<Unit> _initializeCommand;
         private ReactiveCommand<object> _goToDetailsCommand;
+        private ReactiveCommand<Unit> _loadNextPageCommand;
         private bool _isLoading;
-        private ReactiveList<GitPullRequest> _gitPullRequests;
-        private ReactiveList<GitPullRequest> _filteredGitPullRequests;
         private string _errorMessage;
         private ReactiveCommand<object> _goToCreateNewPullRequestCommand;
 
@@ -44,12 +82,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private GitPullRequestStatus? _selectedStatus;
         private GitPullRequest _selectedPullRequest;
         private GitRemoteRepository _currentRepository;
-
-        public ReactiveList<GitPullRequest> GitPullRequests
-        {
-            get { return _gitPullRequests; }
-            set { this.RaiseAndSetIfChanged(ref _gitPullRequests, value); }
-        }
+        private PagedCollection<GitPullRequest> _gitPullRequests;
 
         public GitUser SelectedAuthor
         {
@@ -67,12 +100,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _selectedStatus, value);
             }
-        }
-
-        public ReactiveList<GitPullRequest> FilteredGitPullRequests
-        {
-            get { return _filteredGitPullRequests; }
-            set { this.RaiseAndSetIfChanged(ref _filteredGitPullRequests, value); }
         }
 
         public List<GitUser> Authors
@@ -93,8 +120,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand };
+        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _loadNextPageCommand };
+        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _loadNextPageCommand };
 
         public bool IsLoading
         {
@@ -102,11 +129,18 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
         }
 
+        public PagedCollection<GitPullRequest> GitPullRequests
+        {
+            get { return _gitPullRequests; }
+            set { this.RaiseAndSetIfChanged(ref _gitPullRequests, value); }
+        }
+
         public string PageTitle { get; } = "Pull Requests";
 
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand GoToDetailsCommand => _goToDetailsCommand;
         public ICommand GotoCreateNewPullRequestCommand => _goToCreateNewPullRequestCommand;
+        public ICommand LoadNextPageCommand => _loadNextPageCommand;
 
         public ISuggestionProvider AuthorProvider
         {
@@ -118,8 +152,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
         }
 
-
-
+        private const int PageSize = 50;
+        private bool isInitialized = false;
 
         [ImportingConstructor]
         public PullRequestsMainViewModel(
@@ -134,91 +168,53 @@ namespace GitClientVS.Infrastructure.ViewModels
             _pageNavigationService = pageNavigationService;
             _cacheService = cacheService;
             _currentRepository = _gitService.GetActiveRepository();
-            GitPullRequests = new ReactiveList<GitPullRequest>();
-            FilteredGitPullRequests = new ReactiveList<GitPullRequest>();
+            SelectedStatus = GitPullRequestStatus.Open;
             SetupObservables();
             Authors = new List<GitUser>();
-
-            SelectedStatus = GitPullRequestStatus.Open;
         }
 
         private void SetupObservables()
         {
-            this.WhenAnyValue(x => x.SelectedStatus, x => x.SelectedAuthor).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => Filter());
-            this.WhenAnyObservable(x => x.GitPullRequests.Changed).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => Filter());
-            this.WhenAnyValue(x => x.SelectedPullRequest).Where(x => x != null).Subscribe(_ => _goToDetailsCommand.Execute(SelectedPullRequest));
+            this.WhenAnyValue(x => x.SelectedStatus, x => x.SelectedAuthor)
+                .Select(x => new { SelectedStatus, SelectedAuthor })
+                .Where(x => isInitialized)
+                .DistinctUntilChanged()
+                .Subscribe(_ => { _initializeCommand.Execute(null); });
 
+            this.WhenAnyValue(x => x.SelectedPullRequest).Where(x => x != null).Subscribe(_ => _goToDetailsCommand.Execute(SelectedPullRequest));
         }
 
         public void InitializeCommands()
         {
-            _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), _ => LoadPullRequests());
+            _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), async _ =>
+            {
+                Authors = (await _gitClientService.GetPullRequestsAuthors()).ToList();
+                GitPullRequests = new PagedCollection<GitPullRequest>(GetPullRequestsPage, PageSize);
+                await GitPullRequests.LoadNextPageAsync();
+                isInitialized = true;
+            });
             _goToCreateNewPullRequestCommand = ReactiveCommand.Create(Observable.Return(true));
             _goToCreateNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.Navigate<ICreatePullRequestsView>(); });
 
             _goToDetailsCommand = ReactiveCommand.Create(Observable.Return(true));
             _goToDetailsCommand.Subscribe(x => { _pageNavigationService.Navigate<IPullRequestDetailView>(((GitPullRequest)x).Id); });
+            _loadNextPageCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => GitPullRequests.LoadNextPageAsync());
         }
-
-        private async Task LoadPullRequests()
+        private async Task<IEnumerable<GitPullRequest>> GetPullRequestsPage(int pageSize, int page)
         {
-            GitPullRequests.Clear();
-            Authors = (await _gitClientService.GetPullRequestsAuthors()).ToList();
+            var iterator = await _gitClientService.GetPullRequestsPage(
+                state: SelectedStatus,
+                author: SelectedAuthor?.Username,
+                limit: pageSize,
+                page: page
+                );
 
-            var result = _cacheService.Get<IEnumerable<GitPullRequest>>(CacheKeys.PullRequestCacheKey);
-            if (result.IsSuccess)
-            {
-                GitPullRequests.AddRange(result.Data);
-                ReloadAllPullRequests();
-            }
-            else
-            {
-                await ReloadAllPullRequests();
-            }
-        }
-
-        private async Task ReloadAllPullRequests()
-        {
-            var allPullRequests = new List<GitPullRequest>();
-            int startPage = 1;
-            PageIterator<GitPullRequest> iterator;
-
-            do
-            {
-                iterator = await _gitClientService.GetPullRequests(page: startPage);
-                allPullRequests.AddRange(iterator.Values);
-                startPage = iterator.Page + 1;
-
-            } while (iterator.HasNext());
-
-            GitPullRequests.Clear();
-            GitPullRequests.AddRange(allPullRequests);
-
-            _cacheService.Add(CacheKeys.PullRequestCacheKey, GitPullRequests.ToList());
-        }
-
-        private bool CanRunFilter()
-        {
-            return GitPullRequests != null;
-        }
-
-        private void Filter()
-        {
-            if (!CanRunFilter())
-                return;
-
-            FilteredGitPullRequests = new ReactiveList<GitPullRequest>(
-                GitPullRequests
-                .Where(pullRequest => SelectedStatus == null || pullRequest.Status == SelectedStatus)
-                .Where(pullRequest => SelectedAuthor == null || (pullRequest.Author != null && pullRequest.Author.Username == SelectedAuthor.Username))
-                .OrderByDescending(x => x.Updated));
+            return iterator.Values;
         }
 
         private IObservable<bool> CanLoadPullRequests()
         {
             return this.WhenAnyValue(x => x.IsLoading).Select(x => !IsLoading);
         }
-
-
     }
 }

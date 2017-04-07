@@ -64,7 +64,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         [ImportingConstructor]
         public PullRequestsWindowContainerViewModel(
-            IPullRequestsMainView pullRequestStartView,
             IPageNavigationService<IPullRequestsWindow> pageNavigationService,
             IEventAggregatorService eventAggregator,
             IGitService gitService,

@@ -33,7 +33,5 @@ namespace BitBucket.REST.API.QueryBuilders
         {
             return GetEnumerator();
         }
-
-
     }
 }

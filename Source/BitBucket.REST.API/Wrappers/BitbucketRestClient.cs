@@ -19,7 +19,7 @@ namespace BitBucket.REST.API.Wrappers
         {
         }
 
-        public override async Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 100, QueryString query = null)
+        public override async Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 50, QueryString query = null)
         {
             var result = new IteratorBasedPage<T>()
             {

@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.UI.Behaviours;
 using GitClientVS.UI.Helpers;
 
 namespace GitClientVS.UI.Views
@@ -25,6 +26,12 @@ namespace GitClientVS.UI.Views
             _vm = vm;
             DataContext = vm;
             InitializeComponent();
+            this.Loaded += PullRequestsMainView_Loaded;
+        }
+
+        private void PullRequestsMainView_Loaded(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

@@ -90,6 +90,8 @@
     <Compile Include="AttachedProperties\SelectTreeViewAfterItemClickBehavior.cs" />
     <Compile Include="AttachedProperties\SetErrorTemplateAfterTouchBehavior.cs" />
     <Compile Include="Behaviours\AutoCompleteBoxDelegateAndResetBehaviour.cs" />
+    <Compile Include="Behaviours\ScrollHelper.cs" />
+    <Compile Include="Behaviours\ScrollViewerMonitor.cs" />
     <Compile Include="Bindings\PasswordHelper.cs" />
     <Compile Include="Bindings\ValidatedBinding.cs" />
     <Compile Include="Controls\BitbucketLogo.xaml.cs">

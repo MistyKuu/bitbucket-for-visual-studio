@@ -161,10 +161,47 @@ namespace GitClientVS.Services
             return commits.MapTo<List<GitCommit>>();
         }
 
-        public async Task<PageIterator<GitPullRequest>> GetPullRequests(int limit = 20, int page = 1)
+        public async Task<IEnumerable<GitPullRequest>> GetPullRequests(
+            int limit = 50,
+            GitPullRequestStatus? state = null,
+            string fromBranch = null,
+            string toBranch = null,
+            bool isDescSorted = true,
+            string author = null
+            )
         {
-            var pullRequests = await _bitbucketClient.PullRequestsClient.GetPullRequestsPage(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, limit: limit, page: page);
-            return pullRequests.MapTo<PageIterator<GitPullRequest>>();
+            var builder = _bitbucketClient.PullRequestsClient.GetPullRequestQueryBuilder()
+                .WithState(state?.ToString() ?? "ALL")
+                .WithOrder(isDescSorted ? Order.Newest : Order.Oldest)
+                .WithSourceBranch(fromBranch)
+                .WithDestinationBranch(toBranch)
+                .WithAuthor(author, null);
+
+            return (await _bitbucketClient.PullRequestsClient
+                .GetPullRequests(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, limit, builder))
+                .MapTo<List<GitPullRequest>>();
+        }
+
+        public async Task<PageIterator<GitPullRequest>> GetPullRequestsPage(
+           int page,
+           int limit = 50,
+           GitPullRequestStatus? state = null,
+           string fromBranch = null,
+           string toBranch = null,
+           bool isDescSorted = true,
+           string author = null
+           )
+        {
+            var builder = _bitbucketClient.PullRequestsClient.GetPullRequestQueryBuilder()
+                .WithState(state?.ToString() ?? "ALL")
+                .WithOrder(isDescSorted ? Order.Newest : Order.Oldest)
+                .WithSourceBranch(fromBranch)
+                .WithDestinationBranch(toBranch)
+                .WithAuthor(author, null);
+
+            return (await _bitbucketClient.PullRequestsClient
+                    .GetPullRequestsPage(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, page, limit, builder))
+                    .MapTo<PageIterator<GitPullRequest>>();
         }
 
         public async Task<IEnumerable<GitBranch>> GetBranches()

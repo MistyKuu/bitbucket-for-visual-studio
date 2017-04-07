@@ -1,73 +1,46 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using BitBucket.REST.API.Extensions;
-using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Standard;
 
 namespace BitBucket.REST.API.QueryBuilders
 {
-    public class QueryBuilder : IQueryConnector
+    public class QueryBuilder : IQueryBuilder
     {
-        private readonly StringBuilder _query;
-
-        public QueryBuilder()
+        private readonly Dictionary<string, string> _params = new Dictionary<string, string>();
+        public IQueryBuilder UpdatedOn(DateTime date, Operators queryOperator)
         {
-            _query = new StringBuilder();
-        }
-
-        public IQueryParam And()
-        {
-            _query.Append(" and ");
-            return this;
-        }
-
-        public IQueryParam Or()
-        {
-            _query.Append(" or ");
-            return this;
-        }
-
-        public IQueryConnector UpdatedOn(DateTime date, Operators queryOperator)
-        {
+            throw new NotImplementedException("Only equals works");
             var dateInProperFormat = date.ToString("yyyy-MM-dd");
-            _query.Append($" updated_on {OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
+            _params.Add("updated_on", $"{OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
             return this;
         }
 
-        public IQueryConnector CreatedOn(DateTime date, Operators queryOperator)
+        public IQueryBuilder CreatedOn(DateTime date, Operators queryOperator)
         {
+            throw new NotImplementedException("Only equals works");
             var dateInProperFormat = date.ToString("yyyy-MM-dd");
-            _query.Append($" created_on {OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
+            _params.Add("created_on", $"{OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
+            return this;
+        }
+        public IQueryBuilder State(PullRequestOptions option)
+        {
+            _params.Add("state", $@"""{option}""");
             return this;
         }
 
-        public IQueryConnector SortAsc(string fieldName)
+        public IQueryBuilder Add(string prop, string value)
         {
-            _query.Append($" sort=-{fieldName}");
-            return this;
-        }
-
-        public IQueryConnector SortDesc(string fieldName)
-        {
-            _query.Append($" sort={fieldName}");
-            return this;
-        }
-
-        public IQueryConnector State(PullRequestOptions option)
-        {
-            _query.Append($@" state=""{option}""");
-            return this;
-        }
-
-        public IQueryConnector Add(string prop,string value)
-        {
-            _query.Append($@" {prop}=""{value}""");
+            _params.Add(prop, $@"""{value}""");
             return this;
         }
 
         public string Build()
         {
-            return _query.ToString();
+            return string.Join(" AND ", _params
+                .Where(x => x.Value != null)
+                .Select(x => x.Key + " = " + x.Value));
         }
     }
 }
