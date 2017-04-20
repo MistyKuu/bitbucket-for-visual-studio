@@ -94,8 +94,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             _fileService = fileService;
             var path = _gitService.GetDefaultRepoPath();
             LocalPath = !string.IsNullOrEmpty(path) ? path : Paths.DefaultRepositoryPath;
-
-            SetupObservables();
         }
 
         public void InitializeCommands()
@@ -103,10 +101,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             _createCommand = ReactiveCommand.CreateAsyncTask(CanExecuteCreateObservable(), _ => Create());
         }
 
-        private void SetupObservables()
+        protected override IEnumerable<IDisposable> SetupObservables()
         {
             _createCommand.Subscribe(_ => OnClose());
             this.WhenAnyValue(x => x.Name).Subscribe(_ => ForcePropertyValidation(nameof(LocalPath)));
+            yield break;
         }
 
 

@@ -4,17 +4,28 @@ using GitClientVS.Contracts;
 using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Infrastructure.Extensions;
 using ReactiveUI;
+using System.Linq;
 
 namespace GitClientVS.Infrastructure
 {
-    public abstract class ViewModelBase : ReactiveValidatedObject, IViewModel
+    public abstract class ViewModelBase : ReactiveValidatedObject, IViewModel, IDisposable
     {
-        protected ViewModelBase()
+        private IEnumerable<IDisposable> _disposables;
+
+        public void InitializeObservables()
         {
-            (this as IViewModelWithCommands)?.InitializeCommands();
-            (this as ILoadableViewModel)?.SetupLoadingCommands();
-            (this as IViewModelWithErrorMessage)?.CatchCommandErrors();
-          
+            _disposables = SetupObservables().ToList();
+        }
+
+        protected virtual IEnumerable<IDisposable> SetupObservables()
+        {
+            return Enumerable.Empty<IDisposable>();
+        }
+
+        public virtual void Dispose()
+        {
+            foreach (var obs in _disposables)
+                obs?.Dispose();
         }
     }
 }

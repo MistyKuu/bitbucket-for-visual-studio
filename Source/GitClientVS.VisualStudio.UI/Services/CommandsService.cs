@@ -14,6 +14,7 @@ using GitClientVS.VisualStudio.UI.Window;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ReactiveUI;
+using GitClientVS.Infrastructure.Extensions;
 
 namespace GitClientVS.VisualStudio.UI.Services
 {
@@ -50,6 +51,7 @@ namespace GitClientVS.VisualStudio.UI.Services
             var view = window.Content as IPullRequestsWindowContainer;
             view.DataContext = vm;
             view.Window = window;
+            vm.Initialize();
             _navigationService.ClearNavigationHistory();
             _navigationService.Navigate<IPullRequestsMainView>();
         }
@@ -60,7 +62,7 @@ namespace GitClientVS.VisualStudio.UI.Services
             var vm = (DiffWindowControlViewModel)_diffFactory.CreateExport().Value;
             var view = window.Content as IView;
             view.DataContext = vm;
-            vm.InitializeCommand.Execute(parameter);
+            vm.Initialize(parameter);
             vm.WhenAnyValue(x => x.FileDiff).Where(x => x != null).Subscribe(x => window.Caption = $"Diff ({x.DisplayFileName})");
         }
 

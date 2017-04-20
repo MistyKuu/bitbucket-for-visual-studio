@@ -44,6 +44,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _hasAuthorApproved;
         private ReactiveCommand<Unit> _confirmationMergeCommand;
         private ReactiveCommand<Unit> _confirmationDeclineCommand;
+        private IEventAggregatorService _eventAggregatorService;
 
 
         public string PageTitle => "Pull Request Details";
@@ -96,11 +97,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             _userInformationService = userInformationService;
             _treeStructureGenerator = treeStructureGenerator;
             _messageBoxService = messageBoxService;
+            _eventAggregatorService = eventAggregatorService;
 
             CurrentTheme = userInformationService.CurrentTheme;
             PullRequestDiffModel = new PullRequestDiffModel(commandsService);
 
-            eventAggregatorService.GetEvent<ThemeChangedEvent>().Subscribe(ev =>
+        }
+
+        protected override IEnumerable<IDisposable> SetupObservables()
+        {
+            yield return _eventAggregatorService.GetEvent<ThemeChangedEvent>().Subscribe(ev =>
             {
                 CurrentTheme = ev.Theme;
                 PullRequestDiffModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffModel.Comments.ToList(), CurrentTheme).ToList();

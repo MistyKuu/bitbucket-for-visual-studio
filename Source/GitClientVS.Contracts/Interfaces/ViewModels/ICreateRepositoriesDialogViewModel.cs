@@ -1,6 +1,6 @@
 ﻿namespace GitClientVS.Contracts.Interfaces.ViewModels
 {
-    public interface ICreateRepositoriesDialogViewModel : ICloseable, IViewModelWithErrorMessage
+    public interface ICreateRepositoriesDialogViewModel : ICloseable, IViewModelWithErrorMessage, IViewModel
     {
     }
 }

@@ -107,8 +107,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             var gitClonePath = _gitService.GetDefaultRepoPath();
             ClonePath = !string.IsNullOrEmpty(gitClonePath) ? gitClonePath : Paths.DefaultRepositoryPath;
-
-            SetupObservables();
         }
 
         public void InitializeCommands()
@@ -117,8 +115,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _cloneCommand = ReactiveCommand.CreateAsyncTask(CanExecuteCloneObservable(), _ => Clone());
             _choosePathCommand = ReactiveCommand.Create(Observable.Return(true));
         }
-
-        private void SetupObservables()
+        protected override IEnumerable<IDisposable> SetupObservables()
         {
             _cloneCommand.Subscribe(_ => OnClose());
             _choosePathCommand.Subscribe(_ => ChooseClonePath());
@@ -134,6 +131,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                     SelectedRepository = FilteredRepositories.FirstOrDefault();
                 });
 
+            yield break;
         }
 
         public string FilterRepoName

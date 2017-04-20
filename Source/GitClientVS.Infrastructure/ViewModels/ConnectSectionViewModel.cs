@@ -32,8 +32,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly ReactiveCommand<object> _logoutCommand;
         private readonly ReactiveCommand<object> _openCloneCommand;
         private ReactiveCommand<object> _openCreateCommand;
-
-        private IDisposable _observable;
         private ConnectionData _connectionData;
 
         public ICommand OpenLoginCommand => _openLoginCommand;
@@ -64,13 +62,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             _logoutCommand = ReactiveCommand.Create();
 
             ConnectionData = _userInformationService.ConnectionData;
-
-            SetupObservables();
         }
 
 
 
-        private void SetupObservables()
+        protected override IEnumerable<IDisposable> SetupObservables()
         {
             _openLoginCommand.Subscribe(_ => _loginViewFactory.CreateExport().Value.ShowDialog());
             _openCreateCommand.Subscribe(_ => _createRepoViewFactory.CreateExport().Value.ShowDialog());
@@ -78,7 +74,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _logoutCommand.Subscribe(_ => { _gitClientService.Logout(); });
 
 
-            _observable = _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
+            yield return _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
         }
 
         private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)
@@ -90,11 +86,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get { return _connectionData; }
             set { this.RaiseAndSetIfChanged(ref _connectionData, value); }
-        }
-
-        public void Dispose()
-        {
-            _observable.Dispose();
         }
     }
 }

@@ -27,8 +27,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly ICacheService _cacheService;
         private readonly IUserInformationService _userInfoService;
         private IView _currentView;
-        private readonly ReactiveCommand<object> _prevCommand;
-        private readonly ReactiveCommand<object> _nextCommand;
+        private ReactiveCommand<object> _prevCommand;
+        private ReactiveCommand<object> _nextCommand;
         private IWithPageTitle _currentViewModel;
         private Theme _currentTheme;
 
@@ -76,11 +76,25 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitService = gitService;
             _cacheService = cacheService;
             _userInfoService = userInfoService;
-            _pageNavigationService.Where(x => x.Window == typeof(IPullRequestsWindow)).Subscribe(ChangeView);
+
             _prevCommand = ReactiveCommand.Create(_pageNavigationService.CanNavigateBackObservable);
             _prevCommand.Subscribe(_ => _pageNavigationService.NavigateBack());
             _nextCommand = ReactiveCommand.Create(_pageNavigationService.CanNavigateForwardObservable);
             _nextCommand.Subscribe(_ => _pageNavigationService.NavigateForward());
+
+            var repo = _gitService.GetActiveRepository();
+            ActiveRepository = repo.Owner + '/' + repo.Name;
+
+            CurrentTheme = _userInfoService.CurrentTheme;
+            ConfirmationViewModel = new ShowConfirmationEventViewModel();
+        }
+
+        protected override IEnumerable<IDisposable> SetupObservables()
+        {
+            yield return _pageNavigationService.Where(x => x.Window == typeof(IPullRequestsWindow)).Subscribe(ChangeView);
+            yield return _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(ev => CurrentTheme = ev.Theme);
+            yield return _eventAggregator.GetEvent<ShowConfirmationEvent>().Subscribe(ShowConfirmation);
+
             this.WhenAnyValue(x => x.CurrentView).Where(x => x != null).Subscribe(_ => CurrentViewModel = CurrentView.DataContext as IWithPageTitle);
             _eventAggregator
                 .GetEvent<ActiveRepositoryChangedEvent>()
@@ -89,19 +103,9 @@ namespace GitClientVS.Infrastructure.ViewModels
                 .Merge(_eventAggregator.GetEvent<ConnectionChangedEvent>().Select(x => Unit.Default))
                 .Subscribe(_ => OnClosed());
 
-            var repo = _gitService.GetActiveRepository();
-            ActiveRepository = repo.Owner + '/' + repo.Name;
-            _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(ev => CurrentTheme = ev.Theme);
-            _eventAggregator.GetEvent<ShowConfirmationEvent>().Subscribe(ShowConfirmation);
-
-            CurrentTheme = _userInfoService.CurrentTheme;
-            ConfirmationViewModel = new ShowConfirmationEventViewModel();
-
             this.WhenAnyObservable(x => x._nextCommand, x => x._prevCommand).Subscribe(_ => ConfirmationViewModel.Event = null);
         }
-
-
-
+        
         private void ChangeView(NavigationEvent navEvent)
         {
             CurrentView = navEvent.View;
@@ -114,6 +118,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _cacheService.Delete(CacheKeys.PullRequestCacheKey);
             _pageNavigationService.ClearNavigationHistory();
             Closed?.Invoke(this, EventArgs.Empty);
+            Dispose();
         }
 
         private void ShowConfirmation(ShowConfirmationEvent ev)

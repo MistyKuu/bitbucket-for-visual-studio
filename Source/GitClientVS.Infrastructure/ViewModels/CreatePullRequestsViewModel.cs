@@ -153,13 +153,12 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             CloseSourceBranch = false;
             SelectedReviewers = new ReactiveList<GitUser>();
-            SetupObservables();
         }
 
 
-        private void SetupObservables()
+        protected override IEnumerable<IDisposable> SetupObservables()
         {
-            _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
+            yield return _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
                 .Subscribe(_ => _initializeCommand.Execute(null));
 
             this.WhenAnyValue(x => x.SourceBranch, x => x.DestinationBranch)

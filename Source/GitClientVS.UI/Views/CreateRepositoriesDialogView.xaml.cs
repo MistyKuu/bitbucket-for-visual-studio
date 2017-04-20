@@ -18,6 +18,7 @@ using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using MahApps.Metro.Controls;
 using Microsoft.VisualStudio.PlatformUI;
+using GitClientVS.Infrastructure.Extensions;
 
 namespace GitClientVS.UI.Views
 {
@@ -36,6 +37,7 @@ namespace GitClientVS.UI.Views
             DataContext = vm;
             Owner = Application.Current.MainWindow;
             vm.Closed += delegate { Close(); };
+            vm.Initialize();
         }
     }
 }

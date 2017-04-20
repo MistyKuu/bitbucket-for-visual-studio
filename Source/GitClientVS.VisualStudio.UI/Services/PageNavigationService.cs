@@ -11,6 +11,8 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.Views;
 using Microsoft.VisualStudio.Shell;
 using ReactiveUI;
+using GitClientVS.Infrastructure;
+using GitClientVS.Infrastructure.Extensions;
 
 namespace GitClientVS.VisualStudio.UI.Services
 {
@@ -57,7 +59,11 @@ namespace GitClientVS.VisualStudio.UI.Services
             if (CanNavigateBack())
             {
                 if (removeFromHistory)
+                {
+                    var toRemove = _navigationHistory[CurrentPageIndex];
+                    (toRemove?.View?.DataContext as IDisposable)?.Dispose();
                     _navigationHistory.RemoveAt(CurrentPageIndex);
+                }
 
                 CurrentPageIndex--;
                 var ev = _navigationHistory[CurrentPageIndex];
@@ -88,8 +94,8 @@ namespace GitClientVS.VisualStudio.UI.Services
         {
             ClearForwardNavigationHistory();
             var view = _appServiceProvider.GetService<TView>();
-            var vm = view.DataContext as IInitializable;
-            vm?.InitializeCommand.Execute(parameter);
+            var vm = view.DataContext as IViewModel;
+            vm?.Initialize(parameter);
 
             var ev = new NavigationEvent(typeof(TWindow), view) { Parameter = parameter };
             _navigationSubject.OnNext(ev);

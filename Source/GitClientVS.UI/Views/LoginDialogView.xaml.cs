@@ -18,6 +18,7 @@ using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using MahApps.Metro.Controls;
 using Microsoft.VisualStudio.PlatformUI;
+using GitClientVS.Infrastructure.Extensions;
 
 namespace GitClientVS.UI.Views
 {
@@ -38,6 +39,7 @@ namespace GitClientVS.UI.Views
             Owner = Application.Current.MainWindow;
             vm.Closed += delegate { Close(); };
             Loaded += LoginDialogView_Loaded;
+            vm.Initialize();
         }
 
         private void LoginDialogView_Loaded(object sender, RoutedEventArgs e)

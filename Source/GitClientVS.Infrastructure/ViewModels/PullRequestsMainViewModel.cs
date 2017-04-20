@@ -133,11 +133,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             _cacheService = cacheService;
             _currentRepository = _gitService.GetActiveRepository();
             SelectedStatus = GitPullRequestStatus.Open;
-            SetupObservables();
             Authors = new List<GitUser>();
         }
 
-        private void SetupObservables()
+        protected override IEnumerable<IDisposable> SetupObservables()
         {
             this.WhenAnyValue(x => x.SelectedStatus, x => x.SelectedAuthor)
                 .Select(x => new { SelectedStatus, SelectedAuthor })
@@ -147,6 +146,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 .Subscribe(_ => { _refreshPullRequestsCommand.Execute(null); });
 
             this.WhenAnyValue(x => x.SelectedPullRequest).Where(x => x != null).Subscribe(_ => _goToDetailsCommand.Execute(SelectedPullRequest));
+            yield break;
         }
 
         public void InitializeCommands()

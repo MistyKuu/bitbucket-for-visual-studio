@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Infrastructure.Extensions;
 
 namespace GitClientVS.UI.Views
 {
@@ -30,6 +31,7 @@ namespace GitClientVS.UI.Views
         {
             InitializeComponent();
             DataContext = connectSectionViewModel;
+            connectSectionViewModel.Initialize();
         }
     }
 }

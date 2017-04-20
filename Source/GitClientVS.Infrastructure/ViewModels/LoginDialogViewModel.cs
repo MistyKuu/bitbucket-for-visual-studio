@@ -62,13 +62,13 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _userInformationService = userInformationService;
             IsEnterprise = false;
-            SetupObservables();
         }
 
-        private void SetupObservables()
+        protected override IEnumerable<IDisposable> SetupObservables()
         {
             _connectCommand.Subscribe(_ => OnClose());
             this.WhenAnyValue(x => x.IsEnterprise).Subscribe(_ => ForcePropertyValidation(nameof(Host)));
+            yield break;
         }
 
 
