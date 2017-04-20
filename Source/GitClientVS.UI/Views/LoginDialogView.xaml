@@ -32,7 +32,7 @@
         </ResourceDictionary>
     </controls:MetroWindow.Resources>
 
-    
+
     <Grid Margin="20,20,20,5">
         <Grid.Resources>
             <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
@@ -157,10 +157,10 @@
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" Margin="0,15" HorizontalAlignment="Center">
-                <RadioButton Margin="5" IsChecked="{Binding IsEnterprise, Mode=TwoWay,Converter={converters:NegateBoolConverter}}" GroupName="EnterpriseGroup" Content="Bitbucket Cloud" Foreground="White"/>
-                <RadioButton Margin="5" IsChecked="{Binding IsEnterprise, Mode=TwoWay}" GroupName="EnterpriseGroup" Content="Bitbucket Server" Foreground="White"/>
+                <RadioButton x:Name="CloudRb" Margin="5" IsChecked="{Binding IsEnterprise, Mode=TwoWay,Converter={converters:NegateBoolConverter}}" GroupName="EnterpriseGroup" Content="Bitbucket Cloud" Foreground="White"/>
+                <RadioButton Margin="5" IsChecked="{Binding ElementName=CloudRb,Path=IsChecked, Mode=TwoWay, Converter={converters:NegateBoolConverter}}" GroupName="EnterpriseGroup" Content="Bitbucket Server" Foreground="White"/>
             </StackPanel>
-            
+
             <TextBox Margin="3" Grid.Row="2" Style="{StaticResource ValidatedTextBoxStyle}" Visibility="{Binding IsEnterprise,Converter={converters:BoolToVisibilityConverter}}"  controls:TextBoxHelper.Watermark="Server url" Text="{bindings:ValidatedBinding Host}"/>
             <TextBox Margin="3"  x:Name="LoginBox" Grid.Row="3" Style="{StaticResource ValidatedTextBoxStyle}"  controls:TextBoxHelper.Watermark="Login" Text="{bindings:ValidatedBinding Login}"/>
             <PasswordBox
@@ -177,12 +177,12 @@
                         <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorDataTemplate}"/>
                     </Style>
                 </PasswordBox.Style>
-                </PasswordBox>
+            </PasswordBox>
 
             <Button Margin="3" IsDefault="True" Style="{StaticResource ConnectButtonStyle}" IsEnabled="True" Grid.Row="5"  Command="{Binding ConnectCommand}" Content="{x:Static ui:Resources.Connect}" HorizontalAlignment="Center"/>
             <controls1:ErrorView  Grid.Row="6" Grid.Column="0"  />
-            
-        </Grid> 
+
+        </Grid>
     </Grid>
 </controls:MetroWindow>
 

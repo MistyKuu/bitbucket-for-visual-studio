@@ -19,7 +19,7 @@ using GitClientVS.Contracts.Models;
 namespace GitClientVS.Infrastructure.ViewModels
 {
     [Export(typeof(IConnectSectionViewModel))]
-    [PartCreationPolicy(CreationPolicy.Shared)]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class ConnectSectionViewModel : ViewModelBase, IConnectSectionViewModel
     {
         private readonly ExportFactory<ILoginDialogView> _loginViewFactory;
