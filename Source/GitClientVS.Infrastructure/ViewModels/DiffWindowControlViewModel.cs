@@ -66,10 +66,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _eventAggregator = eventAggregator;
             _userInfoService = userInfoService;
-            _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(ev => CurrentTheme = ev.Theme);
             CurrentTheme = _userInfoService.CurrentTheme;
         }
 
+        protected override IEnumerable<IDisposable> SetupObservables()
+        {
+            yield return _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(ev => CurrentTheme = ev.Theme);
+        }
 
         public void InitializeCommands()
         {
