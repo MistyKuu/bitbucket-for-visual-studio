@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +15,17 @@ namespace GitClientVS.Infrastructure.Utils
             if (ex is AuthorizationException)
                 return "Incorrect credentials";
             if (ex is ForbiddenException)
-                return "Insufficient privileges";
+                return "Operation is Forbidden";
             if (ex is RequestFailedException)
             {
                 var failedEx = ((RequestFailedException)ex);
                 return failedEx.IsFriendlyMessage ? ex.Message : "Wrong request";
             }
 
-            return "Unknown error";
+            if (ex is UnauthorizedAccessException)
+                return "Unauthorized";
+
+            return $"Unknown error ({ex.GetType()}). Check logs for more info";
         }
     }
 }
