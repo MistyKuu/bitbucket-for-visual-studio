@@ -164,22 +164,20 @@ namespace GitClientVS.Infrastructure.ViewModels
             this.WhenAnyValue(x => x.SourceBranch, x => x.DestinationBranch)
                 .Where((x, y) => x.Item1 != null && x.Item2 != null)
                 .Subscribe(_ => _setPullRequestDataCommand.Execute(null));
+
+
+            _createNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.NavigateBack(true); });
+            _removeReviewerCommand.Subscribe((x) => { SelectedReviewers.Remove((GitUser)x); });
+            _goToDetailsCommand.Subscribe(id => { _pageNavigationService.Navigate<IPullRequestDetailView>(id); });
         }
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), _ => LoadBranches());
-
             _removeReviewerCommand = ReactiveCommand.Create();
             _createNewPullRequestCommand = ReactiveCommand.CreateAsyncTask(CanCreatePullRequest(), _ => CreateNewPullRequest());
             _setPullRequestDataCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => SetPullRequestData());
-
-
-            _createNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.NavigateBack(true); });
-            _removeReviewerCommand.Subscribe((x) => { SelectedReviewers.Remove((GitUser)x); });
-
             _goToDetailsCommand = ReactiveCommand.Create(Observable.Return(true));
-            _goToDetailsCommand.Subscribe(id => { _pageNavigationService.Navigate<IPullRequestDetailView>(id); });
         }
 
 

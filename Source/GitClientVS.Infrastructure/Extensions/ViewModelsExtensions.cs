@@ -51,7 +51,6 @@ namespace GitClientVS.Infrastructure.Extensions
 
         public static void Initialize(this IViewModel viewModel, object parameter = null)
         {
-            (viewModel as IViewModelWithCommands)?.InitializeCommands();
             (viewModel as ILoadableViewModel)?.SetupLoadingCommands();
             (viewModel as IViewModelWithErrorMessage)?.CatchCommandErrors();
             (viewModel as ViewModelBase)?.InitializeObservables();

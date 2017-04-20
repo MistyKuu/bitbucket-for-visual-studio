@@ -146,6 +146,10 @@ namespace GitClientVS.Infrastructure.ViewModels
                 .Subscribe(_ => { _refreshPullRequestsCommand.Execute(null); });
 
             this.WhenAnyValue(x => x.SelectedPullRequest).Where(x => x != null).Subscribe(_ => _goToDetailsCommand.Execute(SelectedPullRequest));
+
+            _goToDetailsCommand.Subscribe(x => { _pageNavigationService.Navigate<IPullRequestDetailView>(((GitPullRequest)x).Id); });
+            _goToCreateNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.Navigate<ICreatePullRequestsView>(); });
+
             yield break;
         }
 
@@ -158,10 +162,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 _isInitialized = true;
             });
             _goToCreateNewPullRequestCommand = ReactiveCommand.Create(Observable.Return(true));
-            _goToCreateNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.Navigate<ICreatePullRequestsView>(); });
-
             _goToDetailsCommand = ReactiveCommand.Create(Observable.Return(true));
-            _goToDetailsCommand.Subscribe(x => { _pageNavigationService.Navigate<IPullRequestDetailView>(((GitPullRequest)x).Id); });
             _loadNextPageCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => GitPullRequests.LoadNextPageAsync());
             _refreshPullRequestsCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => RefreshPullRequests());
         }

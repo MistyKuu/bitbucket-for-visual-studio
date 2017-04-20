@@ -126,7 +126,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             _disapproveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DisapprovePullRequest(PullRequest.Id); });
             _declineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version); });
             _mergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await MergePullRequest(); });
-
             _confirmationMergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => RunMergeConfirmation());
             _confirmationDeclineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => RunDeclineConfirmation());
         }

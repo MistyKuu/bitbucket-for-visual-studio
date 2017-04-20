@@ -12,6 +12,11 @@ namespace GitClientVS.Infrastructure
     {
         private IEnumerable<IDisposable> _disposables;
 
+        protected ViewModelBase()
+        {
+            (this as IViewModelWithCommands)?.InitializeCommands();
+        }
+
         public void InitializeObservables()
         {
             _disposables = SetupObservables().ToList();

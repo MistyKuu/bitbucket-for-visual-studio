@@ -126,11 +126,16 @@ namespace GitClientVS.Infrastructure.ViewModels
         public string GitClientType => _gitClientService.GitClientType;
 
 
+        protected override IEnumerable<IDisposable> SetupObservables()
+        {
+            _publishRepositoryCommand.Subscribe(_ => _gitWatcher.Refresh());
+            yield break;
+        }
+
         public void InitializeCommands()
         {
             _publishRepositoryCommand = ReactiveCommand.CreateAsyncTask(CanPublishRepository(), _ => PublishRepository());
             _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => CreateOwners());
-            _publishRepositoryCommand.Subscribe(_ => _gitWatcher.Refresh());
         }
 
         private async Task CreateOwners()
