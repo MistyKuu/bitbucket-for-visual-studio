@@ -279,7 +279,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
                 fileDiffs.Add(fileDiff);
 
-                foreach (var diffHunk in diff.Hunks)
+                foreach (var diffHunk in diff.Hunks ?? new List<Hunk>())
                 {
                     var chunkDiff = new ChunkDiff()
                     {
@@ -306,10 +306,11 @@ namespace BitBucket.REST.API.Clients.Enterprise
                             chunkDiff.Changes.Add(ld);
                         }
                     }
-
-                    fileDiff.Additions = fileDiff.Chunks.Sum(y => y.Changes.Count(z => z.Add));
-                    fileDiff.Deletions = fileDiff.Chunks.Sum(y => y.Changes.Count(z => z.Delete));
                 }
+
+
+                fileDiff.Additions = fileDiff.Chunks.Sum(y => y.Changes.Count(z => z.Add));
+                fileDiff.Deletions = fileDiff.Chunks.Sum(y => y.Changes.Count(z => z.Delete));
             }
             return fileDiffs;
         }

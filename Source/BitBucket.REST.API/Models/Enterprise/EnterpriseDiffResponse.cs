@@ -26,5 +26,8 @@ namespace BitBucket.REST.API.Models.Enterprise
 
         [JsonProperty(PropertyName = "truncated")]
         public bool Truncated { get; set; }
-}
+
+        [JsonProperty(PropertyName = "binary")]
+        public bool IsBinary { get; set; }
+    }
 }
