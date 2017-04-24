@@ -5,9 +5,9 @@ namespace GitClientVS.Contracts.Models
     public class PullRequestActionModel : ReactiveObject
     {
         public string Label { get; }
-        public IReactiveCommand Command { get; }
+        public ReactiveCommand Command { get; }
 
-        public PullRequestActionModel(string label, IReactiveCommand command)
+        public PullRequestActionModel(string label, ReactiveCommand command)
         {
             Label = label;
             Command = command;

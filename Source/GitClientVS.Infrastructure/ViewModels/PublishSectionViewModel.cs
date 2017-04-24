@@ -37,8 +37,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IUserInformationService _userInformationService;
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitWatcher _gitWatcher;
-        private ReactiveCommand<Unit> _publishRepositoryCommand;
-        private ReactiveCommand<Unit> _initializeCommand;
+        private ReactiveCommand _publishRepositoryCommand;
+        private ReactiveCommand _initializeCommand;
         private string _repositoryName;
         private string _description;
         private bool _isPrivate;
@@ -125,17 +125,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
         public string GitClientType => _gitClientService.GitClientType;
 
-
-        protected override IEnumerable<IDisposable> SetupObservables()
-        {
-            _publishRepositoryCommand.Subscribe(_ => _gitWatcher.Refresh());
-            yield break;
-        }
-
         public void InitializeCommands()
         {
-            _publishRepositoryCommand = ReactiveCommand.CreateAsyncTask(CanPublishRepository(), _ => PublishRepository());
-            _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => CreateOwners());
+            _publishRepositoryCommand = ReactiveCommand.CreateFromTask(_ => PublishRepository(), CanPublishRepository());
+            _initializeCommand = ReactiveCommand.CreateFromTask(_ => CreateOwners());
         }
 
         private async Task CreateOwners()
@@ -158,6 +151,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             var remoteRepo = await _gitClientService.CreateRepositoryAsync(gitRemoteRepository);
             _gitService.PublishRepository(remoteRepo);
+            _gitWatcher.Refresh();
         }
 
         private IObservable<bool> CanPublishRepository()
@@ -170,8 +164,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             return IsObjectValid();
         }
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _publishRepositoryCommand, _initializeCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _publishRepositoryCommand, _initializeCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _publishRepositoryCommand, _initializeCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _publishRepositoryCommand, _initializeCommand };
 
 
     }

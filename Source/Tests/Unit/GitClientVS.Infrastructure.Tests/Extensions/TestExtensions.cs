@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Concurrency;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -21,18 +20,18 @@ namespace GitClientVS.Infrastructure.Tests.Extensions
             while (!command.CanExecute(null)) { }
         }
 
-        public static void With(this IScheduler scheduler,Action<IScheduler> schedulerAction)
-        {
-            //var tps = RxApp.TaskpoolScheduler;
-            //var mts = RxApp.MainThreadScheduler;
+        //public static void With(this IScheduler scheduler,Action<IScheduler> schedulerAction)
+        //{
+        //    //var tps = RxApp.TaskpoolScheduler;
+        //    //var mts = RxApp.MainThreadScheduler;
 
-            //RxApp.TaskpoolScheduler = scheduler;
-            //RxApp.MainThreadScheduler = scheduler;
+        //    //RxApp.TaskpoolScheduler = scheduler;
+        //    //RxApp.MainThreadScheduler = scheduler;
 
-            //schedulerAction(scheduler);
+        //    //schedulerAction(scheduler);
 
-            //RxApp.TaskpoolScheduler = tps;
-            //RxApp.MainThreadScheduler = mts;
-        }
+        //    //RxApp.TaskpoolScheduler = tps;
+        //    //RxApp.MainThreadScheduler = mts;
+        //}
     }
 }

@@ -11,6 +11,6 @@ namespace GitClientVS.Contracts.Interfaces
     public interface IViewModelWithErrorMessage : IViewModelWithCommands
     {
         string ErrorMessage { get; set; }
-        IEnumerable<IReactiveCommand> ThrowableCommands { get; }
+        IEnumerable<ReactiveCommand> ThrowableCommands { get; }
     }
 }

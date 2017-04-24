@@ -27,8 +27,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly ICacheService _cacheService;
         private readonly IUserInformationService _userInfoService;
         private IView _currentView;
-        private ReactiveCommand<object> _prevCommand;
-        private ReactiveCommand<object> _nextCommand;
+        private ReactiveCommand _prevCommand;
+        private ReactiveCommand _nextCommand;
         private IWithPageTitle _currentViewModel;
         private Theme _currentTheme;
 
@@ -77,10 +77,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             _cacheService = cacheService;
             _userInfoService = userInfoService;
 
-            _prevCommand = ReactiveCommand.Create(_pageNavigationService.CanNavigateBackObservable);
-            _prevCommand.Subscribe(_ => _pageNavigationService.NavigateBack());
-            _nextCommand = ReactiveCommand.Create(_pageNavigationService.CanNavigateForwardObservable);
-            _nextCommand.Subscribe(_ => _pageNavigationService.NavigateForward());
+            _prevCommand = ReactiveCommand.Create(() => _pageNavigationService.NavigateBack(), _pageNavigationService.CanNavigateBackObservable);
+            _nextCommand = ReactiveCommand.Create(() => _pageNavigationService.NavigateForward(), _pageNavigationService.CanNavigateForwardObservable);
 
             var repo = _gitService.GetActiveRepository();
             ActiveRepository = repo.Owner + '/' + repo.Name;
@@ -103,9 +101,10 @@ namespace GitClientVS.Infrastructure.ViewModels
                 .Merge(_eventAggregator.GetEvent<ConnectionChangedEvent>().Select(x => Unit.Default))
                 .Subscribe(_ => OnClosed());
 
-            this.WhenAnyObservable(x => x._nextCommand, x => x._prevCommand).Subscribe(_ => ConfirmationViewModel.Event = null);
+            this.WhenAnyObservable(x => x._nextCommand.IsExecuting, x => x._prevCommand.IsExecuting)
+                .Subscribe(_ => ConfirmationViewModel.Event = null);
         }
-        
+
         private void ChangeView(NavigationEvent navEvent)
         {
             CurrentView = navEvent.View;

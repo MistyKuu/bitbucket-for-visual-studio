@@ -33,7 +33,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IFileService _fileService;
-        private ReactiveCommand<Unit> _createCommand;
+        private ReactiveCommand _createCommand;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _errorMessage;
         private string _localPath;
@@ -80,7 +80,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         public string GitClientType => _gitClientService.GitClientType;
 
         public ICommand CreateCommand => _createCommand;
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new List<IReactiveCommand> { _createCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new List<ReactiveCommand> { _createCommand };
 
         [ImportingConstructor]
         public CreateRepositoriesDialogViewModel(
@@ -98,12 +98,11 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public void InitializeCommands()
         {
-            _createCommand = ReactiveCommand.CreateAsyncTask(CanExecuteCreateObservable(), _ => Create());
+            _createCommand = ReactiveCommand.CreateFromTask(_ => Create(), CanExecuteCreateObservable());
         }
 
         protected override IEnumerable<IDisposable> SetupObservables()
         {
-            _createCommand.Subscribe(_ => OnClose());
             this.WhenAnyValue(x => x.Name).Subscribe(_ => ForcePropertyValidation(nameof(LocalPath)));
             yield break;
         }
@@ -114,6 +113,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             var repository = new GitRemoteRepository { Name = Name, Description = Description, IsPrivate = IsPrivate };
             var remoteRepo = await _gitClientService.CreateRepositoryAsync(repository);
             _gitService.CloneRepository(remoteRepo.CloneUrl, remoteRepo.Name, LocalPath);
+            OnClose();
         }
 
 

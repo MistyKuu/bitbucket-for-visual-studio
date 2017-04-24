@@ -28,10 +28,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IUserInformationService _userInformationService;
         private readonly IGitClientService _gitClientService;
-        private readonly ReactiveCommand<object> _openLoginCommand;
-        private readonly ReactiveCommand<object> _logoutCommand;
-        private readonly ReactiveCommand<object> _openCloneCommand;
-        private ReactiveCommand<object> _openCreateCommand;
+        private readonly ReactiveCommand _openLoginCommand;
+        private readonly ReactiveCommand _logoutCommand;
+        private readonly ReactiveCommand _openCloneCommand;
+        private ReactiveCommand _openCreateCommand;
         private ConnectionData _connectionData;
 
         public ICommand OpenLoginCommand => _openLoginCommand;
@@ -56,10 +56,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             _userInformationService = userInformationService;
             _gitClientService = gitClientService;
 
-            _openLoginCommand = ReactiveCommand.Create(Observable.Return(true));
-            _openCloneCommand = ReactiveCommand.Create(Observable.Return(true));
-            _openCreateCommand = ReactiveCommand.Create(Observable.Return(true));
-            _logoutCommand = ReactiveCommand.Create();
+            _openLoginCommand = ReactiveCommand.Create(() => _loginViewFactory.CreateExport().Value.ShowDialog());
+            _openCloneCommand = ReactiveCommand.Create(() => _cloneRepoViewFactory.CreateExport().Value.ShowDialog());
+            _openCreateCommand = ReactiveCommand.Create(() => _createRepoViewFactory.CreateExport().Value.ShowDialog());
+            _logoutCommand = ReactiveCommand.Create(() => { _gitClientService.Logout(); });
 
             ConnectionData = _userInformationService.ConnectionData;
         }
@@ -68,12 +68,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         protected override IEnumerable<IDisposable> SetupObservables()
         {
-            _openLoginCommand.Subscribe(_ => _loginViewFactory.CreateExport().Value.ShowDialog());
-            _openCreateCommand.Subscribe(_ => _createRepoViewFactory.CreateExport().Value.ShowDialog());
-            _openCloneCommand.Subscribe(_ => _cloneRepoViewFactory.CreateExport().Value.ShowDialog());
-            _logoutCommand.Subscribe(_ => { _gitClientService.Logout(); });
-
-
             yield return _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
         }
 

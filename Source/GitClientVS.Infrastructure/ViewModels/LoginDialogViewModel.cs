@@ -34,7 +34,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IUserInformationService _userInformationService;
         private string _login;
         private string _password;
-        private ReactiveCommand<Unit> _connectCommand;
+        private ReactiveCommand _connectCommand;
         private string _errorMessage;
         private bool _isLoading;
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -42,8 +42,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _isEnterprise;
 
         public ICommand ConnectCommand => _connectCommand;
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new List<IReactiveCommand> { _connectCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _connectCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new List<ReactiveCommand> { _connectCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _connectCommand };
 
         public bool IsLoading
         {
@@ -66,7 +66,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         protected override IEnumerable<IDisposable> SetupObservables()
         {
-            _connectCommand.Subscribe(_ => OnClose());
             this.WhenAnyValue(x => x.IsEnterprise).Subscribe(_ => ForcePropertyValidation(nameof(Host)));
             yield break;
         }
@@ -74,7 +73,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public void InitializeCommands()
         {
-            _connectCommand = ReactiveCommand.CreateAsyncTask(CanExecuteObservable(), _ => Connect());
+            _connectCommand = ReactiveCommand.CreateFromTask(_ => Connect(), CanExecuteObservable());
         }
 
         private async Task Connect()
@@ -88,6 +87,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             };
 
             await _gitClientService.LoginAsync(cred);
+            OnClose();
         }
 
 

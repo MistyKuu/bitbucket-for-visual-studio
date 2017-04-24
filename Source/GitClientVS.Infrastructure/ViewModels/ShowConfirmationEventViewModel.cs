@@ -23,10 +23,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private void SetCommands()
         {
-            var setResultCommand = ReactiveCommand.Create();
-            setResultCommand.Subscribe(confirmation =>
+            var setResultCommand = ReactiveCommand.Create<bool>(confirmation =>
             {
-                if ((bool)confirmation)
+                if (confirmation)
                     Event.Command.Execute(null);
 
                 Event = null;

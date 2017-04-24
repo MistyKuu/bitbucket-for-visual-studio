@@ -32,18 +32,18 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IMessageBoxService _messageBoxService;
         private string _errorMessage;
         private bool _isLoading;
-        private ReactiveCommand<Unit> _initializeCommand;
-        private ReactiveCommand<Unit> _approveCommand;
-        private ReactiveCommand<Unit> _disapproveCommand;
-        private ReactiveCommand<Unit> _declineCommand;
-        private ReactiveCommand<Unit> _mergeCommand;
+        private ReactiveCommand _initializeCommand;
+        private ReactiveCommand<Unit, Unit> _approveCommand;
+        private ReactiveCommand<Unit, Unit> _disapproveCommand;
+        private ReactiveCommand<Unit, Unit> _declineCommand;
+        private ReactiveCommand<Unit, Unit> _mergeCommand;
+        private ReactiveCommand _confirmationMergeCommand;
+        private ReactiveCommand _confirmationDeclineCommand;
         private GitPullRequest _pullRequest;
         private string _mainSectionCommandText;
         private Theme _currentTheme;
         private ReactiveList<PullRequestActionModel> _actionCommands;
         private bool _hasAuthorApproved;
-        private ReactiveCommand<Unit> _confirmationMergeCommand;
-        private ReactiveCommand<Unit> _confirmationDeclineCommand;
         private IEventAggregatorService _eventAggregatorService;
 
 
@@ -111,8 +111,15 @@ namespace GitClientVS.Infrastructure.ViewModels
                 CurrentTheme = ev.Theme;
                 PullRequestDiffModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffModel.Comments.ToList(), CurrentTheme).ToList();
             });
-            this.WhenAnyObservable(x => x._approveCommand, x => x._declineCommand, x => x._disapproveCommand, x => x._mergeCommand)
-                .Subscribe(_ => _initializeCommand.Execute(PullRequest.Id));
+
+            this.WhenAnyObservable(
+                x => x._approveCommand,
+                x => x._declineCommand,
+                x => x._disapproveCommand,
+                x => x._mergeCommand)
+                .Where(x => PullRequest != null)
+                .Select(x => PullRequest.Id)
+                .InvokeCommand(_initializeCommand);
 
             this.WhenAnyValue(x => x.PullRequest).Where(x => x != null).Subscribe(_ => { this.RaisePropertyChanged(nameof(PageTitle)); });
         }
@@ -121,13 +128,13 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public void InitializeCommands()
         {
-            _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => LoadPullRequestData((long)x));
-            _approveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.ApprovePullRequest(PullRequest.Id); });
-            _disapproveCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DisapprovePullRequest(PullRequest.Id); });
-            _declineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version); });
-            _mergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), async _ => { await MergePullRequest(); });
-            _confirmationMergeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => RunMergeConfirmation());
-            _confirmationDeclineCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => RunDeclineConfirmation());
+            _initializeCommand = ReactiveCommand.CreateFromTask<long>(LoadPullRequestData);
+            _approveCommand = ReactiveCommand.CreateFromTask(async _ => { await _gitClientService.ApprovePullRequest(PullRequest.Id); });
+            _disapproveCommand = ReactiveCommand.CreateFromTask(async _ => { await _gitClientService.DisapprovePullRequest(PullRequest.Id); });
+            _declineCommand = ReactiveCommand.CreateFromTask(async _ => { await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version); });
+            _mergeCommand = ReactiveCommand.CreateFromTask(async _ => { await MergePullRequest(); });
+            _confirmationMergeCommand = ReactiveCommand.CreateFromTask(_ => RunMergeConfirmation());
+            _confirmationDeclineCommand = ReactiveCommand.CreateFromTask(_ => RunDeclineConfirmation());
         }
 
         private Task RunDeclineConfirmation()
@@ -233,8 +240,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             await _gitClientService.MergePullRequest(gitMergeRequest);
         }
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand };
 
         public string ErrorMessage
         {

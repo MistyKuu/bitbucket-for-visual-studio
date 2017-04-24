@@ -20,13 +20,13 @@ namespace GitClientVS.Contracts.Models
         private List<GitCommit> _commits;
         private List<GitComment> _comments;
         private List<FileDiff> _fileDiffs;
-        private readonly ReactiveCommand<Unit> _showDiffCommand;
+        private readonly ReactiveCommand _showDiffCommand;
         private List<ICommentTree> _commentTree;
 
         public PullRequestDiffModel(ICommandsService commandsService)
         {
             _commandsService = commandsService;
-            _showDiffCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), (x) => ShowDiff((FileDiff)x));
+            _showDiffCommand = ReactiveCommand.CreateFromTask<FileDiff>(ShowDiff);
         }
 
         public ICommand ShowDiffCommand => _showDiffCommand;

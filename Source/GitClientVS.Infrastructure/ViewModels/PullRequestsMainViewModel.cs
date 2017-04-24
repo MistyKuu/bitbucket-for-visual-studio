@@ -32,13 +32,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitService _gitService;
         private readonly IPageNavigationService<IPullRequestsWindow> _pageNavigationService;
         private readonly ICacheService _cacheService;
-        private ReactiveCommand<Unit> _initializeCommand;
-        private ReactiveCommand<object> _goToDetailsCommand;
-        private ReactiveCommand<Unit> _loadNextPageCommand;
+        private ReactiveCommand _initializeCommand;
+        private ReactiveCommand _goToDetailsCommand;
+        private ReactiveCommand _loadNextPageCommand;
+        private ReactiveCommand _goToCreateNewPullRequestCommand;
+        private ReactiveCommand _refreshPullRequestsCommand;
         private bool _isLoading;
         private string _errorMessage;
-        private ReactiveCommand<object> _goToCreateNewPullRequestCommand;
-        private ReactiveCommand<Unit> _refreshPullRequestsCommand;
 
         private List<GitUser> _authors;
         private GitUser _selectedAuthor;
@@ -83,8 +83,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _loadNextPageCommand, _refreshPullRequestsCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand, _loadNextPageCommand, _refreshPullRequestsCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _loadNextPageCommand, _refreshPullRequestsCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _loadNextPageCommand, _refreshPullRequestsCommand };
 
         public bool IsLoading
         {
@@ -143,28 +143,29 @@ namespace GitClientVS.Infrastructure.ViewModels
                 .DistinctUntilChanged()
                 .Where(x => _isInitialized)
                 .Where(x => !IsLoading)
-                .Subscribe(_ => { _refreshPullRequestsCommand.Execute(null); });
+                .Select(x => Unit.Default)
+                .InvokeCommand(_refreshPullRequestsCommand);
 
-            this.WhenAnyValue(x => x.SelectedPullRequest).Where(x => x != null).Subscribe(_ => _goToDetailsCommand.Execute(SelectedPullRequest));
-
-            _goToDetailsCommand.Subscribe(x => { _pageNavigationService.Navigate<IPullRequestDetailView>(((GitPullRequest)x).Id); });
-            _goToCreateNewPullRequestCommand.Subscribe(_ => { _pageNavigationService.Navigate<ICreatePullRequestsView>(); });
+            this.WhenAnyValue(x => x.SelectedPullRequest)
+                .Where(x => x != null)
+                .InvokeCommand(_goToDetailsCommand);
 
             yield break;
         }
 
         public void InitializeCommands()
         {
-            _initializeCommand = ReactiveCommand.CreateAsyncTask(CanLoadPullRequests(), async _ =>
+            _initializeCommand = ReactiveCommand.CreateFromTask(async _ =>
             {
                 Authors = (await _gitClientService.GetPullRequestsAuthors()).ToList();
                 await RefreshPullRequests();
                 _isInitialized = true;
-            });
-            _goToCreateNewPullRequestCommand = ReactiveCommand.Create(Observable.Return(true));
-            _goToDetailsCommand = ReactiveCommand.Create(Observable.Return(true));
-            _loadNextPageCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => GitPullRequests.LoadNextPageAsync());
-            _refreshPullRequestsCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), _ => RefreshPullRequests());
+            }, CanLoadPullRequests());
+
+            _goToCreateNewPullRequestCommand = ReactiveCommand.Create(() => { _pageNavigationService.Navigate<ICreatePullRequestsView>(); });
+            _goToDetailsCommand = ReactiveCommand.Create<GitPullRequest>(x => _pageNavigationService.Navigate<IPullRequestDetailView>(x.Id));
+            _loadNextPageCommand = ReactiveCommand.CreateFromTask(_ => GitPullRequests.LoadNextPageAsync());
+            _refreshPullRequestsCommand = ReactiveCommand.CreateFromTask(_ => RefreshPullRequests());
         }
 
         private async Task RefreshPullRequests()

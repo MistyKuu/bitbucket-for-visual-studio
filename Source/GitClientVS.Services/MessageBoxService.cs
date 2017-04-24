@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.Composition;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GitClientVS.Contracts.Events;

@@ -22,7 +22,7 @@ namespace GitClientVS.Infrastructure.ViewModels
     {
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IUserInformationService _userInfoService;
-        private ReactiveCommand<Unit> _initializeCommand;
+        private ReactiveCommand _initializeCommand;
         private string _errorMessage;
         private bool _isLoading;
         private FileDiff _fileDiff;
@@ -58,8 +58,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             set { this.RaiseAndSetIfChanged(ref _fileDiff, value); }
         }
 
-        public IEnumerable<IReactiveCommand> ThrowableCommands => new[] { _initializeCommand };
-        public IEnumerable<IReactiveCommand> LoadingCommands => new[] { _initializeCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand };
 
         [ImportingConstructor]
         public DiffWindowControlViewModel(IEventAggregatorService eventAggregator, IUserInformationService userInfoService)
@@ -76,7 +76,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public void InitializeCommands()
         {
-            _initializeCommand = ReactiveCommand.CreateAsyncTask(Observable.Return(true), x => ShowFileDiff((FileDiff)x));
+            _initializeCommand = ReactiveCommand.CreateFromTask<FileDiff>(ShowFileDiff, Observable.Return(true));
         }
 
         private Task ShowFileDiff(FileDiff fileDiff)
