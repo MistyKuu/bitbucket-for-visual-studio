@@ -35,12 +35,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IFileService _fileService;
-        private readonly IUserInformationService _userInformationService;
         private ReactiveCommand<Unit> _cloneCommand;
         private ReactiveCommand<object> _choosePathCommand;
         private ReactiveCommand<Unit> _initializeCommand;
         private IEnumerable<GitRemoteRepository> _repositories;
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _errorMessage;
         private GitRemoteRepository _selectedRepository;
         private string _clonePath;
@@ -96,14 +94,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         public CloneRepositoriesDialogViewModel(
             IGitClientService gitClientService,
             IGitService gitService,
-            IFileService fileService,
-            IUserInformationService userInformationService
+            IFileService fileService
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _fileService = fileService;
-            _userInformationService = userInformationService;
 
             var gitClonePath = _gitService.GetDefaultRepoPath();
             ClonePath = !string.IsNullOrEmpty(gitClonePath) ? gitClonePath : Paths.DefaultRepositoryPath;
@@ -198,12 +194,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             if (SelectedRepository == null)
                 return false;
 
-            return !Directory.Exists(Path.Combine(ClonePath, SelectedRepository.Name));
+            return !_fileService.Exists(Path.Combine(ClonePath, SelectedRepository.Name));
         }
 
         public bool ClonePathIsPath(string clonePath)
         {
-            return Path.IsPathRooted(clonePath) && clonePath.IndexOfAny(Path.GetInvalidPathChars()) == -1;
+            return _fileService.IsPath(clonePath);
         }
 
         private IEnumerable<GitRemoteRepository> Filter()

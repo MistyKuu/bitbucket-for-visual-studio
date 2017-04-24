@@ -55,6 +55,21 @@ namespace GitClientVS.Services
             }
         }
 
+        public bool IsPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return false;
+
+            return Path.IsPathRooted(path) && path.IndexOfAny(Path.GetInvalidPathChars()) == -1;
+        }
+
+        public bool Exists(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return false;
+
+            return Directory.Exists(path);
+        }
 
     }
 }
