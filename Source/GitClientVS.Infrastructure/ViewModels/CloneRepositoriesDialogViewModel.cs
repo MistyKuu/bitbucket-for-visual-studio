@@ -49,26 +49,26 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public bool IsLoading
         {
-            get { return _isLoading; }
-            set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
         }
 
         public string ErrorMessage
         {
-            get { return _errorMessage; }
-            set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
+            get => _errorMessage;
+            set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
         }
 
         public IEnumerable<GitRemoteRepository> Repositories
         {
-            get { return _repositories; }
-            set { this.RaiseAndSetIfChanged(ref _repositories, value); }
+            get => _repositories;
+            set => this.RaiseAndSetIfChanged(ref _repositories, value);
         }
 
         public GitRemoteRepository SelectedRepository
         {
-            get { return _selectedRepository; }
-            set { this.RaiseAndSetIfChanged(ref _selectedRepository, value); }
+            get => _selectedRepository;
+            set => this.RaiseAndSetIfChanged(ref _selectedRepository, value);
         }
 
         [Required(AllowEmptyStrings = false)]
@@ -77,11 +77,21 @@ namespace GitClientVS.Infrastructure.ViewModels
         [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathIsPath), ErrorMessage = "Clone Path must be a valid path")]
         public string ClonePath
         {
-            get { return _clonePath; }
-            set { this.RaiseAndSetIfChanged(ref _clonePath, value); }
+            get => _clonePath;
+            set => this.RaiseAndSetIfChanged(ref _clonePath, value);
         }
 
+        public string FilterRepoName
+        {
+            get => _filterRepoName;
+            set => this.RaiseAndSetIfChanged(ref _filterRepoName, value);
+        }
 
+        public ReactiveList<GitRemoteRepository> FilteredRepositories
+        {
+            get => _filteredRepositories;
+            set => this.RaiseAndSetIfChanged(ref _filteredRepositories, value);
+        }
 
         public ICommand CloneCommand => _cloneCommand;
         public ICommand ChoosePathCommand => _choosePathCommand;
@@ -116,7 +126,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             this.WhenAnyValue(x => x.SelectedRepository).Subscribe(_ => ForcePropertyValidation(nameof(ClonePath)));
             this.WhenAnyValue(x => x.FilterRepoName, x => x.Repositories)
                 .Throttle(TimeSpan.FromMilliseconds(200), RxApp.TaskpoolScheduler)
-                .Where(Tst())
+                .Where(x => x.Item2 != null && x.Item2.Any())
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Select(_ => Filter().OrderBy(x => x.Name))
                 .Subscribe(filteredRepos =>
@@ -126,26 +136,6 @@ namespace GitClientVS.Infrastructure.ViewModels
                 });
 
             yield break;
-        }
-
-        private static Func<Tuple<string, IEnumerable<GitRemoteRepository>>, bool> Tst()
-        {
-            return x => x.Item2 != null && x.Item2.Any();
-        }
-
-        public string FilterRepoName
-        {
-            get { return _filterRepoName; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _filterRepoName, value);
-            }
-        }
-
-        public ReactiveList<GitRemoteRepository> FilteredRepositories
-        {
-            get { return _filteredRepositories; }
-            set { this.RaiseAndSetIfChanged(ref _filteredRepositories, value); }
         }
 
         private void ChooseClonePath()
@@ -186,14 +176,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             return IsObjectValid();
         }
 
-
-
-        public bool ClonePathHasSelectedRepository(string clonePath)
+        private bool ClonePathHasSelectedRepository(string clonePath)
         {
             return SelectedRepository != null;
         }
 
-        public bool ClonePathNotExists(string clonePath)
+        private bool ClonePathNotExists(string clonePath)
         {
             if (SelectedRepository == null)
                 return false;
@@ -201,7 +189,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             return !_fileService.Exists(Path.Combine(ClonePath, SelectedRepository.Name));
         }
 
-        public bool ClonePathIsPath(string clonePath)
+        private bool ClonePathIsPath(string clonePath)
         {
             return _fileService.IsPath(clonePath);
         }

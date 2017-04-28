@@ -160,6 +160,29 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             });
         }
 
+        [Test]
+        public void FilterRepositories_FoundResults_ResultsShouldBeOrderedByName()
+        {
+            new TestScheduler().With(scheduler =>
+            {
+                IEnumerable<GitRemoteRepository> repositories = new List<GitRemoteRepository>()
+                {
+                    new GitRemoteRepository(){Name = "xyz"},
+                    new GitRemoteRepository(){Name = "abd"},
+                    new GitRemoteRepository(){Name = "abc"},
+                };
+                _gitClientService.Expect(x => x.GetAllRepositories()).Return(repositories.FromTaskAsync());
+
+                var sut = CreateSut();
+                sut.Initialize();
+
+                sut.FilterRepoName = "ab";
+
+                scheduler.AdvanceByMs(201);
+                CollectionAssert.AreEqual(sut.FilteredRepositories, sut.FilteredRepositories.OrderBy(x => x.Name));
+            });
+        }
+
         private CloneRepositoriesDialogViewModel CreateSut()
         {
             return new CloneRepositoriesDialogViewModel(_gitClientService, _gitService, _fileService);
