@@ -115,8 +115,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             this.WhenAnyValue(x => x.SelectedRepository).Subscribe(_ => ForcePropertyValidation(nameof(ClonePath)));
             this.WhenAnyValue(x => x.FilterRepoName, x => x.Repositories)
-                .Throttle(TimeSpan.FromMilliseconds(200))
-                .Where(x => x.Item2 != null && x.Item2.Any())
+                .Throttle(TimeSpan.FromMilliseconds(200), RxApp.TaskpoolScheduler)
+                .Where(Tst())
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Select(_ => Filter().OrderBy(x => x.Name))
                 .Subscribe(filteredRepos =>
@@ -126,6 +126,11 @@ namespace GitClientVS.Infrastructure.ViewModels
                 });
 
             yield break;
+        }
+
+        private static Func<Tuple<string, IEnumerable<GitRemoteRepository>>, bool> Tst()
+        {
+            return x => x.Item2 != null && x.Item2.Any();
         }
 
         public string FilterRepoName

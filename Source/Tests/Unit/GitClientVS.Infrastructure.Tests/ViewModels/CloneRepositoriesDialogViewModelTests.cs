@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -10,6 +11,7 @@ using GitClientVS.Infrastructure.Tests.Extensions;
 using GitClientVS.Infrastructure.ViewModels;
 using Microsoft.Reactive.Testing;
 using NUnit.Framework;
+using ReactiveUI.Testing;
 using Rhino.Mocks;
 
 namespace GitClientVS.Infrastructure.Tests.ViewModels
@@ -30,8 +32,10 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitService = MockRepository.GenerateMock<IGitService>();
             _fileService = MockRepository.GenerateMock<IFileService>();
 
-            _sut = new CloneRepositoriesDialogViewModel(_gitClientService, _gitService, _fileService);
+            _sut = CreateSut();
         }
+
+
 
         [Test]
         public void OnCreate_DefaultClonePathIsCorrect_ShouldBeUsed()
@@ -130,25 +134,35 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         [Test]
         public void FilterRepositories_FoundResults_ShouldFilterResults()
         {
-            IEnumerable<GitRemoteRepository> repositories = new List<GitRemoteRepository>()
+            new TestScheduler().With(scheduler =>
             {
-                new GitRemoteRepository(){Name = "abc"},
-                new GitRemoteRepository(){Name = "xyz"},
-            };
-            _gitClientService.Expect(x => x.GetAllRepositories()).Return(repositories.FromTaskAsync());
+                IEnumerable<GitRemoteRepository> repositories = new List<GitRemoteRepository>()
+                {
+                    new GitRemoteRepository(){Name = "abc"},
+                    new GitRemoteRepository(){Name = "xyz"},
+                };
+                _gitClientService.Expect(x => x.GetAllRepositories()).Return(repositories.FromTaskAsync());
 
-            _sut.Initialize();
+                var sut = CreateSut();
+                sut.Initialize();
 
-            //new TestScheduler().With(scheduler =>
-            //{
-            //    _sut.FilterRepoName = string.Empty;
-            //    Thread.Sleep(1000);
-            //    Assert.That(_sut.FilteredRepositories.Count, Is.EqualTo(repositories.Count()));
+                sut.FilterRepoName = string.Empty;
 
-            //    _sut.FilterRepoName = "ab";
-            //    Thread.Sleep(1000);
-            //    Assert.That(_sut.FilteredRepositories.Count, Is.EqualTo(1));
-            //});
+                scheduler.AdvanceByMs(201);
+
+                Assert.That(sut.FilteredRepositories.Count, Is.EqualTo(repositories.Count()));
+
+                sut.FilterRepoName = "ab";
+
+                scheduler.AdvanceByMs(201);
+
+                Assert.That(sut.FilteredRepositories.Count, Is.EqualTo(1));
+            });
+        }
+
+        private CloneRepositoriesDialogViewModel CreateSut()
+        {
+            return new CloneRepositoriesDialogViewModel(_gitClientService, _gitService, _fileService);
         }
     }
 }
