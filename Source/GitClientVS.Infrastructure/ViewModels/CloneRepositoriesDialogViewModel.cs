@@ -37,7 +37,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IFileService _fileService;
         private ReactiveCommand _cloneCommand;
         private ReactiveCommand _choosePathCommand;
-        private ReactiveCommand _initializeCommand;
+        private ReactiveCommand<Unit,Unit> _initializeCommand;
         private IEnumerable<GitRemoteRepository> _repositories;
         private string _errorMessage;
         private GitRemoteRepository _selectedRepository;
@@ -176,12 +176,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             return IsObjectValid();
         }
 
-        private bool ClonePathHasSelectedRepository(string clonePath)
+        public bool ClonePathHasSelectedRepository(string clonePath)
         {
             return SelectedRepository != null;
         }
 
-        private bool ClonePathNotExists(string clonePath)
+        public bool ClonePathNotExists(string clonePath)
         {
             if (SelectedRepository == null)
                 return false;
@@ -189,7 +189,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             return !_fileService.Exists(Path.Combine(ClonePath, SelectedRepository.Name));
         }
 
-        private bool ClonePathIsPath(string clonePath)
+        public bool ClonePathIsPath(string clonePath)
         {
             return _fileService.IsPath(clonePath);
         }

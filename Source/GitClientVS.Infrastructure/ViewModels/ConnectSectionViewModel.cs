@@ -20,7 +20,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 {
     [Export(typeof(IConnectSectionViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class ConnectSectionViewModel : ViewModelBase, IConnectSectionViewModel
+    public class ConnectSectionViewModel : ViewModelBase, IConnectSectionViewModel,IViewModelWithCommands
     {
         private readonly ExportFactory<ILoginDialogView> _loginViewFactory;
         private readonly ExportFactory<ICloneRepositoriesDialogView> _cloneRepoViewFactory;
@@ -28,9 +28,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IUserInformationService _userInformationService;
         private readonly IGitClientService _gitClientService;
-        private readonly ReactiveCommand _openLoginCommand;
-        private readonly ReactiveCommand _logoutCommand;
-        private readonly ReactiveCommand _openCloneCommand;
+        private ReactiveCommand _openLoginCommand;
+        private ReactiveCommand _logoutCommand;
+        private ReactiveCommand _openCloneCommand;
         private ReactiveCommand _openCreateCommand;
         private ConnectionData _connectionData;
 
@@ -39,6 +39,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand LogoutCommand => _logoutCommand;
         public ICommand OpenCloneCommand => _openCloneCommand;
 
+
+
+        public ConnectionData ConnectionData
+        {
+            get => _connectionData;
+            set => this.RaiseAndSetIfChanged(ref _connectionData, value);
+        }
 
         [ImportingConstructor]
         public ConnectSectionViewModel(
@@ -56,15 +63,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             _userInformationService = userInformationService;
             _gitClientService = gitClientService;
 
+            ConnectionData = _userInformationService.ConnectionData;
+        }
+
+        public void InitializeCommands()
+        {
             _openLoginCommand = ReactiveCommand.Create(() => _loginViewFactory.CreateExport().Value.ShowDialog());
             _openCloneCommand = ReactiveCommand.Create(() => _cloneRepoViewFactory.CreateExport().Value.ShowDialog());
             _openCreateCommand = ReactiveCommand.Create(() => _createRepoViewFactory.CreateExport().Value.ShowDialog());
             _logoutCommand = ReactiveCommand.Create(() => { _gitClientService.Logout(); });
-
-            ConnectionData = _userInformationService.ConnectionData;
         }
-
-
 
         protected override IEnumerable<IDisposable> SetupObservables()
         {
@@ -74,12 +82,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)
         {
             ConnectionData = connectionChangedEvent.Data;
-        }
-
-        public ConnectionData ConnectionData
-        {
-            get { return _connectionData; }
-            set { this.RaiseAndSetIfChanged(ref _connectionData, value); }
         }
     }
 }
