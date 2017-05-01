@@ -86,6 +86,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitClientService.VerifyAllExpectations();
         }
 
+
+
         private ConnectSectionViewModel CreateSut()
         {
             return new ConnectSectionViewModel(

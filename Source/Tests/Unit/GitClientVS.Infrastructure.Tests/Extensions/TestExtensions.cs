@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GitClientVS.Contracts.Interfaces.Views;
+using Ploeh.AutoFixture;
+using Ploeh.AutoFixture.AutoRhinoMock;
 using ReactiveUI;
 
 namespace GitClientVS.Infrastructure.Tests.Extensions

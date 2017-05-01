@@ -60,14 +60,14 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public string ErrorMessage
         {
-            get { return _errorMessage; }
-            set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
+            get => _errorMessage;
+            set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
         }
 
         public IEnumerable<GitBranch> Branches
         {
-            get { return _branches; }
-            set { this.RaiseAndSetIfChanged(ref _branches, value); }
+            get => _branches;
+            set => this.RaiseAndSetIfChanged(ref _branches, value);
         }
 
 
@@ -75,43 +75,69 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public GitBranch SourceBranch
         {
-            get { return _sourceBranch; }
-            set { this.RaiseAndSetIfChanged(ref _sourceBranch, value); }
+            get => _sourceBranch;
+            set => this.RaiseAndSetIfChanged(ref _sourceBranch, value);
         }
 
 
         [Required]
         public GitBranch DestinationBranch
         {
-            get { return _destinationBranch; }
-            set { this.RaiseAndSetIfChanged(ref _destinationBranch, value); }
+            get => _destinationBranch;
+            set => this.RaiseAndSetIfChanged(ref _destinationBranch, value);
         }
 
         public string Message
         {
-            get { return _message; }
-            set { this.RaiseAndSetIfChanged(ref _message, value); }
+            get => _message;
+            set => this.RaiseAndSetIfChanged(ref _message, value);
         }
 
         public string Description
         {
-            get { return _description; }
-            set { this.RaiseAndSetIfChanged(ref _description, value); }
+            get => _description;
+            set => this.RaiseAndSetIfChanged(ref _description, value);
         }
 
         [Required]
         public string Title
         {
-            get { return _title; }
-            set { this.RaiseAndSetIfChanged(ref _title, value); }
+            get => _title;
+            set => this.RaiseAndSetIfChanged(ref _title, value);
         }
 
         [Required]
         public bool CloseSourceBranch
         {
-            get { return _closeSourceBranch; }
-            set { this.RaiseAndSetIfChanged(ref _closeSourceBranch, value); }
+            get => _closeSourceBranch;
+            set => this.RaiseAndSetIfChanged(ref _closeSourceBranch, value);
         }
+
+
+        public string GitClientType => _gitClientService.GitClientType;
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+        }
+
+
+        public ReactiveList<GitUser> SelectedReviewers
+        {
+            get => _selectedReviewers;
+            set => this.RaiseAndSetIfChanged(ref _selectedReviewers, value);
+        }
+
+        public GitPullRequest RemotePullRequest
+        {
+            get => _remotePullRequest;
+            set => this.RaiseAndSetIfChanged(ref _remotePullRequest, value);
+        }
+
+        public ISuggestionProvider ReviewersProvider => new SuggestionProvider(Filter);
+
+
 
         public PullRequestDiffModel PullRequestDiffModel { get; set; }
 
@@ -120,14 +146,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand };
 
         public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand };
-
-        public string GitClientType => _gitClientService.GitClientType;
-
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
-        }
 
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand CreateNewPullRequestCommand => _createNewPullRequestCommand;
@@ -203,7 +221,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             Branches = (await _gitClientService.GetBranches()).OrderBy(x => x.Name).ToList();
 
-
             var currentBranch = _currentRepo.Branches.FirstOrDefault(x => x.IsHead) ?? _currentRepo.Branches.FirstOrDefault();
 
             SourceBranch = Branches.FirstOrDefault(x => x.Name == currentBranch?.TrackedBranchName) ??
@@ -263,20 +280,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             return DestinationBranch?.Name != SourceBranch?.Name;
         }
-
-        public ReactiveList<GitUser> SelectedReviewers
-        {
-            get { return _selectedReviewers; }
-            set { this.RaiseAndSetIfChanged(ref _selectedReviewers, value); }
-        }
-
-        public GitPullRequest RemotePullRequest
-        {
-            get { return _remotePullRequest; }
-            set { this.RaiseAndSetIfChanged(ref _remotePullRequest, value); }
-        }
-
-        public ISuggestionProvider ReviewersProvider => new SuggestionProvider(Filter);
 
         private IEnumerable Filter(string arg)
         {

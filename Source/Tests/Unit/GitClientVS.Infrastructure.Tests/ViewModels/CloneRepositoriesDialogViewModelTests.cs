@@ -65,6 +65,18 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         }
 
         [Test]
+        public void Initialize_GetRepositoriesThrowsException_ShouldSetErrorMessage()
+        {
+            _gitClientService.Expect(x => x.GetAllRepositories()).Throw(new Exception());
+            _sut.ErrorMessage = null;
+
+            _sut.Initialize();
+
+            Assert.IsNull(_sut.Repositories);
+            Assert.IsNotEmpty(_sut.ErrorMessage);
+        }
+
+        [Test]
         public void CloneCommand_InvalidParameters_ShouldBeDisabled()
         {
             _sut.SelectedRepository = null;
@@ -104,6 +116,30 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _sut.CloneCommand.Execute(null);
 
             _gitService.VerifyAllExpectations();
+        }
+
+        [Test]
+        public void CloneCommand_CloneRepositoryThrowsException_ShouldSetErrorMessage()
+        {
+            _gitClientService.Expect(x => x.GetAllRepositories()).Throw(new Exception());
+            _sut.ErrorMessage = null;
+
+            const string path = "CorrectPath";
+            const string repoName = "repoName";
+
+            _fileService.Expect(x => x.IsPath(path)).Return(true);
+            _fileService.Expect(x => x.Exists(Path.Combine(path, repoName))).Return(false);
+
+            _sut.SelectedRepository = new GitRemoteRepository() { Name = repoName };
+            _sut.ClonePath = path;
+            _sut.Initialize();
+
+            _gitService.Expect(x => x.CloneRepository(_sut.SelectedRepository.CloneUrl, _sut.SelectedRepository.Name, _sut.ClonePath)).Throw(new Exception());
+
+            _sut.CloneCommand.Execute(null);
+
+            _gitService.VerifyAllExpectations();
+            Assert.IsNotEmpty(_sut.ErrorMessage);
         }
 
         [Test]
