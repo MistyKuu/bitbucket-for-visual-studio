@@ -11,6 +11,7 @@ using GitClientVS.Infrastructure.Tests.Extensions;
 using GitClientVS.Infrastructure.ViewModels;
 using Microsoft.Reactive.Testing;
 using NUnit.Framework;
+using ReactiveUI;
 using ReactiveUI.Testing;
 using Rhino.Mocks;
 

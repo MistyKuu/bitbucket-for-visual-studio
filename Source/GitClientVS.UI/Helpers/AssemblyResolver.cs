@@ -30,7 +30,12 @@ namespace GitClientVS.UI.Helpers
             "System.Windows.Interactivity",
             "Humanizer",
             "Svg",
-        };
+            "System.Reactive.Core",
+            "System.Reactive.Interfaces",
+            "System.Reactive.Linq",
+            "System.Reactive.PlatformServices",
+            "System.Reactive.Windows.Threading",
+        };//todo version incompability
 
         public static void InitializeAssemblyResolver()
         {
