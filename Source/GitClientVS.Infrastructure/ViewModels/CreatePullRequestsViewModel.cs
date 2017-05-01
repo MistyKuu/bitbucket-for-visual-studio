@@ -300,7 +300,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task SetPullRequestDataFromCommits(List<GitCommit> commits)
         {
             Title = SourceBranch.Name;
-            Description = string.Join(Environment.NewLine, commits.Select((x) => $"* " + x.Message.Trim()).Reverse());
+            Description = string.Join(Environment.NewLine, commits.Select((x) => $"* " + x.Message?.Trim()).Reverse());
             SelectedReviewers.Clear();
             foreach (var defReviewer in await _gitClientService.GetDefaultReviewers())
                 SelectedReviewers.Add(defReviewer);

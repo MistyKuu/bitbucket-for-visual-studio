@@ -37,7 +37,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IFileService _fileService;
         private ReactiveCommand _cloneCommand;
         private ReactiveCommand _choosePathCommand;
-        private ReactiveCommand<Unit,Unit> _initializeCommand;
+        private ReactiveCommand<Unit, Unit> _initializeCommand;
         private IEnumerable<GitRemoteRepository> _repositories;
         private string _errorMessage;
         private GitRemoteRepository _selectedRepository;
@@ -150,8 +150,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             await Task.Run(() =>
             {
                 _gitService.CloneRepository(SelectedRepository.CloneUrl, SelectedRepository.Name, ClonePath);
-                OnClose();
             });
+
+            OnClose();
         }
 
         private IObservable<bool> CanRefreshObservable()

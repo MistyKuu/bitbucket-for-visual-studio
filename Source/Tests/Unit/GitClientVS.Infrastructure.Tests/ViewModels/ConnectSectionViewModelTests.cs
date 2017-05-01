@@ -11,6 +11,7 @@ using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.Infrastructure.Tests.Extensions;
 using GitClientVS.Infrastructure.ViewModels;
+using GitClientVS.Services;
 using Microsoft.Reactive.Testing;
 using NUnit.Framework;
 using ReactiveUI.Testing;
@@ -35,7 +36,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _loginDialogView = MockRepository.GenerateMock<ILoginDialogView>();
             _cloneRepositoriesDialogView = MockRepository.GenerateMock<ICloneRepositoriesDialogView>();
             _createRepositoriesDialogView = MockRepository.GenerateMock<ICreateRepositoriesDialogView>();
-            _eventAggregatorService = MockRepository.GenerateMock<IEventAggregatorService>();
+            _eventAggregatorService = new EventAggregatorService();
             _userInformationService = MockRepository.GenerateMock<IUserInformationService>();
             _gitClientService = MockRepository.GenerateMock<IGitClientService>();
 
@@ -81,6 +82,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitClientService.Expect(x => x.Logout()).Repeat.Once();
 
             var sut = CreateSut();
+
             sut.LogoutCommand.Execute(null);
 
             _gitClientService.VerifyAllExpectations();

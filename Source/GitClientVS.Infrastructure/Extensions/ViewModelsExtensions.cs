@@ -22,7 +22,10 @@ namespace GitClientVS.Infrastructure.Extensions
         {
             foreach (var reactiveCommand in vm.ThrowableCommands)
             {
-                reactiveCommand.IsExecuting.Where(x => x).Subscribe(_ => vm.ErrorMessage = null);
+                reactiveCommand.IsExecuting.Where(x => x).Subscribe(_ =>
+                {
+                    vm.ErrorMessage = null;
+                });
                 reactiveCommand.ThrownExceptions.Subscribe((ex) =>
                 {
                     Logger.Error(ex);

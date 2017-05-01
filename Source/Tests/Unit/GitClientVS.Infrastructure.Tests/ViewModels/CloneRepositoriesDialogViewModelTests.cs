@@ -153,22 +153,20 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _fileService.Expect(x => x.IsPath(path)).Return(true);
             _fileService.Expect(x => x.Exists(Path.Combine(path, repoName))).Return(false);
 
-            new TestScheduler().With(scheduler =>
-            {
-                var sut = CreateSut();
+            var sut = CreateSut();
 
-                sut.SelectedRepository = new GitRemoteRepository() { Name = repoName };
-                sut.ClonePath = path;
-                sut.Closed += delegate { closed = true; };
+            sut.SelectedRepository = new GitRemoteRepository() { Name = repoName };
+            sut.ClonePath = path;
+            sut.Closed += delegate { closed = true; };
 
-                _gitService.Expect(x => x.CloneRepository(sut.SelectedRepository.CloneUrl, sut.SelectedRepository.Name, sut.ClonePath));
+            _gitService.Expect(x => x.CloneRepository(sut.SelectedRepository.CloneUrl, sut.SelectedRepository.Name, sut.ClonePath));
 
-                sut.Initialize();
-                sut.CloneCommand.Execute(null);
-                scheduler.AdvanceByMs(1);
+            sut.Initialize();
+            sut.CloneCommand.Execute(null);
 
-                Assert.That(closed, Is.EqualTo(true));
-            });
+            Assert.That(closed, Is.EqualTo(true));
+
+            sut.CloneCommand.Execute(null);
         }
 
 

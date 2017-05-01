@@ -16,7 +16,7 @@ namespace GitClientVS.Services
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class TreeStructureGenerator : ITreeStructureGenerator
     {
-        public IEnumerable<ICommentTree> CreateCommentTree(List<GitComment> gitComments, Theme currentTheme, char separator = '/')
+        public IEnumerable<ICommentTree> CreateCommentTree(IEnumerable<GitComment> gitComments, Theme currentTheme, char separator = '/')
         {
             Dictionary<long, GitComment> searchableGitComments = new Dictionary<long, GitComment>();
 
@@ -107,7 +107,7 @@ namespace GitClientVS.Services
             return entryComment.Comments;
         }
 
-        public IEnumerable<ITreeFile> CreateFileTree(List<FileDiff> fileDiffs, string rootFileName = "test", char separator = '/')
+        public IEnumerable<ITreeFile> CreateFileTree(IEnumerable<FileDiff> fileDiffs, string rootFileName = "test", char separator = '/')
         {
             var entryFile = new TreeDirectory(rootFileName);
 

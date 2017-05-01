@@ -118,6 +118,10 @@
       <Project>{f8d950b2-10a4-4efc-842c-4a7abd50c1ae}</Project>
       <Name>GitClientVS.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\ParseDiff\ParseDiff.csproj">
+      <Project>{65672E92-C353-4D21-A098-6A5BEB42CDF4}</Project>
+      <Name>ParseDiff</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

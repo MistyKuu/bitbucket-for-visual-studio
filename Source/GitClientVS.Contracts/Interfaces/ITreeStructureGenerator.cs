@@ -7,7 +7,7 @@ namespace GitClientVS.Contracts.Interfaces
 {
     public interface ITreeStructureGenerator
     {
-        IEnumerable<ICommentTree> CreateCommentTree(List<GitComment> gitComments, Theme currentTheme, char separator = '/');
-        IEnumerable<ITreeFile> CreateFileTree(List<FileDiff> fileDiffs, string rootFileName = "test", char separator = '/');
+        IEnumerable<ICommentTree> CreateCommentTree(IEnumerable<GitComment> gitComments, Theme currentTheme, char separator = '/');
+        IEnumerable<ITreeFile> CreateFileTree(IEnumerable<FileDiff> fileDiffs, string rootFileName = "test", char separator = '/');
     }
 }

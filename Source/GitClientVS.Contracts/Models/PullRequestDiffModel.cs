@@ -23,42 +23,44 @@ namespace GitClientVS.Contracts.Models
         private readonly ReactiveCommand _showDiffCommand;
         private List<ICommentTree> _commentTree;
 
-        public PullRequestDiffModel(ICommandsService commandsService)
-        {
-            _commandsService = commandsService;
-            _showDiffCommand = ReactiveCommand.CreateFromTask<FileDiff>(ShowDiff);
-        }
 
         public ICommand ShowDiffCommand => _showDiffCommand;
 
         public List<ITreeFile> FilesTree
         {
-            get { return _filesTree; }
-            set { this.RaiseAndSetIfChanged(ref _filesTree, value); }
+            get => _filesTree;
+            set => this.RaiseAndSetIfChanged(ref _filesTree, value);
         }
 
         public List<FileDiff> FileDiffs
         {
-            get { return _fileDiffs; }
-            set { this.RaiseAndSetIfChanged(ref _fileDiffs, value); }
+            get => _fileDiffs;
+            set => this.RaiseAndSetIfChanged(ref _fileDiffs, value);
         }
 
         public List<GitCommit> Commits
         {
-            get { return _commits; }
-            set { this.RaiseAndSetIfChanged(ref _commits, value); }
+            get => _commits;
+            set => this.RaiseAndSetIfChanged(ref _commits, value);
         }
 
         public List<ICommentTree> CommentTree
         {
-            get { return _commentTree; }
-            set { this.RaiseAndSetIfChanged(ref _commentTree, value); }
+            get => _commentTree;
+            set => this.RaiseAndSetIfChanged(ref _commentTree, value);
         }
 
         public List<GitComment> Comments
         {
-            get { return _comments; }
-            set { this.RaiseAndSetIfChanged(ref _comments, value); }
+            get => _comments;
+            set => this.RaiseAndSetIfChanged(ref _comments, value);
+        }
+
+
+        public PullRequestDiffModel(ICommandsService commandsService)
+        {
+            _commandsService = commandsService;
+            _showDiffCommand = ReactiveCommand.CreateFromTask<FileDiff>(ShowDiff);
         }
 
         private Task ShowDiff(FileDiff diff)
