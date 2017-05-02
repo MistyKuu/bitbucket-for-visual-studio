@@ -23,7 +23,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitService _gitService;
         private readonly IFileService _fileService;
         private ReactiveCommand _createCommand;
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private string _errorMessage;
         private string _localPath;
         private string _name;
@@ -32,10 +32,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public string ErrorMessage
         {
-            get { return _errorMessage; }
-            set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
+            get => _errorMessage;
+            set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
         }
-
 
         [Required(AllowEmptyStrings = false)]
         [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathHasSelectedRepositoryName), ErrorMessage = "Please enter repository name")]
@@ -43,27 +42,27 @@ namespace GitClientVS.Infrastructure.ViewModels
         [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathNotExists), ErrorMessage = "Directory already exists")]
         public string LocalPath
         {
-            get { return _localPath; }
-            set { this.RaiseAndSetIfChanged(ref _localPath, value); }
+            get => _localPath;
+            set => this.RaiseAndSetIfChanged(ref _localPath, value);
         }
 
         [Required]
         public string Name
         {
-            get { return _name; }
-            set { this.RaiseAndSetIfChanged(ref _name, value); }
+            get => _name;
+            set => this.RaiseAndSetIfChanged(ref _name, value);
         }
 
         public string Description
         {
-            get { return _description; }
-            set { this.RaiseAndSetIfChanged(ref _description, value); }
+            get => _description;
+            set => this.RaiseAndSetIfChanged(ref _description, value);
         }
 
         public bool IsPrivate
         {
-            get { return _isPrivate; }
-            set { this.RaiseAndSetIfChanged(ref _isPrivate, value); }
+            get => _isPrivate;
+            set => this.RaiseAndSetIfChanged(ref _isPrivate, value);
         }
 
         public string GitClientType => _gitClientService.GitClientType;
@@ -81,6 +80,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _gitService = gitService;
             _fileService = fileService;
+
             var path = _gitService.GetDefaultRepoPath();
             LocalPath = !string.IsNullOrEmpty(path) ? path : Paths.DefaultRepositoryPath;
         }
@@ -133,15 +133,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             if (string.IsNullOrEmpty(Name))
                 return false;
 
-            return !Directory.Exists(Path.Combine(clonePath, Name));
+            return !_fileService.Exists(Path.Combine(clonePath, Name));
         }
 
         public bool ClonePathIsPath(string clonePath)
         {
-            return Path.IsPathRooted(clonePath) && clonePath.IndexOfAny(Path.GetInvalidPathChars()) == -1;
+            return _fileService.IsPath(clonePath);
         }
 
         public event EventHandler Closed;
-     
+
     }
 }
