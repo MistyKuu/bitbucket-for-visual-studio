@@ -75,9 +75,7 @@ namespace GitClientVS.UI.Behaviours
 
             if (GetSaveScrollPositionProperty(element))
             {
-                double offset;
-                if (scrollViewer.Tag != null
-                     && double.TryParse(scrollViewer.Tag.ToString(), out offset))
+                if (scrollViewer.Tag != null && double.TryParse(scrollViewer.Tag.ToString(), out double offset))
                 {
                     scrollViewer.ScrollToVerticalOffset(offset);
                 }
@@ -95,20 +93,15 @@ namespace GitClientVS.UI.Behaviours
                 throw new InvalidOperationException("ScrollViewer not found.");
             }
 
-            element.MouseWheel += delegate
-            {
-                // listbox not called
-            };
-
-            scrollViewer.MouseWheel += delegate
-            {
-                // scrollviewer not called
-                var visibility = scrollViewer.ComputedVerticalScrollBarVisibility;
-                if (visibility == Visibility.Collapsed)
-                {
-                    //try to fetch data
-                }
-            };
+            //scrollViewer.PreviewMouseWheel += delegate TODO FIX THIS
+            //{
+            //    var visibility = scrollViewer.ComputedVerticalScrollBarVisibility;
+            //    if (visibility == Visibility.Collapsed) //this is the case when there aren't enough elements in a list
+            //    {
+            //        var atEnd = GetAtEndCommand(element);
+            //        atEnd?.Execute(null);
+            //    }
+            //};
 
             var dpd = DependencyPropertyDescriptor.FromProperty(ScrollViewer.VerticalOffsetProperty, typeof(ScrollViewer));
             dpd.AddValueChanged(scrollViewer, delegate
