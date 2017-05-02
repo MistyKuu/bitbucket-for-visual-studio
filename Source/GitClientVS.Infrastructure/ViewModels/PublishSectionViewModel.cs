@@ -21,7 +21,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private IGitClientService _gitClientService;
         private IGitService _gitService;
         private readonly IUserInformationService _userInformationService;
-        private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitWatcher _gitWatcher;
         private ReactiveCommand _publishRepositoryCommand;
         private ReactiveCommand _initializeCommand;
@@ -36,6 +35,54 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand PublishRepositoryCommand => _publishRepositoryCommand;
         public ICommand InitializeCommand => _initializeCommand;
 
+        [Required]
+        public string RepositoryName
+        {
+            get => _repositoryName;
+            set => this.RaiseAndSetIfChanged(ref _repositoryName, value);
+        }
+
+        public string Description
+        {
+            get => _description;
+            set => this.RaiseAndSetIfChanged(ref _description, value);
+        }
+
+        public bool IsPrivate
+        {
+            get => _isPrivate;
+            set => this.RaiseAndSetIfChanged(ref _isPrivate, value);
+        }
+
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
+        }
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+        }
+
+        public List<string> Owners
+        {
+            get => _owners;
+            set => this.RaiseAndSetIfChanged(ref _owners, value);
+        }
+
+        [Required]
+        public string SelectedOwner
+        {
+            get => _selectedOwner;
+            set => this.RaiseAndSetIfChanged(ref _selectedOwner, value);
+        }
+
+        public string GitClientType => _gitClientService.GitClientType;
+
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _publishRepositoryCommand, _initializeCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _publishRepositoryCommand, _initializeCommand };
+
 
         [ImportingConstructor]
         public PublishSectionViewModel(
@@ -43,74 +90,17 @@ namespace GitClientVS.Infrastructure.ViewModels
             IGitService gitService,
             IFileService fileService,
             IUserInformationService userInformationService,
-            IEventAggregatorService eventAggregator,
             IGitWatcher gitWatcher
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _userInformationService = userInformationService;
-            _eventAggregator = eventAggregator;
             _gitWatcher = gitWatcher;
         }
 
 
-        [Required]
-        public string RepositoryName
-        {
-            get { return _repositoryName; }
-            set { this.RaiseAndSetIfChanged(ref _repositoryName, value); }
-        }
-
-        public string Description
-        {
-            get { return _description; }
-            set { this.RaiseAndSetIfChanged(ref _description, value); }
-        }
-
-        public bool IsPrivate
-        {
-            get { return _isPrivate; }
-            set { this.RaiseAndSetIfChanged(ref _isPrivate, value); }
-        }
-
-        public string ErrorMessage
-        {
-            get { return _errorMessage; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _errorMessage, value);
-            }
-        }
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _isLoading, value);
-            }
-        }
-
-        public List<string> Owners
-        {
-            get { return _owners; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _owners, value);
-            }
-        }
-
-        [Required]
-        public string SelectedOwner
-        {
-            get { return _selectedOwner; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _selectedOwner, value);
-            }
-        }
-        public string GitClientType => _gitClientService.GitClientType;
-
+       
         public void InitializeCommands()
         {
             _publishRepositoryCommand = ReactiveCommand.CreateFromTask(_ => PublishRepository(), CanPublishRepository());
@@ -151,9 +141,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             return IsObjectValid();
         }
-
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _publishRepositoryCommand, _initializeCommand };
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _publishRepositoryCommand, _initializeCommand };
 
 
     }
