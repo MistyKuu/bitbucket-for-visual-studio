@@ -122,10 +122,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             if (!IsEnterprise)
                 return true;
+            
 
-            Uri outUri;
-
-            return (Uri.TryCreate(host, UriKind.Absolute, out outUri) &&
+            return (Uri.TryCreate(host, UriKind.Absolute, out Uri outUri) &&
                     (outUri.Scheme == Uri.UriSchemeHttp || outUri.Scheme == Uri.UriSchemeHttps));
         }
 

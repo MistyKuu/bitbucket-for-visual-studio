@@ -31,8 +31,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<Unit, Unit> _disapproveCommand;
         private ReactiveCommand<Unit, Unit> _declineCommand;
         private ReactiveCommand<Unit, Unit> _mergeCommand;
-        private ReactiveCommand _confirmationMergeCommand;
-        private ReactiveCommand _confirmationDeclineCommand;
+        private ReactiveCommand<Unit, Unit> _confirmationMergeCommand;
+        private ReactiveCommand<Unit, Unit> _confirmationDeclineCommand;
         private GitPullRequest _pullRequest;
         private string _mainSectionCommandText;
         private Theme _currentTheme;
@@ -45,36 +45,50 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public string MainSectionCommandText
         {
-            get { return _mainSectionCommandText; }
-            set { this.RaiseAndSetIfChanged(ref _mainSectionCommandText, value); }
+            get => _mainSectionCommandText;
+            set => this.RaiseAndSetIfChanged(ref _mainSectionCommandText, value);
         }
 
         public GitPullRequest PullRequest
         {
-            get { return _pullRequest; }
-            set { this.RaiseAndSetIfChanged(ref _pullRequest, value); }
+            get => _pullRequest;
+            set => this.RaiseAndSetIfChanged(ref _pullRequest, value);
         }
 
         public Theme CurrentTheme
         {
-            get { return _currentTheme; }
-            set { this.RaiseAndSetIfChanged(ref _currentTheme, value); }
+            get => _currentTheme;
+            set => this.RaiseAndSetIfChanged(ref _currentTheme, value);
         }
 
         public ReactiveList<PullRequestActionModel> ActionCommands
         {
-            get { return _actionCommands; }
-            set { this.RaiseAndSetIfChanged(ref _actionCommands, value); }
+            get => _actionCommands;
+            set => this.RaiseAndSetIfChanged(ref _actionCommands, value);
         }
 
         public bool HasAuthorApproved
         {
-            get { return _hasAuthorApproved; }
-            set { this.RaiseAndSetIfChanged(ref _hasAuthorApproved, value); }
+            get => _hasAuthorApproved;
+            set => this.RaiseAndSetIfChanged(ref _hasAuthorApproved, value);
         }
 
         public PullRequestDiffModel PullRequestDiffModel { get; set; }
 
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand };
+
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
+        }
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+        }
 
         [ImportingConstructor]
         public PullRequestsDetailViewModel(
@@ -232,24 +246,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             };
 
             await _gitClientService.MergePullRequest(gitMergeRequest);
-        }
-
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand };
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand };
-
-        public string ErrorMessage
-        {
-            get { return _errorMessage; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _errorMessage, value);
-            }
-        }
-
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
         }
     }
 }
