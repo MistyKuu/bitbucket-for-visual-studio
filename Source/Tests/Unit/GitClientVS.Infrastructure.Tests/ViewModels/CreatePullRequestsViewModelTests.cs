@@ -178,14 +178,17 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitService.Expect(x => x.GetActiveRepository()).Return(activeRepository);
             _gitClientService.Expect(x => x.GetBranches()).Return(remoteBranches.FromTaskAsync());
 
-            _gitClientService.Expect(x => x.GetPullRequestForBranches(Arg<string>.Is.Anything, Arg<string>.Is.Anything))
+            _gitClientService
+                .Expect(x => x.GetPullRequestForBranches(Arg<string>.Is.Anything, Arg<string>.Is.Anything))
                 .Throw(new Exception());
+
             _sut.ErrorMessage = null;
 
             _sut.Initialize();
 
             _gitClientService.VerifyAllExpectations();
             Assert.IsNotNull(_sut.ErrorMessage);
+            //todo solve it later, it works differently when run from wpf app
         }
 
         [Test]
@@ -199,6 +202,105 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
             Assert.IsNotNull(_sut.ErrorMessage);
         }
+
+        [Test]
+        public void CreatePullRequest_PullRequestDoesntExist_ShouldCreatePullRequestAndNavigateBack()
+        {
+            _sut.RemotePullRequest = null;
+            _sut.Title = Guid.NewGuid().ToString();
+            _sut.Description = Guid.NewGuid().ToString();
+            _sut.SourceBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
+            _sut.DestinationBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
+            _sut.CloseSourceBranch = true;
+            _sut.SelectedReviewers = new ReactiveList<GitUser>() { new GitUser() { Username = "User1" }, new GitUser() { Username = "User2" } };
+            _pageNavigationService.Expect(x => x.NavigateBack(true));
+
+            _gitClientService.Expect(x => x.CreatePullRequest(Arg<GitPullRequest>.Matches(y =>
+                    y.Id == 0 &&
+                    y.Title == _sut.Title &&
+                    y.Description == _sut.Description &&
+                    y.SourceBranch == _sut.SourceBranch.Name &&
+                    y.DestinationBranch == _sut.DestinationBranch.Name &&
+                    y.CloseSourceBranch == _sut.CloseSourceBranch &&
+                    y.Reviewers.Count == _sut.SelectedReviewers.Count
+                )))
+                .Return(Task.CompletedTask);
+
+            _sut.CreateNewPullRequestCommand.Execute(null);
+
+            _gitClientService.VerifyAllExpectations();
+            _pageNavigationService.VerifyAllExpectations();
+        }
+
+        [Test]
+        public void CreatePullRequest_PullRequestExists_ShouldUpdatePullRequestAndNavigateBack()
+        {
+            _sut.RemotePullRequest = new GitPullRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
+            {
+                Id = 15,
+                Version = Guid.NewGuid().ToString()
+            };
+            _sut.Title = Guid.NewGuid().ToString();
+            _sut.Description = Guid.NewGuid().ToString();
+            _sut.SourceBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
+            _sut.DestinationBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
+            _sut.CloseSourceBranch = true;
+            _sut.SelectedReviewers = new ReactiveList<GitUser>() { new GitUser() { Username = "User1" }, new GitUser() { Username = "User2" } };
+
+            _pageNavigationService.Expect(x => x.NavigateBack(true));
+            _gitClientService.Expect(x => x.UpdatePullRequest(Arg<GitPullRequest>.Matches(y =>
+                                y.Id == _sut.RemotePullRequest.Id &&
+                                y.Title == _sut.Title &&
+                                y.Description == _sut.Description &&
+                                y.SourceBranch == _sut.SourceBranch.Name &&
+                                y.DestinationBranch == _sut.DestinationBranch.Name &&
+                                y.CloseSourceBranch == _sut.CloseSourceBranch &&
+                                y.Reviewers.Count == _sut.SelectedReviewers.Count &&
+                                y.Version == _sut.RemotePullRequest.Version
+                            )))
+                            .Return(Task.CompletedTask);
+
+            _sut.CreateNewPullRequestCommand.Execute(null);
+
+            _gitClientService.VerifyAllExpectations();
+            _pageNavigationService.VerifyAllExpectations();
+        }
+
+        [Test]
+        public void CreatePullRequestCanExecute_CorrectParameters_ShouldBeEnabled()
+        {
+            using (_sut.SuppressChangeNotifications())
+            {
+                _sut.SourceBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
+                _sut.DestinationBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
+            }
+
+            _sut.ForcePropertyValidation(nameof(_sut.SourceBranch));
+            _sut.ForcePropertyValidation(nameof(_sut.DestinationBranch));
+
+            _sut.Title = Guid.NewGuid().ToString();
+
+            Assert.IsTrue(_sut.CreateNewPullRequestCommand.CanExecute(null));
+        }
+
+        [Test]
+        public void CreatePullRequestCanExecute_IncorrectParameters_ShouldBeEnabled()
+        {
+            using (_sut.SuppressChangeNotifications())
+            {
+                _sut.SourceBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
+                _sut.DestinationBranch = null;
+            }
+
+            _sut.ForcePropertyValidation(nameof(_sut.SourceBranch));
+            _sut.ForcePropertyValidation(nameof(_sut.DestinationBranch));
+
+            _sut.Title = Guid.NewGuid().ToString();
+
+            Assert.IsFalse(_sut.CreateNewPullRequestCommand.CanExecute(null));
+        }
+
 
         private static IEnumerable<GitBranch> GetRemoteBranches()
         {

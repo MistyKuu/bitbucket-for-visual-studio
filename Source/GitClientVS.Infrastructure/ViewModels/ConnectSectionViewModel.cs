@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using System.Linq;
-using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
 using GitClientVS.Contracts.Interfaces;
 using ReactiveUI;
-using System.Reactive.Linq;
 using System.Windows.Input;
 using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;

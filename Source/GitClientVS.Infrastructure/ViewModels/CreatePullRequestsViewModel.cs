@@ -6,11 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using BitBucket.REST.API.Models.Standard;
 using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
@@ -20,7 +17,6 @@ using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
 using log4net;
-using ParseDiff;
 using ReactiveUI;
 using WpfControls;
 
@@ -265,7 +261,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private IObservable<bool> CanCreatePullRequest()
         {
-            return ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
+            return ValidationObservable.Select(x => Unit.Default)
+                .Merge(Changed.Select(x => Unit.Default))
+                .Select(x => CanExecute()).StartWith(CanExecute());
         }
 
         private bool CanExecute()

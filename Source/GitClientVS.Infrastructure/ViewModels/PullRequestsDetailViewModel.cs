@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GitClientVS.Contracts.Events;
@@ -16,8 +12,6 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
-using GitClientVS.Infrastructure.Extensions;
-using ParseDiff;
 using ReactiveUI;
 
 namespace GitClientVS.Infrastructure.ViewModels

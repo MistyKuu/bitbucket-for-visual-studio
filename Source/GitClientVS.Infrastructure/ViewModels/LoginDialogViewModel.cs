@@ -2,26 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
-using System.Reactive;
-using System.Text;
 using System.Threading.Tasks;
-using GitClientVS.Contracts.Interfaces;
 using ReactiveUI;
 using System.Reactive.Linq;
-using System.Security;
 using System.Windows.Input;
-using BitBucket.REST.API;
-using BitBucket.REST.API.Models;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
-using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using log4net;
-using log4net.Config;
-using GitClientVS.Infrastructure.Extensions;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
