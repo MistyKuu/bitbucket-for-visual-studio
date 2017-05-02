@@ -23,9 +23,7 @@ namespace GitClientVS.Infrastructure.ViewModels
     public class PullRequestsMainViewModel : ViewModelBase, IPullRequestsMainViewModel
     {
         private readonly IGitClientService _gitClientService;
-        private readonly IGitService _gitService;
         private readonly IPageNavigationService<IPullRequestsWindow> _pageNavigationService;
-        private readonly ICacheService _cacheService;
         private ReactiveCommand _initializeCommand;
         private ReactiveCommand _goToDetailsCommand;
         private ReactiveCommand _loadNextPageCommand;
@@ -38,43 +36,36 @@ namespace GitClientVS.Infrastructure.ViewModels
         private GitUser _selectedAuthor;
         private GitPullRequestStatus? _selectedStatus;
         private GitPullRequest _selectedPullRequest;
-        private GitRemoteRepository _currentRepository;
         private PagedCollection<GitPullRequest> _gitPullRequests;
 
         public GitUser SelectedAuthor
         {
-            get { return _selectedAuthor; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _selectedAuthor, value);
-            }
+            get => _selectedAuthor;
+            set => this.RaiseAndSetIfChanged(ref _selectedAuthor, value);
         }
 
         public GitPullRequestStatus? SelectedStatus
         {
-            get { return _selectedStatus; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _selectedStatus, value);
-            }
+            get => _selectedStatus;
+            set => this.RaiseAndSetIfChanged(ref _selectedStatus, value);
         }
 
         public List<GitUser> Authors
         {
-            get { return _authors; }
-            set { this.RaiseAndSetIfChanged(ref _authors, value); }
+            get => _authors;
+            set => this.RaiseAndSetIfChanged(ref _authors, value);
         }
 
         public GitPullRequest SelectedPullRequest
         {
-            get { return _selectedPullRequest; }
-            set { this.RaiseAndSetIfChanged(ref _selectedPullRequest, value); }
+            get => _selectedPullRequest;
+            set => this.RaiseAndSetIfChanged(ref _selectedPullRequest, value);
         }
 
         public string ErrorMessage
         {
-            get { return _errorMessage; }
-            set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
+            get => _errorMessage;
+            set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
         }
 
         public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _loadNextPageCommand, _refreshPullRequestsCommand };
@@ -82,14 +73,14 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public bool IsLoading
         {
-            get { return _isLoading; }
-            set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
         }
 
         public PagedCollection<GitPullRequest> GitPullRequests
         {
-            get { return _gitPullRequests; }
-            set { this.RaiseAndSetIfChanged(ref _gitPullRequests, value); }
+            get => _gitPullRequests;
+            set => this.RaiseAndSetIfChanged(ref _gitPullRequests, value);
         }
 
         public string PageTitle { get; } = "Pull Requests";
@@ -116,16 +107,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         [ImportingConstructor]
         public PullRequestsMainViewModel(
             IGitClientService gitClientService,
-            IGitService gitService,
-            IPageNavigationService<IPullRequestsWindow> pageNavigationService,
-            ICacheService cacheService
+            IPageNavigationService<IPullRequestsWindow> pageNavigationService
             )
         {
             _gitClientService = gitClientService;
-            _gitService = gitService;
             _pageNavigationService = pageNavigationService;
-            _cacheService = cacheService;
-            _currentRepository = _gitService.GetActiveRepository();
             SelectedStatus = GitPullRequestStatus.Open;
             Authors = new List<GitUser>();
         }
@@ -151,7 +137,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _initializeCommand = ReactiveCommand.CreateFromTask(async _ =>
             {
-                Authors = (await _gitClientService.GetPullRequestsAuthors()).ToList();
+                if (_isInitialized)
+                    return;
+
                 await RefreshPullRequests();
                 _isInitialized = true;
             }, CanLoadPullRequests());
@@ -164,6 +152,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task RefreshPullRequests()
         {
+            Authors = (await _gitClientService.GetPullRequestsAuthors()).ToList();
             GitPullRequests = new PagedCollection<GitPullRequest>(GetPullRequestsPage, PageSize);
             await GitPullRequests.LoadNextPageAsync();
         }
