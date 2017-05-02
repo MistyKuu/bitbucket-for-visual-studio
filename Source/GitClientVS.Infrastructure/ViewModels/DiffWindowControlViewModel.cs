@@ -30,29 +30,29 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public string ErrorMessage
         {
-            get { return _errorMessage; }
-            set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
+            get => _errorMessage;
+            set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
         }
 
 
 
         public bool IsLoading
         {
-            get { return _isLoading; }
-            set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
         }
 
         public Theme CurrentTheme
         {
-            get { return _currentTheme; }
-            set { this.RaiseAndSetIfChanged(ref _currentTheme, value); }
+            get => _currentTheme;
+            set => this.RaiseAndSetIfChanged(ref _currentTheme, value);
         }
 
 
         public FileDiff FileDiff
         {
-            get { return _fileDiff; }
-            set { this.RaiseAndSetIfChanged(ref _fileDiff, value); }
+            get => _fileDiff;
+            set => this.RaiseAndSetIfChanged(ref _fileDiff, value);
         }
 
         public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand };

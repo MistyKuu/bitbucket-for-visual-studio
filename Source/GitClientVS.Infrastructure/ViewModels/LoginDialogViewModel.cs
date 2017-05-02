@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
+using System.Reactive;
 using System.Threading.Tasks;
 using ReactiveUI;
 using System.Reactive.Linq;
@@ -17,15 +18,12 @@ namespace GitClientVS.Infrastructure.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class LoginDialogViewModel : ViewModelBase, ILoginDialogViewModel
     {
-        private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitClientService _gitClientService;
-        private readonly IUserInformationService _userInformationService;
         private string _login;
         private string _password;
         private ReactiveCommand _connectCommand;
         private string _errorMessage;
         private bool _isLoading;
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _host;
         private bool _isEnterprise;
 
@@ -35,20 +33,49 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public bool IsLoading
         {
-            get { return _isLoading; }
-            set { this.RaiseAndSetIfChanged(ref _isLoading, value); }
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+        }
+        
+        [Required]
+        public string Login
+        {
+            get => _login;
+            set => this.RaiseAndSetIfChanged(ref _login, value);
+        }
+
+        [Required]
+        public string Password
+        {
+            get => _password;
+            set => this.RaiseAndSetIfChanged(ref _password, value);
+        }
+
+        [Required]
+        public bool IsEnterprise
+        {
+            get => _isEnterprise;
+            set => this.RaiseAndSetIfChanged(ref _isEnterprise, value);
+        }
+
+        [ValidatesViaMethod(AllowBlanks = true, AllowNull = true, Name = nameof(ValidateHost), ErrorMessage = "Url is not valid. It must include schema.")]
+        public string Host
+        {
+            get => _host;
+            set => this.RaiseAndSetIfChanged(ref _host, value);
+        }
+
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
         }
 
 
         [ImportingConstructor]
-        public LoginDialogViewModel(
-            IEventAggregatorService eventAggregator,
-            IGitClientService gitClientService,
-            IUserInformationService userInformationService)
+        public LoginDialogViewModel(IGitClientService gitClientService)
         {
-            _eventAggregator = eventAggregator;
             _gitClientService = gitClientService;
-            _userInformationService = userInformationService;
             IsEnterprise = false;
         }
 
@@ -81,47 +108,14 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private IObservable<bool> CanExecuteObservable()
         {
-            return ValidationObservable.Select(x => CanExecute()).StartWith(CanExecute());
+            return ValidationObservable.Select(x => Unit.Default)
+                .Merge(Changed.Select(x => Unit.Default))
+                .Select(x => CanExecute()).StartWith(CanExecute());
         }
 
         private bool CanExecute()
         {
             return IsObjectValid();
-        }
-
-
-        [Required]
-        public string Login
-        {
-            get { return _login; }
-            set { this.RaiseAndSetIfChanged(ref _login, value); }
-        }
-
-        [Required]
-        public string Password
-        {
-            get { return _password; }
-            set { this.RaiseAndSetIfChanged(ref _password, value); }
-        }
-
-        [Required]
-        public bool IsEnterprise
-        {
-            get { return _isEnterprise; }
-            set { this.RaiseAndSetIfChanged(ref _isEnterprise, value); }
-        }
-
-        [ValidatesViaMethod(AllowBlanks = true, AllowNull = true, Name = nameof(ValidateHost), ErrorMessage = "Url is not valid. It must include schema.")]
-        public string Host
-        {
-            get { return _host; }
-            set { this.RaiseAndSetIfChanged(ref _host, value); }
-        }
-
-        public string ErrorMessage
-        {
-            get { return _errorMessage; }
-            set { this.RaiseAndSetIfChanged(ref _errorMessage, value); }
         }
 
         public bool ValidateHost(string host)
