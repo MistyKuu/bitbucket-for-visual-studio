@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GitClientVS.Contracts.Interfaces.Services;
@@ -162,11 +164,9 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitService.Expect(x => x.CloneRepository(sut.SelectedRepository.CloneUrl, sut.SelectedRepository.Name, sut.ClonePath));
 
             sut.Initialize();
-            sut.CloneCommand.Execute(null);
+            ((ReactiveCommand<Unit,Unit>)sut.CloneCommand).Execute(Unit.Default).Wait(); //todo temporary
 
             Assert.That(closed, Is.EqualTo(true));
-
-            sut.CloneCommand.Execute(null);
         }
 
 

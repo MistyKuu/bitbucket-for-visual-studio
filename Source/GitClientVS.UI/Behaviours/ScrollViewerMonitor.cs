@@ -47,8 +47,7 @@ namespace GitClientVS.UI.Behaviours
         }
 
 
-        public static void OnDpdChanged(
-            DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public static void OnDpdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             FrameworkElement element = (FrameworkElement)d;
             if (element != null)
@@ -89,11 +88,27 @@ namespace GitClientVS.UI.Behaviours
         {
             FrameworkElement element = (FrameworkElement)sender;
             element.Loaded -= AssignCommand;
+
             ScrollViewer scrollViewer = GetDescendantByType<ScrollViewer>(element);
             if (scrollViewer == null)
             {
                 throw new InvalidOperationException("ScrollViewer not found.");
             }
+
+            element.MouseWheel += delegate
+            {
+                // listbox not called
+            };
+
+            scrollViewer.MouseWheel += delegate
+            {
+                // scrollviewer not called
+                var visibility = scrollViewer.ComputedVerticalScrollBarVisibility;
+                if (visibility == Visibility.Collapsed)
+                {
+                    //try to fetch data
+                }
+            };
 
             var dpd = DependencyPropertyDescriptor.FromProperty(ScrollViewer.VerticalOffsetProperty, typeof(ScrollViewer));
             dpd.AddValueChanged(scrollViewer, delegate
@@ -109,6 +124,7 @@ namespace GitClientVS.UI.Behaviours
             });
         }
 
+       
 
         public static TType GetDescendantByType<TType>(Visual element) where TType : Visual
         {

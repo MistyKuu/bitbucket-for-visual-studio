@@ -23,8 +23,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly ICacheService _cacheService;
         private readonly IUserInformationService _userInfoService;
         private IView _currentView;
-        private ReactiveCommand _prevCommand;
-        private ReactiveCommand _nextCommand;
+        private ReactiveCommand<Unit,Unit> _prevCommand;
+        private ReactiveCommand<Unit, Unit> _nextCommand;
         private IWithPageTitle _currentViewModel;
         private Theme _currentTheme;
 
@@ -33,26 +33,20 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public IView CurrentView
         {
-            get { return _currentView; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _currentView, value);
-            }
+            get => _currentView;
+            set => this.RaiseAndSetIfChanged(ref _currentView, value);
         }
 
         public IWithPageTitle CurrentViewModel
         {
-            get { return _currentViewModel; }
-            set { this.RaiseAndSetIfChanged(ref _currentViewModel, value); }
+            get => _currentViewModel;
+            set => this.RaiseAndSetIfChanged(ref _currentViewModel, value);
         }
 
         public Theme CurrentTheme
         {
-            get { return _currentTheme; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _currentTheme, value);
-            }
+            get => _currentTheme;
+            set => this.RaiseAndSetIfChanged(ref _currentTheme, value);
         }
 
         public ICommand PrevCommand => _prevCommand;
@@ -97,7 +91,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 .Merge(_eventAggregator.GetEvent<ConnectionChangedEvent>().Select(x => Unit.Default))
                 .Subscribe(_ => OnClosed());
 
-            this.WhenAnyObservable(x => x._nextCommand.IsExecuting, x => x._prevCommand.IsExecuting)
+            this.WhenAnyObservable(x => x._nextCommand, x => x._prevCommand)
                 .Subscribe(_ => ConfirmationViewModel.Event = null);
         }
 
