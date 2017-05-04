@@ -87,16 +87,21 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 Name = Guid.NewGuid().ToString()
             };
 
-            _gitClientService.Expect(x => x.CreateRepositoryAsync(Arg<GitRemoteRepository>.Matches(y =>
-                    y.Name == _sut.Name &&
-                    y.Description == _sut.Description &&
-                    y.IsPrivate == _sut.IsPrivate
-                )))
-                .Return(remoteRepo.FromTaskAsync());
-
             _gitService.Expect(x => x.CloneRepository(remoteRepo.CloneUrl, remoteRepo.Name, _sut.LocalPath));
 
+            var result = _gitClientService
+                .Capture()
+                .Args<GitRemoteRepository, GitRemoteRepository>((s, repo) => s.CreateRepositoryAsync(repo), remoteRepo);
+
             _sut.CreateCommand.Execute(null);
+
+            Assert.AreEqual(1, result.CallCount);
+
+            var args = result.Args[0];
+
+            Assert.AreEqual(_sut.Name, args.Name);
+            Assert.AreEqual(_sut.Description, args.Description);
+            Assert.AreEqual(_sut.IsPrivate, args.IsPrivate);
 
             _gitClientService.VerifyAllExpectations();
             _gitService.VerifyAllExpectations();

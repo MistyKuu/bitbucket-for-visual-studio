@@ -99,14 +99,20 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _sut.Login = Guid.NewGuid().ToString();
             _sut.Password = Guid.NewGuid().ToString();
 
-            _gitClientService.Expect(x => x.LoginAsync(Arg<GitCredentials>.Matches(y =>
-                y.Login == _sut.Login &&
-                y.Password == _sut.Password &&
-                y.Host == null &&
-                y.IsEnterprise == _sut.IsEnterprise
-            )));
+            var result = _gitClientService
+                .Capture()
+                .Args<GitCredentials>((s, repo) => s.LoginAsync(repo));
 
             _sut.ConnectCommand.Execute(null);
+
+            Assert.AreEqual(1, result.CallCount);
+
+            var args = result.Args[0];
+
+            Assert.AreEqual(_sut.Login, args.Login);
+            Assert.AreEqual(_sut.Password, args.Password);
+            Assert.AreEqual(null, args.Host);
+            Assert.AreEqual(_sut.IsEnterprise, args.IsEnterprise);
 
             _gitClientService.VerifyAllExpectations();
         }
@@ -121,14 +127,20 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _sut.Password = Guid.NewGuid().ToString();
             _sut.Host = "http://abc.com";
 
-            _gitClientService.Expect(x => x.LoginAsync(Arg<GitCredentials>.Matches(y =>
-                y.Login == _sut.Login &&
-                y.Password == _sut.Password &&
-                y.Host.ToString() == new Uri(_sut.Host).ToString() &&
-                y.IsEnterprise == _sut.IsEnterprise
-            )));
+            var result = _gitClientService
+                .Capture()
+                .Args<GitCredentials>((s, cred) => s.LoginAsync(cred));
 
             _sut.ConnectCommand.Execute(null);
+
+            Assert.AreEqual(1, result.CallCount);
+
+            var args = result.Args[0];
+
+            Assert.AreEqual(_sut.Login, args.Login);
+            Assert.AreEqual(_sut.Password, args.Password);
+            Assert.AreEqual(new Uri(_sut.Host).ToString(), args.Host.ToString());
+            Assert.AreEqual(_sut.IsEnterprise, args.IsEnterprise);
 
             _gitClientService.VerifyAllExpectations();
         }

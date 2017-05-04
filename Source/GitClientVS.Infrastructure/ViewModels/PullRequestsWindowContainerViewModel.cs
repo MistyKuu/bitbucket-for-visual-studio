@@ -82,15 +82,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             yield return _pageNavigationService.Where(x => x.Window == typeof(IPullRequestsWindow)).Subscribe(ChangeView);
             yield return _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(ev => CurrentTheme = ev.Theme);
             yield return _eventAggregator.GetEvent<ShowConfirmationEvent>().Subscribe(ShowConfirmation);
-
-            this.WhenAnyValue(x => x.CurrentView).Where(x => x != null).Subscribe(_ => CurrentViewModel = CurrentView.DataContext as IWithPageTitle);
-            _eventAggregator
+            yield return _eventAggregator
                 .GetEvent<ActiveRepositoryChangedEvent>()
                 .Where(x => x.IsRepositoryDifferent)
                 .Select(x => Unit.Default)
                 .Merge(_eventAggregator.GetEvent<ConnectionChangedEvent>().Select(x => Unit.Default))
                 .Subscribe(_ => OnClosed());
-
+            
+            this.WhenAnyValue(x => x.CurrentView).Where(x => x != null).Subscribe(_ => CurrentViewModel = CurrentView.DataContext as IWithPageTitle);
+            
             this.WhenAnyObservable(x => x._nextCommand, x => x._prevCommand)
                 .Subscribe(_ => ConfirmationViewModel.Event = null);
         }

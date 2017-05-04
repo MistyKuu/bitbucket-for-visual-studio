@@ -117,18 +117,23 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _sut.Description = "description";
             _sut.IsPrivate = true;
 
-            _gitClientService.Expect(x => x.CreateRepositoryAsync(Arg<GitRemoteRepository>.Matches(y =>
-                    y.Name == "repoName-with-space" &&
-                    y.Description == _sut.Description &&
-                    y.IsPrivate == _sut.IsPrivate &&
-                    y.Owner == _sut.SelectedOwner
-                )))
-                .Return(remoteRepo.FromTaskAsync());
-
             _gitService.Expect(x => x.PublishRepository(remoteRepo));
             _gitWatcher.Expect(x => x.Refresh());
 
+            var result = _gitClientService
+                .Capture()
+                .Args<GitRemoteRepository, GitRemoteRepository>((s, repo) => s.CreateRepositoryAsync(repo), remoteRepo);
+
             _sut.PublishRepositoryCommand.Execute(null);
+
+            Assert.AreEqual(1, result.CallCount);
+
+            var args = result.Args[0];
+
+            Assert.AreEqual("repoName-with-space", args.Name);
+            Assert.AreEqual(_sut.Description, args.Description);
+            Assert.AreEqual(_sut.IsPrivate, args.IsPrivate);
+            Assert.AreEqual(_sut.SelectedOwner, args.Owner);
 
             _gitClientService.VerifyAllExpectations();
             _gitService.VerifyAllExpectations();

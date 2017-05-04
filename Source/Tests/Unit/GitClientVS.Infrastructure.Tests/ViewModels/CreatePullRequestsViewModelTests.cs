@@ -67,7 +67,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _sut.Initialize();
 
             Assert.That(_sut.SourceBranch, Is.EqualTo(remoteBranches.First(x => x.Name == "RemoteHeadBranchName")));
-            Assert.That(_sut.DestinationBranch, Is.EqualTo(remoteBranches.First(x => x.Name == "RemoteDefaultBranchName")));
+            Assert.That(_sut.DestinationBranch,
+                Is.EqualTo(remoteBranches.First(x => x.Name == "RemoteDefaultBranchName")));
         }
 
         [Test]
@@ -97,9 +98,11 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             var srcBranch = remoteBranches.First(x => x.Name == "RemoteHeadBranchName");
             var dstBranch = remoteBranches.First(x => x.Name == "RemoteDefaultBranchName");
 
-            _gitClientService.Expect(x => x.GetPullRequestForBranches(srcBranch.Name, dstBranch.Name)).Return(pullRequest.FromTaskAsync());
+            _gitClientService.Expect(x => x.GetPullRequestForBranches(srcBranch.Name, dstBranch.Name))
+                .Return(pullRequest.FromTaskAsync());
             _gitClientService.Expect(x => x.GetCommitsRange(srcBranch, dstBranch)).Return(commits.FromTaskAsync());
-            _gitClientService.Expect(x => x.GetCommitsDiff(srcBranch.Target.Hash, dstBranch.Target.Hash)).Return(fileDiffs.FromTaskAsync());
+            _gitClientService.Expect(x => x.GetCommitsDiff(srcBranch.Target.Hash, dstBranch.Target.Hash))
+                .Return(fileDiffs.FromTaskAsync());
             _treeStructureGenerator.Expect(x => x.CreateFileTree(fileDiffs)).Return(treeFiles);
 
             _sut.Initialize();
@@ -133,9 +136,11 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             var srcBranch = remoteBranches.First(x => x.Name == "RemoteHeadBranchName");
             var dstBranch = remoteBranches.First(x => x.Name == "RemoteDefaultBranchName");
 
-            _gitClientService.Expect(x => x.GetPullRequestForBranches(srcBranch.Name, dstBranch.Name)).Return(Task.FromResult<GitPullRequest>(null));
+            _gitClientService.Expect(x => x.GetPullRequestForBranches(srcBranch.Name, dstBranch.Name))
+                .Return(Task.FromResult<GitPullRequest>(null));
             _gitClientService.Expect(x => x.GetCommitsRange(srcBranch, dstBranch)).Return(commits.FromTaskAsync());
-            _gitClientService.Expect(x => x.GetCommitsDiff(srcBranch.Target.Hash, dstBranch.Target.Hash)).Return(fileDiffs.FromTaskAsync());
+            _gitClientService.Expect(x => x.GetCommitsDiff(srcBranch.Target.Hash, dstBranch.Target.Hash))
+                .Return(fileDiffs.FromTaskAsync());
             _gitClientService.Expect(x => x.GetDefaultReviewers()).Return(defaultReviewers.FromTaskAsync());
             _treeStructureGenerator.Expect(x => x.CreateFileTree(fileDiffs)).Return(treeFiles);
 
@@ -164,7 +169,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _sut.Initialize();
 
             Assert.That(_sut.SourceBranch, Is.EqualTo(remoteBranches.OrderBy(x => x.Name).First()));
-            Assert.That(_sut.DestinationBranch, Is.EqualTo(remoteBranches.First(x => x.Name == "RemoteDefaultBranchName")));
+            Assert.That(_sut.DestinationBranch,
+                Is.EqualTo(remoteBranches.First(x => x.Name == "RemoteDefaultBranchName")));
             Assert.NotNull(_sut.Message);
         }
 
@@ -213,22 +219,27 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _sut.DestinationBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
             _sut.CloseSourceBranch = true;
             _sut.SelectedReviewers = new ReactiveList<GitUser>() { new GitUser() { Username = "User1" }, new GitUser() { Username = "User2" } };
+
             _pageNavigationService.Expect(x => x.NavigateBack(true));
 
-            _gitClientService.Expect(x => x.CreatePullRequest(Arg<GitPullRequest>.Matches(y =>
-                    y.Id == 0 &&
-                    y.Title == _sut.Title &&
-                    y.Description == _sut.Description &&
-                    y.SourceBranch == _sut.SourceBranch.Name &&
-                    y.DestinationBranch == _sut.DestinationBranch.Name &&
-                    y.CloseSourceBranch == _sut.CloseSourceBranch &&
-                    y.Reviewers.Count == _sut.SelectedReviewers.Count
-                )))
-                .Return(Task.CompletedTask);
+            var result = _gitClientService
+                .Capture()
+                .Args<GitPullRequest>((s, pullRequest) => s.CreatePullRequest(pullRequest));
 
             _sut.CreateNewPullRequestCommand.Execute(null);
 
-            _gitClientService.VerifyAllExpectations();
+            Assert.AreEqual(1, result.CallCount);
+
+            var args = result.Args[0];
+
+            Assert.AreEqual(0, args.Id);
+            Assert.AreEqual(_sut.Title, args.Title);
+            Assert.AreEqual(_sut.Description, args.Description);
+            Assert.AreEqual(_sut.SourceBranch.Name, args.SourceBranch);
+            Assert.AreEqual(_sut.DestinationBranch.Name, args.DestinationBranch);
+            Assert.AreEqual(_sut.CloseSourceBranch, args.CloseSourceBranch);
+            Assert.AreEqual(_sut.SelectedReviewers.Count, args.Reviewers.Count);
+
             _pageNavigationService.VerifyAllExpectations();
         }
 
@@ -246,24 +257,30 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _sut.SourceBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
             _sut.DestinationBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
             _sut.CloseSourceBranch = true;
-            _sut.SelectedReviewers = new ReactiveList<GitUser>() { new GitUser() { Username = "User1" }, new GitUser() { Username = "User2" } };
+            _sut.SelectedReviewers =
+                new ReactiveList<GitUser>() { new GitUser() { Username = "User1" }, new GitUser() { Username = "User2" } };
 
             _pageNavigationService.Expect(x => x.NavigateBack(true));
-            _gitClientService.Expect(x => x.UpdatePullRequest(Arg<GitPullRequest>.Matches(y =>
-                                y.Id == _sut.RemotePullRequest.Id &&
-                                y.Title == _sut.Title &&
-                                y.Description == _sut.Description &&
-                                y.SourceBranch == _sut.SourceBranch.Name &&
-                                y.DestinationBranch == _sut.DestinationBranch.Name &&
-                                y.CloseSourceBranch == _sut.CloseSourceBranch &&
-                                y.Reviewers.Count == _sut.SelectedReviewers.Count &&
-                                y.Version == _sut.RemotePullRequest.Version
-                            )))
-                            .Return(Task.CompletedTask);
+            
+            var result = _gitClientService
+                .Capture()
+                .Args<GitPullRequest>((s, pullRequest) => s.UpdatePullRequest(pullRequest));
 
             _sut.CreateNewPullRequestCommand.Execute(null);
 
-            _gitClientService.VerifyAllExpectations();
+            Assert.AreEqual(1, result.CallCount);
+
+            var args = result.Args[0];
+
+            Assert.AreEqual(_sut.RemotePullRequest.Id, args.Id);
+            Assert.AreEqual(_sut.Title, args.Title);
+            Assert.AreEqual(_sut.Description, args.Description);
+            Assert.AreEqual(_sut.SourceBranch.Name, args.SourceBranch);
+            Assert.AreEqual(_sut.DestinationBranch.Name, args.DestinationBranch);
+            Assert.AreEqual(_sut.CloseSourceBranch, args.CloseSourceBranch);
+            Assert.AreEqual(_sut.SelectedReviewers.Count, args.Reviewers.Count);
+            Assert.AreEqual(_sut.RemotePullRequest.Version, args.Version);
+
             _pageNavigationService.VerifyAllExpectations();
         }
 
@@ -306,9 +323,22 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         {
             return new List<GitBranch>()
             {
-                new GitBranch(){Name = "RemoteHeadBranchName",Target = new GitCommit(){Hash = Guid.NewGuid().ToString()}},
-                new GitBranch(){Name = "RemoteSecondBranchName",Target = new GitCommit(){Hash = Guid.NewGuid().ToString()}},
-                new GitBranch() { Name = "RemoteDefaultBranchName", IsDefault = true,Target = new GitCommit(){Hash = Guid.NewGuid().ToString()}},
+                new GitBranch()
+                {
+                    Name = "RemoteHeadBranchName",
+                    Target = new GitCommit() {Hash = Guid.NewGuid().ToString()}
+                },
+                new GitBranch()
+                {
+                    Name = "RemoteSecondBranchName",
+                    Target = new GitCommit() {Hash = Guid.NewGuid().ToString()}
+                },
+                new GitBranch()
+                {
+                    Name = "RemoteDefaultBranchName",
+                    IsDefault = true,
+                    Target = new GitCommit() {Hash = Guid.NewGuid().ToString()}
+                },
             };
         }
 
@@ -318,8 +348,13 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             {
                 Branches = new List<GitLocalBranch>()
                 {
-                    new GitLocalBranch() { IsHead = true, Name = "HeadBranch"},
-                    new GitLocalBranch() { IsHead = false, Name = "SecondBranch",TrackedBranchName = "RemoteSecondBranchName"},
+                    new GitLocalBranch() {IsHead = true, Name = "HeadBranch"},
+                    new GitLocalBranch()
+                    {
+                        IsHead = false,
+                        Name = "SecondBranch",
+                        TrackedBranchName = "RemoteSecondBranchName"
+                    },
                 }
             };
         }
@@ -335,6 +370,5 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 _treeStructureGenerator,
                 _commandsService);
         }
-
     }
 }

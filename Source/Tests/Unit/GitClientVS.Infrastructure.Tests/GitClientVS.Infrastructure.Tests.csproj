@@ -80,6 +80,9 @@
     <Reference Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Rx-XAML.2.2.5\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="WindowsBase" />
     <Reference Include="xunit.assert, Version=2.2.0.3545, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
@@ -95,9 +98,12 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Extensions\CaptureResult.cs" />
     <Compile Include="Extensions\TestExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Extensions\CaptureExpression.cs" />
     <Compile Include="ViewModels\CloneRepositoriesDialogViewModelTests.cs" />
+    <Compile Include="Extensions\MockExtensions.cs" />
     <Compile Include="ViewModels\PullRequestsMainViewModelTests.cs" />
     <Compile Include="ViewModels\PullRequestsDetailViewModelTests.cs" />
     <Compile Include="ViewModels\PublishSectionViewModelTests.cs" />
