@@ -12,7 +12,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 {
     public class EnterpriseTeamsClient : ApiClient, ITeamsClient
     {
-        public EnterpriseTeamsClient(EnterpriseBitbucketRestClient restClient, Connection connection) : base(restClient, connection)
+        public EnterpriseTeamsClient(IEnterpriseBitbucketRestClient restClient, Connection connection) : base(restClient, connection)
         {
 
         }

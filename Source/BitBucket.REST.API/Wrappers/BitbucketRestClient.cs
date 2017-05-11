@@ -8,12 +8,13 @@ using BitBucket.REST.API.QueryBuilders;
 using BitBucket.REST.API.Serializers;
 using RestSharp;
 using System.Linq;
+using BitBucket.REST.API.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace BitBucket.REST.API.Wrappers
 {
-    public class BitbucketRestClient : BitbucketRestClientBase
+    public class BitbucketRestClient : BitbucketRestClientBase, IBitbucketRestClient
     {
         public BitbucketRestClient(Connection connection) : base(connection)
         {

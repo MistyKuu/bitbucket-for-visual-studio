@@ -18,7 +18,7 @@ namespace BitBucket.REST.API.Clients.Standard
     {
         private readonly BitbucketRestClient _versionOneClient;
 
-        public RepositoriesClient(BitbucketRestClient restClient, BitbucketRestClient versionOneClient,
+        public RepositoriesClient(IBitbucketRestClient restClient, BitbucketRestClient versionOneClient,
             Connection connection) : base(restClient, connection)
         {
             _versionOneClient = versionOneClient;

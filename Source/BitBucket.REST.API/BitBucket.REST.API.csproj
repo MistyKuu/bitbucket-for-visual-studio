@@ -68,6 +68,8 @@
     <Compile Include="Clients\Enterprise\EnterpriseTeamsClient.cs" />
     <Compile Include="Clients\Enterprise\EnterpriseUserClient.cs" />
     <Compile Include="Clients\Enterprise\EnterprisePullRequestsClient.cs" />
+    <Compile Include="Interfaces\IBitbucketRestClient.cs" />
+    <Compile Include="Interfaces\IEnterpriseBitbucketRestClient.cs" />
     <Compile Include="Models\Standard\DefaultBranch.cs" />
     <Compile Include="Models\Standard\MergeRequest.cs" />
     <Compile Include="EnterpriseBitbucketClient.cs" />

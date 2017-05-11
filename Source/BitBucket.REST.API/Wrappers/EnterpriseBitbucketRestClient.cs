@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BitBucket.REST.API.Interfaces;
 using BitBucket.REST.API.Models.Enterprise;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
@@ -9,7 +10,7 @@ using RestSharp;
 
 namespace BitBucket.REST.API.Wrappers
 {
-    public class EnterpriseBitbucketRestClient : BitbucketRestClientBase
+    public class EnterpriseBitbucketRestClient : BitbucketRestClientBase, IEnterpriseBitbucketRestClient
     {
         public EnterpriseBitbucketRestClient(Connection connection) : base(connection)
         {

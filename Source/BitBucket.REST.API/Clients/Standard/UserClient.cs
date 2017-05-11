@@ -12,7 +12,7 @@ namespace BitBucket.REST.API.Clients.Standard
     public class UserClient : ApiClient, IUserClient
     {
 
-        public UserClient(BitbucketRestClient restClient, Connection connection) : base(restClient, connection)
+        public UserClient(IBitbucketRestClient restClient, Connection connection) : base(restClient, connection)
         {
 
         }

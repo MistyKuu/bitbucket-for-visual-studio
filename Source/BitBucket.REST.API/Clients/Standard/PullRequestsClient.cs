@@ -16,10 +16,14 @@ namespace BitBucket.REST.API.Clients.Standard
 {
     public class PullRequestsClient : ApiClient, IPullRequestsClient
     {
-        private readonly BitbucketRestClient _internalRestClient;
-        private readonly BitbucketRestClient _webClient;
+        private readonly IBitbucketRestClient _internalRestClient;
+        private readonly IBitbucketRestClient _webClient;
 
-        public PullRequestsClient(BitbucketRestClient restClient, BitbucketRestClient internalRestClient, BitbucketRestClient webClient, Connection connection) : base(restClient, connection)
+        public PullRequestsClient(
+            IBitbucketRestClient restClient, 
+            IBitbucketRestClient internalRestClient, 
+            IBitbucketRestClient webClient,
+            Connection connection) : base(restClient, connection)
         {
             _internalRestClient = internalRestClient;
             _webClient = webClient;

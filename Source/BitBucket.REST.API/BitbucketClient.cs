@@ -19,7 +19,11 @@ namespace BitBucket.REST.API
         public Connection ApiConnection { get; }
         public BitBucketType BitBucketType { get; } = BitBucketType.Standard;
 
-        public BitbucketClient(Connection apiConnection, Connection internalConnection, Connection versionOneApiConnection,Connection webConnection)
+        public BitbucketClient(
+            Connection apiConnection,
+            Connection internalConnection, 
+            Connection versionOneApiConnection,
+            Connection webConnection)
         {
             ApiConnection = apiConnection;
             var client = new BitbucketRestClient(apiConnection);

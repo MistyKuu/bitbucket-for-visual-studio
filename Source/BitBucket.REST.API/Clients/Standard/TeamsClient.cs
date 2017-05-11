@@ -9,7 +9,7 @@ namespace BitBucket.REST.API.Clients.Standard
 {
     public class TeamsClient : ApiClient, ITeamsClient
     {
-        public TeamsClient(BitbucketRestClient restClient, Connection connection) : base(restClient, connection)
+        public TeamsClient(IBitbucketRestClient restClient, Connection connection) : base(restClient, connection)
         {
 
         }

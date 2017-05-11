@@ -29,15 +29,15 @@ namespace GitClientVS.Infrastructure.Tests.Extensions
         {
             var argsCaptured = new List<TArgument>();
 
-            Func<TArgument, TResult> captureArg = x =>
+            TResult CaptureArg(TArgument x)
             {
                 argsCaptured.Add(x);
                 return result;
-            };
+            }
 
-            Action<TMock> stubArg = stub => methodExpression(stub, default(TArgument));
+            void StubArg(TMock stub) => methodExpression(stub, default(TArgument));
 
-            _stub.Stub(stubArg).IgnoreArguments().Do(captureArg);
+            _stub.Stub(StubArg).IgnoreArguments().Do((Func<TArgument, TResult>) CaptureArg);
 
             return CaptureResult<TArgument>.Create(argsCaptured);
         }
@@ -58,6 +58,5 @@ namespace GitClientVS.Infrastructure.Tests.Extensions
 
             return CaptureResult<(TArgument1 arg1, TArgument2 arg2)>.Create(argsCaptured);
         }
-
     }
 }

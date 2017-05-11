@@ -16,7 +16,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 {
     public class EnterpriseRepositoriesClient : ApiClient, IRepositoriesClient
     {
-        public EnterpriseRepositoriesClient(EnterpriseBitbucketRestClient restClient, Connection connection) : base(restClient, connection)
+        public EnterpriseRepositoriesClient(IEnterpriseBitbucketRestClient restClient, Connection connection) : base(restClient, connection)
         {
         }
 
