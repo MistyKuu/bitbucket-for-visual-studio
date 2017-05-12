@@ -105,6 +105,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Enterprise\EnterprisePullRequestsClientTests.cs" />
+    <Compile Include="Extensions\CaptureExpression.cs" />
+    <Compile Include="Extensions\CaptureResult.cs" />
+    <Compile Include="Extensions\MockExtensions.cs" />
+    <Compile Include="Extensions\TestExtensions.cs" />
+    <Compile Include="Paths.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +120,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="Enterprise\Data\CreatePullRequestRequest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>

@@ -1,0 +1,25 @@
+﻿{
+  "description": "description",
+  "title": "title",
+  "toRef": {
+    "id": "d",
+    "isDefault": false
+  },
+  "fromRef": {
+    "id": "s",
+    "isDefault": false
+  },
+  "state": 0,
+  "createdDate": 0,
+  "updatedDate": 0,
+  "id": 1,
+  "reviewers": [
+    {
+      "approved": false,
+      "user": {
+        "name": "user"
+      }
+    }
+  ],
+  "version": "1.0"
+}

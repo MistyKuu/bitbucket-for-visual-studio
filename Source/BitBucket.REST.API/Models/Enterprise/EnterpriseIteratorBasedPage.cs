@@ -27,7 +27,7 @@ namespace BitBucket.REST.API.Models.Enterprise
         public ulong? Size { get; set; }
 
         [JsonProperty(PropertyName = "nextPageStart")]
-        public ulong? NextPageStart { get; set; }
+        public ulong NextPageStart { get; set; }
 
         [JsonProperty(PropertyName = "filter")]
         public string Filter { get; set; }

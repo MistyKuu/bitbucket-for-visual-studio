@@ -23,7 +23,7 @@ namespace BitBucket.REST.API.Wrappers
                 Values = new List<T>()
             };
             IRestResponse<EnterpriseIteratorBasedPage<T>> response;
-            ulong? pageNumber = 0;
+            ulong pageNumber = 0;
             do
             {
                 var request = new BitbucketRestRequest(url, Method.GET);
@@ -34,10 +34,11 @@ namespace BitBucket.REST.API.Wrappers
                         request.AddQueryParameter(par.Key, par.Value);
 
                 response = await this.ExecuteTaskAsync<EnterpriseIteratorBasedPage<T>>(request);
-                if (response.Data.Values != null)
-                {
-                    result.Values.AddRange(response.Data.Values);
-                }
+
+                if (response.Data?.Values == null)
+                    break;
+
+                result.Values.AddRange(response.Data.Values);
 
                 pageNumber = response.Data.NextPageStart;
 

@@ -38,8 +38,11 @@ namespace BitBucket.REST.API.Wrappers
                         request.AddQueryParameter(par.Key, par.Value);
 
                 response = await this.ExecuteTaskAsync<IteratorBasedPage<T>>(request);
-                if (response.Data.Values != null)
-                    result.Values.AddRange(response.Data.Values);
+
+                if (response.Data?.Values == null)
+                    break;
+
+                result.Values.AddRange(response.Data.Values);
 
                 pageNumber++;
             } while (response.Data?.Next != null);//todo 99% this value should be used instead of pagenumber

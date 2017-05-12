@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Rhino.Mocks;
 
-namespace GitClientVS.Infrastructure.Tests.Extensions
+namespace Bitbucket.REST.API.Integration.Tests.Extensions
 {
     public class CaptureExpression<TMock>
         where TMock : class
@@ -29,9 +29,9 @@ namespace GitClientVS.Infrastructure.Tests.Extensions
         {
             var argsCaptured = new List<TArgument>();
 
-            Func<TArgument, TResult> captureArg = x =>
+            Func<TArgument, TResult> captureArg = (arg1) =>
             {
-                argsCaptured.Add(x);
+                argsCaptured.Add((arg1));
                 return result;
             };
 
