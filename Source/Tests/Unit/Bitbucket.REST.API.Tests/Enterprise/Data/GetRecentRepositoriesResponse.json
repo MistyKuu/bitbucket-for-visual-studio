@@ -1,0 +1,351 @@
+{
+  "size": 9,
+  "limit": 50,
+  "isLastPage": true,
+  "values": [
+    {
+      "slug": "test2",
+      "id": 12,
+      "name": "test2",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "~MISTYK",
+        "id": 2,
+        "name": "MistyKuuuuuuuu",
+        "type": "PERSONAL",
+        "owner": {
+          "name": "MistyK",
+          "emailAddress": "mistyksu@gmail.com",
+          "id": 1,
+          "displayName": "MistyKuuuuuuuu",
+          "active": true,
+          "slug": "mistyk",
+          "type": "NORMAL",
+          "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+        },
+        "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+      },
+      "public": false,
+      "links": {
+        "clone": [
+          {
+            "href": "ssh://git@localhost:7999/~mistyk/test2.git",
+            "name": "ssh"
+          },
+          {
+            "href": "http://MistyK@localhost:7990/scm/~mistyk/test2.git",
+            "name": "http"
+          }
+        ],
+        "self": [ { "href": "http://localhost:7990/users/mistyk/repos/test2/browse" } ]
+      }
+    },
+    {
+      "slug": "tttttttttt-df",
+      "id": 72,
+      "name": "tttttttttt df",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "~MISTYK",
+        "id": 2,
+        "name": "MistyKuuuuuuuu",
+        "type": "PERSONAL",
+        "owner": {
+          "name": "MistyK",
+          "emailAddress": "mistyksu@gmail.com",
+          "id": 1,
+          "displayName": "MistyKuuuuuuuu",
+          "active": true,
+          "slug": "mistyk",
+          "type": "NORMAL",
+          "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+        },
+        "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+      },
+      "public": true,
+      "links": {
+        "clone": [
+          {
+            "href": "ssh://git@localhost:7999/~mistyk/tttttttttt-df.git",
+            "name": "ssh"
+          },
+          {
+            "href": "http://MistyK@localhost:7990/scm/~mistyk/tttttttttt-df.git",
+            "name": "http"
+          }
+        ],
+        "self": [ { "href": "http://localhost:7990/users/mistyk/repos/tttttttttt-df/browse" } ]
+      }
+    },
+    {
+      "slug": "testrepo",
+      "id": 1,
+      "name": "TestRepo",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "TES",
+        "id": 1,
+        "name": "TestProject",
+        "public": false,
+        "type": "NORMAL",
+        "links": { "self": [ { "href": "http://localhost:7990/projects/TES" } ] }
+      },
+      "public": false,
+      "links": {
+        "clone": [
+          {
+            "href": "http://MistyK@localhost:7990/scm/tes/testrepo.git",
+            "name": "http"
+          },
+          {
+            "href": "ssh://git@localhost:7999/tes/testrepo.git",
+            "name": "ssh"
+          }
+        ],
+        "self": [ { "href": "http://localhost:7990/projects/TES/repos/testrepo/browse" } ]
+      }
+    },
+    {
+      "slug": "testprivaterepo",
+      "id": 2,
+      "name": "TESTPRIVATEREPO",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "~MISTYK",
+        "id": 2,
+        "name": "MistyKuuuuuuuu",
+        "type": "PERSONAL",
+        "owner": {
+          "name": "MistyK",
+          "emailAddress": "mistyksu@gmail.com",
+          "id": 1,
+          "displayName": "MistyKuuuuuuuu",
+          "active": true,
+          "slug": "mistyk",
+          "type": "NORMAL",
+          "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+        },
+        "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+      },
+      "public": true,
+      "links": {
+        "clone": [
+          {
+            "href": "ssh://git@localhost:7999/~mistyk/testprivaterepo.git",
+            "name": "ssh"
+          },
+          {
+            "href": "http://MistyK@localhost:7990/scm/~mistyk/testprivaterepo.git",
+            "name": "http"
+          }
+        ],
+        "self": [ { "href": "http://localhost:7990/users/mistyk/repos/testprivaterepo/browse" } ]
+      }
+    },
+    {
+      "slug": "werewrwerwer",
+      "id": 54,
+      "name": "werewrwerwer",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "~MISTYK",
+        "id": 2,
+        "name": "MistyKuuuuuuuu",
+        "type": "PERSONAL",
+        "owner": {
+          "name": "MistyK",
+          "emailAddress": "mistyksu@gmail.com",
+          "id": 1,
+          "displayName": "MistyKuuuuuuuu",
+          "active": true,
+          "slug": "mistyk",
+          "type": "NORMAL",
+          "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+        },
+        "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+      },
+      "public": false,
+      "links": {
+        "clone": [
+          {
+            "href": "http://MistyK@localhost:7990/scm/~mistyk/werewrwerwer.git",
+            "name": "http"
+          },
+          {
+            "href": "ssh://git@localhost:7999/~mistyk/werewrwerwer.git",
+            "name": "ssh"
+          }
+        ],
+        "self": [ { "href": "http://localhost:7990/users/mistyk/repos/werewrwerwer/browse" } ]
+      }
+    },
+    {
+      "slug": "htrhrthtrhrthrth",
+      "id": 53,
+      "name": "htrhrthtrhrthrth",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "~MISTYK",
+        "id": 2,
+        "name": "MistyKuuuuuuuu",
+        "type": "PERSONAL",
+        "owner": {
+          "name": "MistyK",
+          "emailAddress": "mistyksu@gmail.com",
+          "id": 1,
+          "displayName": "MistyKuuuuuuuu",
+          "active": true,
+          "slug": "mistyk",
+          "type": "NORMAL",
+          "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+        },
+        "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+      },
+      "public": false,
+      "links": {
+        "clone": [
+          {
+            "href": "http://MistyK@localhost:7990/scm/~mistyk/htrhrthtrhrthrth.git",
+            "name": "http"
+          },
+          {
+            "href": "ssh://git@localhost:7999/~mistyk/htrhrthtrhrthrth.git",
+            "name": "ssh"
+          }
+        ],
+        "self": [ { "href": "http://localhost:7990/users/mistyk/repos/htrhrthtrhrthrth/browse" } ]
+      }
+    },
+    {
+      "slug": "private",
+      "id": 48,
+      "name": "private",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "~MISTYK",
+        "id": 2,
+        "name": "MistyKuuuuuuuu",
+        "type": "PERSONAL",
+        "owner": {
+          "name": "MistyK",
+          "emailAddress": "mistyksu@gmail.com",
+          "id": 1,
+          "displayName": "MistyKuuuuuuuu",
+          "active": true,
+          "slug": "mistyk",
+          "type": "NORMAL",
+          "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+        },
+        "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+      },
+      "public": false,
+      "links": {
+        "clone": [
+          {
+            "href": "ssh://git@localhost:7999/~mistyk/private.git",
+            "name": "ssh"
+          },
+          {
+            "href": "http://MistyK@localhost:7990/scm/~mistyk/private.git",
+            "name": "http"
+          }
+        ],
+        "self": [ { "href": "http://localhost:7990/users/mistyk/repos/private/browse" } ]
+      }
+    },
+    {
+      "slug": "ads",
+      "id": 13,
+      "name": "ADS",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": false,
+      "project": {
+        "key": "~MISTYK",
+        "id": 2,
+        "name": "MistyKuuuuuuuu",
+        "type": "PERSONAL",
+        "owner": {
+          "name": "MistyK",
+          "emailAddress": "mistyksu@gmail.com",
+          "id": 1,
+          "displayName": "MistyKuuuuuuuu",
+          "active": true,
+          "slug": "mistyk",
+          "type": "NORMAL",
+          "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+        },
+        "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+      },
+      "public": false,
+      "links": {
+        "clone": [
+          {
+            "href": "http://MistyK@localhost:7990/scm/~mistyk/ads.git",
+            "name": "http"
+          },
+          {
+            "href": "ssh://git@localhost:7999/~mistyk/ads.git",
+            "name": "ssh"
+          }
+        ],
+        "self": [ { "href": "http://localhost:7990/users/mistyk/repos/ads/browse" } ]
+      }
+    },
+    {
+      "slug": "abct",
+      "id": 32,
+      "name": "ABCT",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "ABC",
+        "id": 43,
+        "name": "ABC",
+        "description": "rrrrrrrrrr",
+        "public": false,
+        "type": "NORMAL",
+        "links": { "self": [ { "href": "http://localhost:7990/projects/ABC" } ] }
+      },
+      "public": false,
+      "links": {
+        "clone": [
+          {
+            "href": "ssh://git@localhost:7999/abc/abct.git",
+            "name": "ssh"
+          },
+          {
+            "href": "http://MistyK@localhost:7990/scm/abc/abct.git",
+            "name": "http"
+          }
+        ],
+        "self": [ { "href": "http://localhost:7990/projects/ABC/repos/abct/browse" } ]
+      }
+    }
+  ],
+  "start": 0
+}
