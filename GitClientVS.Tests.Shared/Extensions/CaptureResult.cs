@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GitClientVS.Infrastructure.Tests.Extensions
+namespace GitClientVS.Tests.Shared.Extensions
 {
     public class CaptureResult<TResult>
     {

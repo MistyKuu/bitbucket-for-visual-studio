@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 
-namespace GitClientVS.Infrastructure.Tests.Extensions
+namespace GitClientVS.Tests.Shared.Extensions
 {
     public static class TestExtensions
     {
@@ -10,7 +10,6 @@ namespace GitClientVS.Infrastructure.Tests.Extensions
         {
             return Task.FromResult(obj);
         }
-
         public static ExportFactory<TObject> CreateFactoryMock<TObject>(this TObject obj)
         {
             return new ExportFactory<TObject>(() => new Tuple<TObject, Action>(obj, () => Console.WriteLine("Releasing...")));

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Rhino.Mocks;
 
-namespace Bitbucket.REST.API.Tests.Extensions
+namespace GitClientVS.Tests.Shared.Extensions
 {
     public class CaptureExpression<TMock>
         where TMock : class

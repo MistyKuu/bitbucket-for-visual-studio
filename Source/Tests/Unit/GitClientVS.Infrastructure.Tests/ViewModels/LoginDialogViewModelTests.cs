@@ -5,9 +5,9 @@ using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure.Extensions;
-using GitClientVS.Infrastructure.Tests.Extensions;
 using GitClientVS.Infrastructure.ViewModels;
 using GitClientVS.Services;
+using GitClientVS.Tests.Shared.Extensions;
 using NUnit.Framework;
 using Rhino.Mocks;
 

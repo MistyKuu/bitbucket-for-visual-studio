@@ -1,4 +1,4 @@
-namespace Bitbucket.REST.API.Tests.Extensions
+namespace GitClientVS.Tests.Shared.Extensions
 {
     public static class MockExtensions
     {
