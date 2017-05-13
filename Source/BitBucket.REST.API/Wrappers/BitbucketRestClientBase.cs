@@ -62,6 +62,9 @@ namespace BitBucket.REST.API.Wrappers
 
         private void CheckResponseStatusCode(IRestResponse response)
         {
+            if (response.ErrorException != null)
+                throw response.ErrorException;
+
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 throw new AuthorizationException();

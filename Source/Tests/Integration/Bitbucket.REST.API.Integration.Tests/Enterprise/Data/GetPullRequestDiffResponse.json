@@ -1,0 +1,49 @@
+{
+  "fromHash": "9f0a336dc13893f8a73693267662a1b5835a3d87",
+  "toHash": "8033addbfbbdde05d607a262b9666e768a5161d2",
+  "contextLines": 10,
+  "whitespace": "SHOW",
+  "diffs": [
+    {
+      "source": null,
+      "destination": {
+        "components": [ "new4.txt" ],
+        "parent": "",
+        "name": "new4.txt",
+        "extension": "txt",
+        "toString": "new4.txt"
+      },
+      "hunks": [
+        {
+          "sourceLine": 0,
+          "sourceSpan": 0,
+          "destinationLine": 1,
+          "destinationSpan": 2,
+          "segments": [
+            {
+              "type": "ADDED",
+              "lines": [
+                {
+                  "source": 0,
+                  "destination": 1,
+                  "line": "asdkopasdkapskdoasd",
+                  "truncated": false
+                },
+                {
+                  "source": 0,
+                  "destination": 2,
+                  "line": "asdasd",
+                  "truncated": false
+                }
+              ],
+              "truncated": false
+            }
+          ],
+          "truncated": false
+        }
+      ],
+      "truncated": false
+    }
+  ],
+  "truncated": false
+}

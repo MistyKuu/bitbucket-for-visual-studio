@@ -1,0 +1,28 @@
+{
+  "size": 2,
+  "limit": 100,
+  "isLastPage": true,
+  "values": [
+    {
+      "name": "MistyK",
+      "emailAddress": "mistyksu@gmail.com",
+      "id": 1,
+      "displayName": "MistyKuuuuuuuu",
+      "active": true,
+      "slug": "mistyk",
+      "type": "NORMAL",
+      "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+    },
+    {
+      "name": "TestUser",
+      "emailAddress": "TestUser@TestUser.pl",
+      "id": 52,
+      "displayName": "TestUser",
+      "active": true,
+      "slug": "testuser",
+      "type": "NORMAL",
+      "links": { "self": [ { "href": "http://localhost:7990/users/testuser" } ] }
+    }
+  ],
+  "start": 0
+}

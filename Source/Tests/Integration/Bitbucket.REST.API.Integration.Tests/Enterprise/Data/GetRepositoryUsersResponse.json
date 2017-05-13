@@ -1,0 +1,18 @@
+{
+  "size": 1,
+  "limit": 50,
+  "isLastPage": true,
+  "values": [
+    {
+      "name": "MistyK",
+      "emailAddress": "mistyksu@gmail.com",
+      "id": 1,
+      "displayName": "MistyKuuuuuuuu",
+      "active": true,
+      "slug": "mistyk",
+      "type": "NORMAL",
+      "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+    }
+  ],
+  "start": 0
+}

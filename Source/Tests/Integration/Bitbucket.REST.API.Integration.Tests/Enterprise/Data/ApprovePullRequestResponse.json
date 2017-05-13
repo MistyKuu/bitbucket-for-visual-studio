@@ -1,0 +1,16 @@
+{
+  "user": {
+    "name": "TestUser",
+    "emailAddress": "TestUser@TestUser.pl",
+    "id": 52,
+    "displayName": "TestUser",
+    "active": true,
+    "slug": "testuser",
+    "type": "NORMAL",
+    "links": { "self": [ { "href": "http://localhost:7990/users/testuser" } ] }
+  },
+  "lastReviewedCommit": "d4a874473e9b6b3e32b4c20f3eea0bf5849876e1",
+  "role": "REVIEWER",
+  "approved": true,
+  "status": "APPROVED"
+}

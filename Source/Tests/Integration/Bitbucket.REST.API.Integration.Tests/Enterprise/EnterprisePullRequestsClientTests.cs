@@ -207,7 +207,7 @@ namespace Bitbucket.REST.API.Integration.Tests.Enterprise
         public async Task GetDefaultReviewers_ShouldReturnEmptyListBecauseItsNotImplementedYet()
         {
             var reviewers = await _sut.GetDefaultReviewers("repoName", "owner");
-            Assert.AreEqual(0, reviewers.Count());
+            Assert.IsEmpty(reviewers);
         }
 
         [Test]
