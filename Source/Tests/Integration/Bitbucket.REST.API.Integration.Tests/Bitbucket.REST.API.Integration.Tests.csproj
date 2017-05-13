@@ -111,11 +111,16 @@
     <Compile Include="Extensions\TestExtensions.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\BitBucket.REST.API\BitBucket.REST.API.csproj">
       <Project>{8d9a6680-2f77-485e-b90d-70e70a3444cf}</Project>
       <Name>BitBucket.REST.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ParseDiff\ParseDiff.csproj">
+      <Project>{65672e92-c353-4d21-a098-6a5beb42cdf4}</Project>
+      <Name>ParseDiff</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
