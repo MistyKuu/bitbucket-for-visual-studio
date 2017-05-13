@@ -10,8 +10,10 @@ using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Enterprise;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
+using BitBucket.REST.API.Serializers;
 using GitClientVS.Tests.Shared.Extensions;
 using NUnit.Framework;
+using ParseDiff;
 using Ploeh.AutoFixture;
 using RestSharp;
 using Rhino.Mocks;
@@ -45,11 +47,11 @@ namespace Bitbucket.REST.API.Tests.Enterprise
         [Test]
         public async Task ApprovePullRequest_ShouldReturnValidParticipant()
         {
-            var enterpriseParticipant = new Fixture().Create<EnterpriseParticipant>();
-            enterpriseParticipant.User.Links.Clone = null;
+            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("ApprovePullRequestResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseParticipant>(responseJson);
 
             var response = MockRepository.GenerateMock<IRestResponse<EnterpriseParticipant>>();
-            response.Stub(x => x.Data).Return(enterpriseParticipant);
+            response.Stub(x => x.Data).Return(responseData);
 
             var result = _restClient
                 .Capture()
@@ -61,13 +63,16 @@ namespace Bitbucket.REST.API.Tests.Enterprise
 
             var args = result.Args[0];
 
-            Assert.AreEqual("projects/owner/repos/repoName/pull-requests/1/approve", args.Resource);
-            Assert.AreEqual(Method.POST, args.Method);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("projects/owner/repos/repoName/pull-requests/1/approve", args.Resource);
+                Assert.AreEqual(Method.POST, args.Method);
 
-            Assert.AreEqual(enterpriseParticipant.Approved, participant.Approved);
-            Assert.AreEqual(enterpriseParticipant.Role, participant.Role);
-            Assert.AreEqual(enterpriseParticipant.User.Username, participant.User.Username);
-            Assert.AreEqual(enterpriseParticipant.User.DisplayName, participant.User.DisplayName);
+                Assert.AreEqual(true, participant.Approved);
+                Assert.AreEqual("REVIEWER", participant.Role);
+                Assert.AreEqual("TestUser", participant.User.Username);
+                Assert.AreEqual("TestUser", participant.User.DisplayName);
+            });
         }
 
         [Test]
@@ -97,13 +102,11 @@ namespace Bitbucket.REST.API.Tests.Enterprise
             var pq = new PullRequest()
             {
                 Id = 1,
-                Title = "title",
+                Title = "master",
                 Description = "description",
-                Source = new Source() { Branch = new Branch() { Name = "s" } },
-                Destination = new Source() { Branch = new Branch() { Name = "d" } },
-                CloseSourceBranch = true,
-                Reviewers = new List<User>() { new User() { Username = "user", DisplayName = "displayname" } },
-                Version = "1.0"
+                Source = new Source() { Branch = new Branch() { Name = "master", IsDefault = false } },
+                Destination = new Source() { Branch = new Branch() { Name = "4", IsDefault = false } },
+                Reviewers = new List<User>() { new User() { Username = "MistyK" } },
             };
 
             await _sut.CreatePullRequest(pq, "reponame", "owner");
@@ -117,7 +120,9 @@ namespace Bitbucket.REST.API.Tests.Enterprise
 
             var body = args.Parameters.First(p => p.Type == ParameterType.RequestBody);
 
-            Assert.AreEqual(Utilities.LoadFile(Paths.GetEnterpriseDataPath("CreatePullRequestRequest.json")), body.Value);
+            var expectedJsonBody = Utilities.LoadFile(Paths.GetEnterpriseDataPath("CreatePullRequestRequest.json"));
+
+            Assert.AreEqual(expectedJsonBody, body.Value.ToString());
         }
 
         [Test]
@@ -140,14 +145,12 @@ namespace Bitbucket.REST.API.Tests.Enterprise
         [Test]
         public async Task GetAuthors_ShouldCallCorrectUrlAndResult()
         {
-            var authors = new Fixture().CreateMany<EnterpriseUser>().ToList();
-
-            foreach (var author in authors)
-                author.Links.Clone = null;
+            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetAuthorsResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterpriseUser>>(responseJson);
 
             var result = _restClient
                 .Capture()
-                .Args<string, int, QueryString, IEnumerable<EnterpriseUser>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseUser>(url, limit, queryString), authors);
+                .Args<string, int, QueryString, IEnumerable<EnterpriseUser>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseUser>(url, limit, queryString), responseData.Values);
 
             var resultAuthors = (await _sut.GetAuthors("reponame", "owner")).ToList();
 
@@ -160,42 +163,48 @@ namespace Bitbucket.REST.API.Tests.Enterprise
             Assert.IsNull(args.arg3);
 
             var firstResultAuthor = resultAuthors.First();
-            var expectedAuthor = authors.First();
 
-            Assert.AreEqual(authors.Count, resultAuthors.Count);
-            Assert.AreEqual(expectedAuthor.DisplayName, firstResultAuthor.DisplayName);
-            Assert.AreEqual(expectedAuthor.Username, firstResultAuthor.Username);
-            Assert.AreEqual(expectedAuthor.Email, firstResultAuthor.Email);
-            Assert.AreEqual(expectedAuthor.Links.Avatar.First().Href, firstResultAuthor.Links.Avatar.Href);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(responseData.Values.Count, resultAuthors.Count);
+                Assert.AreEqual("MistyKuuuuuuuu", firstResultAuthor.DisplayName);
+                Assert.AreEqual("MistyK", firstResultAuthor.Username);
+                Assert.AreEqual("mistyksu@gmail.com", firstResultAuthor.Email);
+                Assert.AreEqual("http://localhost:7990/users/mistyk", firstResultAuthor.Links.Self.Href);
+
+            });
         }
 
         [Test]
         public async Task GetCommitsDiff_ShouldCallCorrectUrlAndResult()
         {
-            var diffResponse = new Fixture().Create<EnterpriseDiffResponse>();
+            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetCommitsDiffResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseDiffResponse>(responseJson);
 
             var response = MockRepository.GenerateMock<IRestResponse<EnterpriseDiffResponse>>();
-            response.Stub(x => x.Data).Return(diffResponse);
+            response.Stub(x => x.Data).Return(responseData);
 
             var result = _restClient
                 .Capture()
                 .Args<IRestRequest, IRestResponse<EnterpriseDiffResponse>>(
                     (s, req) => s.ExecuteTaskAsync<EnterpriseDiffResponse>(req), response);
 
-            var commitDiff = await _sut.GetCommitsDiff("repoName", "owner", "fromCommit", "toCommit");
+            var commitDiff = await _sut.GetCommitsDiff("repoName", "owner", "9f0a336dc13893f8a73693267662a1b5835a3d87", "9f0a336dc13893f8a73693267662a1b5835a3d87");
 
             Assert.AreEqual(1, result.CallCount);
 
             var args = result.Args[0];
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual($"projects/owner/repos/repoName/compare/diff", args.Resource);
+                Assert.AreEqual(Method.GET, args.Method);
+                Assert.AreEqual(args.Parameters[0].Name, "from");
+                Assert.AreEqual(args.Parameters[0].Value, "9f0a336dc13893f8a73693267662a1b5835a3d87");
+                Assert.AreEqual(args.Parameters[1].Name, "to");
+                Assert.AreEqual(args.Parameters[1].Value, "9f0a336dc13893f8a73693267662a1b5835a3d87");
 
-            Assert.AreEqual($"projects/owner/repos/repoName/compare/diff", args.Resource);
-            Assert.AreEqual(Method.GET, args.Method);
-            Assert.AreEqual(args.Parameters[0].Name, "from");
-            Assert.AreEqual(args.Parameters[0].Value, "fromCommit");
-            Assert.AreEqual(args.Parameters[1].Name, "to");
-            Assert.AreEqual(args.Parameters[1].Value, "toCommit");
-
-            //todo generate diff from file and validate commit diff creation
+                throw new NotImplementedException("generate different commit diff because example doesn't contain anything");
+            });
         }
 
         [Test]
@@ -208,10 +217,11 @@ namespace Bitbucket.REST.API.Tests.Enterprise
         [Test]
         public async Task GetPullRequest_ShouldReturnValidResult()
         {
-            var pullRequest = new Fixture().Create<EnterprisePullRequest>();
+            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetPullRequestResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterprisePullRequest>(responseJson);
 
             var response = MockRepository.GenerateMock<IRestResponse<EnterprisePullRequest>>();
-            response.Stub(x => x.Data).Return(pullRequest);
+            response.Stub(x => x.Data).Return(responseData);
 
             var result = _restClient
                 .Capture()
@@ -223,20 +233,32 @@ namespace Bitbucket.REST.API.Tests.Enterprise
 
             var args = result.Args[0];
 
-            Assert.AreEqual($"projects/owner/repos/repository/pull-requests/1", args.Resource);
-            Assert.AreEqual(Method.POST, args.Method);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("projects/owner/repos/repoName/pull-requests/1", args.Resource);
+                Assert.AreEqual(Method.GET, args.Method);
 
-            Assert.AreEqual(pullRequest.CreatedOn, resultPullRequest.CreatedOn);
+                Assert.AreEqual("04/03/2017 19:43:51", resultPullRequest.CreatedOn);
+                Assert.AreEqual("04/03/2017 19:43:51", resultPullRequest.UpdatedOn);
+                Assert.AreEqual(null, resultPullRequest.CloseSourceBranch);
+                Assert.AreEqual("* asd\r\n* asd", resultPullRequest.Description);
+                Assert.AreEqual("cccccccccccc", resultPullRequest.Title);
+                Assert.AreEqual(48, resultPullRequest.Id);
+                Assert.AreEqual(PullRequestOptions.OPEN, resultPullRequest.State);
+                Assert.AreEqual("refs/heads/cccccccccccc", resultPullRequest.Source.Branch.Name);
+                Assert.AreEqual("refs/heads/12", resultPullRequest.Destination.Branch.Name);
+            });
         }
 
         [Test]
         public async Task GetPullRequestComments_ShouldCallCorrectUrlAndGetResult()
         {
-            var inputData = new Fixture().CreateMany<EnterpriseCommentActivity>().ToList();
+            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetPullRequestCommentsResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterpriseCommentActivity>>(responseJson);
 
             var result = _restClient
                 .Capture()
-                .Args<string, int, QueryString, IEnumerable<EnterpriseCommentActivity>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseCommentActivity>(url, limit, queryString), inputData);
+                .Args<string, int, QueryString, IEnumerable<EnterpriseCommentActivity>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseCommentActivity>(url, limit, queryString), responseData.Values);
 
             var resultData = (await _sut.GetPullRequestComments("reponame", "owner", 1)).ToList();
 
@@ -244,21 +266,32 @@ namespace Bitbucket.REST.API.Tests.Enterprise
 
             var args = result.Args[0];
 
-            Assert.AreEqual($"projects/owner/repos/repositoryName/pull-requests/id/activities", args.arg1);
-            Assert.AreEqual(50, args.arg2);
-            Assert.IsNull(args.arg3);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("projects/owner/repos/reponame/pull-requests/1/activities", args.arg1);
+                Assert.AreEqual(50, args.arg2);
+                Assert.IsNull(args.arg3);
 
-            Assert.AreEqual(inputData.Count, resultData.Count);
+                throw new NotImplementedException("CHANGE COMMENTS RESPONSE FAIL TO INCLUDE COMMENTS");
+            });
         }
 
         [Test]
         public async Task GetPullRequestCommits_ShouldCallCorrectUrlAndGetResult()
         {
-            var inputData = new Fixture().CreateMany<EnterpriseCommit>().ToList();
+            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetPullRequestCommitsResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterpriseCommit>>(responseJson);
 
             var result = _restClient
                 .Capture()
-                .Args<string, int, QueryString, IEnumerable<EnterpriseCommit>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseCommit>(url, limit, queryString), inputData);
+                .Args<string, int, QueryString, IEnumerable<EnterpriseCommit>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseCommit>(url, limit, queryString), responseData.Values);
+
+            var authorResponseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetAuthorsResponse.json"));
+            var authorResponseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterpriseUser>>(authorResponseJson);
+
+            var authorResult = _restClient
+                .Capture()
+                .Args<string, int, QueryString, IEnumerable<EnterpriseUser>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseUser>(url, limit, queryString), authorResponseData.Values);
 
             var resultData = (await _sut.GetPullRequestCommits("reponame", "owner", 1)).ToList();
 
@@ -266,63 +299,117 @@ namespace Bitbucket.REST.API.Tests.Enterprise
 
             var args = result.Args[0];
 
-            Assert.AreEqual($"projects/owner/repos/repositoryName/pull-requests/id/commits", args.arg1);
-            Assert.AreEqual(50, args.arg2);
-            Assert.IsNull(args.arg3);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("projects/owner/repos/reponame/pull-requests/1/commits", args.arg1);
+                Assert.AreEqual(50, args.arg2);
+                Assert.IsNull(args.arg3);
 
-            Assert.AreEqual(inputData.Count, resultData.Count);
+                Assert.AreEqual(responseData.Values.Count, resultData.Count);
+
+                var firstCommit = resultData.First();
+
+                Assert.AreEqual("http://localhost:7990/users/mistyk/avatar.png", firstCommit.Author.User.Links.Avatar.Href);
+                Assert.AreEqual("http://url.com/projects/owner/repos/reponame/pull-requests/1/commits/d4a874473e9b6b3e32b4c20f3eea0bf5849876e1", firstCommit.CommitHref);
+                Assert.AreEqual("d4a874473e9b6b3e32b4c20f3eea0bf5849876e1", firstCommit.Hash);
+                Assert.AreEqual("02/25/2017 10:35:55", firstCommit.Date);
+                Assert.AreEqual("asd", firstCommit.Message);
+            });
+
         }
 
         [Test]
         public async Task GetPullRequestDiff_ShouldCallCorrectUrlAndResult()
         {
-            var inputData = new Fixture().Create<EnterpriseDiffResponse>();
+            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetPullRequestDiffResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseDiffResponse>(responseJson);
 
             var response = MockRepository.GenerateMock<IRestResponse<EnterpriseDiffResponse>>();
-            response.Stub(x => x.Data).Return(inputData);
+            response.Stub(x => x.Data).Return(responseData);
 
             var result = _restClient
                 .Capture()
                 .Args<IRestRequest, IRestResponse<EnterpriseDiffResponse>>(
                     (s, req) => s.ExecuteTaskAsync<EnterpriseDiffResponse>(req), response);
 
-            var resultData = await _sut.GetPullRequestDiff("repoName", "owner", 1);
+            var resultData = (await _sut.GetPullRequestDiff("repoName", "owner", 1)).ToList();
 
             Assert.AreEqual(1, result.CallCount);
 
             var args = result.Args[0];
 
-            Assert.AreEqual($"projects/owner/repos/repoName/compare/diff", args.Resource);
-            Assert.AreEqual(Method.GET, args.Method);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("projects/owner/repos/repoName/pull-requests/1/diff", args.Resource);
+                Assert.AreEqual(Method.GET, args.Method);
+
+                Assert.AreEqual(1, resultData.Count());
+
+                var firstDiff = resultData.First();
+
+                Assert.AreEqual(FileChangeType.Add, firstDiff.Type);
+                Assert.AreEqual(0, firstDiff.Deletions);
+                Assert.AreEqual(2, firstDiff.Additions);
+                Assert.AreEqual(1, firstDiff.Id);
+                Assert.AreEqual(null, firstDiff.From);
+                Assert.AreEqual("new4.txt", firstDiff.To);
+                Assert.AreEqual("new4.txt", firstDiff.DisplayFileName);
+                Assert.AreEqual(1, firstDiff.Chunks.Count);
+
+                var firstChunk = firstDiff.Chunks.First();
+
+                Assert.AreEqual("asdkopasdkapskdoasd\r\nasdasd", firstChunk.Text);
+                Assert.AreEqual(0, firstChunk.OldLines);
+                Assert.AreEqual(0, firstChunk.NewLines);
+                Assert.AreEqual(null, firstChunk.Content);
+                Assert.AreEqual(2, firstChunk.Changes.Count);
+
+                var firstChange = firstChunk.Changes.First();
+
+                Assert.AreEqual(0, firstChange.Index);
+                Assert.AreEqual(null, firstChange.OldIndex);
+                Assert.AreEqual(1, firstChange.NewIndex);
+                Assert.AreEqual(LineChangeType.Add, firstChange.Type);
+            });
         }
 
         [Test]
         public async Task GetPullRequestForBranches_ShouldCallCorrectUrlAndGetResult()
         {
-            var inputData = new Fixture().CreateMany<EnterprisePullRequest>().ToList();//todo only one
+            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetPullRequestForBranchesResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterprisePullRequest>>(responseJson);
 
             var result = _restClient
                 .Capture()
-                .Args<string, int, QueryString, IEnumerable<EnterprisePullRequest>>((s, url, limit, queryString) => s.GetAllPages<EnterprisePullRequest>(url, limit, queryString), inputData);
+                .Args<string, int, QueryString, IEnumerable<EnterprisePullRequest>>((s, url, limit, queryString) => s.GetAllPages<EnterprisePullRequest>(url, limit, queryString), responseData.Values);
 
-            var resultData = (await _sut.GetPullRequestForBranches("reponame", "owner", "sourceBranch", "destBranch"));
+            var resultData = (await _sut.GetPullRequestForBranches("reponame", "owner", "hhhhhhhhhhhhhhhh", "12"));
 
             Assert.AreEqual(1, result.CallCount);
 
             var args = result.Args[0];
 
-            Assert.AreEqual($"projects/owner/repos/repositoryName/pull-requests/id/commits", args.arg1);
-            Assert.AreEqual(50, args.arg2);
-            Assert.IsNull(args.arg3);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("projects/owner/repos/reponame/pull-requests", args.arg1);
+                Assert.AreEqual(50, args.arg2);
+                Assert.AreEqual("?at=refs/heads/12&state=open", args.arg3.ToString());
+
+                Assert.AreEqual("* asd\r\n* asd", resultData.Description);
+                Assert.AreEqual("hhhhhhhhhhhhhhhh", resultData.Title);
+                Assert.AreEqual("refs/heads/hhhhhhhhhhhhhhhh", resultData.Source.Branch.Name);
+                Assert.AreEqual("refs/heads/12", resultData.Destination.Branch.Name);
+            });
         }
 
         [Test]
         public async Task GetPullRequestsPage_ShouldCallCorrectUrlAndResult()
         {
-            var inputData = new Fixture().Create<EnterpriseIteratorBasedPage<EnterprisePullRequest>>();
+            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetPullRequestsPageResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterprisePullRequest>>(responseJson);
 
             var response = MockRepository.GenerateMock<IRestResponse<EnterpriseIteratorBasedPage<EnterprisePullRequest>>>();
-            response.Stub(x => x.Data).Return(inputData);
+            response.Stub(x => x.Data).Return(responseData);
 
             var result = _restClient
                 .Capture()
@@ -335,18 +422,34 @@ namespace Bitbucket.REST.API.Tests.Enterprise
 
             var args = result.Args[0];
 
-            Assert.AreEqual($"projects/owner/repos/repoName/compare/diff", args.Resource);
-            Assert.AreEqual(Method.GET, args.Method);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("projects/owner/repos/repoName/pull-requests", args.Resource);
+                Assert.AreEqual(Method.GET, args.Method);
+
+                Assert.AreEqual(5, resultData.Values.Count);
+                Assert.AreEqual(0, resultData.Page);
+                Assert.AreEqual(5, resultData.Size);
+                Assert.AreEqual(null, resultData.Next);
+                Assert.AreEqual(null, resultData.PageLen);
+
+                var firstPq = resultData.Values.First();
+
+                Assert.AreEqual("* asd\r\n* asd", firstPq.Description);
+                Assert.AreEqual("hhhhhhhhhhhhhhhh", firstPq.Title);
+            });
+
         }
 
         [Test]
         public async Task GetRepositoryUsers_ShouldCallCorrectUrlAndGetResult()
         {
-            var inputData = new Fixture().CreateMany<EnterpriseUser>().ToList();
+            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetRepositoryUsersResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterpriseUser>>(responseJson);
 
             var result = _restClient
                 .Capture()
-                .Args<string, int, QueryString, IEnumerable<EnterpriseUser>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseUser>(url, limit, queryString), inputData);
+                .Args<string, int, QueryString, IEnumerable<EnterpriseUser>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseUser>(url, limit, queryString), responseData.Values);
 
             var resultData = (await _sut.GetRepositoryUsers("reponame", "owner", "filter")).ToList();
 
@@ -354,11 +457,19 @@ namespace Bitbucket.REST.API.Tests.Enterprise
 
             var args = result.Args[0];
 
-            Assert.AreEqual($"projects/owner/repos/repositoryName/pull-requests/id/commits", args.arg1);
-            Assert.AreEqual(50, args.arg2);
-            Assert.IsNull(args.arg3);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual($"users", args.arg1);
+                Assert.AreEqual(50, args.arg2);
+                Assert.AreEqual("?permission=LICENSED_USER&permission.1=REPO_READ&permission.1.projectKey=owner&permission.1.repositorySlug=reponame&filter=filter", args.arg3.ToString());
 
-            Assert.AreEqual(inputData.Count, resultData.Count);
+                var firstUser = resultData.First();
+
+                Assert.AreEqual("MistyKuuuuuuuu", firstUser.DisplayName);
+                Assert.AreEqual("mistyksu@gmail.com", firstUser.Email);
+                Assert.AreEqual("MistyK", firstUser.Username);
+            });
+
         }
 
         [Test]
@@ -402,7 +513,7 @@ namespace Bitbucket.REST.API.Tests.Enterprise
         [Test]
         public void GetPullRequestQueryBuilder_ShouldReturnCorrectQueryParams()
         {
-             _sut.GetPullRequestQueryBuilder(); //todo
+            _sut.GetPullRequestQueryBuilder(); //todo
         }
 
     }

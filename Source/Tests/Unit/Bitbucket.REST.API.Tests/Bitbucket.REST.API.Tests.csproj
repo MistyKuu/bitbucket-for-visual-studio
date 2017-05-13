@@ -140,7 +140,7 @@
     <Content Include="Enterprise\Data\GetAllRepositoriesResponse.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Enterprise\Data\GetAuthors.json">
+    <Content Include="Enterprise\Data\GetAuthorsResponse.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Enterprise\Data\GetBranchesResponse.json">

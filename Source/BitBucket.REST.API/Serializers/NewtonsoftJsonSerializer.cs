@@ -5,8 +5,7 @@ using RestSharp;
 
 namespace BitBucket.REST.API.Serializers
 {
-   
-    class NewtonsoftJsonSerializer : IJsonSerializer
+    public class NewtonsoftJsonSerializer : IJsonSerializer
     {
         private readonly Newtonsoft.Json.JsonSerializer _serializer;
 
