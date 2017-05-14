@@ -178,9 +178,9 @@ namespace Bitbucket.REST.API.Tests.Standard
         [Test]
         public async Task GetCommitsDiff_ShouldCallCorrectUrlAndResult()
         {
-            var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetCommitsDiffResponse.json"));
+            var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetCommitsDiffResponse.txt"));
 
-            var response = MockRepository.GenerateMock<IRestResponse<string>>();
+            var response = MockRepository.GenerateMock<IRestResponse>();
             response.Stub(x => x.Content).Return(responseJson);
 
             var result = _restClient
@@ -349,7 +349,7 @@ namespace Bitbucket.REST.API.Tests.Standard
         [Test]
         public async Task GetPullRequestDiff_ShouldCallCorrectUrlAndResult()
         {
-            var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetPullRequestDiffResponse.json"));
+            var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetPullRequestDiffResponse.txt"));
 
             var response = MockRepository.GenerateMock<IRestResponse>();
             response.Stub(x => x.Content).Return(responseJson);

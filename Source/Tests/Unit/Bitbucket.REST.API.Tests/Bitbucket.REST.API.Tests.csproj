@@ -192,7 +192,7 @@
     <Content Include="Standard\Data\GetBranchesResponse.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Standard\Data\GetCommitsDiffResponse.json">
+    <Content Include="Standard\Data\GetCommitsDiffResponse.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Standard\Data\GetDefaultBranchResponse.json">
@@ -207,7 +207,7 @@
     <Content Include="Standard\Data\GetPullRequestCommitsResponse.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Standard\Data\GetPullRequestDiffResponse.json">
+    <Content Include="Standard\Data\GetPullRequestDiffResponse.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Standard\Data\GetPullRequestForBranchesResponse.json">
