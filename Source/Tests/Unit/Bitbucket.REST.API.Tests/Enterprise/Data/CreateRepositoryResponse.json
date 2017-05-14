@@ -1,0 +1,40 @@
+{
+  "slug": "newrepository",
+  "id": 92,
+  "name": "NEWREPOSITORY",
+  "scmId": "git",
+  "state": "AVAILABLE",
+  "statusMessage": "Available",
+  "forkable": true,
+  "project": {
+    "key": "~MISTYK",
+    "id": 2,
+    "name": "MistyKuuuuuuuu",
+    "type": "PERSONAL",
+    "owner": {
+      "name": "MistyK",
+      "emailAddress": "mistyksu@gmail.com",
+      "id": 1,
+      "displayName": "MistyKuuuuuuuu",
+      "active": true,
+      "slug": "mistyk",
+      "type": "NORMAL",
+      "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+    },
+    "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
+  },
+  "public": false,
+  "links": {
+    "clone": [
+      {
+        "href": "http://MistyK@localhost:7990/scm/~mistyk/newrepository.git",
+        "name": "http"
+      },
+      {
+        "href": "ssh://git@localhost:7999/~mistyk/newrepository.git",
+        "name": "ssh"
+      }
+    ],
+    "self": [ { "href": "http://localhost:7990/users/mistyk/repos/newrepository/browse" } ]
+  }
+}

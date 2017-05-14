@@ -14,7 +14,7 @@
         "links": { "self": [ { "href": "http://localhost:7990/users/mistyk" } ] }
       },
       "authorTimestamp": 1490438587000,
-      "message": "Merge pull request #37 in ~MISTYK/test2 from first-branch to master\n\n* commit '804c76c37b5a49debaf32de00af3607a952494fe':\n  second commit\n  first commit\n  asd\n  asd\n  asd\n  asd",
+      "message": "short message",
       "parents": [
         {
           "id": "bb912538b409b6887eb552ee6f4e392073436beb",
