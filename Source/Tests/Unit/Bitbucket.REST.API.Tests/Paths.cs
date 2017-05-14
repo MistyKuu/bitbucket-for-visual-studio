@@ -9,5 +9,9 @@ namespace Bitbucket.REST.API.Tests
         {
             return Path.Combine(TestContext.CurrentContext.TestDirectory, "Enterprise", "Data", fileName);
         }
+        public static string GetStandardDataPath(string fileName)
+        {
+            return Path.Combine(TestContext.CurrentContext.TestDirectory, "Standard", "Data", fileName);
+        }
     }
 }

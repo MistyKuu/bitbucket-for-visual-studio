@@ -25,7 +25,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         public Task<User> GetUser()
         {
-            throw new NotImplementedException(); //todo its returning all users
+            throw new NotImplementedException(); //todo its returning all users (not used anywhere)
             //var url = EnterpriseApiUrls.User();
             //var response = await RestClient.GetAllPages<EnterpriseUser>(url);
             //if (!response.Values.Any())

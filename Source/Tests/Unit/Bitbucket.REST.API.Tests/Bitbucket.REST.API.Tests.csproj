@@ -104,6 +104,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Standard\PullRequestsClientTests.cs" />
+    <Compile Include="Standard\RepositoriesClientTests.cs" />
     <Compile Include="Enterprise\EnterpriseRepositoriesClientTests.cs" />
     <Compile Include="Enterprise\EnterprisePullRequestsClientTests.cs" />
     <Compile Include="Paths.cs" />
@@ -181,6 +183,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Standard\Data\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
