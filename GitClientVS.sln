@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitClientVS.Infrastructure.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitbucket.REST.API.Tests", "Source\Tests\Unit\Bitbucket.REST.API.Tests\Bitbucket.REST.API.Tests.csproj", "{B47D5BA6-9A5B-4EF6-83C3-93C459F5938D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitClientVS.Tests.Shared", "GitClientVS.Tests.Shared\GitClientVS.Tests.Shared.csproj", "{94E39743-9C02-405B-ADD5-46049DDBE1CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitClientVS.Tests.Shared", "Source\Tests\Unit\GitClientVS.Tests.Shared\GitClientVS.Tests.Shared.csproj", "{94E39743-9C02-405B-ADD5-46049DDBE1CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

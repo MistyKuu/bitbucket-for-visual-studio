@@ -109,10 +109,6 @@
     <Compile Include="ViewModels\ConnectSectionViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\GitClientVS.Tests.Shared\GitClientVS.Tests.Shared.csproj">
-      <Project>{94e39743-9c02-405b-add5-46049ddbe1cf}</Project>
-      <Name>GitClientVS.Tests.Shared</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\BitBucket.REST.API\BitBucket.REST.API.csproj">
       <Project>{8d9a6680-2f77-485e-b90d-70e70a3444cf}</Project>
       <Name>BitBucket.REST.API</Name>
@@ -132,6 +128,10 @@
     <ProjectReference Include="..\..\..\ParseDiff\ParseDiff.csproj">
       <Project>{65672E92-C353-4D21-A098-6A5BEB42CDF4}</Project>
       <Name>ParseDiff</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GitClientVS.Tests.Shared\GitClientVS.Tests.Shared.csproj">
+      <Project>{94e39743-9c02-405b-add5-46049ddbe1cf}</Project>
+      <Name>GitClientVS.Tests.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
