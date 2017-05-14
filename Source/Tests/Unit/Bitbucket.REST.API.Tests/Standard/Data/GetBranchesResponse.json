@@ -1,0 +1,275 @@
+{
+  "pagelen": 50,
+  "values": [
+    {
+      "type": "branch",
+      "name": "ASD-ASD",
+      "links": {
+        "commits": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commits/ASD-ASD" },
+        "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/refs/branches/ASD-ASD" },
+        "html": { "href": "https://bitbucket.org/mistyku/netcoretest/branch/ASD-ASD" }
+      },
+      "target": {
+        "hash": "f2fd0045b8ff7ed824b7cd84ae2c9f0d9d2ec91c",
+        "repository": {
+          "links": {
+            "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest" },
+            "html": { "href": "https://bitbucket.org/mistyku/netcoretest" },
+            "avatar": { "href": "https://bitbucket.org/mistyku/netcoretest/avatar/32/" }
+          },
+          "type": "repository",
+          "name": "NetCoreTest",
+          "full_name": "mistyku/netcoretest",
+          "uuid": "{1e417585-0a5e-4fde-b960-6c0cf7a7c7eb}"
+        },
+        "links": {
+          "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/f2fd0045b8ff7ed824b7cd84ae2c9f0d9d2ec91c" },
+          "comments": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/f2fd0045b8ff7ed824b7cd84ae2c9f0d9d2ec91c/comments" },
+          "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/f2fd0045b8ff7ed824b7cd84ae2c9f0d9d2ec91c" },
+          "diff": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/diff/f2fd0045b8ff7ed824b7cd84ae2c9f0d9d2ec91c" },
+          "approve": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/f2fd0045b8ff7ed824b7cd84ae2c9f0d9d2ec91c/approve" },
+          "statuses": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/f2fd0045b8ff7ed824b7cd84ae2c9f0d9d2ec91c/statuses" }
+        },
+        "author": {
+          "raw": "Zbigniew Szepczyński <mistyksu@gmail.com>",
+          "type": "author",
+          "user": {
+            "username": "mistyku",
+            "display_name": "Zbigniew Szepczyński",
+            "type": "user",
+            "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/users/mistyku" },
+              "html": { "href": "https://bitbucket.org/mistyku/" },
+              "avatar": { "href": "https://bitbucket.org/account/mistyku/avatar/32/" }
+            }
+          }
+        },
+        "parents": [
+          {
+            "hash": "be0fbe1ca947e9a72edcb66114944f902ea8726e",
+            "type": "commit",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/be0fbe1ca947e9a72edcb66114944f902ea8726e" },
+              "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/be0fbe1ca947e9a72edcb66114944f902ea8726e" }
+            }
+          },
+          {
+            "hash": "cac552c5f1c0705165492a9be7fa3c2ff7622c7a",
+            "type": "commit",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/cac552c5f1c0705165492a9be7fa3c2ff7622c7a" },
+              "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/cac552c5f1c0705165492a9be7fa3c2ff7622c7a" }
+            }
+          }
+        ],
+        "date": "2017-03-20T21:34:14+00:00",
+        "message": "Merged in tescik (pull request #10)\n\ntescik\n\nApproved-by: Zbigniew Szepczyński <mistyksu@gmail.com>\n",
+        "type": "commit"
+      }
+    },
+    {
+      "type": "branch",
+      "name": "master",
+      "links": {
+        "commits": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commits/master" },
+        "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/refs/branches/master" },
+        "html": { "href": "https://bitbucket.org/mistyku/netcoretest/branch/master" }
+      },
+      "target": {
+        "hash": "b6988a77079d7f96127c085b5c34077d24e4f096",
+        "repository": {
+          "links": {
+            "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest" },
+            "html": { "href": "https://bitbucket.org/mistyku/netcoretest" },
+            "avatar": { "href": "https://bitbucket.org/mistyku/netcoretest/avatar/32/" }
+          },
+          "type": "repository",
+          "name": "NetCoreTest",
+          "full_name": "mistyku/netcoretest",
+          "uuid": "{1e417585-0a5e-4fde-b960-6c0cf7a7c7eb}"
+        },
+        "links": {
+          "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/b6988a77079d7f96127c085b5c34077d24e4f096" },
+          "comments": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/b6988a77079d7f96127c085b5c34077d24e4f096/comments" },
+          "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/b6988a77079d7f96127c085b5c34077d24e4f096" },
+          "diff": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/diff/b6988a77079d7f96127c085b5c34077d24e4f096" },
+          "approve": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/b6988a77079d7f96127c085b5c34077d24e4f096/approve" },
+          "statuses": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/b6988a77079d7f96127c085b5c34077d24e4f096/statuses" }
+        },
+        "author": {
+          "raw": "Zbigniew Szepczyński <mistyksu@gmail.com>",
+          "type": "author",
+          "user": {
+            "username": "mistyku",
+            "display_name": "Zbigniew Szepczyński",
+            "type": "user",
+            "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/users/mistyku" },
+              "html": { "href": "https://bitbucket.org/mistyku/" },
+              "avatar": { "href": "https://bitbucket.org/account/mistyku/avatar/32/" }
+            }
+          }
+        },
+        "parents": [
+          {
+            "hash": "3fd2deed5317f84c6eec68882084d04e1dc63731",
+            "type": "commit",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/3fd2deed5317f84c6eec68882084d04e1dc63731" },
+              "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/3fd2deed5317f84c6eec68882084d04e1dc63731" }
+            }
+          },
+          {
+            "hash": "1b23ddd1c16655bdf392fd44d99708da11a8b651",
+            "type": "commit",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/1b23ddd1c16655bdf392fd44d99708da11a8b651" },
+              "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/1b23ddd1c16655bdf392fd44d99708da11a8b651" }
+            }
+          }
+        ],
+        "date": "2017-04-07T20:10:54+00:00",
+        "message": "Merged in tescik (pull request #20)\n\nMerged in master1\n\nApproved-by: Zbigniew Szepczyński <mistyksu@gmail.com>\n",
+        "type": "commit"
+      }
+    },
+    {
+      "type": "branch",
+      "name": "tescik",
+      "links": {
+        "commits": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commits/tescik" },
+        "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/refs/branches/tescik" },
+        "html": { "href": "https://bitbucket.org/mistyku/netcoretest/branch/tescik" }
+      },
+      "target": {
+        "hash": "1b23ddd1c16655bdf392fd44d99708da11a8b651",
+        "repository": {
+          "links": {
+            "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest" },
+            "html": { "href": "https://bitbucket.org/mistyku/netcoretest" },
+            "avatar": { "href": "https://bitbucket.org/mistyku/netcoretest/avatar/32/" }
+          },
+          "type": "repository",
+          "name": "NetCoreTest",
+          "full_name": "mistyku/netcoretest",
+          "uuid": "{1e417585-0a5e-4fde-b960-6c0cf7a7c7eb}"
+        },
+        "links": {
+          "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/1b23ddd1c16655bdf392fd44d99708da11a8b651" },
+          "comments": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/1b23ddd1c16655bdf392fd44d99708da11a8b651/comments" },
+          "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/1b23ddd1c16655bdf392fd44d99708da11a8b651" },
+          "diff": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/diff/1b23ddd1c16655bdf392fd44d99708da11a8b651" },
+          "approve": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/1b23ddd1c16655bdf392fd44d99708da11a8b651/approve" },
+          "statuses": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/1b23ddd1c16655bdf392fd44d99708da11a8b651/statuses" }
+        },
+        "author": {
+          "raw": "Zbigniew Szepczyński <mistyksu@gmail.com>",
+          "type": "author",
+          "user": {
+            "username": "mistyku",
+            "display_name": "Zbigniew Szepczyński",
+            "type": "user",
+            "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/users/mistyku" },
+              "html": { "href": "https://bitbucket.org/mistyku/" },
+              "avatar": { "href": "https://bitbucket.org/account/mistyku/avatar/32/" }
+            }
+          }
+        },
+        "parents": [
+          {
+            "hash": "a43201ec9b6b573fd2234ba49f1d3bf72f35721b",
+            "type": "commit",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/a43201ec9b6b573fd2234ba49f1d3bf72f35721b" },
+              "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/a43201ec9b6b573fd2234ba49f1d3bf72f35721b" }
+            }
+          },
+          {
+            "hash": "3fd2deed5317f84c6eec68882084d04e1dc63731",
+            "type": "commit",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/3fd2deed5317f84c6eec68882084d04e1dc63731" },
+              "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/3fd2deed5317f84c6eec68882084d04e1dc63731" }
+            }
+          }
+        ],
+        "date": "2017-03-23T19:14:30+00:00",
+        "message": "Merged in master (pull request #17)\n\nmaster\n\nApproved-by: Zbigniew Szepczyński <mistyksu@gmail.com>\n",
+        "type": "commit"
+      }
+    },
+    {
+      "type": "branch",
+      "name": "testbranch",
+      "links": {
+        "commits": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commits/testbranch" },
+        "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/refs/branches/testbranch" },
+        "html": { "href": "https://bitbucket.org/mistyku/netcoretest/branch/testbranch" }
+      },
+      "target": {
+        "hash": "b6988a77079d7f96127c085b5c34077d24e4f096",
+        "repository": {
+          "links": {
+            "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest" },
+            "html": { "href": "https://bitbucket.org/mistyku/netcoretest" },
+            "avatar": { "href": "https://bitbucket.org/mistyku/netcoretest/avatar/32/" }
+          },
+          "type": "repository",
+          "name": "NetCoreTest",
+          "full_name": "mistyku/netcoretest",
+          "uuid": "{1e417585-0a5e-4fde-b960-6c0cf7a7c7eb}"
+        },
+        "links": {
+          "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/b6988a77079d7f96127c085b5c34077d24e4f096" },
+          "comments": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/b6988a77079d7f96127c085b5c34077d24e4f096/comments" },
+          "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/b6988a77079d7f96127c085b5c34077d24e4f096" },
+          "diff": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/diff/b6988a77079d7f96127c085b5c34077d24e4f096" },
+          "approve": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/b6988a77079d7f96127c085b5c34077d24e4f096/approve" },
+          "statuses": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/b6988a77079d7f96127c085b5c34077d24e4f096/statuses" }
+        },
+        "author": {
+          "raw": "Zbigniew Szepczyński <mistyksu@gmail.com>",
+          "type": "author",
+          "user": {
+            "username": "mistyku",
+            "display_name": "Zbigniew Szepczyński",
+            "type": "user",
+            "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/users/mistyku" },
+              "html": { "href": "https://bitbucket.org/mistyku/" },
+              "avatar": { "href": "https://bitbucket.org/account/mistyku/avatar/32/" }
+            }
+          }
+        },
+        "parents": [
+          {
+            "hash": "3fd2deed5317f84c6eec68882084d04e1dc63731",
+            "type": "commit",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/3fd2deed5317f84c6eec68882084d04e1dc63731" },
+              "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/3fd2deed5317f84c6eec68882084d04e1dc63731" }
+            }
+          },
+          {
+            "hash": "1b23ddd1c16655bdf392fd44d99708da11a8b651",
+            "type": "commit",
+            "links": {
+              "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/commit/1b23ddd1c16655bdf392fd44d99708da11a8b651" },
+              "html": { "href": "https://bitbucket.org/mistyku/netcoretest/commits/1b23ddd1c16655bdf392fd44d99708da11a8b651" }
+            }
+          }
+        ],
+        "date": "2017-04-07T20:10:54+00:00",
+        "message": "Merged in tescik (pull request #20)\n\nMerged in master1\n\nApproved-by: Zbigniew Szepczyński <mistyksu@gmail.com>\n",
+        "type": "commit"
+      }
+    }
+  ],
+  "page": 1,
+  "size": 4
+}

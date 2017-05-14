@@ -1,0 +1,29 @@
+{
+  "pagelen": 100,
+  "values": [
+    {
+      "username": "bitbucketvsextension",
+      "display_name": "bitbucketvsextension",
+      "type": "user",
+      "uuid": "{52722c5e-5f9c-464b-b295-986a61bef26b}",
+      "links": {
+        "self": { "href": "https://bitbucket.org/!api/2.0/users/bitbucketvsextension" },
+        "html": { "href": "https://bitbucket.org/bitbucketvsextension/" },
+        "avatar": { "href": "https://bitbucket.org/account/bitbucketvsextension/avatar/32/" }
+      }
+    },
+    {
+      "username": "mistyku",
+      "display_name": "Zbigniew Szepczyński",
+      "type": "user",
+      "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}",
+      "links": {
+        "self": { "href": "https://bitbucket.org/!api/2.0/users/mistyku" },
+        "html": { "href": "https://bitbucket.org/mistyku/" },
+        "avatar": { "href": "https://bitbucket.org/account/mistyku/avatar/32/" }
+      }
+    }
+  ],
+  "page": 1,
+  "size": 2
+}

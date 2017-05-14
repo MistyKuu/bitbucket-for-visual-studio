@@ -1,0 +1,16 @@
+{
+  "role": "PARTICIPANT",
+  "type": "participant",
+  "user": {
+    "username": "mistyku",
+    "display_name": "Zbigniew Szepczyński",
+    "type": "user",
+    "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}",
+    "links": {
+      "self": { "href": "https://api.bitbucket.org/2.0/users/mistyku" },
+      "html": { "href": "https://bitbucket.org/mistyku/" },
+      "avatar": { "href": "https://bitbucket.org/account/mistyku/avatar/32/" }
+    }
+  },
+  "approved": true
+}

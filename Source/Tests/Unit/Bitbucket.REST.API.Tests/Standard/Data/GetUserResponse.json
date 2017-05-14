@@ -1,0 +1,21 @@
+{
+  "username": "mistyku",
+  "website": null,
+  "display_name": "Zbigniew Szepczyński",
+  "account_id": "557058:1d6e1041-ea83-4e1b-8d65-28822e4a68f4",
+  "links": {
+    "hooks": { "href": "https://api.bitbucket.org/2.0/users/mistyku/hooks" },
+    "self": { "href": "https://api.bitbucket.org/2.0/users/mistyku" },
+    "repositories": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku" },
+    "html": { "href": "https://bitbucket.org/mistyku/" },
+    "followers": { "href": "https://api.bitbucket.org/2.0/users/mistyku/followers" },
+    "avatar": { "href": "https://bitbucket.org/account/mistyku/avatar/32/" },
+    "following": { "href": "https://api.bitbucket.org/2.0/users/mistyku/following" },
+    "snippets": { "href": "https://api.bitbucket.org/2.0/snippets/mistyku" }
+  },
+  "created_on": "2013-03-07T19:14:48.942744+00:00",
+  "is_staff": false,
+  "location": null,
+  "type": "user",
+  "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}"
+}

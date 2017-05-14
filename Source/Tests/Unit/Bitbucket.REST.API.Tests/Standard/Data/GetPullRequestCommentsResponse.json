@@ -1,0 +1,84 @@
+{
+  "pagelen": 50,
+  "values": [
+    {
+      "links": {
+        "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/pullrequests/23/comments/36823271" },
+        "html": { "href": "https://bitbucket.org/mistyku/netcoretest/pull-requests/23/_/diff#comment-36823271" }
+      },
+      "pullrequest": {
+        "type": "pullrequest",
+        "id": 23,
+        "links": {
+          "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/pullrequests/23" },
+          "html": { "href": "https://bitbucket.org/mistyku/netcoretest/pull-requests/23" }
+        },
+        "title": "master"
+      },
+      "content": {
+        "raw": "Hello!",
+        "markup": "markdown",
+        "html": "<p>Hello!</p>"
+      },
+      "created_on": "2017-05-14T17:08:53.137442+00:00",
+      "user": {
+        "username": "mistyku",
+        "display_name": "Zbigniew Szepczyński",
+        "type": "user",
+        "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}",
+        "links": {
+          "self": { "href": "https://api.bitbucket.org/2.0/users/mistyku" },
+          "html": { "href": "https://bitbucket.org/mistyku/" },
+          "avatar": { "href": "https://bitbucket.org/account/mistyku/avatar/32/" }
+        }
+      },
+      "updated_on": "2017-05-14T17:08:53.140033+00:00",
+      "type": "pullrequest_comment",
+      "id": 36823271
+    },
+    {
+      "links": {
+        "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/pullrequests/23/comments/36823272" },
+        "html": { "href": "https://bitbucket.org/mistyku/netcoretest/pull-requests/23/_/diff#comment-36823272" }
+      },
+      "parent": {
+        "id": 36823271,
+        "links": {
+          "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/pullrequests/23/comments/36823271" },
+          "html": { "href": "https://bitbucket.org/mistyku/netcoretest/pull-requests/23/_/diff#comment-36823271" }
+        }
+      },
+      "pullrequest": {
+        "type": "pullrequest",
+        "id": 23,
+        "links": {
+          "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/pullrequests/23" },
+          "html": { "href": "https://bitbucket.org/mistyku/netcoretest/pull-requests/23" }
+        },
+        "title": "master"
+      },
+      "content": {
+        "raw": "Response to hello!",
+        "markup": "markdown",
+        "html": "<p>Response to hello!</p>"
+      },
+      "created_on": "2017-05-14T17:09:00.032164+00:00",
+      "user": {
+        "username": "mistyku",
+        "display_name": "Zbigniew Szepczyński",
+        "type": "user",
+        "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}",
+        "links": {
+          "self": { "href": "https://api.bitbucket.org/2.0/users/mistyku" },
+          "html": { "href": "https://bitbucket.org/mistyku/" },
+          "avatar": { "href": "https://bitbucket.org/account/mistyku/avatar/32/" }
+        }
+      },
+      "updated_on": "2017-05-14T17:09:00.034473+00:00",
+      "type": "pullrequest_comment",
+      "id": 36823272
+    }
+  ],
+  "page": 1,
+  "size": 2
+}

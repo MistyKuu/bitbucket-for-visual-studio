@@ -1,0 +1,18 @@
+{
+  "pagelen": 100,
+  "values": [
+    {
+      "username": "bitbucketvsextension",
+      "display_name": "bitbucketvsextension",
+      "type": "user",
+      "uuid": "{52722c5e-5f9c-464b-b295-986a61bef26b}",
+      "links": {
+        "self": { "href": "https://api.bitbucket.org/2.0/users/bitbucketvsextension" },
+        "html": { "href": "https://bitbucket.org/bitbucketvsextension/" },
+        "avatar": { "href": "https://bitbucket.org/account/bitbucketvsextension/avatar/32/" }
+      }
+    }
+  ],
+  "page": 1,
+  "size": 1
+}
