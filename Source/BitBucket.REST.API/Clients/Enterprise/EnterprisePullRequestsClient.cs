@@ -44,7 +44,9 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var res = (await RestClient.ExecuteTaskAsync<EnterpriseIteratorBasedPage<EnterprisePullRequest>>(request)).Data;
             return new IteratorBasedPage<PullRequest>()
             {
-                Values = res.Values.MapTo<List<PullRequest>>() //todo add rest
+                Values = res.Values.MapTo<List<PullRequest>>(),
+                Size = res.Size,
+                Next = res.NextPageStart.ToString(),
             };
         }
 

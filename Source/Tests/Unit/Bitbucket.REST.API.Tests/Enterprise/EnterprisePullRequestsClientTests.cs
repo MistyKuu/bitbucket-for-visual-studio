@@ -203,7 +203,17 @@ namespace Bitbucket.REST.API.Tests.Enterprise
                 Assert.AreEqual(args.Parameters[1].Name, "to");
                 Assert.AreEqual(args.Parameters[1].Value, "9f0a336dc13893f8a73693267662a1b5835a3d87");
 
-                throw new NotImplementedException("generate different commit diff because example doesn't contain anything");
+                var firstDiff = commitDiff.First();
+
+                Assert.AreEqual(FileChangeType.Modified, firstDiff.Type);
+                Assert.AreEqual(0, firstDiff.Deletions);
+                Assert.AreEqual(0, firstDiff.Additions);
+                Assert.AreEqual(1, firstDiff.Id);
+                Assert.AreEqual("new2.txt", firstDiff.From);
+                Assert.AreEqual("new4.txt", firstDiff.To);
+                Assert.AreEqual("new2.txt", firstDiff.DisplayFileName);
+                Assert.AreEqual(0, firstDiff.Chunks.Count);
+
             });
         }
 
@@ -272,7 +282,16 @@ namespace Bitbucket.REST.API.Tests.Enterprise
                 Assert.AreEqual(50, args.arg2);
                 Assert.IsNull(args.arg3);
 
-                throw new NotImplementedException("CHANGE COMMENTS RESPONSE FAIL TO INCLUDE COMMENTS");
+                var secondComment = resultData[1];
+
+                Assert.AreEqual("ReplyComment", secondComment.Content.Html);
+                Assert.AreEqual(null, secondComment.Content.Raw);
+                Assert.AreEqual("05/14/2017 15:52:59", secondComment.CreatedOn);
+                Assert.AreEqual(63, secondComment.Id);
+                Assert.AreEqual(null, secondComment.Inline);
+                Assert.AreEqual("05/14/2017 15:52:59", secondComment.UpdatedOn);
+                Assert.AreEqual("MistyKuuuuuuuu", secondComment.User.DisplayName);
+                Assert.AreEqual(62, secondComment.Parent.Id);
             });
         }
 
@@ -350,7 +369,6 @@ namespace Bitbucket.REST.API.Tests.Enterprise
                 Assert.AreEqual(FileChangeType.Add, firstDiff.Type);
                 Assert.AreEqual(0, firstDiff.Deletions);
                 Assert.AreEqual(2, firstDiff.Additions);
-                Assert.AreEqual(1, firstDiff.Id);
                 Assert.AreEqual(null, firstDiff.From);
                 Assert.AreEqual("new4.txt", firstDiff.To);
                 Assert.AreEqual("new4.txt", firstDiff.DisplayFileName);
@@ -416,7 +434,7 @@ namespace Bitbucket.REST.API.Tests.Enterprise
                 .Args<IRestRequest, IRestResponse<EnterpriseIteratorBasedPage<EnterprisePullRequest>>>(
                     (s, req) => s.ExecuteTaskAsync<EnterpriseIteratorBasedPage<EnterprisePullRequest>>(req), response);
 
-            var resultData = await _sut.GetPullRequestsPage("repoName", "owner", 1);
+            var resultData = await _sut.GetPullRequestsPage("repoName", "owner", 2);
 
             Assert.AreEqual(1, result.CallCount);
 
@@ -427,10 +445,16 @@ namespace Bitbucket.REST.API.Tests.Enterprise
                 Assert.AreEqual("projects/owner/repos/repoName/pull-requests", args.Resource);
                 Assert.AreEqual(Method.GET, args.Method);
 
+                var limit = args.Parameters.First(x => x.Name == "limit").Value;
+                var start = args.Parameters.First(x => x.Name == "start").Value;
+
+                Assert.AreEqual("50", limit);
+                Assert.AreEqual("50", start);
+
                 Assert.AreEqual(5, resultData.Values.Count);
                 Assert.AreEqual(0, resultData.Page);
                 Assert.AreEqual(5, resultData.Size);
-                Assert.AreEqual(null, resultData.Next);
+                Assert.AreEqual("0", resultData.Next);
                 Assert.AreEqual(null, resultData.PageLen);
 
                 var firstPq = resultData.Values.First();
@@ -475,20 +499,28 @@ namespace Bitbucket.REST.API.Tests.Enterprise
         [Test]
         public async Task UpdatePullRequest_ShouldCallCorrectUrlAndMethod()
         {
-            var pullRequest = new Fixture().Create<PullRequest>();
+            var pq = new PullRequest()
+            {
+                Id = 1,
+                Title = "master",
+                Description = "description",
+                Source = new Source() { Branch = new Branch() { Name = "master", IsDefault = false } },
+                Destination = new Source() { Branch = new Branch() { Name = "4", IsDefault = false } },
+                Reviewers = new List<User>() { new User() { Username = "MistyK" } },
+            };
 
             var result = _restClient
                 .Capture()
                 .Args<IRestRequest, IRestResponse>((s, req) => s.ExecuteTaskAsync(req), MockRepository.GenerateMock<IRestResponse>());
 
-            await _sut.UpdatePullRequest(pullRequest, "repo", "owner");
+            await _sut.UpdatePullRequest(pq, "repo", "owner");
 
             Assert.AreEqual(1, result.CallCount);
 
             var args = result.Args[0];
 
-            Assert.AreEqual("projects/owner/repos/repoName/pull-requests/1/approve", args.Resource);
-            Assert.AreEqual(Method.DELETE, args.Method);
+            Assert.AreEqual($"projects/owner/repos/repo/pull-requests/{pq.Id}", args.Resource);
+            Assert.AreEqual(Method.PUT, args.Method);
         }
 
         [Test]
@@ -506,14 +538,51 @@ namespace Bitbucket.REST.API.Tests.Enterprise
 
             var args = result.Args[0];
 
-            Assert.AreEqual("projects/owner/repos/repoName/pull-requests/1/approve", args.Resource);
-            Assert.AreEqual(Method.DELETE, args.Method);
+            Assert.AreEqual($"projects/owner/repos/repo/pull-requests/{request.Id}/merge?version={request.Version}", args.Resource);
+            Assert.AreEqual(Method.POST, args.Method);
         }
 
         [Test]
         public void GetPullRequestQueryBuilder_ShouldReturnCorrectQueryParams()
         {
-            _sut.GetPullRequestQueryBuilder(); //todo
+            var builder = _sut.GetPullRequestQueryBuilder()
+                .WithState("OPEN")
+                .WithOrder(Order.Newest)
+                .WithSourceBranch("sourceBranch")
+                .WithAuthor("user", null);
+
+            Assert.Multiple(() =>
+            {
+                var expectedResults = new Dictionary<string, string>()
+                {
+                    ["state"] = "OPEN",
+                    ["order"] = "Newest",
+                    ["withAttributes"] = "True",
+                    ["withProperties"] = "True",
+                    ["direction"] = "OUTGOING",
+                    ["at"] = "sourceBranch",
+                    ["username.1"] = "user",
+                    ["role.1"] = "AUTHOR",
+                };
+
+                foreach (var queryParameter in builder.GetQueryParameters().Zip(expectedResults, (x, y) => new { Actual = x, Expected = y }))
+                {
+                    Assert.AreEqual(queryParameter.Expected.Key, queryParameter.Actual.Key);
+                    Assert.AreEqual(queryParameter.Expected.Value, queryParameter.Actual.Value);
+                }
+            });
+        }
+
+        [Test]
+        public void GetPullRequestQueryBuilder_SourceAndDestSpecified_ShouldThrow()
+        {
+            var builder = _sut.GetPullRequestQueryBuilder()
+                .WithState("OPEN")
+                .WithOrder(Order.Newest)
+                .WithSourceBranch("sourceBranch")
+                .WithAuthor("user", null);
+
+            Assert.Throws<Exception>(() => builder.WithDestinationBranch("destBranch"));
         }
 
     }

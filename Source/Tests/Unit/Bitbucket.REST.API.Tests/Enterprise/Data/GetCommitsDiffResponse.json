@@ -1,8 +1,27 @@
 {
-  "fromHash": "9f0a336dc13893f8a73693267662a1b5835a3d87",
-  "toHash": "9f0a336dc13893f8a73693267662a1b5835a3d87",
+  "fromHash": "b0499ba193df04c250cf36a1893ceb4dde6113a0",
+  "toHash": "d4a874473e9b6b3e32b4c20f3eea0bf5849876e1",
   "contextLines": 10,
   "whitespace": "SHOW",
-  "diffs": [],
+  "diffs": [
+    {
+      "source": {
+        "components": [ "new2.txt" ],
+        "parent": "",
+        "name": "new2.txt",
+        "extension": "txt",
+        "toString": "new2.txt"
+      },
+      "destination": {
+        "components": [ "new4.txt" ],
+        "parent": "",
+        "name": "new4.txt",
+        "extension": "txt",
+        "toString": "new4.txt"
+      },
+      "hunks": [],
+      "truncated": false
+    }
+  ],
   "truncated": false
 }
