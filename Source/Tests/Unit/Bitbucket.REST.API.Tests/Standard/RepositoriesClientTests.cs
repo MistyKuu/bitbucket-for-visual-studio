@@ -37,19 +37,25 @@ namespace Bitbucket.REST.API.Tests.Standard
                 new Credentials("Login", "Password")
                 );
 
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<EnterpriseToStandardMappingsProfile>();
+            });
+
             _sut = new RepositoriesClient(_restClient, _versionOneClient, connection);
         }
 
         [Test]
         public async Task CreateRepository_ShouldCallCorrectUrlAndMethod()
         {
+            throw new NotImplementedException("Couldn't create repository");
             var inputRepository = new Repository()
             {
                 IsPrivate = true,
                 Name = "Test111"
             };
 
-            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("CreateRepositoryResponse.json"));
+            var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("CreateRepositoryResponse.json"));
             var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseRepository>(responseJson);
 
             var response = MockRepository.GenerateMock<IRestResponse<EnterpriseRepository>>();
@@ -71,7 +77,7 @@ namespace Bitbucket.REST.API.Tests.Standard
                 Assert.AreEqual(Method.POST, args.Method);
 
                 var body = args.Parameters.First(x => x.Type == ParameterType.RequestBody);
-                var expectedJsonBody = Utilities.LoadFile(Paths.GetEnterpriseDataPath("CreateRepositoryRequest.json"));
+                var expectedJsonBody = Utilities.LoadFile(Paths.GetStandardDataPath("CreateRepositoryRequest.json"));
 
                 Assert.AreEqual(expectedJsonBody, body.Value.ToString());
 
@@ -83,12 +89,21 @@ namespace Bitbucket.REST.API.Tests.Standard
         [Test]
         public async Task GetBranches_ShouldCallCorrectUrlAndGetResult()
         {
-            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetBranchesResponse.json"));
-            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterpriseBranch>>(responseJson);
+            var responseDefaultBranchJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetDefaultBranchResponse.json"));
+            var responseDefaultBranchData = new NewtonsoftJsonSerializer().Deserialize<Branch>(responseDefaultBranchJson);
+            var response = MockRepository.GenerateMock<IRestResponse<Branch>>();
+            response.Stub(x => x.Data).Return(responseDefaultBranchData);
+
+            var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetBranchesResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<IteratorBasedPage<Branch>>(responseJson);
 
             var result = _restClient
                 .Capture()
-                .Args<string, int, QueryString, IEnumerable<EnterpriseBranch>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseBranch>(url, limit, queryString), responseData.Values);
+                .Args<string, int, QueryString, IEnumerable<Branch>>((s, url, limit, queryString) => s.GetAllPages<Branch>(url, limit, queryString), responseData.Values);
+
+            var defaultBranchResult = _versionOneClient
+                .Capture()
+                .Args<IRestRequest, IRestResponse<Branch>>((s, req) => s.ExecuteTaskAsync<Branch>(req), response);
 
             var resultData = (await _sut.GetBranches("reponame", "owner")).ToList();
 
@@ -98,16 +113,16 @@ namespace Bitbucket.REST.API.Tests.Standard
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual("projects/owner/repos/reponame/branches", args.arg1);
+                Assert.AreEqual("repositories/owner/reponame/refs/branches", args.arg1);
                 Assert.AreEqual(50, args.arg2);
                 Assert.IsNull(args.arg3);
 
                 var firstBranch = resultData[0];
 
                 Assert.AreEqual(false, firstBranch.IsDefault);
-                Assert.AreEqual("asdasdasd", firstBranch.Name);
+                Assert.AreEqual("ASD-ASD", firstBranch.Name);
                 Assert.AreEqual(null, firstBranch.Target.CommitHref);
-                Assert.AreEqual("a2b217a1a7742a1c4a9784012c50df23da43d6fc", firstBranch.Target.Hash);
+                Assert.AreEqual("f2fd0045b8ff7ed824b7cd84ae2c9f0d9d2ec91c", firstBranch.Target.Hash);
             });
         }
 
@@ -115,10 +130,11 @@ namespace Bitbucket.REST.API.Tests.Standard
         [Test]
         public async Task GetCommitsRange_ShouldCallCorrectUrlAndGetResult()
         {
+            throw new NotImplementedException("NO RESPONSE FILE");
             var sourceBranch = new Branch() { Target = new Commit() { Hash = "firstHash" } };
             var destBranch = new Branch() { Target = new Commit() { Hash = "secondHash" } };
 
-            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetCommitsRangeResponse.json"));
+            var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetCommitsRangeResponse.json"));
             var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterpriseCommit>>(responseJson);
 
             var result = _restClient
@@ -147,12 +163,15 @@ namespace Bitbucket.REST.API.Tests.Standard
         [Test]
         public async Task GetUserRepositories_ShouldCallCorrectUrlAndGetResult()
         {
-            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetRepositoryUsersResponse.json"));
-            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterpriseRepository>>(responseJson);
+            var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetUserRepositoriesResponse.json"));
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<List<RepositoryV1>>(responseJson);
 
-            var result = _restClient
+            var response = MockRepository.GenerateMock<IRestResponse<List<RepositoryV1>>>();
+            response.Stub(x => x.Data).Return(responseData);
+
+            var result = _versionOneClient
                 .Capture()
-                .Args<string, int, QueryString, IEnumerable<EnterpriseRepository>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseRepository>(url, limit, queryString), responseData.Values);
+                .Args<IRestRequest, IRestResponse<List<RepositoryV1>>>((s, req) => s.ExecuteTaskAsync<List<RepositoryV1>>(req), response);
 
             var resultData = (await _sut.GetUserRepositories()).ToList();
 
@@ -162,14 +181,19 @@ namespace Bitbucket.REST.API.Tests.Standard
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual("repos", args.arg1);
-                Assert.AreEqual(50, args.arg2);
-                Assert.IsNull(args.arg3);
+                Assert.AreEqual("user/repositories", args.Resource);
+                Assert.AreEqual(Method.GET, args.Method);
 
                 var firstRepo = resultData[0];
 
-                Assert.AreEqual("Abc", firstRepo.Name);
-                Assert.AreEqual(55, firstRepo.Id);
+                Assert.AreEqual("teamrepo", firstRepo.Name);
+                Assert.IsNull(firstRepo.Id);
+                Assert.AreEqual("git", firstRepo.Scm);
+                Assert.AreEqual("2016-07-30 11:48:44+00:00", firstRepo.CreatedOn);
+                Assert.AreEqual("2017-03-25 10:41:23+00:00", firstRepo.UpdatedOn);
+                Assert.AreEqual("teamrepo", firstRepo.Name);
+                Assert.AreEqual(true, firstRepo.IsPrivate);
+                Assert.AreEqual("http://Login@url.com/testujemyext/teamrepo.git", firstRepo.Links.Clone.First().Href);
             });
         }
 

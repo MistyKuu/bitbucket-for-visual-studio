@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using BitBucket.REST.API.Mappings.Converters;
 using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Standard;
 using GitClientVS.Contracts.Models.GitClientModels;
@@ -11,8 +12,6 @@ namespace GitClientVS.Infrastructure.Mappings
     {
         public GitMappingsProfile()
         {
-            CreateMap<RepositoryV1, Repository>().ConvertUsing<RepositoryV1TypeConverter>();
-
             CreateMap<Repository, GitRemoteRepository>().ConvertUsing<RepositoryTypeConverter>();
             CreateMap<GitRemoteRepository, Repository>().ConvertUsing<ReverseRepositoryTypeConverter>();
 

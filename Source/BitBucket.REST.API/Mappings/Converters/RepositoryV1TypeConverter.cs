@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using AutoMapper;
 using BitBucket.REST.API.Models.Standard;
 
-namespace GitClientVS.Infrastructure.Mappings
+namespace BitBucket.REST.API.Mappings.Converters
 {
     public class RepositoryV1TypeConverter : ITypeConverter<RepositoryV1, Repository>
     {
@@ -18,6 +14,8 @@ namespace GitClientVS.Infrastructure.Mappings
                 Description = source.Description,
                 IsPrivate = source.IsPrivate,
                 Scm = source.Scm,
+                CreatedOn = source.UtcCreatedOn,
+                UpdatedOn = source.UtcLastUpdated,
                 HasIssues = source.HasIssues,
                 HasWiki = source.HasWiki,
                 Parent = source.IsFork ? new Parent() : null,//todo this is only because mapping between repository and gitremoterepository uses that

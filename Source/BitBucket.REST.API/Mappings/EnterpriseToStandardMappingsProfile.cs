@@ -10,6 +10,7 @@ namespace BitBucket.REST.API.Mappings
     {
         public EnterpriseToStandardMappingsProfile()
         {
+            CreateMap<RepositoryV1, Repository>().ConvertUsing<RepositoryV1TypeConverter>();
             CreateMap<EnterpriseLink, Link>();
             CreateMap<Link, EnterpriseLink>();
 
