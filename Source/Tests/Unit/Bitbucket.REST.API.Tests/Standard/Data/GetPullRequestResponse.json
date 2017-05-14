@@ -1,6 +1,6 @@
 {
   "merge_commit": null,
-  "description": "* test edited online with Bitbucket\r\n* Merged in hehe (pull request #12)\n\nasd11\r\n* Merged in master (pull request #13)\n\nmaster\n\nApproved-by: Zbigniew Szepczyński <mistyksu@gmail.com>\r\n* Merged in TTTTTTTTTTTTT (pull request #15)\n\nTTTTTTTTTTTTT\r\n* Merged in tescik (pull request #14)\n\nMerged in master (pull request #13)\n\nApproved-by: wariatzkrakowa <digu@gamgling.com>\r\n* qwdqwd created online with Bitbucket\r\n* Merged in master (pull request #17)\n\nmaster\n\nApproved-by: Zbigniew Szepczyński <mistyksu@gmail.com>\r\n* Merged in tescik (pull request #20)\n\nMerged in master1\n\nApproved-by: Zbigniew Szepczyński <mistyksu@gmail.com>",
+  "description": "short description",
   "links": {
     "decline": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/pullrequests/21/decline" },
     "commits": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/netcoretest/pullrequests/21/commits" },

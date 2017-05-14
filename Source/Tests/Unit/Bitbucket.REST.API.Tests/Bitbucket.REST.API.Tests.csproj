@@ -192,7 +192,7 @@
     <Content Include="Standard\Data\GetBranchesResponse.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Standard\Data\GetCommitDiffsResponse.json">
+    <Content Include="Standard\Data\GetCommitsDiffResponse.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Standard\Data\GetDefaultBranchResponse.json">

@@ -23,7 +23,7 @@
       "created_on": "2017-05-14T17:08:53.137442+00:00",
       "user": {
         "username": "mistyku",
-        "display_name": "Zbigniew Szepczyński",
+        "display_name": "dispName",
         "type": "user",
         "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}",
         "links": {
@@ -65,7 +65,7 @@
       "created_on": "2017-05-14T17:09:00.032164+00:00",
       "user": {
         "username": "mistyku",
-        "display_name": "Zbigniew Szepczyński",
+        "display_name": "dispname",
         "type": "user",
         "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}",
         "links": {
