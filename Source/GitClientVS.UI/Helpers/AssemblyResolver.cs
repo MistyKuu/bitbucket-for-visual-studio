@@ -13,7 +13,6 @@ namespace GitClientVS.UI.Helpers
         // list of assemblies to be loaded from the extension installation path
         static readonly string[] OurAssemblies =
         {
-            "GitClientVS.Api",
             "GitClientVS.Contracts",
             "GitClientVS.Infrastructure",
             "GitClientVS.Services",
