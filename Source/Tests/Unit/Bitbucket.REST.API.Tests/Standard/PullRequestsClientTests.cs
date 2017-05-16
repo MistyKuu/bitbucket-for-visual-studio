@@ -206,7 +206,6 @@ namespace Bitbucket.REST.API.Tests.Standard
                 Assert.AreEqual(FileChangeType.Add, firstDiff.Type);
                 Assert.AreEqual(0, firstDiff.Deletions);
                 Assert.AreEqual(1, firstDiff.Additions);
-                Assert.AreEqual(1, firstDiff.Id);
                 Assert.AreEqual("/dev/null", firstDiff.From);
                 Assert.AreEqual("NEWFILE", firstDiff.To);
                 Assert.AreEqual("NEWFILE", firstDiff.DisplayFileName);
