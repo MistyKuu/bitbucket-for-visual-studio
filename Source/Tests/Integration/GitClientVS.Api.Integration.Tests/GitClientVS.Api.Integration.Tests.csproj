@@ -56,12 +56,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\GitClientVS.Api\GitClientVS.Api.csproj">
-      <Project>{e0958944-2774-483f-8b43-72e89f87971a}</Project>
-      <Name>GitClientVS.Api</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
