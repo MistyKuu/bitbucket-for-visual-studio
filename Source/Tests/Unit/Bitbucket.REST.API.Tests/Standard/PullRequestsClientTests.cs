@@ -39,7 +39,7 @@ namespace Bitbucket.REST.API.Tests.Standard
             var connection = new Connection(
                 new Uri("http://url.com"),
                 new Uri("http://api.url.com"),
-                new Credentials("Login", "Password")
+                new Credentials("mistyku", "Password")
                 );
 
             _sut = new PullRequestsClient(_restClient, _internalClient, _webClient, connection);
@@ -102,12 +102,14 @@ namespace Bitbucket.REST.API.Tests.Standard
 
             var pq = new PullRequest()
             {
-                Id = 1,
+                Id = 0,
                 Title = "master",
-                Description = "description",
+                Description = "* qwdwqdqwd created online with Bitbucket",
                 Source = new Source() { Branch = new Branch() { Name = "master", IsDefault = false } },
-                Destination = new Source() { Branch = new Branch() { Name = "4", IsDefault = false } },
-                Reviewers = new List<User>() { new User() { Username = "MistyK" } },
+                Destination = new Source() { Branch = new Branch() { Name = "testbranch", IsDefault = false } },
+                Reviewers = new List<User>() { new User() { Username = "bitbucketvsextension", Type = "user" } },
+                CloseSourceBranch = false,
+                State = PullRequestOptions.OPEN
             };
 
             await _sut.CreatePullRequest(pq, "reponame", "owner");
@@ -178,10 +180,11 @@ namespace Bitbucket.REST.API.Tests.Standard
         [Test]
         public async Task GetCommitsDiff_ShouldCallCorrectUrlAndResult()
         {
-            var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetCommitsDiffResponse.txt"));
+            var responseTxt = Utilities.LoadFile(Paths.GetStandardDataPath("GetCommitsDiffResponse.txt"));
+            responseTxt = responseTxt.Replace(Environment.NewLine, "\n");
 
             var response = MockRepository.GenerateMock<IRestResponse>();
-            response.Stub(x => x.Content).Return(responseJson);
+            response.Stub(x => x.Content).Return(responseTxt);
 
             var result = _restClient
                 .Capture()
@@ -200,14 +203,22 @@ namespace Bitbucket.REST.API.Tests.Standard
 
                 var firstDiff = commitDiff.First();
 
-                Assert.AreEqual(FileChangeType.Modified, firstDiff.Type);
+                Assert.AreEqual(FileChangeType.Add, firstDiff.Type);
                 Assert.AreEqual(0, firstDiff.Deletions);
-                Assert.AreEqual(0, firstDiff.Additions);
+                Assert.AreEqual(1, firstDiff.Additions);
                 Assert.AreEqual(1, firstDiff.Id);
-                Assert.AreEqual("of", firstDiff.From);
-                Assert.AreEqual("file", firstDiff.To);
-                Assert.AreEqual("of", firstDiff.DisplayFileName);
-                Assert.AreEqual(0, firstDiff.Chunks.Count);
+                Assert.AreEqual("/dev/null", firstDiff.From);
+                Assert.AreEqual("NEWFILE", firstDiff.To);
+                Assert.AreEqual("NEWFILE", firstDiff.DisplayFileName);
+                Assert.AreEqual(1, firstDiff.Chunks.Count);
+
+                var firstChange = firstDiff.Chunks.First().Changes.First();
+
+                Assert.AreEqual("+wqdqwdwqd", firstChange.Content);
+                Assert.AreEqual(1,firstChange.Index);
+                Assert.AreEqual(1,firstChange.NewIndex);
+                Assert.AreEqual(null,firstChange.OldIndex);
+                Assert.AreEqual(LineChangeType.Add,firstChange.Type);
 
             });
         }
@@ -349,10 +360,11 @@ namespace Bitbucket.REST.API.Tests.Standard
         [Test]
         public async Task GetPullRequestDiff_ShouldCallCorrectUrlAndResult()
         {
-            var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetPullRequestDiffResponse.txt"));
+            var responseTxt = Utilities.LoadFile(Paths.GetStandardDataPath("GetPullRequestDiffResponse.txt"));
+            responseTxt = responseTxt.Replace(Environment.NewLine, "\n");
 
             var response = MockRepository.GenerateMock<IRestResponse>();
-            response.Stub(x => x.Content).Return(responseJson);
+            response.Stub(x => x.Content).Return(responseTxt);
 
             var result = _restClient
                 .Capture()
@@ -367,7 +379,7 @@ namespace Bitbucket.REST.API.Tests.Standard
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual("projects/owner/repos/repoName/pull-requests/1/diff", args.Resource);
+                Assert.AreEqual("repositories/owner/repoName/pullrequests/1/diff", args.Resource);
                 Assert.AreEqual(Method.GET, args.Method);
 
                 Assert.AreEqual(1, resultData.Count());
@@ -376,23 +388,23 @@ namespace Bitbucket.REST.API.Tests.Standard
 
                 Assert.AreEqual(FileChangeType.Add, firstDiff.Type);
                 Assert.AreEqual(0, firstDiff.Deletions);
-                Assert.AreEqual(2, firstDiff.Additions);
-                Assert.AreEqual(null, firstDiff.From);
-                Assert.AreEqual("new4.txt", firstDiff.To);
-                Assert.AreEqual("new4.txt", firstDiff.DisplayFileName);
+                Assert.AreEqual(1, firstDiff.Additions);
+                Assert.AreEqual("/dev/null", firstDiff.From);
+                Assert.AreEqual("NEWFILE", firstDiff.To);
+                Assert.AreEqual("NEWFILE", firstDiff.DisplayFileName);
                 Assert.AreEqual(1, firstDiff.Chunks.Count);
 
                 var firstChunk = firstDiff.Chunks.First();
 
-                Assert.AreEqual("asdkopasdkapskdoasd\r\nasdasd", firstChunk.Text);
+                Assert.AreEqual("+wqdqwdwqd\r\n\\ No newline at end of file", firstChunk.Text);
                 Assert.AreEqual(0, firstChunk.OldLines);
                 Assert.AreEqual(0, firstChunk.NewLines);
-                Assert.AreEqual(null, firstChunk.Content);
+                Assert.AreEqual("@@ -0,0 +1 @@", firstChunk.Content);
                 Assert.AreEqual(2, firstChunk.Changes.Count);
 
                 var firstChange = firstChunk.Changes.First();
 
-                Assert.AreEqual(0, firstChange.Index);
+                Assert.AreEqual(1, firstChange.Index);
                 Assert.AreEqual(null, firstChange.OldIndex);
                 Assert.AreEqual(1, firstChange.NewIndex);
                 Assert.AreEqual(LineChangeType.Add, firstChange.Type);
@@ -508,7 +520,7 @@ namespace Bitbucket.REST.API.Tests.Standard
             {
                 Assert.AreEqual("mentions/repositories/owner/reponame", args.Resource);
                 Assert.AreEqual(Method.GET, args.Method);
-               
+
 
                 var firstUser = resultData.First();
 

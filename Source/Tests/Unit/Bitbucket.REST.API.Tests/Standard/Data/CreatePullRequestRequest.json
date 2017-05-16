@@ -1,0 +1,29 @@
+{
+  "description": "* qwdwqdqwd created online with Bitbucket",
+  "author": {
+    "username": "mistyku"
+  },
+  "close_source_branch": false,
+  "title": "master",
+  "destination": {
+    "branch": {
+      "name": "testbranch",
+      "IsDefault": false
+    }
+  },
+  "source": {
+    "branch": {
+      "name": "master",
+      "IsDefault": false
+    }
+  },
+  "state": 2,
+  "id": 0,
+  "comment_count": 0,
+  "reviewers": [
+    {
+      "username": "bitbucketvsextension",
+      "type": "user"
+    }
+  ]
+}

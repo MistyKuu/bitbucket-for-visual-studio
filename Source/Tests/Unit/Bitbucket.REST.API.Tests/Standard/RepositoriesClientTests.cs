@@ -48,12 +48,13 @@ namespace Bitbucket.REST.API.Tests.Standard
         [Test]
         public async Task CreateRepository_ShouldCallCorrectUrlAndMethod()
         {
-            throw new NotImplementedException("Couldn't create repository");
             var inputRepository = new Repository()
             {
                 IsPrivate = true,
                 Name = "Test111"
             };
+
+            throw new NotImplementedException("Creating repository doesn't work. Invalid slug. Investigate TODO");
 
             var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("CreateRepositoryResponse.json"));
             var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseRepository>(responseJson);
@@ -130,16 +131,15 @@ namespace Bitbucket.REST.API.Tests.Standard
         [Test]
         public async Task GetCommitsRange_ShouldCallCorrectUrlAndGetResult()
         {
-            throw new NotImplementedException("NO RESPONSE FILE");
-            var sourceBranch = new Branch() { Target = new Commit() { Hash = "firstHash" } };
-            var destBranch = new Branch() { Target = new Commit() { Hash = "secondHash" } };
+            var sourceBranch = new Branch() { Name = "sourcebranch", Target = new Commit() { Hash = "firstHash" } };
+            var destBranch = new Branch() { Name = "destBranch", Target = new Commit() { Hash = "secondHash" } };
 
             var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetCommitsRangeResponse.json"));
-            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterpriseCommit>>(responseJson);
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<IteratorBasedPage<Commit>>(responseJson);
 
             var result = _restClient
                 .Capture()
-                .Args<string, int, QueryString, IEnumerable<EnterpriseCommit>>((s, url, limit, queryString) => s.GetAllPages<EnterpriseCommit>(url, limit, queryString), responseData.Values);
+                .Args<string, int, QueryString, IEnumerable<Commit>>((s, url, limit, queryString) => s.GetAllPages<Commit>(url, limit, queryString), responseData.Values);
 
             var resultData = (await _sut.GetCommitsRange("reponame", "owner", sourceBranch, destBranch)).ToList();
 
@@ -149,14 +149,14 @@ namespace Bitbucket.REST.API.Tests.Standard
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual("projects/owner/repos/reponame/commits", args.arg1);
+                Assert.AreEqual("repositories/owner/reponame/commits/sourcebranch", args.arg1);
                 Assert.AreEqual(50, args.arg2);
-                Assert.AreEqual("?until=firstHash&since=secondHash", args.arg3.ToString());
+                Assert.AreEqual("?exclude=destBranch", args.arg3.ToString());
 
                 var firstCommit = resultData[0];
 
-                Assert.AreEqual("short message", firstCommit.Message);
-                Assert.AreEqual("28ca84f2acf43e0f935c27d6d96b24e9c09d5fc4", firstCommit.Hash);
+                Assert.AreEqual("NEWFILE created online with Bitbucket", firstCommit.Message);
+                Assert.AreEqual("a35d9f3a6642da77a66674fb77cbb9d4fae3f8c1", firstCommit.Hash);
             });
         }
 
