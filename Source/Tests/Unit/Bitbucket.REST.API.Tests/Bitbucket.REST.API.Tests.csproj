@@ -178,6 +178,9 @@
     <Content Include="Enterprise\Data\CreateRepositoryResponse.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Enterprise\Data\GetUserRepositoriesResponse.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <Content Include="Standard\Data\ApprovePullRequestResponse.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

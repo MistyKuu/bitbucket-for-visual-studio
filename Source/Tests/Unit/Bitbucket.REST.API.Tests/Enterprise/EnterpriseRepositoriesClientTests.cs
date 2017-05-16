@@ -180,7 +180,7 @@ namespace Bitbucket.REST.API.Tests.Enterprise
         [Test]
         public async Task GetUserRepositories_ShouldCallCorrectUrlAndGetResult()
         {
-            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetRepositoryUsersResponse.json"));
+            var responseJson = Utilities.LoadFile(Paths.GetEnterpriseDataPath("GetUserRepositoriesResponse.json"));
             var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseIteratorBasedPage<EnterpriseRepository>>(responseJson);
 
             var result = _restClient
