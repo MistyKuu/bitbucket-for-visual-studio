@@ -19,7 +19,7 @@ namespace GitClientVS.TeamFoundation
 {
     [Export(typeof(IGitService))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class GitService: IGitService
+    public class GitService : IGitService
     {
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly string remoteName;
@@ -64,7 +64,7 @@ namespace GitClientVS.TeamFoundation
         public void CloneRepository(string cloneUrl, string repositoryName, string repositoryPath)
         {
             var gitExt = _appServiceProvider.GetService<IGitRepositoriesExt>();
-            
+
             string path = Path.Combine(repositoryPath, repositoryName);
 
             Directory.CreateDirectory(path);
@@ -83,9 +83,9 @@ namespace GitClientVS.TeamFoundation
         private Repository GetRepository()
         {
             var gitExt = _appServiceProvider.GetService<IGitExt>();
-           // _gitService = gitExt;
+            // _gitService = gitExt;
             var vsRepo = gitExt.ActiveRepositories.FirstOrDefault();
-          
+
             Repository activeRepository;
             if (vsRepo == null)
             {
@@ -117,7 +117,7 @@ namespace GitClientVS.TeamFoundation
             {
                 return RegistryHelper.GetLocalClonePath();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return string.Empty;
             }
@@ -149,9 +149,7 @@ namespace GitClientVS.TeamFoundation
             {
                 CredentialsProvider = this.CreateCredentials
             };
-
-            var remote = activeRepository.Network.Remotes[remoteName];
-            activeRepository.Network.Fetch(remote, fetchOptions);
+            Commands.Fetch(activeRepository, remoteName, new string[0], fetchOptions, null);
         }
 
         private void SetTrackingRemote(Repository activeRepository)

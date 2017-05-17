@@ -8,7 +8,6 @@ namespace BitBucket.REST.API.Authentication
     {
         private const string TokenUrl = "https://bitbucket.org/site/oauth2/access_token";
         private const string TokenType = "Bearer";
-        private string token;
 
         public OAuthAuthenticator(Credentials credentials)
         {

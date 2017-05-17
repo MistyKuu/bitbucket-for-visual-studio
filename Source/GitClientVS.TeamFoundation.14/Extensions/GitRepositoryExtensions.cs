@@ -22,7 +22,7 @@ namespace GitClientVS.TeamFoundation.Extensions
             if (repo == null) return null;
 
             var repoUrl = repo.Network.Remotes["origin"]?.Url ?? repo.Network.Remotes.FirstOrDefault()?.Url;
-            if (repoUrl == null) return null;
+            if (repoUrl == null) return new GitRemoteRepository();
 
             try
             {

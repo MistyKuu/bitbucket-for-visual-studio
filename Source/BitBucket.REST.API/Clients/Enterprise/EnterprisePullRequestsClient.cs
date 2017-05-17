@@ -166,7 +166,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
                         Href = participant.Links.Self.Href + "/avatar.png"
                     };
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

@@ -54,17 +54,16 @@ namespace Bitbucket.REST.API.Tests.Standard
                 Name = "Test111"
             };
 
-            throw new NotImplementedException("Creating repository doesn't work. Invalid slug. Investigate TODO");
 
             var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("CreateRepositoryResponse.json"));
-            var responseData = new NewtonsoftJsonSerializer().Deserialize<EnterpriseRepository>(responseJson);
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<Repository>(responseJson);
 
-            var response = MockRepository.GenerateMock<IRestResponse<EnterpriseRepository>>();
+            var response = MockRepository.GenerateMock<IRestResponse<Repository>>();
             response.Stub(x => x.Data).Return(responseData);
 
             var result = _restClient
                 .Capture()
-                .Args<IRestRequest, IRestResponse<EnterpriseRepository>>((s, req) => s.ExecuteTaskAsync<EnterpriseRepository>(req), response);
+                .Args<IRestRequest, IRestResponse<Repository>>((s, req) => s.ExecuteTaskAsync<Repository>(req), response);
 
             var repository = await _sut.CreateRepository(inputRepository);
 
@@ -74,7 +73,7 @@ namespace Bitbucket.REST.API.Tests.Standard
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual("users/Login/repos", args.Resource);
+                Assert.AreEqual("repositories/Login/Test111", args.Resource);
                 Assert.AreEqual(Method.POST, args.Method);
 
                 var body = args.Parameters.First(x => x.Type == ParameterType.RequestBody);
@@ -82,7 +81,7 @@ namespace Bitbucket.REST.API.Tests.Standard
 
                 Assert.AreEqual(expectedJsonBody, body.Value.ToString());
 
-                Assert.AreEqual("NEWREPOSITORY", repository.Name);
+                Assert.AreEqual("terere", repository.Name);
                 Assert.AreEqual(true, repository.IsPrivate);
             });
         }

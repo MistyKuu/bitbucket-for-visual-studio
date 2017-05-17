@@ -1,0 +1,53 @@
+{
+  "scm": "git",
+  "website": "",
+  "has_wiki": false,
+  "name": "terere",
+  "links": {
+    "watchers": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/terere/watchers" },
+    "branches": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/terere/refs/branches" },
+    "tags": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/terere/refs/tags" },
+    "commits": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/terere/commits" },
+    "clone": [
+      {
+        "href": "https://mistyku@bitbucket.org/mistyku/terere.git",
+        "name": "https"
+      },
+      {
+        "href": "ssh://git@bitbucket.org/mistyku/terere.git",
+        "name": "ssh"
+      }
+    ],
+    "self": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/terere" },
+    "html": { "href": "https://bitbucket.org/mistyku/terere" },
+    "avatar": { "href": "https://bitbucket.org/mistyku/terere/avatar/32/" },
+    "hooks": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/terere/hooks" },
+    "forks": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/terere/forks" },
+    "downloads": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/terere/downloads" },
+    "pullrequests": { "href": "https://api.bitbucket.org/2.0/repositories/mistyku/terere/pullrequests" }
+  },
+  "fork_policy": "allow_forks",
+  "uuid": "{758938a2-381c-4636-ba0d-3f5be0fcc6d2}",
+  "language": "",
+  "created_on": "2017-05-17T19:01:13.012218+00:00",
+  "mainbranch": null,
+  "full_name": "mistyku/terere",
+  "has_issues": false,
+  "owner": {
+    "username": "mistyku",
+    "display_name": "Zbigniew Szepczyński",
+    "type": "user",
+    "uuid": "{3c680c87-61cd-425c-918d-cfd69e8ed73e}",
+    "links": {
+      "self": { "href": "https://api.bitbucket.org/2.0/users/mistyku" },
+      "html": { "href": "https://bitbucket.org/mistyku/" },
+      "avatar": { "href": "https://bitbucket.org/account/mistyku/avatar/32/" }
+    }
+  },
+  "updated_on": "2017-05-17T19:01:13.070096+00:00",
+  "size": 0,
+  "type": "repository",
+  "slug": "terere",
+  "is_private": true,
+  "description": "desc"
+}

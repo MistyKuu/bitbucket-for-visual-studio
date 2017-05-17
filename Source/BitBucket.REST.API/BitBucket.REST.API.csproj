@@ -155,7 +155,6 @@
     <Compile Include="QueryBuilders\PullRequestQueryBuilder.cs" />
     <Compile Include="QueryBuilders\QueryBuilder.cs" />
     <Compile Include="QueryBuilders\QueryString.cs" />
-    <Compile Include="Serializers\BitbucketPropertyNamesContractResolver.cs" />
     <Compile Include="Serializers\IJsonSerializer.cs" />
     <Compile Include="Serializers\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Wrappers\BitbucketRestClient.cs" />

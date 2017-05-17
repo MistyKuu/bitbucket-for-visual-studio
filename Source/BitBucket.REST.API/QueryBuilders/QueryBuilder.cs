@@ -11,18 +11,12 @@ namespace BitBucket.REST.API.QueryBuilders
         private readonly Dictionary<string, string> _params = new Dictionary<string, string>();
         public IQueryBuilder UpdatedOn(DateTime date, Operators queryOperator)
         {
-            throw new NotImplementedException("Only equals works");
-            var dateInProperFormat = date.ToString("yyyy-MM-dd");
-            _params.Add("updated_on", $"{OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
-            return this;
+            throw new NotSupportedException("Only equals works");
         }
 
         public IQueryBuilder CreatedOn(DateTime date, Operators queryOperator)
         {
-            throw new NotImplementedException("Only equals works");
-            var dateInProperFormat = date.ToString("yyyy-MM-dd");
-            _params.Add("created_on", $"{OperatorsMappings.MappingsDictionary[queryOperator]} {dateInProperFormat}");
-            return this;
+            throw new NotSupportedException("Only equals works");
         }
         public IQueryBuilder State(PullRequestOptions option)
         {
