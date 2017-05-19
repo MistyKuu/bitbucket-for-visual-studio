@@ -29,14 +29,14 @@ You can also install it from within Visual Studio. ```Tools -> Extensions and Up
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md][CONTRIBUTING.md] for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Authors
 
 * **Zbigniew Szepczyński** - [MistyK](https://github.com/MistyKuu)
 * **niba** - [niba](https://github.com/niba)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/MistyKuu/bitbucketvsextension/graphs/contributors) who participated in this project.
 
 ## License
 
