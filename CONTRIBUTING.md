@@ -2,6 +2,10 @@
 
 We're happy to allow you to contribute in our project to improve the codebase, fix bugs and develop new features. You can either participate by reporting an issue or by implementing it yourself and submitting a pull request! You'll find below how to create a pull request.
 
+### Prerequisites
+
+Visual Studio 2017+ is required for development.
+
 ### Creating Pull Request
 
 * Fork the repository and clone it locally.
