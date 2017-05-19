@@ -100,13 +100,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\AssemblyReferences\LibGit2Sharp.NativeBinaries.1.0.129\libgit2\windows\amd64\git2-785d8c4.dll">
-      <Link>NativeBinaries\amd64\git2-785d8c4.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\AssemblyReferences\LibGit2Sharp.NativeBinaries.1.0.129\libgit2\windows\x86\git2-785d8c4.dll">
-      <Link>NativeBinaries\x86\git2-785d8c4.dll</Link>
+    <Content Include="..\..\packages\LibGit2Sharp.NativeBinaries.1.0.164\runtimes\win7-x86\native\git2-a5cf255.dll">
+      <Link>git2-a5cf255.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
