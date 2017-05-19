@@ -4,6 +4,7 @@
     <Identity Id="69c97fa4-92b5-448c-b5db-037dd9c2c8b7" Version="1.35" Language="en-US" Publisher="NextIteration" />
     <DisplayName>Visual Studio Bitbucket Extension</DisplayName>
     <Description xml:space="preserve">Provides the integration with Atlassian Bitbucket - bitbucket.org.</Description>
+    <MoreInfo>https://github.com/MistyKuu/bitbucketvsextension</MoreInfo>
     <Icon>logo.png</Icon>
     <Tags>bitbucket git visual studio</Tags>
   </Metadata>
