@@ -68,10 +68,10 @@ namespace GitClientVS.TeamFoundation
             string path = Path.Combine(repositoryPath, repositoryName);
 
             Directory.CreateDirectory(path);
-
+            
             try
             {
-                gitExt.Clone(cloneUrl, path, CloneOptions.None);
+                gitExt.Clone(cloneUrl, path, CloneOptions.RecurseSubmodule);
             }
             catch (Exception ex)
             {
