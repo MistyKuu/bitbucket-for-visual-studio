@@ -1,6 +1,2 @@
 language: csharp
 solution: GitClientVS.sln
-script:
-- msbuild /p:Configuration=Release GitClientVS.sln
-  - mono ./packages/NUnit.ConsoleRunner.3.6.1/tools/nunit3-console.exe ./Source/Tests/Unit/GitClientVS.Infrastructure.Tests/bin/Release/GitClientVS.Infrastructure.Tests.dll
-  - mono ./packages/NUnit.ConsoleRunner.3.6.1/tools/nunit3-console.exe ./Source/Tests/Unit/Bitbucket.REST.API.Tests/bin/Release/Bitbucket.REST.API.Tests.dll
