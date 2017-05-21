@@ -9,7 +9,6 @@ using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Infrastructure.Utils;
 using log4net;
-using Microsoft.VisualStudio.Shell;
 using ReactiveUI;
 
 namespace GitClientVS.Infrastructure.Extensions

@@ -101,7 +101,6 @@
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\MapperExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Extensions\ServiceProviderExtensions.cs" />
     <Compile Include="Extensions\ViewModelsExtensions.cs" />
     <Compile Include="GitClientVsException.cs" />
     <Compile Include="LoggerConfigurator.cs" />
