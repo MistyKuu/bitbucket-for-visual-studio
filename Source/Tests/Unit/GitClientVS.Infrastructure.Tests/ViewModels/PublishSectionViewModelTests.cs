@@ -42,7 +42,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         public void Initialize_TeamsLoadedCorrectly_ShouldAssignTeamNamesAndCurrentUserToViewModel()
         {
             IEnumerable<GitTeam> teams = new List<GitTeam>() { new GitTeam() { Name = "TeamName" } };
-            var connectionData = new ConnectionData() { UserName = "UserName" };
+            var connectionData = new ConnectionData() { UserName = "UserName", IsLoggedIn = true };
 
             _gitClientService.Expect(x => x.GetTeams()).Return(teams.FromTaskAsync());
             _userInfoService.Stub(x => x.ConnectionData).Return(connectionData);
@@ -102,7 +102,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         public void PublishCommand_Invoked_ShouldCreateAndPublishRepositoryAndRefreshActiveRepo()
         {
             IEnumerable<GitTeam> teams = new List<GitTeam>() { new GitTeam() { Name = "TeamName" } };
-            var connectionData = new ConnectionData() { UserName = "UserName" };
+            var connectionData = new ConnectionData() { UserName = "UserName", IsLoggedIn = true };
 
             _gitClientService.Expect(x => x.GetTeams()).Return(teams.FromTaskAsync());
             _userInfoService.Stub(x => x.ConnectionData).Return(connectionData);
