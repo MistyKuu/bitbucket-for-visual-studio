@@ -36,7 +36,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 * **Zbigniew Szepczyński** - [MistyK](https://github.com/MistyKuu)
 * **niba** - [niba](https://github.com/niba)
 
-See also the list of [contributors](https://github.com/MistyKuu/bitbucketvsextension/graphs/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/MistyKuu/bitbucket-for-visual-studio/graphs/contributors) who participated in this project.
 
 ## License
 
