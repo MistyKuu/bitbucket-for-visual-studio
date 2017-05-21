@@ -109,6 +109,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CreateOwners()
         {
+            if (!_userInformationService.ConnectionData.IsLoggedIn)
+                return;
+
             var teamNames = (await _gitClientService.GetTeams()).Select(x => x.Name).ToList();
             teamNames.Insert(0, _userInformationService.ConnectionData.UserName);
             Owners = teamNames;
