@@ -7,6 +7,7 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
+using GitClientVS.Contracts.Models.Tree;
 using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.Infrastructure.ViewModels;
 using GitClientVS.Services;

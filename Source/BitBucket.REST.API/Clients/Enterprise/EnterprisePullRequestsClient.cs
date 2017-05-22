@@ -135,6 +135,11 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return new EnterprisePullRequestQueryBuilder();
         }
 
+        public Task<string> GetFileContent(string repoName, string owner, string hash, string path)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
         {
             var url = EnterpriseApiUrls.PullRequestCommits(ownerName, repositoryName, id);

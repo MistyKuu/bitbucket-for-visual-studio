@@ -12,6 +12,7 @@
              xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"
              xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
+             xmlns:tree="clr-namespace:GitClientVS.Contracts.Models.Tree;assembly=GitClientVS.Contracts"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
             d:DataContext="{d:DesignInstance models:PullRequestDiffModel,IsDesignTimeCreatable=False}" 
@@ -80,13 +81,13 @@
                             <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay}"/>
                             <Setter Property="IsSelected" Value="{Binding IsSelected,Mode=TwoWay}"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding GetTreeType}" Value="{x:Type models:TreeDirectory}">
+                                <DataTrigger Binding="{Binding GetTreeType}" Value="{x:Type tree:TreeDirectory}">
                                     <Setter Property="Background" Value="Transparent" />
                                     <Setter Property="Focusable" Value="False"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                        <HierarchicalDataTemplate DataType="{x:Type models:TreeDirectory}" ItemsSource="{Binding Files}">
+                        <HierarchicalDataTemplate DataType="{x:Type tree:TreeDirectory}" ItemsSource="{Binding Files}">
                             <StackPanel Orientation="Horizontal" Margin="2">
                                 <Image Source="{Binding IsExpanded, Converter={converters:TreeViewFolderIconConverter}}"
                                                Width="16"
@@ -97,7 +98,7 @@
                             </StackPanel>
                         </HierarchicalDataTemplate>
 
-                        <DataTemplate DataType="{x:Type models:TreeFile}" >
+                        <DataTemplate DataType="{x:Type tree:TreeFile}" >
                             <StackPanel Orientation="Horizontal" Margin="2">
                                 <Image Source="../Images/File.png"
                                                Width="16"
@@ -277,7 +278,7 @@
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
-                        <HierarchicalDataTemplate DataType="{x:Type models:CommentTree}" ItemsSource="{Binding Comments}">
+                        <HierarchicalDataTemplate DataType="{x:Type tree:CommentTree}" ItemsSource="{Binding Comments}">
 
                             <StackPanel Orientation="Vertical" Margin="0,5,0,5">
                                 <StackPanel Orientation="Horizontal">

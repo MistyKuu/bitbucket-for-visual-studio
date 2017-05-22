@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ParseDiff;
-using System;
 
-namespace GitClientVS.Contracts.Models
+namespace GitClientVS.Contracts.Models.Tree
 {
     public class TreeFile: ITreeFile
     {

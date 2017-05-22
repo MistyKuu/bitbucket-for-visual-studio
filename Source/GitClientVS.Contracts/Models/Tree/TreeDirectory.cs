@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ParseDiff;
-using ReactiveUI;
 
-namespace GitClientVS.Contracts.Models
+namespace GitClientVS.Contracts.Models.Tree
 {
     public class TreeDirectory : ITreeFile, INotifyPropertyChanged
     {

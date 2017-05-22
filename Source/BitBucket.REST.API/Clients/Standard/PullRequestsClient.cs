@@ -20,8 +20,8 @@ namespace BitBucket.REST.API.Clients.Standard
         private readonly IBitbucketRestClient _webClient;
 
         public PullRequestsClient(
-            IBitbucketRestClient restClient, 
-            IBitbucketRestClient internalRestClient, 
+            IBitbucketRestClient restClient,
+            IBitbucketRestClient internalRestClient,
             IBitbucketRestClient webClient,
             Connection connection) : base(restClient, connection)
         {
@@ -174,6 +174,14 @@ namespace BitBucket.REST.API.Clients.Standard
             var request = new BitbucketRestRequest(url, Method.GET);
             var response = await RestClient.ExecuteTaskAsync(request);
             return DiffFileParser.Parse(response.Content);
+        }
+
+        public async Task<string> GetFileContent(string repoName, string owner, string hash, string path)
+        {
+            var url = ApiUrls.DownloadFile(owner, repoName, hash, path);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await RestClient.ExecuteTaskAsync(request);
+            return response.Content;
         }
 
         public async Task CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner)

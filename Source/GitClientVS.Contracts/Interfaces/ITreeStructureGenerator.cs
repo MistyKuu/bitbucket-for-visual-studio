@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
+using GitClientVS.Contracts.Models.Tree;
 using ParseDiff;
 
 namespace GitClientVS.Contracts.Interfaces

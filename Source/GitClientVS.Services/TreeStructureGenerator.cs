@@ -8,6 +8,7 @@ using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
+using GitClientVS.Contracts.Models.Tree;
 using ParseDiff;
 
 namespace GitClientVS.Services

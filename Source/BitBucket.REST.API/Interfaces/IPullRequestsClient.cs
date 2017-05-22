@@ -29,5 +29,6 @@ namespace BitBucket.REST.API.Interfaces
         Task MergePullRequest(string repositoryName, string ownerName, MergeRequest mergeRequest);
         Task<IEnumerable<UserShort>> GetDefaultReviewers(string repositoryName, string ownerName);
         IPullRequestQueryBuilder GetPullRequestQueryBuilder();
+        Task<string> GetFileContent(string repoName, string owner, string hash, string path);
     }
 }

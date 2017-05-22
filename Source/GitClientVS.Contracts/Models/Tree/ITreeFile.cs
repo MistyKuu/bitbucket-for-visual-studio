@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ParseDiff;
 
-namespace GitClientVS.Contracts.Models
+namespace GitClientVS.Contracts.Models.Tree
 {
     public interface ITreeFile
     {

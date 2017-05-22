@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GitClientVS.Contracts.Models.GitClientModels;
 
-namespace GitClientVS.Contracts.Models
+namespace GitClientVS.Contracts.Models.Tree
 {
     public class CommentTree : ICommentTree
     {

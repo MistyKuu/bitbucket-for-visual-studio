@@ -22,9 +22,14 @@ using ParseDiff;
 
 namespace GitClientVS.Services
 {
+    public interface IBitbucketService
+    {
+        Task<string> GetFileContent(string hash, string path);
+    }
+
     [Export(typeof(IGitClientService))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class BitbucketService : IGitClientService
+    public class BitbucketService : IGitClientService, IBitbucketService
     {
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitWatcher _gitWatcher;
@@ -118,6 +123,11 @@ namespace GitClientVS.Services
         public async Task<IEnumerable<FileDiff>> GetCommitsDiff(string fromCommit, string toCommit)
         {
             return await _bitbucketClient.PullRequestsClient.GetCommitsDiff(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, fromCommit, toCommit);
+        }
+
+        public async Task<string> GetFileContent(string hash, string path)
+        {
+            return await _bitbucketClient.PullRequestsClient.GetFileContent(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, hash, path);
         }
 
         public bool IsOriginRepo(GitRemoteRepository gitRemoteRepository)

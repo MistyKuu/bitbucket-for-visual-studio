@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models.GitClientModels;
+using GitClientVS.Contracts.Models.Tree;
 using ParseDiff;
 using ReactiveUI;
 
@@ -16,6 +17,7 @@ namespace GitClientVS.Contracts.Models
     public class PullRequestDiffModel : ReactiveObject
     {
         private readonly ICommandsService _commandsService;
+        private readonly IVsTools _vsTools;
         private List<ITreeFile> _filesTree;
         private List<GitCommit> _commits;
         private List<GitComment> _comments;
@@ -60,6 +62,7 @@ namespace GitClientVS.Contracts.Models
         public PullRequestDiffModel(ICommandsService commandsService)
         {
             _commandsService = commandsService;
+
             _showDiffCommand = ReactiveCommand.CreateFromTask<FileDiff>(ShowDiff);
         }
 
