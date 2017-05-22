@@ -18,15 +18,18 @@ namespace BitBucket.REST.API.Clients.Standard
     {
         private readonly IBitbucketRestClient _internalRestClient;
         private readonly IBitbucketRestClient _webClient;
+        private readonly IBitbucketRestClient _versionOneClient;
 
         public PullRequestsClient(
             IBitbucketRestClient restClient,
             IBitbucketRestClient internalRestClient,
             IBitbucketRestClient webClient,
+            IBitbucketRestClient versionOneClient,
             Connection connection) : base(restClient, connection)
         {
             _internalRestClient = internalRestClient;
             _webClient = webClient;
+            _versionOneClient = versionOneClient;
         }
 
         public async Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
@@ -180,7 +183,7 @@ namespace BitBucket.REST.API.Clients.Standard
         {
             var url = ApiUrls.DownloadFile(owner, repoName, hash, path);
             var request = new BitbucketRestRequest(url, Method.GET);
-            var response = await RestClient.ExecuteTaskAsync(request);
+            var response = await _versionOneClient.ExecuteTaskAsync(request);
             return response.Content;
         }
 

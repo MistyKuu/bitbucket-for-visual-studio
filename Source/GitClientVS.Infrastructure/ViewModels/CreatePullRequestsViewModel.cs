@@ -32,6 +32,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IPageNavigationService<IPullRequestsWindow> _pageNavigationService;
         private readonly IEventAggregatorService _eventAggregator;
         private readonly ITreeStructureGenerator _treeStructureGenerator;
+        private readonly IVsTools _vsTools;
         private ReactiveCommand _initializeCommand;
         private ReactiveCommand _removeReviewerCommand;
         private bool _isLoading;
@@ -139,7 +140,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public string ExistingBranchText => RemotePullRequest == null ? null : $"#{RemotePullRequest.Id} {RemotePullRequest.Title} (created {RemotePullRequest.Created})";
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand, PullRequestDiffModel.ShowDiffCommand };
 
         public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand };
 
@@ -155,7 +156,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             IPageNavigationService<IPullRequestsWindow> pageNavigationService,
             IEventAggregatorService eventAggregator,
             ITreeStructureGenerator treeStructureGenerator,
-            ICommandsService commandsService
+            ICommandsService commandsService,
+            IVsTools vsTools
         )
         {
             _gitClientService = gitClientService;
@@ -163,7 +165,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             _pageNavigationService = pageNavigationService;
             _eventAggregator = eventAggregator;
             _treeStructureGenerator = treeStructureGenerator;
-            PullRequestDiffModel = new PullRequestDiffModel(commandsService);
+            _vsTools = vsTools;
+            PullRequestDiffModel = new PullRequestDiffModel(commandsService, _vsTools, _gitClientService);
 
             CloseSourceBranch = false;
             SelectedReviewers = new ReactiveList<GitUser>();
@@ -310,6 +313,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             var fileDiffs = (await _gitClientService.GetCommitsDiff(fromCommit, toCommit)).ToList();
             PullRequestDiffModel.FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
             PullRequestDiffModel.FileDiffs = fileDiffs;
+
+            PullRequestDiffModel.FromCommit = fromCommit;
+            PullRequestDiffModel.ToCommit = toCommit;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace BitBucket.REST.API
 
             RepositoriesClient = new RepositoriesClient(client, versionOneClient, ApiConnection);
             UserClient = new UserClient(client, ApiConnection);
-            PullRequestsClient = new PullRequestsClient(client, internalClient, webClient, ApiConnection);
+            PullRequestsClient = new PullRequestsClient(client, internalClient, webClient, versionOneClient, ApiConnection);
             TeamsClient = new TeamsClient(client, ApiConnection);
         }
     }

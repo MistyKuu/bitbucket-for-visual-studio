@@ -22,14 +22,9 @@ using ParseDiff;
 
 namespace GitClientVS.Services
 {
-    public interface IBitbucketService
-    {
-        Task<string> GetFileContent(string hash, string path);
-    }
-
     [Export(typeof(IGitClientService))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class BitbucketService : IGitClientService, IBitbucketService
+    public class BitbucketService : IGitClientService
     {
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitWatcher _gitWatcher;

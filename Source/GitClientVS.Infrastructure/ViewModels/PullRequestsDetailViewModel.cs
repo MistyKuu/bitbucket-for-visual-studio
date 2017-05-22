@@ -24,6 +24,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IUserInformationService _userInformationService;
         private readonly ITreeStructureGenerator _treeStructureGenerator;
         private readonly IMessageBoxService _messageBoxService;
+        private readonly IVsTools _vsTools;
         private string _errorMessage;
         private bool _isLoading;
         private ReactiveCommand _initializeCommand;
@@ -75,7 +76,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public PullRequestDiffModel PullRequestDiffModel { get; set; }
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand, PullRequestDiffModel.ShowDiffCommand };
         public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand };
 
         public string ErrorMessage
@@ -98,17 +99,19 @@ namespace GitClientVS.Infrastructure.ViewModels
             IUserInformationService userInformationService,
             IEventAggregatorService eventAggregatorService,
             ITreeStructureGenerator treeStructureGenerator,
-            IMessageBoxService messageBoxService
+            IMessageBoxService messageBoxService,
+            IVsTools vsTools
             )
         {
             _gitClientService = gitClientService;
             _userInformationService = userInformationService;
             _treeStructureGenerator = treeStructureGenerator;
             _messageBoxService = messageBoxService;
+            _vsTools = vsTools;
             _eventAggregatorService = eventAggregatorService;
 
             CurrentTheme = userInformationService.CurrentTheme;
-            PullRequestDiffModel = new PullRequestDiffModel(commandsService);
+            PullRequestDiffModel = new PullRequestDiffModel(commandsService, _vsTools, _gitClientService);
 
         }
 

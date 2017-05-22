@@ -108,7 +108,7 @@
                                 <TextBlock Margin="5,0">
                                             <Hyperlink 
                                                 attachedProperties:SelectTreeViewAfterItemClickBehavior.TreeViewItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}"
-                                                Command="{Binding ElementName=PqDiffView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding FileDiff}" TextDecorations="None">
+                                                Command="{Binding ElementName=PqDiffView,Path=DataContext.ShowDiffCommand}" CommandParameter="{Binding}" TextDecorations="None">
                                                   <TextBlock Text="{Binding Path=Name}">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">

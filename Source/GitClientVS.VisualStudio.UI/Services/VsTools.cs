@@ -17,10 +17,10 @@ namespace GitClientVS.VisualStudio.UI.Services
             _appServiceProvider = appServiceProvider;
         }
 
-        public void RunDiff(string file1, string file2)
+        public void RunDiff(string file1, string file2, string fileDisplayName1, string fileDisplayName2)
         {
             _dte = (DTE)_appServiceProvider.GetService(typeof(DTE));
-            _dte.ExecuteCommand("Tools.DiffFiles", $"\"{file1}\" \"{file2}\"");
+            _dte.ExecuteCommand("Tools.DiffFiles", $"\"{file1}\" \"{file2}\" \"{fileDisplayName1}\" \"{fileDisplayName2}\"");
         }
     }
 }

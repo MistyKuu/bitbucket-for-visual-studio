@@ -36,6 +36,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<IEnumerable<FileDiff>> GetCommitsDiff(string fromCommit, string toCommit);
         Task UpdatePullRequest(GitPullRequest gitPullRequest);
         Task<IEnumerable<GitUser>> GetDefaultReviewers();
+        Task<string> GetFileContent(string hash, string path);
 
         Task<IEnumerable<GitPullRequest>> GetPullRequests(
             int limit = 50,

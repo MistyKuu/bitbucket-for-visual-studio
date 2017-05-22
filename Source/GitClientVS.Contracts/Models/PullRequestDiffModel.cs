@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -18,15 +19,15 @@ namespace GitClientVS.Contracts.Models
     {
         private readonly ICommandsService _commandsService;
         private readonly IVsTools _vsTools;
+        private readonly IGitClientService _gitClientService;
         private List<ITreeFile> _filesTree;
         private List<GitCommit> _commits;
         private List<GitComment> _comments;
         private List<FileDiff> _fileDiffs;
-        private readonly ReactiveCommand _showDiffCommand;
         private List<ICommentTree> _commentTree;
 
 
-        public ICommand ShowDiffCommand => _showDiffCommand;
+        public ReactiveCommand ShowDiffCommand { get; }
 
         public List<ITreeFile> FilesTree
         {
@@ -58,18 +59,51 @@ namespace GitClientVS.Contracts.Models
             set => this.RaiseAndSetIfChanged(ref _comments, value);
         }
 
+        public string FromCommit { get; set; }
+        public string ToCommit { get; set; }
 
-        public PullRequestDiffModel(ICommandsService commandsService)
+
+        public PullRequestDiffModel(
+            ICommandsService commandsService,
+            IVsTools vsTools,
+            IGitClientService gitClientService
+            )
         {
             _commandsService = commandsService;
+            _vsTools = vsTools;
+            _gitClientService = gitClientService;
 
-            _showDiffCommand = ReactiveCommand.CreateFromTask<FileDiff>(ShowDiff);
+            ShowDiffCommand = ReactiveCommand.CreateFromTask<TreeFile>(ShowDiff);
         }
 
-        private Task ShowDiff(FileDiff diff)
+        private async Task ShowDiff(TreeFile file)
         {
-            _commandsService.ShowDiffWindow(diff, diff.Id);
-            return Task.CompletedTask;
+            var content1 = await GetFileContent(ToCommit, file);
+            var content2 = await GetFileContent(FromCommit, file);
+
+            Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "GITCLIENT"));
+
+            var tempPath1 = Path.Combine(Path.GetTempPath(), "GITCLIENT", Guid.NewGuid().ToString());
+            var tempPath2 = Path.Combine(Path.GetTempPath(), "GITCLIENT", Guid.NewGuid().ToString());
+
+            File.WriteAllText(tempPath1, content1);
+            File.WriteAllText(tempPath2, content2);
+
+            _vsTools.RunDiff(tempPath1, tempPath2, $"{file.Name} ({ToCommit})", $"{file.Name} ({FromCommit})");
+
+            // _commandsService.ShowDiffWindow(file.FileDiff, file.FileDiff.Id);
+        }
+
+        private async Task<string> GetFileContent(string commit, TreeFile file)
+        {
+            try
+            {
+                return await _gitClientService.GetFileContent(commit, file.Name);
+            }
+            catch (Exception e)
+            {
+                return string.Empty;
+            }
         }
     }
 }
