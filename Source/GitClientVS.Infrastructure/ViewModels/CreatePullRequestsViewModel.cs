@@ -173,6 +173,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         protected override IEnumerable<IDisposable> SetupObservables()
         {
             yield return _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
+                .Select(x => Unit.Default)
                 .InvokeCommand(_initializeCommand);
 
             this.WhenAnyValue(x => x.SourceBranch, x => x.DestinationBranch)
