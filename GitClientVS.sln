@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitbucket.REST.API.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitClientVS.Tests.Shared", "Source\Tests\Unit\GitClientVS.Tests.Shared\GitClientVS.Tests.Shared.csproj", "{94E39743-9C02-405B-ADD5-46049DDBE1CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitClientVS.TeamFoundation.Tests", "Source\Tests\Unit\GitClientVS.TeamFoundation.Tests\GitClientVS.TeamFoundation.Tests.csproj", "{02ECBF1C-3C9F-41BA-A9E8-67105A0A2187}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{94E39743-9C02-405B-ADD5-46049DDBE1CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94E39743-9C02-405B-ADD5-46049DDBE1CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94E39743-9C02-405B-ADD5-46049DDBE1CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02ECBF1C-3C9F-41BA-A9E8-67105A0A2187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02ECBF1C-3C9F-41BA-A9E8-67105A0A2187}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02ECBF1C-3C9F-41BA-A9E8-67105A0A2187}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02ECBF1C-3C9F-41BA-A9E8-67105A0A2187}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,5 +112,6 @@ Global
 		{0463CFF7-C41E-422A-A730-213B7C7181F3} = {5403EAEB-209C-43A9-A8BB-45F42DB980A0}
 		{B47D5BA6-9A5B-4EF6-83C3-93C459F5938D} = {5403EAEB-209C-43A9-A8BB-45F42DB980A0}
 		{94E39743-9C02-405B-ADD5-46049DDBE1CF} = {5403EAEB-209C-43A9-A8BB-45F42DB980A0}
+		{02ECBF1C-3C9F-41BA-A9E8-67105A0A2187} = {5403EAEB-209C-43A9-A8BB-45F42DB980A0}
 	EndGlobalSection
 EndGlobal
