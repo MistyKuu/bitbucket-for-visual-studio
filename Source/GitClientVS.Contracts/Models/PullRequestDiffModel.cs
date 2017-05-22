@@ -78,27 +78,19 @@ namespace GitClientVS.Contracts.Models
 
         private async Task ShowDiff(TreeFile file)
         {
-            var content1 = await GetFileContent(ToCommit, file);
-            var content2 = await GetFileContent(FromCommit, file);
+            var content1 = await GetFileContent(ToCommit, file.FileDiff.DisplayFileName);
+            var content2 = await GetFileContent(FromCommit, file.FileDiff.DisplayFileName);
 
-            Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "GITCLIENT"));
-
-            var tempPath1 = Path.Combine(Path.GetTempPath(), "GITCLIENT", Guid.NewGuid().ToString());
-            var tempPath2 = Path.Combine(Path.GetTempPath(), "GITCLIENT", Guid.NewGuid().ToString());
-
-            File.WriteAllText(tempPath1, content1);
-            File.WriteAllText(tempPath2, content2);
-
-            _vsTools.RunDiff(tempPath1, tempPath2, $"{file.Name} ({ToCommit})", $"{file.Name} ({FromCommit})");
+            _vsTools.RunDiff(content1, content2, $"{file.FileDiff.DisplayFileName} ({ToCommit})", $"{file.FileDiff.DisplayFileName} ({FromCommit})");
 
             // _commandsService.ShowDiffWindow(file.FileDiff, file.FileDiff.Id);
         }
 
-        private async Task<string> GetFileContent(string commit, TreeFile file)
+        private async Task<string> GetFileContent(string commit, string fileName)
         {
             try
             {
-                return await _gitClientService.GetFileContent(commit, file.Name);
+                return await _gitClientService.GetFileContent(commit, fileName);
             }
             catch (Exception e)
             {
