@@ -234,8 +234,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             Assert.AreEqual(0, args.Id);
             Assert.AreEqual(_sut.Title, args.Title);
             Assert.AreEqual(_sut.Description, args.Description);
-            Assert.AreEqual(_sut.SourceBranch.Name, args.SourceBranch);
-            Assert.AreEqual(_sut.DestinationBranch.Name, args.DestinationBranch);
+            Assert.AreEqual(_sut.SourceBranch.Name, args.SourceBranch.Name);
+            Assert.AreEqual(_sut.DestinationBranch.Name, args.DestinationBranch.Name);
             Assert.AreEqual(_sut.CloseSourceBranch, args.CloseSourceBranch);
             Assert.AreEqual(_sut.SelectedReviewers.Count, args.Reviewers.Count);
 
@@ -274,8 +274,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             Assert.AreEqual(_sut.RemotePullRequest.Id, args.Id);
             Assert.AreEqual(_sut.Title, args.Title);
             Assert.AreEqual(_sut.Description, args.Description);
-            Assert.AreEqual(_sut.SourceBranch.Name, args.SourceBranch);
-            Assert.AreEqual(_sut.DestinationBranch.Name, args.DestinationBranch);
+            Assert.AreEqual(_sut.SourceBranch.Name, args.SourceBranch.Name);
+            Assert.AreEqual(_sut.DestinationBranch.Name, args.DestinationBranch.Name);
             Assert.AreEqual(_sut.CloseSourceBranch, args.CloseSourceBranch);
             Assert.AreEqual(_sut.SelectedReviewers.Count, args.Reviewers.Count);
             Assert.AreEqual(_sut.RemotePullRequest.Version, args.Version);

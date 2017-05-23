@@ -57,11 +57,11 @@ namespace GitClientVS.Infrastructure.Mappings
                 Description = source.Description,
                 Source = new Source
                 {
-                    Branch = source.SourceBranch?.MapTo<Branch>()
+                    Branch = new Branch() { Name = source.SourceBranch?.Name }
                 },
                 Destination = new Source()
                 {
-                    Branch = source.DestinationBranch?.MapTo<Branch>()
+                    Branch = new Branch() { Name = source.DestinationBranch?.Name }
                 },
                 State = source.Status.MapTo<PullRequestOptions>(),
                 CloseSourceBranch = source.CloseSourceBranch,
