@@ -18,17 +18,13 @@ namespace GitClientVS.Contracts.Models
     public class PullRequestDiffModel : ReactiveObject
     {
         private readonly ICommandsService _commandsService;
-        private readonly IVsTools _vsTools;
-        private readonly IGitClientService _gitClientService;
         private List<ITreeFile> _filesTree;
         private List<GitCommit> _commits;
         private List<GitComment> _comments;
         private List<FileDiff> _fileDiffs;
         private List<ICommentTree> _commentTree;
 
-
         public ReactiveCommand ShowDiffCommand { get; }
-        public ReactiveCommand ShowSideBySideDiffCommand { get; }
 
         public List<ITreeFile> FilesTree
         {
@@ -65,50 +61,25 @@ namespace GitClientVS.Contracts.Models
 
 
         public PullRequestDiffModel(
-            ICommandsService commandsService,
-            IVsTools vsTools,
-            IGitClientService gitClientService
+            ICommandsService commandsService
             )
         {
             _commandsService = commandsService;
-            _vsTools = vsTools;
-            _gitClientService = gitClientService;
 
             ShowDiffCommand = ReactiveCommand.CreateFromTask<TreeFile>(ShowDiff);
-            ShowSideBySideDiffCommand = ReactiveCommand.CreateFromTask<TreeFile>(ShowSideBySideDiff);
         }
 
         private Task ShowDiff(TreeFile file)
         {
-            _commandsService.ShowDiffWindow(file.FileDiff, file.FileDiff.Id);
+            var fileDiffModel = new FileDiffModel()
+            {
+                FromCommit = FromCommit,
+                ToCommit = ToCommit,
+                TreeFile = file,
+            };
+
+            _commandsService.ShowDiffWindow(fileDiffModel, file.FileDiff.Id);
             return Task.CompletedTask;
-        }
-
-        private async Task ShowSideBySideDiff(TreeFile file)
-        {
-            var content1 = await GetFileContent(ToCommit, file.FileDiff.DisplayFileName);
-            var content2 = await GetFileContent(FromCommit, file.FileDiff.DisplayFileName);
-
-            _vsTools.RunDiff(
-                content1,
-                content2,
-                $"{file.FileDiff.DisplayFileName} ({ToCommit})",
-                $"{file.FileDiff.DisplayFileName} ({FromCommit})",
-                "Diff",
-                "Diff"
-            );
-        }
-
-        private async Task<string> GetFileContent(string commit, string fileName)
-        {
-            try
-            {
-                return await _gitClientService.GetFileContent(commit, fileName);
-            }
-            catch (Exception e)
-            {
-                return string.Empty;
-            }
         }
     }
 }

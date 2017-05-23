@@ -36,7 +36,6 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         private ITreeStructureGenerator _treeStructureGenerator;
         private ICommandsService _commandsService;
         private CreatePullRequestsViewModel _sut;
-        private IVsTools _vsTools;
 
 
         [SetUp]
@@ -48,7 +47,6 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _eventAggregator = new EventAggregatorService();
             _treeStructureGenerator = MockRepository.GenerateMock<ITreeStructureGenerator>();
             _commandsService = MockRepository.GenerateMock<ICommandsService>();
-            _vsTools = MockRepository.GenerateMock<IVsTools>();
 
 
             _sut = CreateSut();
@@ -369,8 +367,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 _pageNavigationService,
                 _eventAggregator,
                 _treeStructureGenerator,
-                _commandsService,
-                _vsTools);
+                _commandsService);
         }
     }
 }

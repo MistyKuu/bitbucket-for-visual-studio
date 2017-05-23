@@ -6,12 +6,14 @@
 
 using System.ComponentModel.Composition;
 using System.Reactive.Linq;
+using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.Infrastructure.ViewModels;
 using GitClientVS.UI.Views;
 using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.Shell.Interop;
 using ReactiveUI;
 
 namespace GitClientVS.VisualStudio.UI.Window
@@ -34,14 +36,34 @@ namespace GitClientVS.VisualStudio.UI.Window
     [Guid("0027eeb1-cbc1-4e21-a806-e3d120f7a770")]
     public class DiffWindow : ToolWindowPane
     {
+        private DiffWindowControl _view;
+        private DiffWindowControlViewModel _viewModel;
+
+        public DiffWindowControlViewModel ViewModel
+        {
+            get { return _viewModel; }
+            set
+            {
+                _viewModel = value;
+                _view.DataContext = _viewModel;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DiffWindow"/> class.
         /// </summary>
-
         public DiffWindow() : base(null)
         {
             Caption = "Diff";
-            Content = new DiffWindowControl();
+            _view  = new DiffWindowControl();
+            Content = _view;
+        }
+
+        protected override void OnClose()
+        {
+            base.OnClose();
+
+            (ViewModel?.VsFrame as IVsWindowFrame)?.CloseFrame((uint)__FRAMECLOSE.FRAMECLOSE_NoSave);
         }
     }
 }

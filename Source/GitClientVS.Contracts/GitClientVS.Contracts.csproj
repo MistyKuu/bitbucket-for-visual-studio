@@ -116,6 +116,7 @@
     <Compile Include="Interfaces\Views\IPullRequestsWindow.cs" />
     <Compile Include="Interfaces\Views\IPullRequestsWindowContainerViewModel.cs" />
     <Compile Include="Interfaces\Views\IWorkflowWindow.cs" />
+    <Compile Include="Models\FileDiffModel.cs" />
     <Compile Include="Models\GitClientModels\GitLocalBranch.cs" />
     <Compile Include="Models\GitClientModels\GitMergeRequest.cs" />
     <Compile Include="Models\GitClientModels\PageIterator.cs" />

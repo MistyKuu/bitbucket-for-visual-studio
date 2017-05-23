@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
+using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure.ViewModels;
 using GitClientVS.VisualStudio.UI.Window;
 using Microsoft.VisualStudio.Shell;
@@ -57,14 +60,16 @@ namespace GitClientVS.VisualStudio.UI.Services
             _navigationService.Navigate<IPullRequestsMainView>();
         }
 
-        public void ShowDiffWindow(FileDiff parameter, int id)
+        public void ShowDiffWindow(FileDiffModel parameter, int id)
         {
-            var window = ShowWindow<DiffWindow>(id);
-            var vm = (DiffWindowControlViewModel)_diffFactory.CreateExport().Value;
-            var view = window.Content as IView;
-            view.DataContext = vm;
-            vm.Initialize(parameter);
-            vm.WhenAnyValue(x => x.FileDiff).Where(x => x != null).Subscribe(x => window.Caption = $"Diff ({x.DisplayFileName})");
+            var window = ShowWindow<DiffWindow>(id); // todo id is generated in filediff, we can use more elegant solution to prevent duplicates. It won't work in cases like user reopen detail view
+            if (window.ViewModel == null)
+            {
+                var vm = (DiffWindowControlViewModel)_diffFactory.CreateExport().Value;
+                window.ViewModel = vm;
+                vm.Initialize(parameter);
+                vm.WhenAnyValue(x => x.FileDiff).Where(x => x != null).Subscribe(x => window.Caption = $"Diff ({x.DisplayFileName})");
+            }
         }
 
         private TWindow ShowWindow<TWindow>(int id = 0) where TWindow : class
@@ -81,6 +86,66 @@ namespace GitClientVS.VisualStudio.UI.Services
             Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
 
             return window as TWindow;
+        }
+
+        public object ShowSideBySideDiffWindow(
+            string content1,
+            string content2,
+            string fileDisplayName1,
+            string fileDisplayName2,
+            string caption,
+            string tooltip,
+            object vsFrame //todo thisvsFrame is pretty ugly. Find a better way to check if window already exists. It's object due to dependencies (it's just easier)
+        )
+        {
+
+            (string file1, string file2) = CreateTempFiles(content1, content2);
+
+            try
+            {
+                var differenceService = Package.GetGlobalService(typeof(SVsDifferenceService)) as IVsDifferenceService;
+
+                var options = __VSDIFFSERVICEOPTIONS.VSDIFFOPT_DetectBinaryFiles |
+                              __VSDIFFSERVICEOPTIONS.VSDIFFOPT_LeftFileIsTemporary |
+                              __VSDIFFSERVICEOPTIONS.VSDIFFOPT_RightFileIsTemporary;
+
+                (vsFrame as IVsWindowFrame)?.CloseFrame((uint)__FRAMECLOSE.FRAMECLOSE_NoSave);
+
+                return differenceService.OpenComparisonWindow2(
+                    file1,
+                    file2,
+                    caption,
+                    tooltip,
+                    fileDisplayName1,
+                    fileDisplayName2,
+                    null,
+                    null,
+                    (uint)options
+                );
+
+            }
+            finally
+            {
+                if (File.Exists(file1))
+                    File.Delete(file1);
+                if (File.Exists(file2))
+                    File.Delete(file2);
+            }
+        }
+
+
+        private static (string file1, string file2) CreateTempFiles(string content1, string content2)
+        {
+            var tempDir = Path.Combine(Path.GetTempPath(), "GitClientVs");
+            Directory.CreateDirectory(tempDir);
+
+            var tempPath1 = Path.Combine(tempDir, Guid.NewGuid().ToString());
+            var tempPath2 = Path.Combine(tempDir, Guid.NewGuid().ToString());
+
+            File.WriteAllText(tempPath1, content1);
+            File.WriteAllText(tempPath2, content2);
+
+            return (tempPath1, tempPath2);
         }
     }
 }

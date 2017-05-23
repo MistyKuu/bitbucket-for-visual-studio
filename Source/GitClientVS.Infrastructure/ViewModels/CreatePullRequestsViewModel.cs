@@ -140,9 +140,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public string ExistingBranchText => RemotePullRequest == null ? null : $"#{RemotePullRequest.Id} {RemotePullRequest.Title} (created {RemotePullRequest.Created})";
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand, PullRequestDiffModel.ShowDiffCommand, PullRequestDiffModel.ShowSideBySideDiffCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand, PullRequestDiffModel.ShowDiffCommand};
 
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand, PullRequestDiffModel.ShowDiffCommand, PullRequestDiffModel.ShowSideBySideDiffCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand, PullRequestDiffModel.ShowDiffCommand };
 
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand CreateNewPullRequestCommand => _createNewPullRequestCommand;
@@ -156,8 +156,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             IPageNavigationService<IPullRequestsWindow> pageNavigationService,
             IEventAggregatorService eventAggregator,
             ITreeStructureGenerator treeStructureGenerator,
-            ICommandsService commandsService,
-            IVsTools vsTools
+            ICommandsService commandsService
         )
         {
             _gitClientService = gitClientService;
@@ -165,8 +164,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _pageNavigationService = pageNavigationService;
             _eventAggregator = eventAggregator;
             _treeStructureGenerator = treeStructureGenerator;
-            _vsTools = vsTools;
-            PullRequestDiffModel = new PullRequestDiffModel(commandsService, _vsTools, _gitClientService);
+            PullRequestDiffModel = new PullRequestDiffModel(commandsService);
 
             CloseSourceBranch = false;
             SelectedReviewers = new ReactiveList<GitUser>();

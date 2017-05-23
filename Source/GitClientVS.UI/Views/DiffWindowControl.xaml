@@ -19,8 +19,12 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid >
-        
-        
-        <controls:DiffControl FileDiff="{Binding FileDiff}" Theme="{Binding CurrentTheme}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button HorizontalAlignment="Right" Content="Side by side diff" Command="{Binding ShowSideBySideDiffCommand}"/>
+        <controls:DiffControl Grid.Row="1" FileDiff="{Binding FileDiff}" Theme="{Binding CurrentTheme}"/>
     </Grid>
 </UserControl>

@@ -76,8 +76,8 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public PullRequestDiffModel PullRequestDiffModel { get; set; }
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand, PullRequestDiffModel.ShowDiffCommand, PullRequestDiffModel.ShowSideBySideDiffCommand };
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand, PullRequestDiffModel.ShowDiffCommand, PullRequestDiffModel.ShowSideBySideDiffCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand, PullRequestDiffModel.ShowDiffCommand};
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand, PullRequestDiffModel.ShowDiffCommand};
 
         public string ErrorMessage
         {
@@ -99,19 +99,17 @@ namespace GitClientVS.Infrastructure.ViewModels
             IUserInformationService userInformationService,
             IEventAggregatorService eventAggregatorService,
             ITreeStructureGenerator treeStructureGenerator,
-            IMessageBoxService messageBoxService,
-            IVsTools vsTools
+            IMessageBoxService messageBoxService
             )
         {
             _gitClientService = gitClientService;
             _userInformationService = userInformationService;
             _treeStructureGenerator = treeStructureGenerator;
             _messageBoxService = messageBoxService;
-            _vsTools = vsTools;
             _eventAggregatorService = eventAggregatorService;
 
             CurrentTheme = userInformationService.CurrentTheme;
-            PullRequestDiffModel = new PullRequestDiffModel(commandsService, _vsTools, _gitClientService);
+            PullRequestDiffModel = new PullRequestDiffModel(commandsService);
 
         }
 

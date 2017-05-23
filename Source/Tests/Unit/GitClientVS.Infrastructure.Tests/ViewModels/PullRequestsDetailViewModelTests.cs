@@ -201,8 +201,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 _userInfoService,
                 _eventAggregatorService,
                 _treeStructureGenerator,
-                _messageBoxService,
-                _vsTools
+                _messageBoxService
             );
         }
     }
