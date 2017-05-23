@@ -137,7 +137,34 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         public Task<string> GetFileContent(string repoName, string owner, string hash, string path)
         {
-            throw new NotImplementedException();
+            return GetAllLines(EnterpriseApiUrls.DownloadFile(owner, repoName, hash, path));
+        }
+
+        private async Task<string> GetAllLines(string url) //todo temporary for test
+        {
+            var result = new EnterpriseBrowsePage()
+            {
+                Lines = new List<EnterpriseBrowseText>()
+            };
+            IRestResponse<EnterpriseBrowsePage> response;
+            ulong pageNumber = 0;
+            do
+            {
+                var request = new BitbucketRestRequest(url, Method.GET);
+                request.AddQueryParameter("start", pageNumber.ToString());
+
+                response = await RestClient.ExecuteTaskAsync<EnterpriseBrowsePage>(request);
+
+                if (response.Data?.Lines == null)
+                    break;
+
+                result.Lines.AddRange(response.Data.Lines);
+
+                pageNumber += response.Data.Size.Value;
+
+            } while (response.Data?.IsLastPage == false);
+
+            return string.Join(Environment.NewLine, result.Lines.Select(x=>x.Text));
         }
 
         public async Task<IEnumerable<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
@@ -279,6 +306,22 @@ namespace BitBucket.REST.API.Clients.Enterprise
                     To = diff.Destination?.String,
                     Chunks = new List<ChunkDiff>(),
                 };
+
+                if (fileDiff.From != null && fileDiff.To != null)
+                {
+                    var fileDiffDeleted = new FileDiff
+                    {
+                        From = diff.Source?.String,
+                        To = null,
+                        Chunks = new List<ChunkDiff>(),
+                        Type = FileChangeType.Delete
+                    };
+
+                    fileDiff.From = null;
+                    fileDiffs.Add(fileDiffDeleted);
+                    //todo fileDiffDelete wrong, chunks should be reverse than filediff, either detect here renames or fix in standard.
+                }
+
 
                 fileDiff.Type = fileDiff.From == null
                     ? FileChangeType.Add

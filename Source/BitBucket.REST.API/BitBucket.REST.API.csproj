@@ -71,6 +71,8 @@
     <Compile Include="Interfaces\IBitbucketRestClient.cs" />
     <Compile Include="Interfaces\IEnterpriseBitbucketRestClient.cs" />
     <Compile Include="Mappings\Converters\RepositoryV1TypeConverter.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseBrowse.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseBrowseText.cs" />
     <Compile Include="Models\Standard\DefaultBranch.cs" />
     <Compile Include="Models\Standard\MergeRequest.cs" />
     <Compile Include="EnterpriseBitbucketClient.cs" />

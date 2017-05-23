@@ -29,6 +29,8 @@ namespace GitClientVS.Infrastructure.Mappings
                 .ForMember(dto => dto.Date, e => e.MapFrom(o => TimeConverter.GetDate(o.Date)))
                 .ForMember(dto => dto.Author, e => e.MapFrom(o => o.Author.User));
 
+            CreateMap<GitCommit, Commit>();
+
             CreateMap(typeof(IteratorBasedPage<>), typeof(PageIterator<>));
 
             // todo: make a general parent
