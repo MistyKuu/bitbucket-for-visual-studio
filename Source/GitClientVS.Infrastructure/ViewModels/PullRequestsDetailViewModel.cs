@@ -76,8 +76,8 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public PullRequestDiffModel PullRequestDiffModel { get; set; }
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand, PullRequestDiffModel.ShowDiffCommand };
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand, PullRequestDiffModel.ShowDiffCommand, PullRequestDiffModel.ShowSideBySideDiffCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand, PullRequestDiffModel.ShowDiffCommand, PullRequestDiffModel.ShowSideBySideDiffCommand };
 
         public string ErrorMessage
         {
@@ -180,6 +180,9 @@ namespace GitClientVS.Infrastructure.ViewModels
                 CreateComments(id),
                 CreateDiffContent(id)
             };
+
+            PullRequestDiffModel.FromCommit = PullRequest.SourceBranch.Target.Hash;
+            PullRequestDiffModel.ToCommit = PullRequest.DestinationBranch.Target.Hash;
 
             await Task.WhenAll(tasks);
         }

@@ -86,10 +86,10 @@
                                 <TextBlock Margin="5,0,5,0"  Text="{Binding PullRequest.Status}"></TextBlock>
                                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                                 <controls1:BranchIcon Margin="5,0,0,0"/>
-                                <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.SourceBranch,Converter={converters:BranchNameConverter}}"/>
+                                <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.SourceBranch.Name,Converter={converters:BranchNameConverter}}"/>
                                 <TextBlock Margin="0,0,5,0" Text="&#x2794;" />
                                 <controls1:BranchIcon />
-                                <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.DestinationBranch,Converter={converters:BranchNameConverter}}"/>
+                                <TextBlock Margin="5,0,5,0" Text="{Binding PullRequest.DestinationBranch.Name,Converter={converters:BranchNameConverter}}"/>
                             </WrapPanel>
                         </Grid>
 

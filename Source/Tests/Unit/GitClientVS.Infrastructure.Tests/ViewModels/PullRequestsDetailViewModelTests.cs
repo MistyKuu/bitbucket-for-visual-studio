@@ -29,6 +29,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         private ITreeStructureGenerator _treeStructureGenerator;
         private IEventAggregatorService _eventAggregatorService;
         private ICommandsService _commandsService;
+        private IVsTools _vsTools;
 
         [SetUp]
         public void SetUp()
@@ -40,6 +41,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _treeStructureGenerator = MockRepository.GenerateMock<ITreeStructureGenerator>();
             _eventAggregatorService = new EventAggregatorService();
             _commandsService = MockRepository.GenerateMock<ICommandsService>();
+            _vsTools = MockRepository.GenerateMock<IVsTools>();
         }
 
         [Test]
@@ -48,7 +50,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             long id = 123;
             var pqAuthor = "Author";
 
-            var pullRequest = new GitPullRequest("Title", "Description", "SourceBranch", "DestinationBranch")
+            var pullRequest = new GitPullRequest("Title", "Description", new GitBranch(){Name="SourceBranch"}, new GitBranch() { Name = "DestinationBranch" })
             {
                 Reviewers = new Dictionary<GitUser, bool>()
                 {
@@ -84,7 +86,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             var pqAuthor = "Author";
             var currentUser = "CurrentUser";
 
-            var pullRequest = new GitPullRequest("Title", "Description", "SourceBranch", "DestinationBranch")
+            var pullRequest = new GitPullRequest("Title", "Description", new GitBranch() { Name = "SourceBranch" }, new GitBranch() { Name = "DestinationBranch" })
             {
                 Reviewers = new Dictionary<GitUser, bool>()
                 {
@@ -113,7 +115,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             var pqAuthor = "Author";
             var currentUser = "CurrentUser";
 
-            var pullRequest = new GitPullRequest("Title", "Description", "SourceBranch", "DestinationBranch")
+            var pullRequest = new GitPullRequest("Title", "Description", new GitBranch() { Name = "SourceBranch" }, new GitBranch() { Name = "DestinationBranch" })
             {
                 Reviewers = new Dictionary<GitUser, bool>()
                 {
@@ -142,7 +144,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             var currentUser = "CurrentUser";
             var pqAuthor = currentUser;
 
-            var pullRequest = new GitPullRequest("Title", "Description", "SourceBranch", "DestinationBranch")
+            var pullRequest = new GitPullRequest("Title", "Description", new GitBranch() { Name = "SourceBranch" }, new GitBranch() { Name = "DestinationBranch" })
             {
                 Reviewers = new Dictionary<GitUser, bool>()
                 {
@@ -199,7 +201,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 _userInfoService,
                 _eventAggregatorService,
                 _treeStructureGenerator,
-                _messageBoxService
+                _messageBoxService,
+                _vsTools
             );
         }
     }

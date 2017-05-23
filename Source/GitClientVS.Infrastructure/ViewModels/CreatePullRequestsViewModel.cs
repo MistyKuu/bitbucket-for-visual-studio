@@ -140,9 +140,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public string ExistingBranchText => RemotePullRequest == null ? null : $"#{RemotePullRequest.Id} {RemotePullRequest.Title} (created {RemotePullRequest.Created})";
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand, PullRequestDiffModel.ShowDiffCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand, PullRequestDiffModel.ShowDiffCommand, PullRequestDiffModel.ShowSideBySideDiffCommand };
 
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand, PullRequestDiffModel.ShowDiffCommand, PullRequestDiffModel.ShowSideBySideDiffCommand };
 
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand CreateNewPullRequestCommand => _createNewPullRequestCommand;
@@ -197,7 +197,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CreateNewPullRequest()
         {
-            var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch.Name, DestinationBranch.Name)
+            var gitPullRequest = new GitPullRequest(Title, Description, SourceBranch, DestinationBranch)
             {
                 Id = RemotePullRequest?.Id ?? 0,
                 CloseSourceBranch = CloseSourceBranch,

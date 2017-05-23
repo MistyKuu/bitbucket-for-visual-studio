@@ -36,6 +36,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         private ITreeStructureGenerator _treeStructureGenerator;
         private ICommandsService _commandsService;
         private CreatePullRequestsViewModel _sut;
+        private IVsTools _vsTools;
 
 
         [SetUp]
@@ -47,6 +48,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _eventAggregator = new EventAggregatorService();
             _treeStructureGenerator = MockRepository.GenerateMock<ITreeStructureGenerator>();
             _commandsService = MockRepository.GenerateMock<ICommandsService>();
+            _vsTools = MockRepository.GenerateMock<IVsTools>();
 
 
             _sut = CreateSut();
@@ -79,7 +81,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
             activeRepository.Branches.First(x => x.IsHead).TrackedBranchName = "RemoteHeadBranchName";
 
-            var pullRequest = new GitPullRequest("Title", "Desc", "SrcBranch", "DestinationBranch")
+            var pullRequest = new GitPullRequest("Title", "Desc", new GitBranch() { Name = "SrcBranch" }, new GitBranch() { Name = "DestinationBranch" })
             {
                 Author = new GitUser() { Username = "Author" },
                 Reviewers = new Dictionary<GitUser, bool>()
@@ -175,7 +177,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         }
 
 
-        [Test,Ignore("todo solve it later, it works differently when run from wpf app")]
+        [Test, Ignore("todo solve it later, it works differently when run from wpf app")]
         public void Initialize_GetPullRequestForBranchesThrowsException_ShouldSetErrorMessage()
         {
             var remoteBranches = GetRemoteBranches();
@@ -246,7 +248,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         public void CreatePullRequest_PullRequestExists_ShouldUpdatePullRequestAndNavigateBack()
         {
             _sut.RemotePullRequest = new GitPullRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
-                Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
+                new GitBranch() { Name = Guid.NewGuid().ToString() }, new GitBranch() { Name = Guid.NewGuid().ToString() })
             {
                 Id = 15,
                 Version = Guid.NewGuid().ToString()
@@ -260,7 +262,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 new ReactiveList<GitUser>() { new GitUser() { Username = "User1" }, new GitUser() { Username = "User2" } };
 
             _pageNavigationService.Expect(x => x.NavigateBack(true));
-            
+
             var result = _gitClientService
                 .Capture()
                 .Args<GitPullRequest>((s, pullRequest) => s.UpdatePullRequest(pullRequest));
@@ -367,7 +369,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 _pageNavigationService,
                 _eventAggregator,
                 _treeStructureGenerator,
-                _commandsService);
+                _commandsService,
+                _vsTools);
         }
     }
 }

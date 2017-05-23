@@ -28,6 +28,7 @@ namespace GitClientVS.Contracts.Models
 
 
         public ReactiveCommand ShowDiffCommand { get; }
+        public ReactiveCommand ShowSideBySideDiffCommand { get; }
 
         public List<ITreeFile> FilesTree
         {
@@ -74,16 +75,28 @@ namespace GitClientVS.Contracts.Models
             _gitClientService = gitClientService;
 
             ShowDiffCommand = ReactiveCommand.CreateFromTask<TreeFile>(ShowDiff);
+            ShowSideBySideDiffCommand = ReactiveCommand.CreateFromTask<TreeFile>(ShowSideBySideDiff);
         }
 
-        private async Task ShowDiff(TreeFile file)
+        private Task ShowDiff(TreeFile file)
+        {
+            _commandsService.ShowDiffWindow(file.FileDiff, file.FileDiff.Id);
+            return Task.CompletedTask;
+        }
+
+        private async Task ShowSideBySideDiff(TreeFile file)
         {
             var content1 = await GetFileContent(ToCommit, file.FileDiff.DisplayFileName);
             var content2 = await GetFileContent(FromCommit, file.FileDiff.DisplayFileName);
 
-            _vsTools.RunDiff(content1, content2, $"{file.FileDiff.DisplayFileName} ({ToCommit})", $"{file.FileDiff.DisplayFileName} ({FromCommit})");
-
-            // _commandsService.ShowDiffWindow(file.FileDiff, file.FileDiff.Id);
+            _vsTools.RunDiff(
+                content1,
+                content2,
+                $"{file.FileDiff.DisplayFileName} ({ToCommit})",
+                $"{file.FileDiff.DisplayFileName} ({FromCommit})",
+                "Diff",
+                "Diff"
+            );
         }
 
         private async Task<string> GetFileContent(string commit, string fileName)

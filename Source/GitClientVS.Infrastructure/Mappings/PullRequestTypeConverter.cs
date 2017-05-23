@@ -23,7 +23,7 @@ namespace GitClientVS.Infrastructure.Mappings
                     reviewers.Add(user.User, user.Approved);
             }
 
-            return new GitPullRequest(source.Title, source.Description, source.Source.Branch.Name, source.Destination.Branch.Name)
+            return new GitPullRequest(source.Title, source.Description, source.Source.Branch.MapTo<GitBranch>(), source.Destination.Branch.MapTo<GitBranch>())
             {
                 Id = source.Id,
                 Author = source.Author.MapTo<GitUser>(),
@@ -52,17 +52,11 @@ namespace GitClientVS.Infrastructure.Mappings
                 Description = source.Description,
                 Source = new Source
                 {
-                    Branch = new Branch()
-                    {
-                        Name = source.SourceBranch
-                    },
+                    Branch = source.SourceBranch?.MapTo<Branch>()
                 },
                 Destination = new Source()
                 {
-                    Branch = new Branch()
-                    {
-                        Name = source.DestinationBranch
-                    }
+                    Branch = source.DestinationBranch?.MapTo<Branch>()
                 },
                 State = source.Status.MapTo<PullRequestOptions>(),
                 CloseSourceBranch = source.CloseSourceBranch,

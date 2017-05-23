@@ -38,8 +38,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             IEnumerable<GitUser> authors = new List<GitUser>() { new GitUser() { Username = "Author1" } };
             List<GitPullRequest> pullRequests = new List<GitPullRequest>()
             {
-                new GitPullRequest("Title", "Description", "SourceBranch", "DestinationBranch"),
-                new GitPullRequest("Title2", "Description", "SourceBranch", "DestinationBranch"),
+                new GitPullRequest("Title", "Description", new GitBranch(){Name="SourceBranch"}, new GitBranch() { Name = "DestinationBranch" }),
+                new GitPullRequest("Title2", "Description", new GitBranch(){Name="SourceBranch"}, new GitBranch() { Name = "DestinationBranch" }),
             };
             var iterator = new PageIterator<GitPullRequest>() { Values = pullRequests };
 
@@ -68,7 +68,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         {
             IEnumerable<GitUser> authors = new List<GitUser>() { new GitUser() { Username = "Author1" } };
             List<GitPullRequest> pullRequests = Enumerable
-                .Repeat(new GitPullRequest("Title", "Description", "SourceBranch", "DestinationBranch"), 100)
+                .Repeat(new GitPullRequest("Title", "Description", new GitBranch() { Name = "SourceBranch" }, new GitBranch() { Name = "DestinationBranch" }), 100)
                 .ToList();
 
             var iterator = new PageIterator<GitPullRequest>() { Values = pullRequests.Take(50).ToList(), Next = "2" };
@@ -126,7 +126,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             Initialize_LoadNextPageAfterInitialization_ShouldLoadExpectedPullRequests();
 
             List<GitPullRequest> pullRequests = Enumerable
-                .Repeat(new GitPullRequest("Title", "Description", "SourceBranch", "DestinationBranch"), 100)
+                .Repeat(new GitPullRequest("Title", "Description", new GitBranch() { Name = "SourceBranch" }, new GitBranch() { Name = "DestinationBranch" }), 100)
                 .ToList();
 
             var iterator = new PageIterator<GitPullRequest>() { Values = pullRequests.Take(50).ToList(), Next = "2" };

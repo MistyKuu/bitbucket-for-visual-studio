@@ -7,8 +7,8 @@ namespace GitClientVS.Contracts.Models.GitClientModels
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public string SourceBranch { get; set; }
-        public string DestinationBranch { get; set; }
+        public GitBranch SourceBranch { get; set; }
+        public GitBranch DestinationBranch { get; set; }
         public GitPullRequestStatus Status { get; set; }
         public long Id { get; set; }
         public GitUser Author { get; set; }
@@ -21,12 +21,12 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public int CommentsCount { get; set; }
         public string Version { get; set; }
 
-        public GitPullRequest(string title, string description, string sourceBranch, string destinationBranch) : 
+        public GitPullRequest(string title, string description, GitBranch sourceBranch, GitBranch destinationBranch) : 
             this(title, description, sourceBranch, destinationBranch, null)
         {
         }
 
-        public GitPullRequest(string title, string description, string sourceBranch, string destinationBranch, Dictionary<GitUser, bool> reviewers)
+        public GitPullRequest(string title, string description, GitBranch sourceBranch, GitBranch destinationBranch, Dictionary<GitUser, bool> reviewers)
         {
             Title = title;
             Description = description;

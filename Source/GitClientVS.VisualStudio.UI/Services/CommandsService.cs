@@ -15,6 +15,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ReactiveUI;
 using GitClientVS.Infrastructure.Extensions;
+using ParseDiff;
 
 namespace GitClientVS.VisualStudio.UI.Services
 {
@@ -56,7 +57,7 @@ namespace GitClientVS.VisualStudio.UI.Services
             _navigationService.Navigate<IPullRequestsMainView>();
         }
 
-        public void ShowDiffWindow(object parameter, int id)
+        public void ShowDiffWindow(FileDiff parameter, int id)
         {
             var window = ShowWindow<DiffWindow>(id);
             var vm = (DiffWindowControlViewModel)_diffFactory.CreateExport().Value;
