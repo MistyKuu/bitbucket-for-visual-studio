@@ -179,10 +179,10 @@ namespace GitClientVS.Infrastructure.ViewModels
                 CreateDiffContent(id)
             };
 
+            await Task.WhenAll(tasks);
+
             PullRequestDiffModel.FromCommit = PullRequest.SourceBranch.Target.Hash;
             PullRequestDiffModel.ToCommit = PullRequest.DestinationBranch.Target.Hash;
-
-            await Task.WhenAll(tasks);
         }
 
         private async Task GetPullRequestInfo(long id)

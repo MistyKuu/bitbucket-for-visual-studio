@@ -36,6 +36,11 @@ namespace BitBucket.REST.API.Helpers
             return $"users";
         }
 
+        public static string DownloadFile(string ownerName, string repoName, string hash, string filePath)
+        {
+            return $"projects/{ownerName}/repos/{repoName}/files/{filePath}?at={hash}";
+        }
+
         public static string Commits(string ownerName, string repository)
         {
             return $"projects/{ownerName}/repos/{repository}/commits";

@@ -4,6 +4,7 @@ using BitBucket.REST.API.Mappings.Converters;
 using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Standard;
 using GitClientVS.Contracts.Models.GitClientModels;
+using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.Infrastructure.Utils;
 
 namespace GitClientVS.Infrastructure.Mappings
@@ -40,6 +41,7 @@ namespace GitClientVS.Infrastructure.Mappings
 
             CreateMap<Content, GitCommentContent>();
             CreateMap<Branch, GitBranch>();
+
             CreateMap<GitBranch, Branch>();
 
 
