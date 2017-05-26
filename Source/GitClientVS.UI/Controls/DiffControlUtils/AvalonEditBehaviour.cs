@@ -13,8 +13,8 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
     public sealed class AvalonEditBehaviour : DependencyObject
     {
 
-        private static readonly SolidColorBrush DarkAddedBackground = new SolidColorBrush(Color.FromRgb(3, 192, 60));
-        private static readonly SolidColorBrush DarkRemovedBackground = new SolidColorBrush(Color.FromRgb(194, 59, 34));
+        private static readonly SolidColorBrush DarkAddedBackground = new SolidColorBrush(Color.FromRgb(38, 94, 77));
+        private static readonly SolidColorBrush DarkRemovedBackground = new SolidColorBrush(Color.FromRgb(45, 0, 0));
 
         private static readonly SolidColorBrush LightAddedBackground = new SolidColorBrush(Color.FromRgb(0xdd, 0xff, 0xdd));
         private static readonly SolidColorBrush LightRemovedBackground = new SolidColorBrush(Color.FromRgb(0xff, 0xdd, 0xdd));
@@ -96,7 +96,9 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
         private static void FileDiffChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             TextEditor textEditor = d as TextEditor;
-            textEditor.SyntaxHighlighting = ICSharpCode.AvalonEdit.Highlighting.HighlightingManager.Instance.GetDefinition(HighLightStyle((FileDiff)e.NewValue));
+            textEditor.TextArea.TextView.LinkTextForegroundBrush = new SolidColorBrush(Color.FromRgb(77, 156, 214));
+            //todo jasniejsze zrobic
+            // textEditor.SyntaxHighlighting = ICSharpCode.AvalonEdit.Highlighting.HighlightingManager.Instance.GetDefinition(HighLightStyle((FileDiff)e.NewValue));
         }
 
         private static void BehaviourAttached(DependencyObject d, DependencyPropertyChangedEventArgs e)

@@ -307,22 +307,6 @@ namespace BitBucket.REST.API.Clients.Enterprise
                     Chunks = new List<ChunkDiff>(),
                 };
 
-                if (fileDiff.From != null && fileDiff.To != null)
-                {
-                    var fileDiffDeleted = new FileDiff
-                    {
-                        From = diff.Source?.String,
-                        To = null,
-                        Chunks = new List<ChunkDiff>(),
-                        Type = FileChangeType.Delete
-                    };
-
-                    fileDiff.From = null;
-                    fileDiffs.Add(fileDiffDeleted);
-                    //todo fileDiffDelete wrong, chunks should be reverse than filediff, either detect here renames or fix in standard.
-                }
-
-
                 fileDiff.Type = fileDiff.From == null
                     ? FileChangeType.Add
                     : fileDiff.To == null ? FileChangeType.Delete : FileChangeType.Modified;

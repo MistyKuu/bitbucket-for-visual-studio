@@ -20,11 +20,19 @@
     </UserControl.Resources>
     <Grid >
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Button HorizontalAlignment="Right" Content="Side by side diff" Command="{Binding ShowSideBySideDiffCommand}"/>
+        <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="2,0"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Style="{StaticResource ActionLinkButton}" Content="Side-by-Side diff" FontSize="13"  Command="{Binding ShowSideBySideDiffCommand}"/>
+        </StackPanel>        
+      
         <controls:DiffControl Grid.Row="1" FileDiff="{Binding FileDiff}" Theme="{Binding CurrentTheme}"/>
     </Grid>
 </UserControl>

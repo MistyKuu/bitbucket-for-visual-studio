@@ -139,9 +139,12 @@
 
             if (string.IsNullOrEmpty(line)) return;
 
+            if (line == noeol)
+                return;
+
             current.Changes.Add(new LineDiff(
-                oldIndex: line == noeol ? 0 : in_del++,
-                newIndex: line == noeol ? 0 : in_add++,
+                oldIndex: in_del++,
+                newIndex: in_add++,
                 content: line));
         }
 

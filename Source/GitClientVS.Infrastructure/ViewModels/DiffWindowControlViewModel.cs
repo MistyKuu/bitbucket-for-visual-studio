@@ -26,6 +26,8 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private ReactiveCommand _showSideBySideDiffCommand;
         private ReactiveCommand _initializeCommand;
+        private ReactiveCommand _viewFileCommand;
+
         private string _errorMessage;
         private bool _isLoading;
         private FileDiff _fileDiff;
@@ -35,6 +37,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
         public ICommand ShowSideBySideDiffCommand => _showSideBySideDiffCommand;
+        public ICommand ViewFileCommand => _viewFileCommand;
 
         public ICommand InitializeCommand => _initializeCommand;
 
@@ -63,8 +66,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             set => this.RaiseAndSetIfChanged(ref _fileDiff, value);
         }
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _showSideBySideDiffCommand };
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _showSideBySideDiffCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _showSideBySideDiffCommand, _viewFileCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _showSideBySideDiffCommand, _viewFileCommand };
 
         [ImportingConstructor]
         public DiffWindowControlViewModel(
@@ -89,6 +92,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _initializeCommand = ReactiveCommand.CreateFromTask<FileDiffModel>(ShowFileDiff, Observable.Return(true));
             _showSideBySideDiffCommand = ReactiveCommand.CreateFromTask(ShowSideBySideDiff);
+            _viewFileCommand = ReactiveCommand.CreateFromTask(ViewFile);
         }
 
         private Task ShowFileDiff(FileDiffModel fileDiffModel)
@@ -98,18 +102,25 @@ namespace GitClientVS.Infrastructure.ViewModels
             return Task.CompletedTask;
         }
 
+        private Task ViewFile()
+        {
+            throw new NotImplementedException();
+        }
+
         private async Task ShowSideBySideDiff()
         {
-            var content1 = await GetFileContent(_fileDiffModel.ToCommit, FileDiff.DisplayFileName);
-            var content2 = await GetFileContent(_fileDiffModel.FromCommit, FileDiff.DisplayFileName);
+            var results = await Task.WhenAll(
+                GetFileContent(_fileDiffModel.ToCommit, FileDiff.DisplayFileName),
+                GetFileContent(_fileDiffModel.FromCommit, FileDiff.DisplayFileName)
+            );
 
-            VsFrame =_commandsService.ShowSideBySideDiffWindow(
-                content1,
-                content2,
+            VsFrame = _commandsService.ShowSideBySideDiffWindow(
+                results[0],
+                results[1],
                 $"{FileDiff.DisplayFileName} ({_fileDiffModel.ToCommit})",
                 $"{FileDiff.DisplayFileName} ({_fileDiffModel.FromCommit})",
-                $"Side by Side Diff ({FileDiff.DisplayFileName})",
-                $"Side by Side Diff ({FileDiff.DisplayFileName})",
+                $"Side-by-side Diff ({FileDiff.DisplayFileName})",
+                $"Side-by-side Diff ({FileDiff.DisplayFileName})",
                 VsFrame
             );
         }
@@ -120,7 +131,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 return await _gitClientService.GetFileContent(commit, fileName);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return string.Empty;
             }
