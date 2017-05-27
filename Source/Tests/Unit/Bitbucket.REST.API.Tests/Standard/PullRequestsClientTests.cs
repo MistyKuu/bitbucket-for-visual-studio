@@ -28,6 +28,7 @@ namespace Bitbucket.REST.API.Tests.Standard
         private PullRequestsClient _sut;
         private IBitbucketRestClient _internalClient;
         private IBitbucketRestClient _webClient;
+        private IBitbucketRestClient _versionOneClient;
 
         [SetUp]
         public void SetUp()
@@ -35,6 +36,7 @@ namespace Bitbucket.REST.API.Tests.Standard
             _restClient = MockRepository.GenerateMock<IBitbucketRestClient>();
             _internalClient = MockRepository.GenerateMock<IBitbucketRestClient>();
             _webClient = MockRepository.GenerateMock<IBitbucketRestClient>();
+            _versionOneClient = MockRepository.GenerateMock<IBitbucketRestClient>();
 
             var connection = new Connection(
                 new Uri("http://url.com"),
@@ -42,7 +44,7 @@ namespace Bitbucket.REST.API.Tests.Standard
                 new Credentials("mistyku", "Password")
                 );
 
-            _sut = new PullRequestsClient(_restClient, _internalClient, _webClient, connection);
+            _sut = new PullRequestsClient(_restClient, _internalClient, _webClient, _versionOneClient, connection);
         }
 
         [Test]
@@ -395,7 +397,7 @@ namespace Bitbucket.REST.API.Tests.Standard
 
                 var firstChunk = firstDiff.Chunks.First();
 
-                Assert.AreEqual("+wqdqwdwqd\r\n\\ No newline at end of file", firstChunk.Text);
+                Assert.AreEqual("+wqdqwdwqd", firstChunk.Text);
                 Assert.AreEqual(0, firstChunk.OldLines);
                 Assert.AreEqual(0, firstChunk.NewLines);
                 Assert.AreEqual("@@ -0,0 +1 @@", firstChunk.Content);
