@@ -17,6 +17,9 @@ using Microsoft.VisualStudio.Shell;
 [assembly: ProvideCodeBase(AssemblyName = "ReactiveUI", CodeBase = @"$PackageFolder$\ReactiveUI.dll")]
 [assembly: ProvideCodeBase(AssemblyName = "Splat", CodeBase = @"$PackageFolder$\Splat.dll")]
 [assembly: ProvideCodeBase(AssemblyName = "RestSharp", CodeBase = @"$PackageFolder$\RestSharp.dll")]
+[assembly: ProvideCodeBase(AssemblyName = "ICSharpCode.AvalonEdit", CodeBase = @"$PackageFolder$\ICSharpCode.AvalonEdit.dll")]
+[assembly: ProvideCodeBase(AssemblyName = "log4net", CodeBase = @"$PackageFolder$\log4net.dll")]
+[assembly: ProvideCodeBase(AssemblyName = "Newtonsoft.Json", CodeBase = @"$PackageFolder$\Newtonsoft.Json.dll")]
 
 
 // Setting ComVisible to false makes the types in this assembly not visible 
