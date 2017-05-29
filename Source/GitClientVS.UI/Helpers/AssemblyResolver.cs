@@ -28,6 +28,7 @@ namespace GitClientVS.UI.Helpers
             "HtmlRenderer.WPF",
             "System.Windows.Interactivity",
             "Humanizer",
+            "RestSharp",
             "Svg",
             "System.Reactive.Core",
             "System.Reactive.Interfaces",
