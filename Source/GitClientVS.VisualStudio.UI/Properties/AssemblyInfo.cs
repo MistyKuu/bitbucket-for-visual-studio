@@ -16,6 +16,7 @@ using Microsoft.VisualStudio.Shell;
 [assembly: ProvideCodeBase(AssemblyName = "System.Reactive.Windows.Threading", CodeBase = @"$PackageFolder$\System.Reactive.Windows.Threading.dll")]
 [assembly: ProvideCodeBase(AssemblyName = "ReactiveUI", CodeBase = @"$PackageFolder$\ReactiveUI.dll")]
 [assembly: ProvideCodeBase(AssemblyName = "Splat", CodeBase = @"$PackageFolder$\Splat.dll")]
+[assembly: ProvideCodeBase(AssemblyName = "RestSharp", CodeBase = @"$PackageFolder$\RestSharp.dll")]
 
 
 // Setting ComVisible to false makes the types in this assembly not visible 
