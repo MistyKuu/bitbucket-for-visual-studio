@@ -1,10 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DiffPlex;
+using DiffPlex.DiffBuilder;
 
 namespace ParseDiff
 {
     public class DiffFileParser
-    { // from property holds the name of the file -> no matter what
+    {
+        private static SideBySideDiffBuilder _diffBuilder;
+// from property holds the name of the file -> no matter what
+
+        static DiffFileParser()
+        {
+            _diffBuilder = new SideBySideDiffBuilder(new Differ());
+        }
+
         public static IEnumerable<FileDiff> Parse(string diff)
         {
             var files = Diff.Parse(diff).ToList();
@@ -29,12 +39,12 @@ namespace ParseDiff
                                     on added.NewIndex equals deleted.OldIndex
                                     select new { Added = added, Deleted = deleted };
 
-                        //foreach (var pair in pairs)
-                        //{
-                        //    pair.Added.Content
-                        //}
-
-
+                        foreach (var pair in pairs)
+                        {
+                            var result = _diffBuilder.BuildDiffModel(pair.Deleted.Content, pair.Added.Content);
+                            pair.Deleted.ChangesInLine = result.OldText;//todo REWRITE EVERYTHING TO USE THIS LIB
+                            pair.Added.ChangesInLine = result.NewText;
+                        }
                     }
                 }
                 else if (fileDiff.Type == FileChangeType.Add)

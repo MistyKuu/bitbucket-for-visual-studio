@@ -29,6 +29,8 @@ namespace GitClientVS.UI.Helpers
             "System.Windows.Interactivity",
             "Humanizer",
             "RestSharp",
+            "DiffPlex",
+            "System.ValueTuple",
             "Svg",
             "System.Reactive.Core",
             "System.Reactive.Interfaces",

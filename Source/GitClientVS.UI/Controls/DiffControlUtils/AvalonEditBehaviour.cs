@@ -136,7 +136,9 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
                 addedBg = DarkLineAddedBackground;
                 removedBg = DarkLineRemovedBackground;
             }
-            textEditor.TextArea.TextView.BackgroundRenderers.Add(new DiffLineBackgroundRenderer(addedBg, removedBg));
+            textEditor.TextArea.TextView.BackgroundRenderers.Add(new DiffLineBackgroundRenderer(addedBg, removedBg,new SolidColorBrush(Colors.LightBlue),new SolidColorBrush(Colors.LightCoral)));
+
+            textEditor.TextArea.TextView.LineTransformers.Add(new OffsetColorizer((ChunkDiff)textEditor.DataContext));
         }
 
         public static string GetTextBinding(DependencyObject obj)
