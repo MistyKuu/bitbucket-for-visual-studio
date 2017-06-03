@@ -12,12 +12,15 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
 {
     public sealed class AvalonEditBehaviour : DependencyObject
     {
+        private static readonly SolidColorBrush DarkLinkForeground = new SolidColorBrush(Color.FromRgb(86, 156, 214));
+        private static readonly SolidColorBrush LightLinkForeground = new SolidColorBrush(Color.FromRgb(0, 89, 214));
 
-        private static readonly SolidColorBrush DarkAddedBackground = new SolidColorBrush(Color.FromRgb(38, 94, 77));
-        private static readonly SolidColorBrush DarkRemovedBackground = new SolidColorBrush(Color.FromRgb(45, 0, 0));
 
-        private static readonly SolidColorBrush LightAddedBackground = new SolidColorBrush(Color.FromRgb(0xdd, 0xff, 0xdd));
-        private static readonly SolidColorBrush LightRemovedBackground = new SolidColorBrush(Color.FromRgb(0xff, 0xdd, 0xdd));
+        private static readonly SolidColorBrush DarkLineAddedBackground = new SolidColorBrush(Color.FromRgb(38, 94, 77));
+        private static readonly SolidColorBrush DarkLineRemovedBackground = new SolidColorBrush(Color.FromRgb(60, 0, 0));
+
+        private static readonly SolidColorBrush LightLineAddedBackground = new SolidColorBrush(Color.FromRgb(235, 241, 221));
+        private static readonly SolidColorBrush LightLineRemovedBackground = new SolidColorBrush(Color.FromRgb(255, 204, 204));
 
         private static readonly Dictionary<string, string> HighlightMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
         {
@@ -95,9 +98,6 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
 
         private static void FileDiffChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            TextEditor textEditor = d as TextEditor;
-            textEditor.TextArea.TextView.LinkTextForegroundBrush = new SolidColorBrush(Color.FromRgb(77, 156, 214));
-            //todo jasniejsze zrobic
             // textEditor.SyntaxHighlighting = ICSharpCode.AvalonEdit.Highlighting.HighlightingManager.Instance.GetDefinition(HighLightStyle((FileDiff)e.NewValue));
         }
 
@@ -107,7 +107,13 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
             // textEditor.TextArea.TextView.LineTransformers.Add(new DiffLineColorizer((ChunkDiff)textEditor.DataContext));
             textEditor.TextArea.LeftMargins.Add(new TwoColumnMargin());
             textEditor.TextArea.LeftMargins.Add(DottedLineMargin.Create());
-            ChangeBackgroundRenderer(textEditor, GetTheme(textEditor));
+
+            var theme = GetTheme(textEditor);
+
+            ChangeBackgroundRenderer(textEditor, theme);
+
+            textEditor.TextArea.TextView.LinkTextForegroundBrush =
+                theme == Theme.Light ? LightLinkForeground : DarkLinkForeground;
         }
 
 
@@ -122,13 +128,13 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
 
             if (theme == Theme.Light)
             {
-                addedBg = LightAddedBackground;
-                removedBg = LightRemovedBackground;
+                addedBg = LightLineAddedBackground;
+                removedBg = LightLineRemovedBackground;
             }
             else
             {
-                addedBg = DarkAddedBackground;
-                removedBg = DarkRemovedBackground;
+                addedBg = DarkLineAddedBackground;
+                removedBg = DarkLineRemovedBackground;
             }
             textEditor.TextArea.TextView.BackgroundRenderers.Add(new DiffLineBackgroundRenderer(addedBg, removedBg));
         }

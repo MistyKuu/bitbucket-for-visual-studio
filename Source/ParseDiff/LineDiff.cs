@@ -1,4 +1,6 @@
-﻿namespace ParseDiff
+﻿using System.Collections.Generic;
+
+namespace ParseDiff
 {
     public class LineDiff
     {
@@ -37,5 +39,14 @@
         public int? NewIndex { get; set; }
 
         public LineChangeType Type { get; set; }
+
+        public List<LineDiffChange> ChangesInLine { get; } = new List<LineDiffChange>();
     }
+
+    public class LineDiffChange
+    {
+        public int From { get; set; }
+        public int To { get; set; }
+    }
+
 }

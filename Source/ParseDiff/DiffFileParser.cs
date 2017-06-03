@@ -13,12 +13,28 @@ namespace ParseDiff
             {
                 if (fileDiff.Type == FileChangeType.Modified)
                 {
-                    foreach (var change in fileDiff.Chunks.Select(chunk => chunk.Changes).SelectMany(changes => changes))
+
+                    foreach (var chunk in fileDiff.Chunks)
                     {
-                        if (change.Type == LineChangeType.Add)
-                            change.NewIndex = change.Index;
-                        else if (change.Type == LineChangeType.Delete)
-                            change.OldIndex = change.Index;
+                        foreach (var change in chunk.Changes)
+                        {
+                            if (change.Type == LineChangeType.Add)
+                                change.NewIndex = change.Index;
+                            else if (change.Type == LineChangeType.Delete)
+                                change.OldIndex = change.Index;
+                        }
+
+                        var pairs = from added in chunk.Changes.Where(x=>x.Type == LineChangeType.Add)
+                                    join deleted in chunk.Changes.Where(x => x.Type == LineChangeType.Delete) 
+                                    on added.NewIndex equals deleted.OldIndex
+                                    select new { Added = added, Deleted = deleted };
+
+                        //foreach (var pair in pairs)
+                        //{
+                        //    pair.Added.Content
+                        //}
+
+
                     }
                 }
                 else if (fileDiff.Type == FileChangeType.Add)
