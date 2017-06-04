@@ -12,16 +12,6 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
 {
     public sealed class AvalonEditBehaviour : DependencyObject
     {
-        private static readonly SolidColorBrush DarkLinkForeground = new SolidColorBrush(Color.FromRgb(86, 156, 214));
-        private static readonly SolidColorBrush LightLinkForeground = new SolidColorBrush(Color.FromRgb(0, 89, 214));
-
-
-        private static readonly SolidColorBrush DarkLineAddedBackground = new SolidColorBrush(Color.FromRgb(38, 94, 77));
-        private static readonly SolidColorBrush DarkLineRemovedBackground = new SolidColorBrush(Color.FromRgb(60, 0, 0));
-
-        private static readonly SolidColorBrush LightLineAddedBackground = new SolidColorBrush(Color.FromRgb(235, 241, 221));
-        private static readonly SolidColorBrush LightLineRemovedBackground = new SolidColorBrush(Color.FromRgb(255, 204, 204));
-
         private static readonly Dictionary<string, string> HighlightMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
         {
             ["cshtml"] = "ASP / XHTML",
@@ -113,7 +103,7 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
             ChangeBackgroundRenderer(textEditor, theme);
 
             textEditor.TextArea.TextView.LinkTextForegroundBrush =
-                theme == Theme.Light ? LightLinkForeground : DarkLinkForeground;
+                theme == Theme.Light ? DiffColors.LightLinkForeground : DiffColors.DarkLinkForeground;
         }
 
 
@@ -125,20 +115,26 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
 
             SolidColorBrush addedBg;
             SolidColorBrush removedBg;
+            SolidColorBrush addedWordBg;
+            SolidColorBrush removedWordBg;
 
             if (theme == Theme.Light)
             {
-                addedBg = LightLineAddedBackground;
-                removedBg = LightLineRemovedBackground;
+                addedBg = DiffColors.LightLineAddedBackground;
+                addedWordBg = DiffColors.LightWordAddedBackground;
+                removedBg = DiffColors.LightLineRemovedBackground;
+                removedWordBg = DiffColors.LightWordRemovedBackground;
             }
             else
             {
-                addedBg = DarkLineAddedBackground;
-                removedBg = DarkLineRemovedBackground;
+                addedBg = DiffColors.DarkLineAddedBackground;
+                addedWordBg = DiffColors.DarkWordAddedBackground;
+                removedBg = DiffColors.DarkLineRemovedBackground;
+                removedWordBg = DiffColors.DarkWordRemovedBackground;
             }
-            textEditor.TextArea.TextView.BackgroundRenderers.Add(new DiffLineBackgroundRenderer(addedBg, removedBg,new SolidColorBrush(Colors.LightBlue),new SolidColorBrush(Colors.LightCoral)));
+            textEditor.TextArea.TextView.BackgroundRenderers.Add(new DiffLineBackgroundRenderer(addedBg, removedBg));
 
-            textEditor.TextArea.TextView.LineTransformers.Add(new OffsetColorizer((ChunkDiff)textEditor.DataContext));
+            textEditor.TextArea.TextView.LineTransformers.Add(new OffsetColorizer((ChunkDiff)textEditor.DataContext, addedWordBg,removedWordBg));
         }
 
         public static string GetTextBinding(DependencyObject obj)

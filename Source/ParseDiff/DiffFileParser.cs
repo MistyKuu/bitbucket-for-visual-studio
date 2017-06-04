@@ -7,14 +7,7 @@ namespace ParseDiff
 {
     public class DiffFileParser
     {
-        private static SideBySideDiffBuilder _diffBuilder;
-// from property holds the name of the file -> no matter what
-
-        static DiffFileParser()
-        {
-            _diffBuilder = new SideBySideDiffBuilder(new Differ());
-        }
-
+        // from property holds the name of the file -> no matter what
         public static IEnumerable<FileDiff> Parse(string diff)
         {
             var files = Diff.Parse(diff).ToList();
@@ -32,18 +25,6 @@ namespace ParseDiff
                                 change.NewIndex = change.Index;
                             else if (change.Type == LineChangeType.Delete)
                                 change.OldIndex = change.Index;
-                        }
-
-                        var pairs = from added in chunk.Changes.Where(x=>x.Type == LineChangeType.Add)
-                                    join deleted in chunk.Changes.Where(x => x.Type == LineChangeType.Delete) 
-                                    on added.NewIndex equals deleted.OldIndex
-                                    select new { Added = added, Deleted = deleted };
-
-                        foreach (var pair in pairs)
-                        {
-                            var result = _diffBuilder.BuildDiffModel(pair.Deleted.Content, pair.Added.Content);
-                            pair.Deleted.ChangesInLine = result.OldText;//todo REWRITE EVERYTHING TO USE THIS LIB
-                            pair.Added.ChangesInLine = result.NewText;
                         }
                     }
                 }

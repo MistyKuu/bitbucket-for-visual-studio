@@ -106,8 +106,10 @@
       <DependentUpon>DiffControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\DiffControlUtils\AvalonEditBehaviour.cs" />
+    <Compile Include="Controls\DiffControlUtils\DiffColors.cs" />
     <Compile Include="Controls\DiffControlUtils\DiffLineBackgroundRenderer.cs" />
     <Compile Include="Controls\DiffControlUtils\DiffLineColorizer.cs" />
+    <Compile Include="Controls\DiffControlUtils\OffsetColorizer.cs" />
     <Compile Include="Controls\DiffControlUtils\TwoColumnMargin.cs" />
     <Compile Include="Controls\PullRequestDiffView.xaml.cs">
       <DependentUpon>PullRequestDiffView.xaml</DependentUpon>

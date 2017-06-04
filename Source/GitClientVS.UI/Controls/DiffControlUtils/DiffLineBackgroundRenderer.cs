@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using DiffPlex.DiffBuilder.Model;
-using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
 using ParseDiff;
 
@@ -16,21 +12,14 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
 
         private readonly SolidColorBrush _removedLineBackground;
         private readonly SolidColorBrush _addedLineBackground;
-        private readonly SolidColorBrush _addedWordBackground;
-        private SolidColorBrush _removedWordBackground;
 
         public DiffLineBackgroundRenderer(
             SolidColorBrush addedLineBackground,
-            SolidColorBrush removedLineBackground,
-            SolidColorBrush addedWordBackground,
-            SolidColorBrush removedWordBackground
+            SolidColorBrush removedLineBackground
             )
         {
             _addedLineBackground = addedLineBackground;
-            _addedWordBackground = addedWordBackground;
-
             _removedLineBackground = removedLineBackground;
-            _removedWordBackground = removedWordBackground;
 
             var blackBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0)); blackBrush.Freeze();
             pen = new Pen(blackBrush, 0.0);
@@ -71,49 +60,6 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
 
                 drawingContext.DrawRectangle(brush, pen, new Rect(0, rc.Top, textView.ActualWidth, rc.Height));
             }
-        }
-    }
-
-    public class OffsetColorizer : DocumentColorizingTransformer
-    {
-        private readonly ChunkDiff _chunkDiff;
-
-        public OffsetColorizer(ChunkDiff chunkDiff)
-        {
-            _chunkDiff = chunkDiff;
-        }
-
-        protected override void ColorizeLine(DocumentLine line)
-        {
-            if (line.Length == 0)
-                return;
-
-
-            //if (line.Offset < StartOffset || line.Offset > EndOffset)
-            //    return;
-
-            //int start = line.Offset > StartOffset ? line.Offset : StartOffset;
-            //int end = EndOffset > line.EndOffset ? line.EndOffset : EndOffset;
-
-
-            var change = _chunkDiff.Changes[line.LineNumber - 1];
-            foreach (var changeLine in change.ChangesInLine?.Lines
-                       .Where(x => x.Type != ChangeType.Imaginary && x.Type != ChangeType.Unchanged) ?? new List<DiffPiece>())
-            {
-                foreach (var diffPiece in changeLine.SubPieces
-                    .Where(x => x.Type != ChangeType.Imaginary && x.Type != ChangeType.Unchanged))
-                {
-
-                    var start = line.Offset + change.Content.IndexOf(diffPiece.Text, StringComparison.InvariantCultureIgnoreCase);
-                    var end = start + diffPiece.Text.Length;
-
-                    ChangeLinePart(start, end, element => element.TextRunProperties.SetBackgroundBrush(
-                        diffPiece.Type == ChangeType.Deleted ? Brushes.OrangeRed : Brushes.LightGreen));
-                }
-            }
-
-
-
         }
     }
 }

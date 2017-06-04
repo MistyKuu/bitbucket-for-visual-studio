@@ -11,6 +11,8 @@ using BitBucket.REST.API.Interfaces;
 using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
+using DiffPlex;
+using DiffPlex.DiffBuilder;
 using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
@@ -44,6 +46,7 @@ namespace GitClientVS.Services
         public string Origin => "Bitbucket";
         public string Title => $"{Origin} Extension";
         private readonly string supportedSCM = "git";
+        private static readonly SideBySideDiffBuilder DiffBuilder = new SideBySideDiffBuilder(new Differ());
 
         public async Task LoginAsync(GitCredentials gitCredentials)
         {
@@ -112,13 +115,27 @@ namespace GitClientVS.Services
 
         public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(long id)
         {
-            return await _bitbucketClient.PullRequestsClient.GetPullRequestDiff(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, id);
+            var diffs =(await _bitbucketClient
+                .PullRequestsClient
+                .GetPullRequestDiff(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, id)).ToList();
+
+            ProcessDiffs(diffs);
+
+            return diffs;
         }
 
         public async Task<IEnumerable<FileDiff>> GetCommitsDiff(string fromCommit, string toCommit)
         {
-            return await _bitbucketClient.PullRequestsClient.GetCommitsDiff(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, fromCommit, toCommit);
+            var diffs= (await  _bitbucketClient
+                .PullRequestsClient
+                .GetCommitsDiff(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, fromCommit, toCommit)).ToList();
+
+            ProcessDiffs(diffs);
+
+            return diffs;
         }
+
+       
 
         public async Task<string> GetFileContent(string hash, string path)
         {
@@ -273,6 +290,24 @@ namespace GitClientVS.Services
         {
             _bitbucketClient = null;
             OnConnectionChanged(ConnectionData.NotLogged);
+        }
+
+        private static void ProcessDiffs(IEnumerable<FileDiff> diffs)
+        {
+            foreach (var chunk in diffs.SelectMany(x => x.Chunks))
+            {
+                var pairs = from added in chunk.Changes.Where(x => x.Type == LineChangeType.Add)
+                    join deleted in chunk.Changes.Where(x => x.Type == LineChangeType.Delete)
+                    on added.NewIndex equals deleted.OldIndex
+                    select new { Added = added, Deleted = deleted };
+
+                foreach (var pair in pairs)
+                {
+                    var result = DiffBuilder.BuildDiffModel(pair.Deleted.Content, pair.Added.Content);
+                    pair.Deleted.ChangesInLine = result.OldText; //todo REWRITE EVERYTHING TO USE THIS LIB
+                    pair.Added.ChangesInLine = result.NewText;
+                }
+            }
         }
 
         private void OnConnectionChanged(ConnectionData connectionData)
