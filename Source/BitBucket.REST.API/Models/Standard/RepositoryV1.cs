@@ -29,7 +29,7 @@ namespace BitBucket.REST.API.Models.Standard
         [JsonProperty("is_mq")]
         public bool IsMq { get; set; }
         [JsonProperty("size")]
-        public int Size { get; set; }
+        public ulong Size { get; set; }
         [JsonProperty("read_only")]
         public bool ReadOnly { get; set; }
         [JsonProperty("fork_of")]
