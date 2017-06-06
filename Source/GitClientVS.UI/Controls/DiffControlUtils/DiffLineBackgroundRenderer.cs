@@ -57,7 +57,7 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
                         brush = _removedLineBackground;
                         break;
                 }
-
+                
                 drawingContext.DrawRectangle(brush, pen, new Rect(0, rc.Top, textView.ActualWidth, rc.Height));
             }
         }

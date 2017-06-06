@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Media;
 using DiffPlex.DiffBuilder.Model;
 using ICSharpCode.AvalonEdit.Document;
@@ -40,8 +41,10 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
                     var start = line.Offset + change.Content.IndexOf(diffPiece.Text, StringComparison.InvariantCulture);
                     var end = start + diffPiece.Text.Length;
 
-                    ChangeLinePart(start, end, element => element.TextRunProperties.SetBackgroundBrush(
-                        diffPiece.Type == ChangeType.Deleted ? _removedWorkBackground : _addedWordBackground));
+                    ChangeLinePart(start, end, element =>
+                    {
+                        element.TextRunProperties.SetBackgroundBrush(diffPiece.Type == ChangeType.Deleted ? _removedWorkBackground : _addedWordBackground);
+                    });
                 }
             }
         }

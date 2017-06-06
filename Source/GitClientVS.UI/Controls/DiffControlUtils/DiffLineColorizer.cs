@@ -18,6 +18,7 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
             if (line.LineNumber - 1 >= _chunkDiff.Changes.Count)
                 return;
 
+
             var change = _chunkDiff.Changes[line.LineNumber - 1];
             if (!line.IsDeleted && (change.Type == LineChangeType.Add || change.Type == LineChangeType.Delete))
             {

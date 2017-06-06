@@ -298,7 +298,7 @@ namespace GitClientVS.Services
             {
                 var pairs = from added in chunk.Changes.Where(x => x.Type == LineChangeType.Add)
                     join deleted in chunk.Changes.Where(x => x.Type == LineChangeType.Delete)
-                    on added.NewIndex equals deleted.OldIndex
+                    on added.Index equals deleted.Index
                     select new { Added = added, Deleted = deleted };
 
                 foreach (var pair in pairs)
