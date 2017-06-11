@@ -367,7 +367,9 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 _pageNavigationService,
                 _eventAggregator,
                 _treeStructureGenerator,
-                _commandsService);
+                _commandsService,
+                new DataNotifier()
+                );
         }
     }
 }

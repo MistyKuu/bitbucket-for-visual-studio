@@ -150,7 +150,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         {
             return new PullRequestsMainViewModel(
                  _gitClientService,
-                 _pageNavigationService
+                 _pageNavigationService,
+                 new DataNotifier()
             );
         }
     }
