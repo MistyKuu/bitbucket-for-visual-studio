@@ -27,5 +27,10 @@ namespace GitClientVS.UI.Views
             DataContext = vm;
             InitializeComponent();
         }
+
+        private void PullRequestListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            PullRequestListBox.UnselectAll();
+        }
     }
 }

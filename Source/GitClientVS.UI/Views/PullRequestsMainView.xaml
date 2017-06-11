@@ -173,6 +173,7 @@
                  SelectedItem="{Binding SelectedPullRequest, Mode=TwoWay}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ItemTemplate="{StaticResource PullRequestTemplate}"
+                 SelectionChanged="PullRequestListBox_SelectionChanged"
                 x:Name="PullRequestListBox"
                      />
                 <TextBlock Text="No pull requests" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15">
