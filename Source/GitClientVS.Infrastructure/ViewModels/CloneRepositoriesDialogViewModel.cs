@@ -85,8 +85,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand ChoosePathCommand => _choosePathCommand;
         public ICommand InitializeCommand => _initializeCommand;
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _cloneCommand, _initializeCommand };
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _cloneCommand, _initializeCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _cloneCommand, _initializeCommand, _choosePathCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _cloneCommand, _initializeCommand,_choosePathCommand };
 
         [ImportingConstructor]
         public CloneRepositoriesDialogViewModel(
@@ -107,7 +107,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _initializeCommand = ReactiveCommand.CreateFromTask(_ => RefreshRepositories(), CanRefreshObservable());
             _cloneCommand = ReactiveCommand.CreateFromTask(_ => Clone(), CanExecuteCloneObservable());
-            _choosePathCommand = ReactiveCommand.Create(ChooseClonePath);
+            _choosePathCommand = ReactiveCommand.CreateFromTask<object>(_ =>ChooseClonePath(),Observable.Return(true));
         }
         protected override IEnumerable<IDisposable> SetupObservables()
         {
@@ -126,11 +126,13 @@ namespace GitClientVS.Infrastructure.ViewModels
             yield break;
         }
 
-        private void ChooseClonePath()
+        private Task ChooseClonePath()
         {
             var result = _fileService.OpenDirectoryDialog(ClonePath);
             if (result.IsSuccess)
                 ClonePath = result.Data;
+
+            return Task.CompletedTask;
         }
 
         private async Task Clone()

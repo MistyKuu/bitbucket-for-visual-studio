@@ -13,6 +13,7 @@
              xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+                      xmlns:reactive="System.Reactive"
              mc:Ignorable="d" 
              Style="{DynamicResource DefaultMetroWindowStyle}"
              WindowStartupLocation="CenterOwner"
@@ -184,7 +185,7 @@
                     controls:TextBoxHelper.Watermark="Repository Path"
                     Text="{bindings:ValidatedBinding ClonePath}" 
                     VerticalAlignment="Center"
-                    controls:TextBoxHelper.ButtonCommand="{Binding ChoosePathCommand}"
+                    controls:TextBoxHelper.ButtonCommand="{Binding ElementName=ContentGrid,Path=DataContext.ChoosePathCommand,Mode=OneWay}"
                 >
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource MetroButtonTextBox}">
