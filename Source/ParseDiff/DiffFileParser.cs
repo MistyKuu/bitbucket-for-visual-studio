@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DiffPlex;
-using DiffPlex.DiffBuilder;
 
 namespace ParseDiff
 {
@@ -19,24 +17,15 @@ namespace ParseDiff
 
                     foreach (var chunk in fileDiff.Chunks)
                     {
-                        int originalDifference = chunk.OldStart - chunk.NewStart;
-                        int added = 0;
-                        int deleted = 0;
-
-
                         foreach (var change in chunk.Changes)
                         {
                             if (change.Type == LineChangeType.Add)
                             {
                                 change.NewIndex = change.Index;
-                                change.Index = change.NewIndex.Value - chunk.NewStart + added;
-                                added++;
                             }
                             else if (change.Type == LineChangeType.Delete)
                             {
                                 change.OldIndex = change.Index;
-                                change.Index = change.OldIndex.Value - chunk.OldStart - deleted;
-                                deleted++;
                             }
                         }
                     }

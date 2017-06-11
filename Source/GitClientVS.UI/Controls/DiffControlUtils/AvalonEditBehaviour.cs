@@ -134,7 +134,7 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
             }
             textEditor.TextArea.TextView.BackgroundRenderers.Add(new DiffLineBackgroundRenderer(addedBg, removedBg));
 
-            textEditor.TextArea.TextView.LineTransformers.Add(new OffsetColorizer((ChunkDiff)textEditor.DataContext, addedWordBg,removedWordBg));
+            //todo for word level textEditor.TextArea.TextView.LineTransformers.Add(new OffsetColorizer((ChunkDiff)textEditor.DataContext, addedWordBg,removedWordBg));
         }
 
         public static string GetTextBinding(DependencyObject obj)

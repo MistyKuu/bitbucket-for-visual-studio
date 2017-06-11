@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DiffPlex.DiffBuilder.Model;
 
 namespace ParseDiff
 {
@@ -40,14 +39,5 @@ namespace ParseDiff
         public int? NewIndex { get; set; }
 
         public LineChangeType Type { get; set; }
-
-        public DiffPaneModel ChangesInLine { get; set; }
     }
-
-    public class LineDiffChange
-    {
-        public int From { get; set; }
-        public int To { get; set; }
-    }
-
 }

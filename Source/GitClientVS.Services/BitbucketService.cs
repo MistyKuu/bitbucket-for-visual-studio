@@ -11,8 +11,6 @@ using BitBucket.REST.API.Interfaces;
 using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
-using DiffPlex;
-using DiffPlex.DiffBuilder;
 using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
@@ -46,7 +44,6 @@ namespace GitClientVS.Services
         public string Origin => "Bitbucket";
         public string Title => $"{Origin} Extension";
         private readonly string supportedSCM = "git";
-        private static readonly SideBySideDiffBuilder DiffBuilder = new SideBySideDiffBuilder(new Differ());
 
         public async Task LoginAsync(GitCredentials gitCredentials)
         {
@@ -294,20 +291,7 @@ namespace GitClientVS.Services
 
         private static void ProcessDiffs(IEnumerable<FileDiff> diffs)
         {
-            foreach (var chunk in diffs.SelectMany(x => x.Chunks))
-            {
-                var pairs = from added in chunk.Changes.Where(x => x.Type == LineChangeType.Add)
-                    join deleted in chunk.Changes.Where(x => x.Type == LineChangeType.Delete)
-                    on added.Index equals deleted.Index
-                    select new { Added = added, Deleted = deleted };
-
-                foreach (var pair in pairs)
-                {
-                    var result = DiffBuilder.BuildDiffModel(pair.Deleted.Content, pair.Added.Content);
-                    pair.Deleted.ChangesInLine = result.OldText; //todo REWRITE EVERYTHING TO USE THIS LIB
-                    pair.Added.ChangesInLine = result.NewText;
-                }
-            }
+            //todo word level
         }
 
         private void OnConnectionChanged(ConnectionData connectionData)
