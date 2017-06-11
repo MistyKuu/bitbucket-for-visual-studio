@@ -37,6 +37,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private GitPullRequestStatus? _selectedStatus;
         private GitPullRequest _selectedPullRequest;
         private PagedCollection<GitPullRequest> _gitPullRequests;
+        private IDataNotifier _dataNotifier;
 
         public GitUser SelectedAuthor
         {
@@ -107,11 +108,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         [ImportingConstructor]
         public PullRequestsMainViewModel(
             IGitClientService gitClientService,
-            IPageNavigationService<IPullRequestsWindow> pageNavigationService
+            IPageNavigationService<IPullRequestsWindow> pageNavigationService,
+            IDataNotifier dataNotifier
             )
         {
             _gitClientService = gitClientService;
             _pageNavigationService = pageNavigationService;
+            _dataNotifier = dataNotifier;
+
             SelectedStatus = GitPullRequestStatus.Open;
             Authors = new List<GitUser>();
         }
@@ -137,8 +141,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _initializeCommand = ReactiveCommand.CreateFromTask(async _ =>
             {
-                if (_isInitialized)
+                if (_isInitialized && !_dataNotifier.ShouldUpdate)
                     return;
+
 
                 await RefreshPullRequests();
                 _isInitialized = true;
@@ -152,6 +157,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task RefreshPullRequests()
         {
+            _dataNotifier.ShouldUpdate = false;
             Authors = (await _gitClientService.GetPullRequestsAuthors()).ToList();
             GitPullRequests = new PagedCollection<GitPullRequest>(GetPullRequestsPage, PageSize);
             await GitPullRequests.LoadNextPageAsync();

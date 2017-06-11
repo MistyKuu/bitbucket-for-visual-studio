@@ -78,6 +78,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BitbucketService.cs" />
+    <Compile Include="DataNotifier.cs" />
     <Compile Include="MemoryCacheService.cs" />
     <Compile Include="EventAggregatorService.cs" />
     <Compile Include="FileService.cs" />

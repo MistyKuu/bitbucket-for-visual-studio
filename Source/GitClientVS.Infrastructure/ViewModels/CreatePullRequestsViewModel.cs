@@ -50,7 +50,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private GitPullRequest _remotePullRequest;
         private ReactiveCommand _goToDetailsCommand;
         private ReactiveCommand<Unit, Unit> _setPullRequestDataCommand;
-
+        private IDataNotifier _dataNotifier;
 
         public string PageTitle { get; } = "Create New Pull Request";
 
@@ -156,7 +156,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             IPageNavigationService<IPullRequestsWindow> pageNavigationService,
             IEventAggregatorService eventAggregator,
             ITreeStructureGenerator treeStructureGenerator,
-            ICommandsService commandsService
+            ICommandsService commandsService,
+            IDataNotifier dataNotifier
         )
         {
             _gitClientService = gitClientService;
@@ -164,6 +165,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             _pageNavigationService = pageNavigationService;
             _eventAggregator = eventAggregator;
             _treeStructureGenerator = treeStructureGenerator;
+            _dataNotifier = dataNotifier;
+
             PullRequestDiffModel = new PullRequestDiffModel(commandsService);
 
             CloseSourceBranch = false;
@@ -210,6 +213,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 await _gitClientService.UpdatePullRequest(gitPullRequest);
             }
 
+            _dataNotifier.ShouldUpdate = true;
             _pageNavigationService.NavigateBack(true);
         }
 

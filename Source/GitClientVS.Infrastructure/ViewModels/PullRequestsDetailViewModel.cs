@@ -40,7 +40,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveList<PullRequestActionModel> _actionCommands;
         private bool _hasAuthorApproved;
         private IEventAggregatorService _eventAggregatorService;
-
+        private IDataNotifier _dataNotifier;
 
         public string PageTitle => "Pull Request Details";
 
@@ -99,7 +99,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             IUserInformationService userInformationService,
             IEventAggregatorService eventAggregatorService,
             ITreeStructureGenerator treeStructureGenerator,
-            IMessageBoxService messageBoxService
+            IMessageBoxService messageBoxService,
+            IDataNotifier dataNotifier
             )
         {
             _gitClientService = gitClientService;
@@ -107,6 +108,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _treeStructureGenerator = treeStructureGenerator;
             _messageBoxService = messageBoxService;
             _eventAggregatorService = eventAggregatorService;
+            _dataNotifier = dataNotifier;
 
             CurrentTheme = userInformationService.CurrentTheme;
             PullRequestDiffModel = new PullRequestDiffModel(commandsService);
@@ -138,10 +140,25 @@ namespace GitClientVS.Infrastructure.ViewModels
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateFromTask<long>(LoadPullRequestData);
-            _approveCommand = ReactiveCommand.CreateFromTask(async _ => { await _gitClientService.ApprovePullRequest(PullRequest.Id); });
-            _disapproveCommand = ReactiveCommand.CreateFromTask(async _ => { await _gitClientService.DisapprovePullRequest(PullRequest.Id); });
-            _declineCommand = ReactiveCommand.CreateFromTask(async _ => { await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version); });
-            _mergeCommand = ReactiveCommand.CreateFromTask(async _ => { await MergePullRequest(); });
+            _approveCommand = ReactiveCommand.CreateFromTask(async _ => {
+                await _gitClientService.ApprovePullRequest(PullRequest.Id);
+                _dataNotifier.ShouldUpdate = true;
+            });
+
+            _disapproveCommand = ReactiveCommand.CreateFromTask(async _ => {
+                await _gitClientService.DisapprovePullRequest(PullRequest.Id);
+                _dataNotifier.ShouldUpdate = true;
+            });
+
+            _declineCommand = ReactiveCommand.CreateFromTask(async _ => {
+                await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version);
+                _dataNotifier.ShouldUpdate = true;
+            });
+
+            _mergeCommand = ReactiveCommand.CreateFromTask(async _ => {
+                await MergePullRequest();
+                _dataNotifier.ShouldUpdate = true;
+            });
             _confirmationMergeCommand = ReactiveCommand.CreateFromTask(_ => RunMergeConfirmation());
             _confirmationDeclineCommand = ReactiveCommand.CreateFromTask(_ => RunDeclineConfirmation());
         }
