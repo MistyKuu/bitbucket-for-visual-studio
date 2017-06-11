@@ -102,8 +102,7 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
 
             ChangeBackgroundRenderer(textEditor, theme);
 
-            textEditor.TextArea.TextView.LinkTextForegroundBrush =
-                theme == Theme.Light ? DiffColors.LightLinkForeground : DiffColors.DarkLinkForeground;
+          
         }
 
 
@@ -133,7 +132,8 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
                 removedWordBg = DiffColors.DarkWordRemovedBackground;
             }
             textEditor.TextArea.TextView.BackgroundRenderers.Add(new DiffLineBackgroundRenderer(addedBg, removedBg));
-
+            textEditor.TextArea.TextView.LinkTextForegroundBrush =
+              theme == Theme.Light ? DiffColors.LightLinkForeground : DiffColors.DarkLinkForeground;
             //todo for word level textEditor.TextArea.TextView.LineTransformers.Add(new OffsetColorizer((ChunkDiff)textEditor.DataContext, addedWordBg,removedWordBg));
         }
 

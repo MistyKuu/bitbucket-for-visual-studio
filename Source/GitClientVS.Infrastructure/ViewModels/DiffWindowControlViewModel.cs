@@ -109,10 +109,26 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task ShowSideBySideDiff()
         {
-            var results = await Task.WhenAll(
-                GetFileContent(_fileDiffModel.ToCommit, FileDiff.DisplayFileName),
-                GetFileContent(_fileDiffModel.FromCommit, FileDiff.DisplayFileName)
-            );
+            Task<string> t1;
+            Task<string> t2;
+
+            if(FileDiff.Type == FileChangeType.Modified)
+            {
+                 t1 = GetFileContent(_fileDiffModel.ToCommit, FileDiff.DisplayFileName);
+                 t2 = GetFileContent(_fileDiffModel.FromCommit, FileDiff.DisplayFileName);
+            }
+            else if(FileDiff.Type == FileChangeType.Add)
+            {
+                t1 = Task.FromResult(string.Empty);
+                t2 = GetFileContent(_fileDiffModel.FromCommit, FileDiff.DisplayFileName);
+            }
+            else
+            {
+                t1 = GetFileContent(_fileDiffModel.ToCommit, FileDiff.DisplayFileName);
+                t2 = Task.FromResult(string.Empty);
+            }
+
+            var results = await Task.WhenAll(t1,t2);
 
             VsFrame = _commandsService.ShowSideBySideDiffWindow(
                 results[0],
