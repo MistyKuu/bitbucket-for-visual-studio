@@ -401,7 +401,7 @@ namespace Bitbucket.REST.API.Tests.Standard
                 Assert.AreEqual(0, firstChunk.OldLines);
                 Assert.AreEqual(0, firstChunk.NewLines);
                 Assert.AreEqual("@@ -0,0 +1 @@", firstChunk.Content);
-                Assert.AreEqual(2, firstChunk.Changes.Count);
+                Assert.AreEqual(1, firstChunk.Changes.Count);
 
                 var firstChange = firstChunk.Changes.First();
 

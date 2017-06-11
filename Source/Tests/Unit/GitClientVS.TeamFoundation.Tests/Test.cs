@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace GitClientVS.Services.Tests
 {
-
+    [Ignore("Internal purpose")]
     [TestFixture]
     class Test12
     {
