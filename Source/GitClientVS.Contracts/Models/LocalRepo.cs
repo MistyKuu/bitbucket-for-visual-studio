@@ -9,12 +9,14 @@ namespace GitClientVS.Contracts.Models
     public class LocalRepo
     {
         public string Name { get; set; }
-        public string Path { get; set; }
+        public string LocalPath { get; set; }
+        public string ClonePath { get; set; }
 
-        public LocalRepo(string name, string path)
+        public LocalRepo(string name, string localPath, string clonePath)
         {
             Name = name;
-            Path = path;
+            ClonePath = clonePath;
+            LocalPath = localPath;
         }
     }
 }

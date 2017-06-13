@@ -10,6 +10,8 @@ using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
@@ -84,15 +86,24 @@ namespace GitClientVS.Infrastructure.ViewModels
             _openCloneCommand = ReactiveCommand.Create(() => _cloneRepoViewFactory.CreateExport().Value.ShowDialog());
             _openCreateCommand = ReactiveCommand.Create(() => _createRepoViewFactory.CreateExport().Value.ShowDialog());
             _logoutCommand = ReactiveCommand.Create(() => { _gitClientService.Logout(); });
-            _initializeCommand = ReactiveCommand.Create(() =>
+            _initializeCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                LocalRepositories = _gitService.GetLocalRepositories().ToList();
+                if (!ConnectionData.IsLoggedIn)
+                    return;
+
+                var localRepositories = _gitService.GetLocalRepositories().ToList();
+                var remoteCloneUrls = (await _gitClientService.GetAllRepositories()).Select(x => x.CloneUrl).ToList();
+
+                LocalRepositories = localRepositories.Where(x => remoteCloneUrls.Contains(x.ClonePath)).ToList();
             });
         }
 
         protected override IEnumerable<IDisposable> SetupObservables()
         {
             yield return _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
+            yield return _eventAggregator.GetEvent<ConnectionChangedEvent>()
+                .Select(x => Unit.Default)
+                .InvokeCommand(_initializeCommand);
         }
 
         private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)

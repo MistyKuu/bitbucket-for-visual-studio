@@ -64,11 +64,19 @@ namespace GitClientVS.TeamFoundation
         {
             var localRepositories = RegistryHelper
                 .GetLocalRepositories()
-                .Select(path => new LocalRepo(path.Split('\\').LastOrDefault(), path))
-                .Where(x => x.Name != null)
+                .Select(path => new LocalRepo(path.Split(Path.DirectorySeparatorChar).LastOrDefault(), path, GetCloneUrl(path)))
+                .Where(x => x.Name != null && x.ClonePath != null)
                 .ToList();
 
             return localRepositories;
+        }
+
+        private static string GetCloneUrl(string path)
+        {
+            var repoPath = Repository.Discover(path);
+            var repo = repoPath == null ? null : new Repository(repoPath);
+            var cloneUrl= repo.Network.Remotes["origin"]?.Url ?? repo.Network.Remotes.FirstOrDefault()?.Url;
+            return cloneUrl;
         }
 
         public void CloneRepository(string cloneUrl, string repositoryName, string repositoryPath)
