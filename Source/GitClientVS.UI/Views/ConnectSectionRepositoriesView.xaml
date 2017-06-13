@@ -19,20 +19,23 @@
         </ResourceDictionary>
     </UserControl.Resources>
     
-    <Grid >
+    <Grid Margin="15,0,0,0">
         <Grid.Resources>
-            <DataTemplate x:Key="RepositoryDateTemplate" DataType="gitClientModels:GitRemoteRepository">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <TextBlock Grid.Column="1" Text="{Binding FullName}"/>
-                </Grid>
+            <DataTemplate x:Key="RepositoryDateTemplate">
+                <StackPanel Orientation="Horizontal" Margin="2">
+                    <Image Source="../Images/arrow_forward.png"
+                                               Width="16"
+                                               Height="16"
+                                               SnapsToDevicePixels="True"
+                                               />
+                    <TextBlock Text="{Binding Name}"/>
+                    <TextBlock Text=" | "/>
+                    <TextBlock Text="{Binding LocalPath}" Foreground="#6D6D6D"/>
+
+                </StackPanel>
             </DataTemplate>
         </Grid.Resources>
         
-        <!--<ListView ItemsSource="{Binding Repositories}" ItemTemplate="{StaticResource RepositoryDateTemplate}" />-->
+        <ItemsControl ItemsSource="{Binding LocalRepositories}" ItemTemplate="{StaticResource RepositoryDateTemplate}" />
     </Grid>
 </UserControl>

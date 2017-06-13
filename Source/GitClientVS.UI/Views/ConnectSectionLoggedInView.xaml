@@ -24,6 +24,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
 
@@ -43,6 +44,6 @@
             <Button Style="{StaticResource ActionLinkButton}" KeyboardNavigation.TabIndex="2"  Content="{x:Static prop:Resources.Logout}" Command="{Binding LogoutCommand}"/>
         </StackPanel>
 
-        <local:ConnectSectionRepositoriesView Grid.Row="2"/>
+        <local:ConnectSectionRepositoriesView Grid.Row="3"/>
     </Grid>
 </UserControl>
