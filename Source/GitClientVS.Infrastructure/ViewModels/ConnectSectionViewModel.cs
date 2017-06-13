@@ -9,12 +9,13 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
+using System.Linq;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
     [Export(typeof(IConnectSectionViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class ConnectSectionViewModel : ViewModelBase, IConnectSectionViewModel,IViewModelWithCommands
+    public class ConnectSectionViewModel : ViewModelBase, IConnectSectionViewModel
     {
         private readonly ExportFactory<ILoginDialogView> _loginViewFactory;
         private readonly ExportFactory<ICloneRepositoriesDialogView> _cloneRepoViewFactory;
@@ -26,13 +27,17 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand _logoutCommand;
         private ReactiveCommand _openCloneCommand;
         private ReactiveCommand _openCreateCommand;
+        private ReactiveCommand _initializeCommand;
+
         private ConnectionData _connectionData;
+        private IGitService _gitService;
+        private List<LocalRepo> _localRepositories;
 
         public ICommand OpenLoginCommand => _openLoginCommand;
         public ICommand OpenCreateCommand => _openCreateCommand;
         public ICommand LogoutCommand => _logoutCommand;
         public ICommand OpenCloneCommand => _openCloneCommand;
-
+        public ICommand InitializeCommand => _initializeCommand;
 
 
         public ConnectionData ConnectionData
@@ -41,6 +46,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             set => this.RaiseAndSetIfChanged(ref _connectionData, value);
         }
 
+        public List<LocalRepo> LocalRepositories
+        {
+            get => _localRepositories;
+            set => this.RaiseAndSetIfChanged(ref _localRepositories, value);
+        }
+
+        public string ErrorMessage { get; set; }
+
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand };
+
         [ImportingConstructor]
         public ConnectSectionViewModel(
             ExportFactory<ILoginDialogView> loginViewFactory,
@@ -48,7 +63,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             ExportFactory<ICreateRepositoriesDialogView> createRepoViewFactory,
             IEventAggregatorService eventAggregator,
             IUserInformationService userInformationService,
-            IGitClientService gitClientService)
+            IGitClientService gitClientService,
+            IGitService gitService
+            )
         {
             _loginViewFactory = loginViewFactory;
             _cloneRepoViewFactory = cloneRepoViewFactory;
@@ -56,6 +73,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _eventAggregator = eventAggregator;
             _userInformationService = userInformationService;
             _gitClientService = gitClientService;
+            _gitService = gitService;
 
             ConnectionData = _userInformationService.ConnectionData;
         }
@@ -66,6 +84,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             _openCloneCommand = ReactiveCommand.Create(() => _cloneRepoViewFactory.CreateExport().Value.ShowDialog());
             _openCreateCommand = ReactiveCommand.Create(() => _createRepoViewFactory.CreateExport().Value.ShowDialog());
             _logoutCommand = ReactiveCommand.Create(() => { _gitClientService.Logout(); });
+            _initializeCommand = ReactiveCommand.Create(() =>
+            {
+                LocalRepositories = _gitService.GetLocalRepositories().ToList();
+            });
         }
 
         protected override IEnumerable<IDisposable> SetupObservables()

@@ -11,8 +11,8 @@ namespace GitClientVS.TeamFoundation.Extensions
     public static class GitRepositoryExtensions
     {
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        public static GitRemoteRepository ToModel(this IGitRepositoryInfo source)
+        
+        public static GitRemoteRepository ToGitRepo(this IGitRepositoryInfo source)
         {
             if (source == null) return null;
 
@@ -21,6 +21,11 @@ namespace GitClientVS.TeamFoundation.Extensions
             var repo = repoPath == null ? null : new Repository(repoPath);
             if (repo == null) return null;
 
+            return CreateGitRepo(repo);
+        }
+
+        private static GitRemoteRepository CreateGitRepo(Repository repo)
+        {
             var repoUrl = repo.Network.Remotes["origin"]?.Url ?? repo.Network.Remotes.FirstOrDefault()?.Url;
             if (repoUrl == null) return new GitRemoteRepository();
 

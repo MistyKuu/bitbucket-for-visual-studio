@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GitClientVS.Contracts.Models.GitClientModels
 {
-
+    //todo this represents both local, and remote. Name is unfortunate. change it later
     public class  GitRemoteRepository
     {
         public string Name { get; set; }

@@ -47,7 +47,7 @@ namespace GitClientVS.TeamFoundation
             if (e.PropertyName != "ActiveRepositories")
                 return;
 
-            var repo = gitExt.ActiveRepositories.FirstOrDefault()?.ToModel();
+            var repo = gitExt.ActiveRepositories.FirstOrDefault()?.ToGitRepo();
             if (repo != ActiveRepo)
                 syncContext.Post(r => ActiveRepo = r as GitRemoteRepository, repo);
         }

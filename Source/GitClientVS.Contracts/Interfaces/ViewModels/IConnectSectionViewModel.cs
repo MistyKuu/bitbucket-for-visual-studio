@@ -2,7 +2,7 @@
 
 namespace GitClientVS.Contracts.Interfaces.ViewModels
 {
-    public interface IConnectSectionViewModel : IViewModel, IDisposable
+    public interface IConnectSectionViewModel : IViewModel, IViewModelWithCommands, IViewModelWithErrorMessage, IInitializable, IDisposable
     {
 
     }

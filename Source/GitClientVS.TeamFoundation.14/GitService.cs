@@ -14,6 +14,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TeamFoundation.Git.Extensibility;
 using CloneOptions = Microsoft.TeamFoundation.Git.Controls.Extensibility.CloneOptions;
 using System.Collections.Generic;
+using GitClientVS.Contracts.Models;
 
 namespace GitClientVS.TeamFoundation
 {
@@ -28,9 +29,7 @@ namespace GitClientVS.TeamFoundation
         private readonly IAppServiceProvider _appServiceProvider;
 
         /// <summary>
-        /// This MEF export requires specific versions of TeamFoundation. IGitExt is declared here so
-        /// that instances of this type cannot be created if the TeamFoundation dlls are not available
-        /// (otherwise we'll have multiple instances of IVSServices exports, and that would be Bad(tm))
+        /// This MEF export requires specific versions of TeamFoundation. 
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         IGitExt _gitService;
@@ -58,7 +57,18 @@ namespace GitClientVS.TeamFoundation
         {
             _gitService = _appServiceProvider.GetService<IGitExt>();
             var activeRepository = _gitService.ActiveRepositories.FirstOrDefault();
-            return activeRepository.ToModel();
+            return activeRepository.ToGitRepo();
+        }
+
+        public IEnumerable<LocalRepo> GetLocalRepositories()
+        {
+            var localRepositories = RegistryHelper
+                .GetLocalRepositories()
+                .Select(path => new LocalRepo(path.Split('\\').LastOrDefault(), path))
+                .Where(x => x.Name != null)
+                .ToList();
+
+            return localRepositories;
         }
 
         public void CloneRepository(string cloneUrl, string repositoryName, string repositoryPath)
@@ -68,7 +78,7 @@ namespace GitClientVS.TeamFoundation
             string path = Path.Combine(repositoryPath, repositoryName);
 
             Directory.CreateDirectory(path);
-            
+
             try
             {
                 gitExt.Clone(cloneUrl, path, CloneOptions.RecurseSubmodule);
@@ -173,6 +183,8 @@ namespace GitClientVS.TeamFoundation
             Fetch(activeRepository);
             SetTrackingRemote(activeRepository);
         }
+
+
 
 
     }
