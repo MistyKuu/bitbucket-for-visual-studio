@@ -101,7 +101,11 @@ namespace GitClientVS.Infrastructure.ViewModels
                 var localRepositories = _gitService.GetLocalRepositories().ToList();
                 var remoteCloneUrls = (await _gitClientService.GetAllRepositories()).Select(x => x.CloneUrl).ToList();
 
-                LocalRepositories = localRepositories.Where(x => remoteCloneUrls.Contains(x.ClonePath)).ToList();
+                LocalRepositories =
+                localRepositories
+                .Where(x => remoteCloneUrls.Contains(x.ClonePath))
+                .OrderBy(x => x.Name)
+                .ToList();
 
             });
         }
