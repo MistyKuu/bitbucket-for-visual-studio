@@ -122,8 +122,8 @@
     <Compile Include="..\GitClientVS.TeamFoundation.14\Sections\PublishSection.cs">
       <Link>Sections\PublishSection.cs</Link>
     </Compile>
-    <Compile Include="..\GitClientVS.TeamFoundation.14\TeamCommandService.cs">
-      <Link>TeamCommandService.cs</Link>
+    <Compile Include="..\GitClientVS.TeamFoundation.14\TeamExplorerCommandsService.cs">
+      <Link>TeamExplorerCommandsService.cs</Link>
     </Compile>
     <Compile Include="..\GitClientVS.TeamFoundation.14\TeamFoundation\TeamExplorerBase.cs">
       <Link>TeamFoundation\TeamExplorerBase.cs</Link>
