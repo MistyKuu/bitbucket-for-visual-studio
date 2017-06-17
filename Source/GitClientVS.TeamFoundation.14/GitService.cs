@@ -15,6 +15,7 @@ using Microsoft.VisualStudio.TeamFoundation.Git.Extensibility;
 using CloneOptions = Microsoft.TeamFoundation.Git.Controls.Extensibility.CloneOptions;
 using System.Collections.Generic;
 using GitClientVS.Contracts.Models;
+using Microsoft.TeamFoundation.Controls;
 
 namespace GitClientVS.TeamFoundation
 {
@@ -200,36 +201,5 @@ namespace GitClientVS.TeamFoundation
             Fetch(activeRepository);
             SetTrackingRemote(activeRepository);
         }
-
-        private bool TryOpenRepository(string repoPath)
-        {
-            return true;
-            //var dte = _appServiceProvider.GetService<DTE>();
-            //if (dte == null)
-            //{
-            //    return false;
-            //}
-
-            //bool solutionCreated = false;
-            //try
-            //{
-            //    dte.Solution.Create(repoPath, TempSolutionName);
-            //    solutionCreated = true;
-
-            //    dte.Solution.Close(false); // Don't create a .sln file when we close.
-            //}
-            //catch (Exception e)
-            //{
-            //    VsOutputLogger.WriteLine("Error opening repository. {0}", e);
-            //}
-            //finally
-            //{
-            //    TryCleanupSolutionUserFiles(os, repoPath, TempSolutionName);
-            //}
-            //return solutionCreated;
-        }
-
-
-
     }
 }

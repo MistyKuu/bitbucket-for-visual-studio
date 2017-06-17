@@ -27,7 +27,9 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         private IEventAggregatorService _eventAggregatorService;
         private IUserInformationService _userInformationService;
         private IGitClientService _gitClientService;
-
+        private IVsTools _vsTools;
+        private ITeamExplorerCommandsService _teamExplorerCommandsService;
+        private IGitService _gitService;
 
         [SetUp]
         public void SetUp()
@@ -38,8 +40,9 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _eventAggregatorService = new EventAggregatorService();
             _userInformationService = MockRepository.GenerateMock<IUserInformationService>();
             _gitClientService = MockRepository.GenerateMock<IGitClientService>();
-
-
+            _vsTools = MockRepository.GenerateMock<IVsTools>();
+            _teamExplorerCommandsService = MockRepository.GenerateMock<ITeamExplorerCommandsService>();
+            _gitService = MockRepository.GenerateMock<IGitService>();
         }
 
         [Test]
@@ -97,7 +100,11 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 _createRepositoriesDialogView.CreateFactoryMock(),
                 _eventAggregatorService,
                 _userInformationService,
-                _gitClientService);
+                _gitClientService,
+                _gitService,
+                _vsTools,
+                _teamExplorerCommandsService
+                );
         }
 
     }

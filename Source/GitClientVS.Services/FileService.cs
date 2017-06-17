@@ -15,6 +15,12 @@ namespace GitClientVS.Services
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class FileService : IFileService
     {
+        public void DeleteDirectory(string path)
+        {
+            if (Exists(path))
+                Directory.Delete(path, true);
+        }
+
         public void Save(string path, string content)
         {
             var file = new FileInfo(path);

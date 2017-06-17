@@ -4,6 +4,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
 {
     public interface IFileService
     {
+        void DeleteDirectory(string path);
         void Save(string path, string content);
         string Read(string path);
         Result<string> OpenSaveDialog(string filterPattern);

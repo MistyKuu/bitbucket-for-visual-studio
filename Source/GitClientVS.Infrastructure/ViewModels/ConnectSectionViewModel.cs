@@ -12,6 +12,8 @@ using GitClientVS.Contracts.Models;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive;
+using Microsoft.VisualStudio;
+using log4net;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
@@ -19,6 +21,7 @@ namespace GitClientVS.Infrastructure.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class ConnectSectionViewModel : ViewModelBase, IConnectSectionViewModel
     {
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ExportFactory<ILoginDialogView> _loginViewFactory;
         private readonly ExportFactory<ICloneRepositoriesDialogView> _cloneRepoViewFactory;
         private readonly ExportFactory<ICreateRepositoriesDialogView> _createRepoViewFactory;
@@ -35,6 +38,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private IGitService _gitService;
         private List<LocalRepo> _localRepositories;
         private LocalRepo _selectRepository;
+        private IVsTools _vsTools;
+        private ITeamExplorerCommandsService _teamExplorerCommandsService;
 
         public ICommand OpenLoginCommand => _openLoginCommand;
         public ICommand OpenCreateCommand => _openCreateCommand;
@@ -73,7 +78,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             IEventAggregatorService eventAggregator,
             IUserInformationService userInformationService,
             IGitClientService gitClientService,
-            IGitService gitService
+            IGitService gitService,
+            IVsTools vsTools,
+            ITeamExplorerCommandsService teamExplorerCommandsService
             )
         {
             _loginViewFactory = loginViewFactory;
@@ -83,6 +90,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             _userInformationService = userInformationService;
             _gitClientService = gitClientService;
             _gitService = gitService;
+            _vsTools = vsTools;
+            _teamExplorerCommandsService = teamExplorerCommandsService;
 
             ConnectionData = _userInformationService.ConnectionData;
         }
@@ -101,12 +110,10 @@ namespace GitClientVS.Infrastructure.ViewModels
                 var localRepositories = _gitService.GetLocalRepositories().ToList();
                 var remoteCloneUrls = (await _gitClientService.GetAllRepositories()).Select(x => x.CloneUrl).ToList();
 
-                LocalRepositories =
-                localRepositories
+                LocalRepositories = localRepositories
                 .Where(x => remoteCloneUrls.Contains(x.ClonePath))
                 .OrderBy(x => x.Name)
                 .ToList();
-
             });
         }
 
@@ -131,18 +138,23 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public void ChangeActiveRepo()
         {
-            if (SelectedRepository != null)
+            if (SelectedRepository != null && !SelectedRepository.IsActive)
             {
-                //var opened = vsServices.TryOpenRepository(SelectedRepository.LocalPath);
-                //if (!opened)
-                //{
-                //    // TryOpenRepository might fail because dir no longer exists. Let user find solution themselves.
-                //    opened = ErrorHandler.Succeeded(ServiceProvider.GetSolution().OpenSolutionViaDlg(SelectedRepository.LocalPath, 1));
-                //    if (!opened)
-                //    {
-                //        return false;
-                //    }
-                //}
+                try
+                {
+                    _vsTools.OpenTemporarySolution(SelectedRepository.LocalPath);
+                    _teamExplorerCommandsService.NavigateToHomePage();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                    _vsTools.OpenSolutionViaDlg(SelectedRepository.LocalPath);
+                    _teamExplorerCommandsService.NavigateToHomePage();
+                }
+            }
+            else if (SelectedRepository.IsActive)
+            {
+                _teamExplorerCommandsService.NavigateToHomePage();
             }
         }
     }

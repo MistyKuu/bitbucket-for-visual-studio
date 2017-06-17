@@ -110,6 +110,7 @@
     <Compile Include="RegistryHelper.cs" />
     <Compile Include="Sections\ConnectSection.cs" />
     <Compile Include="Sections\PublishSection.cs" />
+    <Compile Include="TeamCommandService.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBase.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBaseNavigationItem.cs" />
     <Compile Include="TeamFoundation\TeamExplorerBaseNavigationLink.cs" />
