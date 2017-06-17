@@ -338,6 +338,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\bitbucketIco.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
   <ItemGroup>

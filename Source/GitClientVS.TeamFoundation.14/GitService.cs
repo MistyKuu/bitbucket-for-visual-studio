@@ -68,6 +68,15 @@ namespace GitClientVS.TeamFoundation
                 .Where(x => x.Name != null && x.ClonePath != null)
                 .ToList();
 
+            var activeRepo = _gitService.ActiveRepositories.FirstOrDefault();
+
+            if (activeRepo != null)
+            {
+                var localActiveRepo = localRepositories.FirstOrDefault(x => String.Compare(x.LocalPath, activeRepo.RepositoryPath, true) == 0);
+                if (localActiveRepo != null)
+                    localActiveRepo.IsActive = true;
+            }
+
             return localRepositories;
         }
 
@@ -75,7 +84,7 @@ namespace GitClientVS.TeamFoundation
         {
             var repoPath = Repository.Discover(path);
             var repo = repoPath == null ? null : new Repository(repoPath);
-            var cloneUrl= repo.Network.Remotes["origin"]?.Url ?? repo.Network.Remotes.FirstOrDefault()?.Url;
+            var cloneUrl = repo.Network.Remotes["origin"]?.Url ?? repo.Network.Remotes.FirstOrDefault()?.Url;
             return cloneUrl;
         }
 
@@ -192,6 +201,33 @@ namespace GitClientVS.TeamFoundation
             SetTrackingRemote(activeRepository);
         }
 
+        private bool TryOpenRepository(string repoPath)
+        {
+            return true;
+            //var dte = _appServiceProvider.GetService<DTE>();
+            //if (dte == null)
+            //{
+            //    return false;
+            //}
+
+            //bool solutionCreated = false;
+            //try
+            //{
+            //    dte.Solution.Create(repoPath, TempSolutionName);
+            //    solutionCreated = true;
+
+            //    dte.Solution.Close(false); // Don't create a .sln file when we close.
+            //}
+            //catch (Exception e)
+            //{
+            //    VsOutputLogger.WriteLine("Error opening repository. {0}", e);
+            //}
+            //finally
+            //{
+            //    TryCleanupSolutionUserFiles(os, repoPath, TempSolutionName);
+            //}
+            //return solutionCreated;
+        }
 
 
 

@@ -24,5 +24,10 @@ namespace GitClientVS.UI.Views
         {
             InitializeComponent();
         }
+
+        private void ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            (this.DataContext as IConnectSectionViewModel).ChangeActiveRepo();
+        }
     }
 }

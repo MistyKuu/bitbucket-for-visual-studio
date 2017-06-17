@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReactiveUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace GitClientVS.Contracts.Models
         public string Name { get; set; }
         public string LocalPath { get; set; }
         public string ClonePath { get; set; }
+        public bool IsActive { get; set; }
 
         public LocalRepo(string name, string localPath, string clonePath)
         {

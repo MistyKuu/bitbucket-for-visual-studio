@@ -34,6 +34,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ConnectionData _connectionData;
         private IGitService _gitService;
         private List<LocalRepo> _localRepositories;
+        private LocalRepo _selectRepository;
 
         public ICommand OpenLoginCommand => _openLoginCommand;
         public ICommand OpenCreateCommand => _openCreateCommand;
@@ -41,6 +42,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand OpenCloneCommand => _openCloneCommand;
         public ICommand InitializeCommand => _initializeCommand;
 
+
+        public LocalRepo SelectedRepository
+        {
+            get => _selectRepository;
+            set => this.RaiseAndSetIfChanged(ref _selectRepository, value);
+        }
 
         public ConnectionData ConnectionData
         {
@@ -95,12 +102,18 @@ namespace GitClientVS.Infrastructure.ViewModels
                 var remoteCloneUrls = (await _gitClientService.GetAllRepositories()).Select(x => x.CloneUrl).ToList();
 
                 LocalRepositories = localRepositories.Where(x => remoteCloneUrls.Contains(x.ClonePath)).ToList();
+
             });
         }
 
         protected override IEnumerable<IDisposable> SetupObservables()
         {
             yield return _eventAggregator.GetEvent<ConnectionChangedEvent>().Subscribe(ConnectionChanged);
+
+            yield return _eventAggregator.GetEvent<ActiveRepositoryChangedEvent>()
+                .Select(x => Unit.Default)
+                .InvokeCommand(_initializeCommand);
+
             yield return _eventAggregator.GetEvent<ConnectionChangedEvent>()
                 .Select(x => Unit.Default)
                 .InvokeCommand(_initializeCommand);
@@ -109,6 +122,24 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)
         {
             ConnectionData = connectionChangedEvent.Data;
+        }
+
+
+        public void ChangeActiveRepo()
+        {
+            if (SelectedRepository != null)
+            {
+                //var opened = vsServices.TryOpenRepository(SelectedRepository.LocalPath);
+                //if (!opened)
+                //{
+                //    // TryOpenRepository might fail because dir no longer exists. Let user find solution themselves.
+                //    opened = ErrorHandler.Succeeded(ServiceProvider.GetSolution().OpenSolutionViaDlg(SelectedRepository.LocalPath, 1));
+                //    if (!opened)
+                //    {
+                //        return false;
+                //    }
+                //}
+            }
         }
     }
 }

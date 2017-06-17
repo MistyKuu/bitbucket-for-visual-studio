@@ -16,26 +16,142 @@
             <ResourceDictionary.MergedDictionaries>
                 <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="ListBoxItem" x:Key="ListBoxItemRepositoryStyle">
+                <Style.Resources>
+                    <SolidColorBrush x:Key="OnHoverBackgroundColorBrush" Color="{DynamicResource VsColor.CommandBarHover}"/>
+                    <SolidColorBrush x:Key="RepoPathColor" Color="{DynamicResource VsColor.GrayText}"/>
+                    <SolidColorBrush x:Key="OnHoverBorderColorBrush">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="OnSelectedActive" Color="{DynamicResource VsColor.ControlLinkTextPressed}"/>
+                    <SolidColorBrush x:Key="OnSelectedNotActive" Color="{DynamicResource VsColor.ButtonShadow}"/>
+                </Style.Resources>
+
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Padding" Value="0"/>
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border BorderThickness="{TemplateBinding Border.BorderThickness}"
+                  Padding="{TemplateBinding Control.Padding}"
+                  BorderBrush="{TemplateBinding Border.BorderBrush}"
+                  Background="{TemplateBinding Panel.Background}"
+                  Name="Bd"
+                  SnapsToDevicePixels="True">
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}"
+                               ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                               ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
+                               HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                               VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                               SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                        <Condition Property="Selector.IsSelected" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Panel.Background" TargetName="Bd"  Value="{StaticResource OnSelectedNotActive}"/>
+                                    <Setter Property="Border.BorderBrush" TargetName="Bd">
+                                        <Setter.Value>
+                                            <SolidColorBrush>Transparent</SolidColorBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                                        <Condition Property="Selector.IsSelected" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Panel.Background" TargetName="Bd" Value="{StaticResource OnSelectedActive}"/>
+                                    <Setter Property="Border.BorderBrush" TargetName="Bd">
+                                        <Setter.Value>
+                                            <SolidColorBrush>Transparent</SolidColorBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="TextElement.Foreground" TargetName="Bd" Value="White"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="UIElement.IsMouseOver" Value="True"/>
+                                        <Condition Property="Selector.IsSelected" Value="False"/>
+                                    </MultiTrigger.Conditions>
+
+                                    <Setter Property="Panel.Background" TargetName="Bd"  Value="{StaticResource OnHoverBackgroundColorBrush}"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="UIElement.IsMouseOver" Value="True"/>
+                                        <Condition Property="Selector.IsSelected" Value="True"/>
+                                    </MultiTrigger.Conditions>
+
+                                    <Setter Property="Panel.Background" TargetName="Bd"  Value="{StaticResource OnSelectedActive}"/>
+                                    <Setter Property="TextElement.Foreground" TargetName="Bd" Value="White"/>
+
+                                </MultiTrigger>
+                                <Trigger Property="UIElement.IsEnabled" Value="False">
+                                    <Setter Property="TextElement.Foreground" TargetName="Bd">
+                                        <Setter.Value>
+                                            <DynamicResource ResourceKey="{x:Static SystemColors.GrayTextBrushKey}" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     
-    <Grid Margin="15,0,0,0">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="40*"/>
+        </Grid.ColumnDefinitions>
         <Grid.Resources>
             <DataTemplate x:Key="RepositoryDateTemplate">
                 <StackPanel Orientation="Horizontal" Margin="2">
-                    <Image Source="../Images/arrow_forward.png"
+                    <Image Source="../Images/bitbucketIco.png"
                                                Width="16"
                                                Height="16"
                                                SnapsToDevicePixels="True"
+                                               Margin="0,0,5,0"
                                                />
-                    <TextBlock Text="{Binding Name}"/>
+
+                    <TextBlock Text="{Binding Name}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     <TextBlock Text=" | "/>
-                    <TextBlock Text="{Binding LocalPath}" Foreground="#6D6D6D"/>
+                    <TextBlock Text="{Binding LocalPath}"/>
 
                 </StackPanel>
             </DataTemplate>
+                <ControlTemplate x:Key="NoScroll">
+                    <ItemsPresenter></ItemsPresenter>
+                </ControlTemplate>
         </Grid.Resources>
-        
-        <ItemsControl ItemsSource="{Binding LocalRepositories}" ItemTemplate="{StaticResource RepositoryDateTemplate}" />
+
+        <ListBox
+            MouseDoubleClick="ListBox_MouseDoubleClick"
+            Grid.Column="1" 
+            Template="{StaticResource NoScroll}" 
+            ItemsSource="{Binding LocalRepositories}" 
+            ItemTemplate="{StaticResource RepositoryDateTemplate}" 
+            BorderThickness="0" 
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+            ScrollViewer.VerticalScrollBarVisibility="Disabled"
+            SelectedItem="{Binding SelectedRepository, Mode=TwoWay}"
+            ItemContainerStyle="{StaticResource ListBoxItemRepositoryStyle}"
+            >
+        </ListBox>
     </Grid>
 </UserControl>
