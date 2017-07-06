@@ -17,7 +17,6 @@ namespace BitBucket.REST.API.Interfaces
         Task<Participant> ApprovePullRequest(string repositoryName, string ownerName, long id);
         Task DisapprovePullRequest(string repositoryName, string ownerName, long id);
         Task<IEnumerable<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id);
-        Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, long id);
         Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id);
         Task<PullRequest> GetPullRequest(string repositoryName, string owner, long id);
         Task CreatePullRequest(PullRequest pullRequest, string repositoryName, string owner);

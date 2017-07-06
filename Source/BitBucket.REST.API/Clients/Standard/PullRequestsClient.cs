@@ -127,11 +127,6 @@ namespace BitBucket.REST.API.Clients.Standard
             return commits;
         }
 
-        public async Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, long id)
-        {
-            return await GetPullRequestComments(repositoryName, Connection.Credentials.Login, id);
-        }
-
         public async Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
         {
             var url = ApiUrls.PullRequestComments(ownerName, repositoryName, id);
