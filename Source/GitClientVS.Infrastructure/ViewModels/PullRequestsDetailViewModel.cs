@@ -76,8 +76,8 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public PullRequestDiffModel PullRequestDiffModel { get; set; }
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand, PullRequestDiffModel.ShowDiffCommand};
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand, PullRequestDiffModel.ShowDiffCommand};
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand, PullRequestDiffModel.ShowDiffCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand, PullRequestDiffModel.ShowDiffCommand };
 
         public string ErrorMessage
         {
@@ -121,6 +121,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 CurrentTheme = ev.Theme;
                 PullRequestDiffModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffModel.Comments.ToList(), CurrentTheme).ToList();
+                //todo should update inlinecommentree as well?
             });
 
             this.WhenAnyObservable(
@@ -140,22 +141,26 @@ namespace GitClientVS.Infrastructure.ViewModels
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateFromTask<long>(LoadPullRequestData);
-            _approveCommand = ReactiveCommand.CreateFromTask(async _ => {
+            _approveCommand = ReactiveCommand.CreateFromTask(async _ =>
+            {
                 await _gitClientService.ApprovePullRequest(PullRequest.Id);
                 _dataNotifier.ShouldUpdate = true;
             });
 
-            _disapproveCommand = ReactiveCommand.CreateFromTask(async _ => {
+            _disapproveCommand = ReactiveCommand.CreateFromTask(async _ =>
+            {
                 await _gitClientService.DisapprovePullRequest(PullRequest.Id);
                 _dataNotifier.ShouldUpdate = true;
             });
 
-            _declineCommand = ReactiveCommand.CreateFromTask(async _ => {
+            _declineCommand = ReactiveCommand.CreateFromTask(async _ =>
+            {
                 await _gitClientService.DeclinePullRequest(PullRequest.Id, PullRequest.Version);
                 _dataNotifier.ShouldUpdate = true;
             });
 
-            _mergeCommand = ReactiveCommand.CreateFromTask(async _ => {
+            _mergeCommand = ReactiveCommand.CreateFromTask(async _ =>
+            {
                 await MergePullRequest();
                 _dataNotifier.ShouldUpdate = true;
             });
@@ -211,7 +216,11 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CreateComments(long id)
         {
-            PullRequestDiffModel.Comments = (await _gitClientService.GetPullRequestComments(id)).Where(comment => comment.IsFile == false).ToList();
+            var pqComments = (await _gitClientService.GetPullRequestComments(id)).ToList();
+            var inlineComments = pqComments.Where(comment => comment.IsInline).Cast<InlineGitComment>().ToList();
+
+            PullRequestDiffModel.Comments = pqComments.Where(comment => comment.IsInline == false).ToList();
+            PullRequestDiffModel.InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments, CurrentTheme).ToList();
             PullRequestDiffModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffModel.Comments.ToList(), CurrentTheme).ToList();
         }
 

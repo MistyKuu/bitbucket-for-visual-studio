@@ -307,8 +307,8 @@ namespace GitClientVS.Services
 
         public async Task<IEnumerable<GitComment>> GetPullRequestComments(long id)
         {
-            var commits = await _bitbucketClient.PullRequestsClient.GetPullRequestComments(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, id);
-            return commits.MapTo<List<GitComment>>();
+            var comments = await _bitbucketClient.PullRequestsClient.GetPullRequestComments(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, id);
+            return comments.MapTo<List<GitComment>>();
         }
     }
 }

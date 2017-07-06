@@ -23,6 +23,8 @@ namespace GitClientVS.Contracts.Models
         private List<GitComment> _comments;
         private List<FileDiff> _fileDiffs;
         private List<ICommentTree> _commentTree;
+        private List<InlineGitComment> _inlineComments;
+        private List<ICommentTree> _inlineCommentTree;
 
         public ReactiveCommand ShowDiffCommand { get; }
 
@@ -59,6 +61,12 @@ namespace GitClientVS.Contracts.Models
         public string FromCommit { get; set; }
         public string ToCommit { get; set; }
 
+        public List<ICommentTree> InlineCommentTree
+        {
+            get => _inlineCommentTree;
+            set => this.RaiseAndSetIfChanged(ref _inlineCommentTree, value);
+        }
+
 
         public PullRequestDiffModel(
             ICommandsService commandsService
@@ -76,6 +84,7 @@ namespace GitClientVS.Contracts.Models
                 FromCommit = FromCommit,
                 ToCommit = ToCommit,
                 TreeFile = file,
+                InlineCommentTree = InlineCommentTree
             };
 
             _commandsService.ShowDiffWindow(fileDiffModel, file.FileDiff.Id);
