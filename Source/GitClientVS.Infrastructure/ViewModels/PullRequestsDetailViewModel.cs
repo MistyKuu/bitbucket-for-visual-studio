@@ -217,7 +217,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task CreateComments(long id)
         {
             var pqComments = (await _gitClientService.GetPullRequestComments(id)).ToList();
-            var inlineComments = pqComments.Where(comment => comment.IsInline).Cast<InlineGitComment>().ToList();
+            var inlineComments = pqComments.Where(comment => comment.IsInline).ToList();
 
             PullRequestDiffModel.Comments = pqComments.Where(comment => comment.IsInline == false).ToList();
             PullRequestDiffModel.InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments, CurrentTheme).ToList();

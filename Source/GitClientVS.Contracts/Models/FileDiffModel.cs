@@ -14,6 +14,6 @@ namespace GitClientVS.Contracts.Models
         public ITreeFile TreeFile { get; set; }
         public string FromCommit { get; set; }
         public string ToCommit { get; set; }
-        public List<InlineGitComment> InlineComments { get; set; }
+        public List<ICommentTree> InlineCommentTree { get; set; }
     }
 }

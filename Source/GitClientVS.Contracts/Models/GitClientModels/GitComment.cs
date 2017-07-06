@@ -12,10 +12,6 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public long Id { get; set; }
         public GitCommentParent Parent { get; set; }
         public bool IsInline { get; set; }
-    }
-
-    public class InlineGitComment : GitComment
-    {
         public int? From { get; set; }
         public int? To { get; set; }
         public string Path { get; set; }

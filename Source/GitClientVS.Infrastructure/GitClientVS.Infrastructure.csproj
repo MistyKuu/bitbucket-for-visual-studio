@@ -106,6 +106,7 @@
     <Compile Include="GitClientVsException.cs" />
     <Compile Include="LoggerConfigurator.cs" />
     <Compile Include="Mappings\BitBucketEnterpriseMappings.cs" />
+    <Compile Include="Mappings\CommentConverter.cs" />
     <Compile Include="Mappings\GitMappingsProfile.cs" />
     <Compile Include="Mappings\PullRequestOptionsTypeConverter.cs" />
     <Compile Include="Mappings\PullRequestTypeConverter.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +26,17 @@ namespace GitClientVS.UI.Controls
         // Using a DependencyProperty as the backing store for FileDiff.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FileDiffProperty =
             DependencyProperty.Register("FileDiff", typeof(FileDiff), typeof(DiffControl), new PropertyMetadata(null));
+
+        public ObservableCollection<object> DisplayedModels
+        {
+            get { return (ObservableCollection<object>)GetValue(DisplayedModelsProperty); }
+            set { SetValue(DisplayedModelsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DisplayedModels.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DisplayedModelsProperty =
+            DependencyProperty.Register("DisplayedModels", typeof(ObservableCollection<object>), typeof(DiffControl), new PropertyMetadata(null));
+
 
 
 

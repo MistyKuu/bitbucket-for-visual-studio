@@ -73,7 +73,11 @@ namespace GitClientVS.Services
                     Id = comment.Id,
                     Parent = comment.Parent,
                     User = comment.User,
-                    UpdatedOn = comment.UpdatedOn
+                    UpdatedOn = comment.UpdatedOn,
+                    IsInline = comment.IsInline,
+                    Path = comment.Path,
+                    From = comment.From,
+                    To = comment.To
                 }));
             }
 

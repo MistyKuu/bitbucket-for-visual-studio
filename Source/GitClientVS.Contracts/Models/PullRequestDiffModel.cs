@@ -23,7 +23,6 @@ namespace GitClientVS.Contracts.Models
         private List<GitComment> _comments;
         private List<FileDiff> _fileDiffs;
         private List<ICommentTree> _commentTree;
-        private List<InlineGitComment> _inlineComments;
         private List<ICommentTree> _inlineCommentTree;
 
         public ReactiveCommand ShowDiffCommand { get; }

@@ -33,6 +33,6 @@
             <Button Style="{StaticResource ActionLinkButton}" Content="Side-by-Side diff" FontSize="13"  Command="{Binding ShowSideBySideDiffCommand}"/>
         </StackPanel>        
       
-        <controls:DiffControl Grid.Row="1" FileDiff="{Binding FileDiff}" Theme="{Binding CurrentTheme}"/>
+        <controls:DiffControl Grid.Row="1" FileDiff="{Binding FileDiff}" Theme="{Binding CurrentTheme}" DisplayedModels="{Binding DisplayedModels}"/>
     </Grid>
 </UserControl>

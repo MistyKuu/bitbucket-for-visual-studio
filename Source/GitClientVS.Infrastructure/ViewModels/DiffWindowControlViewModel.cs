@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -9,12 +11,24 @@ using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
+using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Contracts.Models.Tree;
 using ParseDiff;
 using ReactiveUI;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
+    public class DiffViewDisplayedModel
+    {
+        public object Item { get; set; }
+
+        public DiffViewDisplayedModel(object item)
+        {
+            Item = item;
+        }
+    }
+
+
     [Export(typeof(IDiffWindowControlViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class DiffWindowControlViewModel : ViewModelBase, IDiffWindowControlViewModel
@@ -33,13 +47,21 @@ namespace GitClientVS.Infrastructure.ViewModels
         private FileDiff _fileDiff;
         private Theme _currentTheme;
         private FileDiffModel _fileDiffModel;
-        public object VsFrame { get; private set; }
+        private ObservableCollection<object> _displayedModels;
 
 
         public ICommand ShowSideBySideDiffCommand => _showSideBySideDiffCommand;
         public ICommand ViewFileCommand => _viewFileCommand;
-
         public ICommand InitializeCommand => _initializeCommand;
+
+
+        public ObservableCollection<object> DisplayedModels
+        {
+            get => _displayedModels;
+            set => this.RaiseAndSetIfChanged(ref _displayedModels, value);
+        }
+
+        public object VsFrame { get; private set; }
 
         public string ErrorMessage
         {
@@ -99,7 +121,43 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _fileDiffModel = fileDiffModel;
             FileDiff = fileDiffModel.TreeFile.FileDiff;
+
+            PrepareDiffModels();
+
             return Task.CompletedTask;
+        }
+
+        private void PrepareDiffModels()
+        {
+            DisplayedModels = new ObservableCollection<object>();
+
+            var topLevelFileComments = _fileDiffModel
+                .InlineCommentTree
+                .Where(x => x.Comment.Path == FileDiff.From || x.Comment.Path == FileDiff.To)
+                .ToList();
+
+
+            foreach (var topLevelFileComment in topLevelFileComments)
+            {
+                foreach (var chunk in FileDiff.Chunks) //todo won't work if two comments in one chunk because it will split original
+                {
+                    var changeIndex = chunk.Changes.FindIndex(x => x.OldIndex == topLevelFileComment.Comment.From && x.NewIndex == topLevelFileComment.Comment.To);
+                    if (changeIndex == -1)
+                    {
+                        DisplayedModels.Add(chunk);
+                    }
+                    else
+                    {
+                        var firstChunk = new ChunkDiff() { Changes = chunk.Changes.Take(changeIndex + 1).ToList() };
+                        var secondChunk = new ChunkDiff() { Changes = chunk.Changes.Skip(changeIndex + 1).ToList() };
+
+                        DisplayedModels.Add(firstChunk);
+                        DisplayedModels.Add(topLevelFileComment);
+                        DisplayedModels.Add(secondChunk);
+                        break;//don't search in the rest of chunks
+                    }
+                }
+            }
         }
 
         private Task ViewFile()
@@ -112,12 +170,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             Task<string> t1;
             Task<string> t2;
 
-            if(FileDiff.Type == FileChangeType.Modified)
+            if (FileDiff.Type == FileChangeType.Modified)
             {
-                 t1 = GetFileContent(_fileDiffModel.ToCommit, FileDiff.DisplayFileName);
-                 t2 = GetFileContent(_fileDiffModel.FromCommit, FileDiff.DisplayFileName);
+                t1 = GetFileContent(_fileDiffModel.ToCommit, FileDiff.DisplayFileName);
+                t2 = GetFileContent(_fileDiffModel.FromCommit, FileDiff.DisplayFileName);
             }
-            else if(FileDiff.Type == FileChangeType.Add)
+            else if (FileDiff.Type == FileChangeType.Add)
             {
                 t1 = Task.FromResult(string.Empty);
                 t2 = GetFileContent(_fileDiffModel.FromCommit, FileDiff.DisplayFileName);
@@ -128,7 +186,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 t2 = Task.FromResult(string.Empty);
             }
 
-            var results = await Task.WhenAll(t1,t2);
+            var results = await Task.WhenAll(t1, t2);
 
             VsFrame = _commandsService.ShowSideBySideDiffWindow(
                 results[0],

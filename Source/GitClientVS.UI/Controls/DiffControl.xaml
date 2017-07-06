@@ -6,6 +6,9 @@
              xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
              xmlns:diffControlUtils="clr-namespace:GitClientVS.UI.Controls.DiffControlUtils"
+             xmlns:parseDiff="clr-namespace:ParseDiff;assembly=ParseDiff"
+             xmlns:tree="clr-namespace:GitClientVS.Contracts.Models.Tree;assembly=GitClientVS.Contracts"
+             xmlns:controls="clr-namespace:GitClientVS.UI.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" x:Name="CurrentControl">
     <UserControl.Resources>
@@ -18,7 +21,12 @@
 
     <Grid>
         <Grid.Resources>
-            <DataTemplate x:Key="ChunkTemplate">
+            
+            <DataTemplate DataType="{x:Type tree:CommentTree}">
+                <TextBlock Text="COMMENTTREE"/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type parseDiff:ChunkDiff}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -50,7 +58,7 @@
         <!--TODO A HACK TO USE TB FOREGROUND-->
 
         <ScrollViewer PreviewMouseWheel="UIElement_OnPreviewMouseWheel">
-            <ItemsControl ItemsSource="{Binding FileDiff.Chunks}" ItemTemplate="{StaticResource ChunkTemplate}">
+            <ItemsControl ItemsSource="{Binding DisplayedModels}">
                 <ItemsControl.Resources>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
