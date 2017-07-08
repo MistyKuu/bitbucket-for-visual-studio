@@ -21,10 +21,21 @@
 
     <Grid>
         <Grid.Resources>
-            
+
             <DataTemplate DataType="{x:Type tree:CommentTree}">
-                <TextBlock Text="{Binding Comment.Content.DisplayHtml}"/>
+                <Border Margin="5" BorderThickness="0.2" BorderBrush="Black" Padding="5">
+                    <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                            
+                    <controls:CommentsTreeView SingleCommentTree="{Binding}"/>
+                    </Grid>
+
+                </Border>
             </DataTemplate>
+
 
             <DataTemplate DataType="{x:Type parseDiff:ChunkDiff}">
                 <Grid>

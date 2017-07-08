@@ -108,6 +108,9 @@
     <Compile Include="Controls\DiffControlUtils\DiffLineColorizer.cs" />
     <Compile Include="Controls\DiffControlUtils\OffsetColorizer.cs" />
     <Compile Include="Controls\DiffControlUtils\TwoColumnMargin.cs" />
+    <Compile Include="Controls\CommentsTreeView.xaml.cs">
+      <DependentUpon>CommentsTreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PullRequestDiffView.xaml.cs">
       <DependentUpon>PullRequestDiffView.xaml</DependentUpon>
     </Compile>
@@ -233,6 +236,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\DiffControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CommentsTreeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
