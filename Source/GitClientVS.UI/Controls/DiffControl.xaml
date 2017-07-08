@@ -23,7 +23,7 @@
         <Grid.Resources>
             
             <DataTemplate DataType="{x:Type tree:CommentTree}">
-                <TextBlock Text="COMMENTTREE"/>
+                <TextBlock Text="{Binding Comment.Content.DisplayHtml}"/>
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type parseDiff:ChunkDiff}">

@@ -7,6 +7,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using BitBucket.REST.API.Helpers;
 using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
@@ -136,28 +137,38 @@ namespace GitClientVS.Infrastructure.ViewModels
                 .Where(x => x.Comment.Path == FileDiff.From || x.Comment.Path == FileDiff.To)
                 .ToList();
 
+            var fileLevelComment = topLevelFileComments.FirstOrDefault(x => x.Comment.From == null && x.Comment.To == null);
+            if (fileLevelComment != null)
+                DisplayedModels.Add(fileLevelComment);
 
-            foreach (var topLevelFileComment in topLevelFileComments)
+            foreach (var chunk in FileDiff.Chunks)
             {
-                foreach (var chunk in FileDiff.Chunks) //todo won't work if two comments in one chunk because it will split original
-                {
-                    var changeIndex = chunk.Changes.FindIndex(x => x.OldIndex == topLevelFileComment.Comment.From && x.NewIndex == topLevelFileComment.Comment.To);
-                    if (changeIndex == -1)
-                    {
-                        DisplayedModels.Add(chunk);
-                    }
-                    else
-                    {
-                        var firstChunk = new ChunkDiff() { Changes = chunk.Changes.Take(changeIndex + 1).ToList() };
-                        var secondChunk = new ChunkDiff() { Changes = chunk.Changes.Skip(changeIndex + 1).ToList() };
+                var commentInChunkIndexes = chunk.Changes.FindAllIndexes(
+                    x => topLevelFileComments.Any(ch => ch.Comment.From == x.OldIndex && ch.Comment.To == x.NewIndex)).ToList();
 
-                        DisplayedModels.Add(firstChunk);
-                        DisplayedModels.Add(topLevelFileComment);
-                        DisplayedModels.Add(secondChunk);
-                        break;//don't search in the rest of chunks
-                    }
-                }
+                SplitChunkByIndexes(chunk, commentInChunkIndexes, topLevelFileComments);
             }
+        }
+
+        private void SplitChunkByIndexes(ChunkDiff chunk, List<int> indexes, List<ICommentTree> topLevelFileComments) //todo not every effective
+        {
+            if (!indexes.Any())
+            {
+                DisplayedModels.Add(chunk);
+                return;
+            }
+
+            var firstIndex = indexes[0];
+            var currentSplitChange = chunk.Changes[firstIndex];
+            var currentComment = topLevelFileComments.First(x => x.Comment.From == currentSplitChange.OldIndex && x.Comment.To == currentSplitChange.NewIndex);
+
+            var firstChunk = new ChunkDiff() { Changes = chunk.Changes.Take(firstIndex + 1).ToList() };
+            var secondChunk = new ChunkDiff() { Changes = chunk.Changes.Skip(firstIndex + 1).ToList() };
+
+            DisplayedModels.Add(firstChunk);
+            DisplayedModels.Add(currentComment);
+
+            SplitChunkByIndexes(secondChunk, indexes.Skip(1).Select(x => x - firstChunk.Changes.Count).ToList(), topLevelFileComments);
         }
 
         private Task ViewFile()
