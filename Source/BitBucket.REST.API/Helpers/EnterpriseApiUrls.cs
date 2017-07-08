@@ -17,7 +17,7 @@ namespace BitBucket.REST.API.Helpers
         }
 
         public static string CreateRepositories(string ownerName)
-        {
+        {   
             return $"users/{ownerName}/repos";
         }
 
@@ -97,11 +97,6 @@ namespace BitBucket.REST.API.Helpers
         public static string PullRequestActivities(string owner, string repositoryName, long id)
         {
             return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/activities";
-        }
-
-        public static string DefaultReviewers(string ownerName, string repositoryName)
-        {
-            throw new NotImplementedException();
         }
     }
 }

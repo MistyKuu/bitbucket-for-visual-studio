@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace BitBucket.REST.API.Models.Enterprise
 {
-    public class EnterpriseComment 
+    public class EnterpriseComment
     {
         [JsonProperty(PropertyName = "author")]
         public EnterpriseUser User { get; set; }
@@ -24,5 +24,6 @@ namespace BitBucket.REST.API.Models.Enterprise
         public long Id { get; set; }
 
         public EnterpriseParent Parent { get; set; }
+        public EnterpriseAnchor Anchor { get; set; }
     }
 }

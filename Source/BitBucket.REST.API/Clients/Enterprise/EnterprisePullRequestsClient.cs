@@ -164,7 +164,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
             } while (response.Data?.IsLastPage == false);
 
-            return string.Join(Environment.NewLine, result.Lines.Select(x=>x.Text));
+            return string.Join(Environment.NewLine, result.Lines.Select(x => x.Text));
         }
 
         public async Task<IEnumerable<Commit>> GetPullRequestCommits(string repositoryName, string ownerName, long id)
@@ -212,14 +212,15 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
             var url = EnterpriseApiUrls.PullRequestActivities(ownerName, repositoryName, id);
             var activities = await RestClient.GetAllPages<EnterpriseCommentActivity>(url);
-            var comments = activities.Where(x => x.Action == "COMMENTED").Select(x => x.Comment).ToList();
+            var commentActivities = activities.Where(x => x.Action == "COMMENTED").ToList();
 
+            foreach (var comment in commentActivities)
+            {
+                comment.Comment.Anchor = comment.Anchor;
+                AssignCommentParent(comment.Comment);
+            }
 
-            foreach (var comment in comments)
-                AssignCommentParent(comment);
-
-
-            comments = comments.Flatten(x => true, x => x.Comments).ToList();
+            var comments = commentActivities.Select(x => x.Comment).Flatten(x => true, x => x.Comments).ToList();
             return comments.MapTo<List<Comment>>();
         }
         public async Task<PullRequest> GetPullRequest(string repositoryName, string owner, long id)

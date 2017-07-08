@@ -27,17 +27,5 @@ namespace BitBucket.REST.API.Helpers
             }
             return flattenedList;
         }
-
-        public static IEnumerable<int> FindAllIndexes<TSource>(this IEnumerable<TSource> source, Predicate<TSource> predicate)
-        {
-            int i = 0;
-            foreach (var element in source)
-            {
-                if (predicate(element))
-                    yield return i;
-
-                i++;
-            }
-        }
     }
 }

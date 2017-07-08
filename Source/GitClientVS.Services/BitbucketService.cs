@@ -112,7 +112,7 @@ namespace GitClientVS.Services
 
         public async Task<IEnumerable<FileDiff>> GetPullRequestDiff(long id)
         {
-            var diffs =(await _bitbucketClient
+            var diffs = (await _bitbucketClient
                 .PullRequestsClient
                 .GetPullRequestDiff(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, id)).ToList();
 
@@ -123,7 +123,7 @@ namespace GitClientVS.Services
 
         public async Task<IEnumerable<FileDiff>> GetCommitsDiff(string fromCommit, string toCommit)
         {
-            var diffs= (await  _bitbucketClient
+            var diffs = (await _bitbucketClient
                 .PullRequestsClient
                 .GetCommitsDiff(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, fromCommit, toCommit)).ToList();
 
@@ -132,7 +132,7 @@ namespace GitClientVS.Services
             return diffs;
         }
 
-       
+
 
         public async Task<string> GetFileContent(string hash, string path)
         {
@@ -307,8 +307,40 @@ namespace GitClientVS.Services
 
         public async Task<IEnumerable<GitComment>> GetPullRequestComments(long id)
         {
-            var comments = await _bitbucketClient.PullRequestsClient.GetPullRequestComments(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, id);
+            var comments = (await _bitbucketClient.PullRequestsClient.GetPullRequestComments(_gitWatcher.ActiveRepo.Name,
+                _gitWatcher.ActiveRepo.Owner, id)).ToList();
+
+            AssignInlinesToChildren(comments);
+
             return comments.MapTo<List<GitComment>>();
+        }
+
+        private static void AssignInlinesToChildren(List<Comment> comments)
+        {
+            var commentDictionary = comments.ToDictionary(x => x.Id, x => x);
+
+            foreach (var comment in comments)
+            {
+                var ancestors = new List<Comment>();
+
+                Comment current = comment;
+                do
+                {
+                    ancestors.Add(current);
+                    current = GetParent(commentDictionary, current);
+                }
+                while (current != null);
+
+                var firstAncestor = ancestors.Last();
+
+                foreach (var ancestor in ancestors)
+                    ancestor.Inline = firstAncestor.Inline;
+            }
+        }
+
+        private static Comment GetParent(Dictionary<long, Comment> commentDictionary, Comment current)
+        {
+            return current.Parent == null ? null : commentDictionary[current.Parent.Id];
         }
     }
 }

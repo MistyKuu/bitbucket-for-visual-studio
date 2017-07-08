@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -71,8 +72,10 @@
     <Compile Include="Interfaces\IBitbucketRestClient.cs" />
     <Compile Include="Interfaces\IEnterpriseBitbucketRestClient.cs" />
     <Compile Include="Mappings\Converters\RepositoryV1TypeConverter.cs" />
+    <Compile Include="Models\Enterprise\EnterpriseAnchor.cs" />
     <Compile Include="Models\Enterprise\EnterpriseBrowse.cs" />
     <Compile Include="Models\Enterprise\EnterpriseBrowseText.cs" />
+    <Compile Include="Models\Enterprise\FileDiffType.cs" />
     <Compile Include="Models\Standard\DefaultBranch.cs" />
     <Compile Include="Models\Standard\MergeRequest.cs" />
     <Compile Include="EnterpriseBitbucketClient.cs" />

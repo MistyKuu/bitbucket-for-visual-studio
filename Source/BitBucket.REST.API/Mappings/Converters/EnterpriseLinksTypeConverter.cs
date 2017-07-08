@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -13,7 +14,7 @@ namespace BitBucket.REST.API.Mappings.Converters
             if (source == null)
                 return new Links();
 
-            return new Links()
+            var links = new Links()
             {
                 Self = source.Self?.FirstOrDefault()?.MapTo<Link>(),
                 Repositories = source.Repositories?.FirstOrDefault()?.MapTo<Link>(),
@@ -22,8 +23,10 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Avatar = source.Avatar?.FirstOrDefault()?.MapTo<Link>(),
                 Html = source.Html?.FirstOrDefault()?.MapTo<Link>(),
                 Following = source.Following?.FirstOrDefault()?.MapTo<Link>(),
-                Clone = new List<Link>() { source.Clone?.First(x => x.Name == "http").MapTo<Link>() }
+                Clone = new List<Link>() { source.Clone?.FirstOrDefault(x => x.Name.Contains("http"))?.MapTo<Link>() }
             };
+
+            return links;
         }
 
         public EnterpriseLinks Convert(Links source, EnterpriseLinks destination, ResolutionContext context)
