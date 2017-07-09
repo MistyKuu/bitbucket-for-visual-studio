@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
+using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
@@ -36,6 +37,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         private ITreeStructureGenerator _treeStructureGenerator;
         private ICommandsService _commandsService;
         private CreatePullRequestsViewModel _sut;
+        private IPullRequestDiffViewModel _pullRequestDiffViewModel;
 
 
         [SetUp]
@@ -47,6 +49,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _eventAggregator = new EventAggregatorService();
             _treeStructureGenerator = MockRepository.GenerateMock<ITreeStructureGenerator>();
             _commandsService = MockRepository.GenerateMock<ICommandsService>();
+            _pullRequestDiffViewModel = MockRepository.GenerateMock<IPullRequestDiffViewModel>();
 
 
             _sut = CreateSut();
@@ -107,9 +110,9 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
             _sut.Initialize();
 
-            Assert.That(_sut.PullRequestDiffModel.Commits, Is.EqualTo(commits));
-            Assert.That(_sut.PullRequestDiffModel.FilesTree, Is.EqualTo(treeFiles));
-            Assert.That(_sut.PullRequestDiffModel.FileDiffs, Is.EqualTo(fileDiffs));
+            Assert.That(_sut.PullRequestDiffViewModel.Commits, Is.EqualTo(commits));
+            Assert.That(_sut.PullRequestDiffViewModel.FilesTree, Is.EqualTo(treeFiles));
+            Assert.That(_sut.PullRequestDiffViewModel.FileDiffs, Is.EqualTo(fileDiffs));
 
             Assert.That(_sut.Title, Is.EqualTo("Title"));
             Assert.That(_sut.Description, Is.EqualTo("Desc"));
@@ -146,9 +149,9 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
             _sut.Initialize();
 
-            Assert.That(_sut.PullRequestDiffModel.Commits, Is.EqualTo(commits));
-            Assert.That(_sut.PullRequestDiffModel.FilesTree, Is.EqualTo(treeFiles));
-            Assert.That(_sut.PullRequestDiffModel.FileDiffs, Is.EqualTo(fileDiffs));
+            Assert.That(_sut.PullRequestDiffViewModel.Commits, Is.EqualTo(commits));
+            Assert.That(_sut.PullRequestDiffViewModel.FilesTree, Is.EqualTo(treeFiles));
+            Assert.That(_sut.PullRequestDiffViewModel.FileDiffs, Is.EqualTo(fileDiffs));
 
             Assert.That(_sut.Title, Is.EqualTo(_sut.SourceBranch.Name));
             Assert.That(_sut.Description, Is.Not.Empty);
@@ -368,7 +371,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 _eventAggregator,
                 _treeStructureGenerator,
                 _commandsService,
-                new DataNotifier()
+                new DataNotifier(),
+                _pullRequestDiffViewModel
                 );
         }
     }

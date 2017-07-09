@@ -92,6 +92,7 @@
     <Compile Include="Interfaces\ViewModels\IDiffWindowControlViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPublishSectionViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestDetailView.cs" />
+    <Compile Include="Interfaces\ViewModels\IPullRequestDiffViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestsDetailViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestsMainViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestsWindowContainer.cs" />
@@ -125,7 +126,6 @@
     <Compile Include="Models\GitCredentials.cs" />
     <Compile Include="Models\LocalRepo.cs" />
     <Compile Include="Models\PullRequestActionModel.cs" />
-    <Compile Include="Models\PullRequestDiffModel.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\Tree\CommentTree.cs" />
     <Compile Include="Models\Tree\ICommentTree.cs" />

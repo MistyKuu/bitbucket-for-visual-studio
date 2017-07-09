@@ -194,7 +194,7 @@
             </Grid>
 
 
-            <controls1:PullRequestDiffView Grid.Row="3" DataContext="{Binding PullRequestDiffModel}"/>
+            <controls1:PullRequestDiffView Grid.Row="3" DataContext="{Binding PullRequestDiffViewModel}"/>
         </Grid>
     </Grid>
 

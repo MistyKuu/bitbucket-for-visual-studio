@@ -5,6 +5,9 @@ using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Infrastructure.Extensions;
 using ReactiveUI;
 using System.Linq;
+using GitClientVS.Contracts.Models.GitClientModels;
+using GitClientVS.Contracts.Models.Tree;
+using ParseDiff;
 
 namespace GitClientVS.Infrastructure
 {

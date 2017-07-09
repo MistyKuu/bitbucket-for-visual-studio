@@ -13,9 +13,10 @@
              xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
              xmlns:tree="clr-namespace:GitClientVS.Contracts.Models.Tree;assembly=GitClientVS.Contracts"
+             xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-            d:DataContext="{d:DesignInstance models:PullRequestDiffModel,IsDesignTimeCreatable=False}" 
+            d:DataContext="{d:DesignInstance viewModels:PullRequestDiffViewModel,IsDesignTimeCreatable=False}" 
              x:Name="PqDiffView"
              >
     <Grid>
@@ -166,7 +167,12 @@
             </controls:MetroTabItem>
 
             <controls:MetroTabItem Visibility="{Binding Comments,Converter={converters:NullToNonVisibilityConverter}}"  controls:ControlsHelper.HeaderFontSize="14" Header="{Binding Comments.Count,FallbackValue=0}"  HeaderStringFormat="{}Comments ({0})">
-               <local:CommentsTreeView CommentTree="{Binding CommentTree}"/>
+               <local:CommentsTreeView 
+                   CommentTree="{Binding CommentTree}" 
+                   DeleteCommand="{Binding DeleteCommentCommand}"
+                   AddCommand="{Binding AddCommentCommand}"
+                   EditCommand="{Binding EditCommentCommand}"
+                   />
             </controls:MetroTabItem>
         </controls:MetroAnimatedTabControl>
     </Grid>

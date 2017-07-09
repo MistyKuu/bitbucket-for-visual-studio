@@ -159,7 +159,7 @@
 
             <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch" />
 
-            <controls1:PullRequestDiffView Grid.Row="4" Margin="0,0,0,20" DataContext="{Binding PullRequestDiffModel}"/>
+            <controls1:PullRequestDiffView Grid.Row="4" Margin="0,0,0,20" DataContext="{Binding PullRequestDiffViewModel}"/>
 
         </Grid>
     </Grid>

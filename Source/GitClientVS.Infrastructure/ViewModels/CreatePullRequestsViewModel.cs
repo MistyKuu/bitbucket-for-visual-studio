@@ -136,13 +136,13 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
 
-        public PullRequestDiffModel PullRequestDiffModel { get; set; }
+        public IPullRequestDiffViewModel PullRequestDiffViewModel { get; set; }
 
         public string ExistingBranchText => RemotePullRequest == null ? null : $"#{RemotePullRequest.Id} {RemotePullRequest.Title} (created {RemotePullRequest.Created})";
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand, PullRequestDiffModel.ShowDiffCommand};
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand}.Concat(PullRequestDiffViewModel.ThrowableCommands);
 
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand, PullRequestDiffModel.ShowDiffCommand };
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand};
 
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand CreateNewPullRequestCommand => _createNewPullRequestCommand;
@@ -157,7 +157,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             IEventAggregatorService eventAggregator,
             ITreeStructureGenerator treeStructureGenerator,
             ICommandsService commandsService,
-            IDataNotifier dataNotifier
+            IDataNotifier dataNotifier,
+            IPullRequestDiffViewModel pullRequestDiffViewModel
         )
         {
             _gitClientService = gitClientService;
@@ -167,7 +168,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _treeStructureGenerator = treeStructureGenerator;
             _dataNotifier = dataNotifier;
 
-            PullRequestDiffModel = new PullRequestDiffModel(commandsService);
+            PullRequestDiffViewModel = pullRequestDiffViewModel;
 
             CloseSourceBranch = false;
             SelectedReviewers = new ReactiveList<GitUser>();
@@ -238,7 +239,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task SetPullRequestData()
         {
             var pullRequest = await _gitClientService.GetPullRequestForBranches(SourceBranch.Name, DestinationBranch.Name);
-            PullRequestDiffModel.Commits = (await _gitClientService.GetCommitsRange(SourceBranch, DestinationBranch)).ToList();
+            PullRequestDiffViewModel.Commits = (await _gitClientService.GetCommitsRange(SourceBranch, DestinationBranch)).ToList();
 
             await CreateDiffContent(SourceBranch.Target.Hash, DestinationBranch.Target.Hash);
 
@@ -252,7 +253,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             }
             else
             {
-                await SetPullRequestDataFromCommits(PullRequestDiffModel.Commits);
+                await SetPullRequestDataFromCommits(PullRequestDiffViewModel.Commits);
             }
 
             RemotePullRequest = pullRequest;
@@ -313,11 +314,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task CreateDiffContent(string fromCommit, string toCommit)
         {
             var fileDiffs = (await _gitClientService.GetCommitsDiff(fromCommit, toCommit)).ToList();
-            PullRequestDiffModel.FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
-            PullRequestDiffModel.FileDiffs = fileDiffs;
+            PullRequestDiffViewModel.FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
+            PullRequestDiffViewModel.FileDiffs = fileDiffs;
 
-            PullRequestDiffModel.FromCommit = fromCommit;
-            PullRequestDiffModel.ToCommit = toCommit;
+            PullRequestDiffViewModel.FromCommit = fromCommit;
+            PullRequestDiffViewModel.ToCommit = toCommit;
         }
     }
 }

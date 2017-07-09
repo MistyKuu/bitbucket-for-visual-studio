@@ -17,6 +17,15 @@
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="CommentView"
              >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <TreeView  ItemsSource="{Binding ElementName=CommentView,Path=CommentTree}" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <TreeView.Resources>
@@ -140,7 +149,15 @@
 
                         <wpf:HtmlPanel Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.DisplayHtml}" Background="Transparent" Margin="30,-10,0,0" />
 
-                        <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.CreatedOn}" Foreground="Gray"></TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=AddCommand}" CommandParameter="{Binding Comment}"/>
+                            <Separator Style="{StaticResource VerticalSeparator}" />
+                            <Button Style="{StaticResource ActionLinkButton}" Content="Edit" Command="{Binding ElementName=CommentView,Path=EditCommand}" CommandParameter="{Binding Comment}"/>
+                            <Separator Style="{StaticResource VerticalSeparator}" />
+                            <Button Style="{StaticResource ActionLinkButton}" Content="Delete" Command="{Binding ElementName=CommentView,Path=DeleteCommand}" CommandParameter="{Binding Comment}"/>
+                            <Separator Style="{StaticResource VerticalSeparator}" />
+                            <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.UpdatedOn}" Foreground="Gray"></TextBlock>
+                        </StackPanel>
                     </StackPanel>
 
                 </HierarchicalDataTemplate>

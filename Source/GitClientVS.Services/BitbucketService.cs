@@ -139,6 +139,27 @@ namespace GitClientVS.Services
             return await _bitbucketClient.PullRequestsClient.GetFileContent(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, hash, path);
         }
 
+        public async Task AddPullRequestComment(GitComment comment)
+        {
+            await _bitbucketClient.PullRequestsClient.AddPullRequestComment(
+                _gitWatcher.ActiveRepo.Name,
+                _gitWatcher.ActiveRepo.Owner,
+                comment.Id,
+                comment.Content.Html,
+                comment.From,
+                comment.To,
+                comment.Path,
+                comment.Parent?.Id);
+        }
+
+        public async Task DeletePullRequestComment(long id)
+        {
+            await _bitbucketClient.PullRequestsClient.DeletePullRequestComment(
+                _gitWatcher.ActiveRepo.Name,
+                _gitWatcher.ActiveRepo.Owner,
+                id);
+        }
+
         public bool IsOriginRepo(GitRemoteRepository gitRemoteRepository)
         {
             if (gitRemoteRepository?.CloneUrl == null) return false;
@@ -318,7 +339,7 @@ namespace GitClientVS.Services
 
         public async Task AddComment(long id)
         {
-            
+
         }
 
 

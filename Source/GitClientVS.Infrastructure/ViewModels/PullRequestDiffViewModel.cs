@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Text;
+using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using GitClientVS.Contracts.Interfaces.Services;
+using GitClientVS.Contracts.Interfaces.ViewModels;
+using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Contracts.Models.Tree;
 using ParseDiff;
 using ReactiveUI;
 
-namespace GitClientVS.Contracts.Models
+namespace GitClientVS.Infrastructure.ViewModels
 {
-    public class PullRequestDiffModel : ReactiveObject
+    [Export(typeof(IPullRequestDiffViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public class PullRequestDiffViewModel : ViewModelBase, IPullRequestDiffViewModel
     {
         private readonly ICommandsService _commandsService;
+        private readonly IGitClientService _gitClientService;
         private List<ITreeFile> _filesTree;
         private List<GitCommit> _commits;
         private List<GitComment> _comments;
@@ -25,7 +25,10 @@ namespace GitClientVS.Contracts.Models
         private List<ICommentTree> _commentTree;
         private List<ICommentTree> _inlineCommentTree;
 
-        public ReactiveCommand ShowDiffCommand { get; }
+        public ReactiveCommand ShowDiffCommand { get; set; }
+        public ReactiveCommand AddCommentCommand { get; set; }
+        public ReactiveCommand EditCommentCommand { get; set; }
+        public ReactiveCommand DeleteCommentCommand { get; set; }
 
         public List<ITreeFile> FilesTree
         {
@@ -66,14 +69,37 @@ namespace GitClientVS.Contracts.Models
             set => this.RaiseAndSetIfChanged(ref _inlineCommentTree, value);
         }
 
-
-        public PullRequestDiffModel(
-            ICommandsService commandsService
-            )
+        [ImportingConstructor]
+        public PullRequestDiffViewModel(ICommandsService commandsService, IGitClientService gitClientService)
         {
             _commandsService = commandsService;
+            _gitClientService = gitClientService;
+        }
 
+        public void InitializeCommands()
+        {
             ShowDiffCommand = ReactiveCommand.CreateFromTask<TreeFile>(ShowDiff);
+            AddCommentCommand = ReactiveCommand.CreateFromTask<GitComment>(AddComment);
+            EditCommentCommand = ReactiveCommand.CreateFromTask<GitComment>(EditComment);
+            DeleteCommentCommand = ReactiveCommand.CreateFromTask<GitComment>(DeleteComment);
+        }
+
+        public string ErrorMessage { get; set; }
+        public IEnumerable<ReactiveCommand> ThrowableCommands =>  new[] { ShowDiffCommand, AddCommentCommand, EditCommentCommand, DeleteCommentCommand };
+
+        private async Task AddComment(GitComment comment)
+        {
+            await _gitClientService.AddPullRequestComment(comment);
+        }
+
+        private Task EditComment(GitComment comment)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task DeleteComment(GitComment comment)
+        {
+            await _gitClientService.DeletePullRequestComment(comment.Id);
         }
 
         private Task ShowDiff(TreeFile file)

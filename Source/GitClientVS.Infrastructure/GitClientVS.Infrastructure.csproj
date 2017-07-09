@@ -121,6 +121,7 @@
     <Compile Include="Utils\TimeConverter.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="ViewModels\DiffWindowControlViewModel.cs" />
+    <Compile Include="ViewModels\PullRequestDiffViewModel.cs" />
     <Compile Include="ViewModels\PullRequestsDetailViewModel.cs" />
     <Compile Include="ViewModels\PublishSectionViewModel.cs" />
     <Compile Include="ViewModels\CreatePullRequestsViewModel.cs" />

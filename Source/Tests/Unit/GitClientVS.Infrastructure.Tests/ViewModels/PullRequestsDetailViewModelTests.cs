@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
+using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
@@ -30,11 +31,13 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         private IEventAggregatorService _eventAggregatorService;
         private ICommandsService _commandsService;
         private IVsTools _vsTools;
+        private IPullRequestDiffViewModel _pullRequestDiffViewModel;
 
         [SetUp]
         public void SetUp()
         {
             _gitClientService = MockRepository.GenerateMock<IGitClientService>();
+            _pullRequestDiffViewModel = MockRepository.GenerateMock<IPullRequestDiffViewModel>();
             _gitService = MockRepository.GenerateMock<IGitService>();
             _userInfoService = MockRepository.GenerateMock<IUserInformationService>();
             _messageBoxService = MockRepository.GenerateMock<IMessageBoxService>();
@@ -69,11 +72,11 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             sut.Initialize(id);
 
             Assert.AreEqual(pullRequest, sut.PullRequest);
-            Assert.IsNotEmpty(sut.PullRequestDiffModel.CommentTree);
-            Assert.IsNotEmpty(sut.PullRequestDiffModel.Comments);
-            Assert.IsNotEmpty(sut.PullRequestDiffModel.Commits);
-            Assert.IsNotEmpty(sut.PullRequestDiffModel.FileDiffs);
-            Assert.IsNotEmpty(sut.PullRequestDiffModel.FilesTree);
+            Assert.IsNotEmpty(sut.PullRequestDiffViewModel.CommentTree);
+            Assert.IsNotEmpty(sut.PullRequestDiffViewModel.Comments);
+            Assert.IsNotEmpty(sut.PullRequestDiffViewModel.Commits);
+            Assert.IsNotEmpty(sut.PullRequestDiffViewModel.FileDiffs);
+            Assert.IsNotEmpty(sut.PullRequestDiffViewModel.FilesTree);
 
             Assert.IsTrue(sut.ActionCommands.Any(sutActionCommand => sutActionCommand.Label.Contains("Merge")));
             Assert.IsTrue(sut.ActionCommands.Any(sutActionCommand => sutActionCommand.Label.Contains("Decline")));
@@ -202,7 +205,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 _eventAggregatorService,
                 _treeStructureGenerator,
                 _messageBoxService,
-                new DataNotifier()
+                new DataNotifier(),
+                _pullRequestDiffViewModel
             );
         }
     }

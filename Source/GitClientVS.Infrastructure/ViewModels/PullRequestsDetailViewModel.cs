@@ -74,10 +74,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             set => this.RaiseAndSetIfChanged(ref _hasAuthorApproved, value);
         }
 
-        public PullRequestDiffModel PullRequestDiffModel { get; set; }
+        public IPullRequestDiffViewModel PullRequestDiffViewModel { get; set; }
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand, PullRequestDiffModel.ShowDiffCommand };
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand, PullRequestDiffModel.ShowDiffCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand }.Concat(PullRequestDiffViewModel.ThrowableCommands);
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand};
 
         public string ErrorMessage
         {
@@ -100,7 +100,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             IEventAggregatorService eventAggregatorService,
             ITreeStructureGenerator treeStructureGenerator,
             IMessageBoxService messageBoxService,
-            IDataNotifier dataNotifier
+            IDataNotifier dataNotifier,
+            IPullRequestDiffViewModel pullRequestDiffViewModel
             )
         {
             _gitClientService = gitClientService;
@@ -111,7 +112,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             _dataNotifier = dataNotifier;
 
             CurrentTheme = userInformationService.CurrentTheme;
-            PullRequestDiffModel = new PullRequestDiffModel(commandsService);
+
+            PullRequestDiffViewModel = pullRequestDiffViewModel;
 
         }
 
@@ -120,7 +122,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             yield return _eventAggregatorService.GetEvent<ThemeChangedEvent>().Subscribe(ev =>
             {
                 CurrentTheme = ev.Theme;
-                PullRequestDiffModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffModel.Comments.ToList(), CurrentTheme).ToList();
+                PullRequestDiffViewModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffViewModel.Comments.ToList(), CurrentTheme).ToList();
                 //todo should update inlinecommentree as well?
             });
 
@@ -203,8 +205,8 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             await Task.WhenAll(tasks);
 
-            PullRequestDiffModel.FromCommit = PullRequest.SourceBranch.Target.Hash;
-            PullRequestDiffModel.ToCommit = PullRequest.DestinationBranch.Target.Hash;
+            PullRequestDiffViewModel.FromCommit = PullRequest.SourceBranch.Target.Hash;
+            PullRequestDiffViewModel.ToCommit = PullRequest.DestinationBranch.Target.Hash;
         }
 
         private async Task GetPullRequestInfo(long id)
@@ -219,21 +221,21 @@ namespace GitClientVS.Infrastructure.ViewModels
             var pqComments = (await _gitClientService.GetPullRequestComments(id)).ToList();
             var inlineComments = pqComments.Where(comment => comment.IsInline).ToList();
 
-            PullRequestDiffModel.Comments = pqComments.Where(comment => comment.IsInline == false).ToList();
-            PullRequestDiffModel.InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments, CurrentTheme).ToList();
-            PullRequestDiffModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffModel.Comments.ToList(), CurrentTheme).ToList();
+            PullRequestDiffViewModel.Comments = pqComments.Where(comment => comment.IsInline == false).ToList();
+            PullRequestDiffViewModel.InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments, CurrentTheme).ToList();
+            PullRequestDiffViewModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffViewModel.Comments.ToList(), CurrentTheme).ToList();
         }
 
         private async Task CreateCommits(long id)
         {
-            PullRequestDiffModel.Commits = (await _gitClientService.GetPullRequestCommits(id)).ToList();
+            PullRequestDiffViewModel.Commits = (await _gitClientService.GetPullRequestCommits(id)).ToList();
         }
 
         private async Task CreateDiffContent(long id)
         {
             var fileDiffs = (await _gitClientService.GetPullRequestDiff(id)).ToList();
-            PullRequestDiffModel.FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
-            PullRequestDiffModel.FileDiffs = fileDiffs;
+            PullRequestDiffViewModel.FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
+            PullRequestDiffViewModel.FileDiffs = fileDiffs;
         }
 
         private void CreatePullRequestCommands(GitPullRequest pullRequest)
