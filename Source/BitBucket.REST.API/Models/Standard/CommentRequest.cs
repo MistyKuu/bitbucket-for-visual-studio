@@ -11,10 +11,11 @@ namespace BitBucket.REST.API.Models.Standard
     {
         [JsonProperty("content")]
         public string Content { get; set; }
+
         [JsonProperty("lineFrom")]
-        public int? LineFrom { get; set; }
+        public long? LineFrom { get; set; }
         [JsonProperty("lineTo")]
-        public int? LineTo { get; set; }
+        public long? LineTo { get; set; }
         [JsonProperty("fileName")]
         public string FileName { get; set; }
         [JsonProperty("parent_id")]

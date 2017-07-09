@@ -226,10 +226,17 @@ namespace BitBucket.REST.API.Clients.Enterprise
                         Line = lineFrom ?? lineTo ?? throw new Exception("Line cannot be empty while path specified"),
                         FileType = lineFrom != null ? FileDiffType.From : FileDiffType.To,
                         Path = fileName,
-                        SourcePath = fileName
+                        SourcePath = fileName,
                     } : null
             };
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(body), ParameterType.RequestBody);
+            await RestClient.ExecuteTaskAsync(request);
+        }
+
+        public async Task DeletePullRequestComment(string repositoryName, string ownerName, long id)
+        {
+            var url = EnterpriseApiUrls.PullRequestComments(ownerName, repositoryName, id);
+            var request = new BitbucketRestRequest(url, Method.DELETE);
             await RestClient.ExecuteTaskAsync(request);
         }
 

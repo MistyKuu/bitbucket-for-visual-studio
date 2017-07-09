@@ -12,7 +12,7 @@ using RestSharp;
 
 namespace BitBucket.REST.API.Clients
 {
-    public abstract class ApiClient
+    public abstract class ApiClient 
     {
         protected ApiClient(IBitbucketRestClient restClient, Connection connection)
         {
