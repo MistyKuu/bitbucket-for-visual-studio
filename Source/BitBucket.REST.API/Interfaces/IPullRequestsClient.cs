@@ -29,5 +29,16 @@ namespace BitBucket.REST.API.Interfaces
         Task<IEnumerable<UserShort>> GetDefaultReviewers(string repositoryName, string ownerName);
         IPullRequestQueryBuilder GetPullRequestQueryBuilder();
         Task<string> GetFileContent(string repoName, string owner, string hash, string path);
+
+        Task AddPullRequestComment(
+            string repositoryName,
+            string ownerName,
+            long id,
+            string content,
+            long? lineFrom = null,
+            long? lineTo = null,
+            string fileName = null,
+            long? parentId = null
+        );
     }
 }

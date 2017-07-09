@@ -98,5 +98,9 @@ namespace BitBucket.REST.API.Helpers
         {
             return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/activities";
         }
+        public static string PullRequestComments(string owner, string repositoryName, long id)
+        {
+            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/commits";
+        }
     }
 }

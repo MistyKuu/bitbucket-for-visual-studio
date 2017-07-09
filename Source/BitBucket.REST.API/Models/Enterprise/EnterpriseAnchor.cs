@@ -11,7 +11,7 @@ namespace BitBucket.REST.API.Models.Enterprise
         public string Path { get; set; }
 
         [JsonProperty(PropertyName = "line")]
-        public int? Line { get; set; }
+        public long? Line { get; set; }
 
         [JsonProperty(PropertyName = "lineType")]
         public string LineType { get; set; }

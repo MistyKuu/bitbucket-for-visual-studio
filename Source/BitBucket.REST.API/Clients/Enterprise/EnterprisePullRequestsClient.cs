@@ -203,9 +203,34 @@ namespace BitBucket.REST.API.Clients.Enterprise
             }
         }
 
-        public async Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, long id)
+        public async Task AddPullRequestComment(
+            string repositoryName,
+            string ownerName,
+            long id,
+            string content,
+            long? lineFrom = null,
+            long? lineTo = null,
+            string fileName = null,
+            long? parentId = null)
         {
-            return await GetPullRequestComments(repositoryName, Connection.Credentials.Login, id);
+            var url = EnterpriseApiUrls.PullRequestComments(ownerName, repositoryName, id);
+            var request = new BitbucketRestRequest(url, Method.POST);
+
+            var body = new EnterpriseComment()
+            {
+                Text = content,
+                Parent = parentId.HasValue ? new EnterpriseParent() { Id = parentId.Value } : null,
+                Anchor = fileName != null
+                    ? new EnterpriseAnchor()
+                    {
+                        Line = lineFrom ?? lineTo ?? throw new Exception("Line cannot be empty while path specified"),
+                        FileType = lineFrom != null ? FileDiffType.From : FileDiffType.To,
+                        Path = fileName,
+                        SourcePath = fileName
+                    } : null
+            };
+            request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(body), ParameterType.RequestBody);
+            await RestClient.ExecuteTaskAsync(request);
         }
 
         public async Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
