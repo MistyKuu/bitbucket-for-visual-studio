@@ -133,6 +133,18 @@ namespace BitBucket.REST.API.Clients.Standard
             return await RestClient.GetAllPages<Comment>(url);
         }
 
+        public async Task<IEnumerable<Comment>> AddPullRequestComment(string repositoryName, string ownerName, long id)
+        {
+            var url = ApiUrls.PullRequestCommentsV1(ownerName, repositoryName, id);
+            var request = new BitbucketRestRequest(url, Method.POST);
+
+            await RestClient.ExecuteTaskAsync(request);
+
+          //  request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(mergeRequest), ParameterType.RequestBody);
+
+            return await RestClient.GetAllPages<Comment>(url);
+        }
+
         public async Task<PullRequest> GetPullRequest(string repositoryName, string owner, long id)
         {
             var url = ApiUrls.PullRequest(owner, repositoryName, id);

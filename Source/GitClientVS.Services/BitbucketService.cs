@@ -315,6 +315,13 @@ namespace GitClientVS.Services
             return comments.MapTo<List<GitComment>>();
         }
 
+
+        public async Task AddComment(long id)
+        {
+            
+        }
+
+
         private static void AssignInlinesToChildren(List<Comment> comments)
         {
             var commentDictionary = comments.ToDictionary(x => x.Id, x => x);

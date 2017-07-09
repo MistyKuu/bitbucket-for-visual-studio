@@ -156,13 +156,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             foreach (var change in splitChanges)
             {
                 var currentChangeIndex = chunk.Changes.IndexOf(change);
-                var currentComment = topLevelFileComments.First(x => x.Comment.From == change.OldIndex && x.Comment.To == change.NewIndex);
+                var currentComments = topLevelFileComments.Where(x => x.Comment.From == change.OldIndex && x.Comment.To == change.NewIndex).ToList();
 
                 var firstChunk = new ChunkDiff { Changes = chunk.Changes.Take(currentChangeIndex + 1).ToList() };
                 var secondChunk = new ChunkDiff { Changes = chunk.Changes.Skip(currentChangeIndex + 1).ToList() };
 
                 DisplayedModels.Add(firstChunk);
-                DisplayedModels.Add(currentComment);
+
+                foreach(var comment in currentComments)
+                DisplayedModels.Add(comment);
 
                 chunk = secondChunk;
             }

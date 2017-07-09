@@ -2,6 +2,11 @@
 
 namespace BitBucket.REST.API.Models.Standard
 {
+    public class CommentV1
+    {
+        
+    }
+
     public class Comment 
     {
         [JsonProperty(PropertyName = "user")]
