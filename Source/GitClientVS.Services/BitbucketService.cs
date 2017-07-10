@@ -358,7 +358,7 @@ namespace GitClientVS.Services
                 do
                 {
                     ancestors.Add(current);
-                    current = GetParent(commentDictionary, current, comments);
+                    current = GetParent(commentDictionary, current);
                 }
                 while (current != null);
 
@@ -370,31 +370,9 @@ namespace GitClientVS.Services
             }
         }
 
-        private static Comment GetParent(Dictionary<long, Comment> commentDictionary, Comment current, List<Comment> comments)
+        private static Comment GetParent(Dictionary<long, Comment> commentDictionary, Comment current)
         {
-            if (current.Parent != null)
-            {
-                if (commentDictionary.ContainsKey(current.Parent.Id))
-                {
-                    return commentDictionary[current.Parent.Id];
-                }
-                else
-                {
-                    var comment = new Comment()
-                    {
-                        Content = new Content() { Html = "Comment has been deleted" },
-                        Id = current.Parent.Id,
-                        IsDeleted = true
-                    };
-
-                    comments.Add(comment);
-                    commentDictionary.Add(comment.Id, comment);
-
-                    return comment;
-                }
-            }
-
-            return null;
+            return current.Parent != null ? commentDictionary[current.Parent.Id] : null;
         }
     }
 }
