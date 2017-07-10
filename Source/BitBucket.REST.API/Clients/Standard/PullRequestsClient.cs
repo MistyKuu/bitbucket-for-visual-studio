@@ -162,7 +162,7 @@ namespace BitBucket.REST.API.Clients.Standard
             await _versionOneClient.ExecuteTaskAsync(request);
         }
 
-        public async Task DeletePullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id)
+        public async Task DeletePullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, long version)
         {
             var url = ApiUrls.PullRequestCommentV1(ownerName, repositoryName, pullRequestId, id);
             var request = new BitbucketRestRequest(url, Method.DELETE);

@@ -22,7 +22,8 @@ namespace GitClientVS.Infrastructure.Mappings
                 To = source.Inline?.To,
                 Path = source.Inline?.Path,
                 IsInline = source.Inline != null,
-                IsDeleted = source.IsDeleted
+                IsDeleted = source.IsDeleted,
+                Version = source.Version
             };
 
 

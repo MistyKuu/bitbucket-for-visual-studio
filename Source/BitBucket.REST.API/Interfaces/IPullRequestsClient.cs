@@ -41,6 +41,6 @@ namespace BitBucket.REST.API.Interfaces
             long? parentId = null
         );
 
-        Task DeletePullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id);
+        Task DeletePullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, long version);
     }
 }

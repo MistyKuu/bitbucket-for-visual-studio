@@ -16,6 +16,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public long? To { get; set; }
         public string Path { get; set; }
         public bool IsDeleted { get; set; }
+        public long Version { get; set; }
     }
 
     public class GitCommentParent

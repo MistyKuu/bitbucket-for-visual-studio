@@ -18,6 +18,7 @@ namespace BitBucket.REST.API.Mappings.Converters
                 UpdatedOn = source.UpdatedOn.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture),
                 Id = source.Id,
                 Parent = source.Parent != null ? new Parent() { Id = source.Parent.Id } : null,
+                Version = source.Version
             };
 
             if (source.Anchor != null)

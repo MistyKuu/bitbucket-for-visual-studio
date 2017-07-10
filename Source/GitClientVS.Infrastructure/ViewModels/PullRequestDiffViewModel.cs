@@ -100,7 +100,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task DeleteComment(GitComment comment)
         {
-            await _gitClientService.DeletePullRequestComment(Id,comment.Id);
+            await _gitClientService.DeletePullRequestComment(Id, comment.Id, comment.Version);
         }
 
         private Task ShowDiff(TreeFile file)

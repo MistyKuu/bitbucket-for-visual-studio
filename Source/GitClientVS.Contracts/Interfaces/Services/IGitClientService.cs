@@ -40,7 +40,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
 
         Task AddPullRequestComment(long id, GitComment comment);
 
-        Task DeletePullRequestComment(long pullRequestId, long commentId);
+        Task DeletePullRequestComment(long pullRequestId, long commentId, long version);
 
         Task<IEnumerable<GitPullRequest>> GetPullRequests(
             int limit = 50,

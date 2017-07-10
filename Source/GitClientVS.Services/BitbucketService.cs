@@ -152,13 +152,15 @@ namespace GitClientVS.Services
                 comment.Parent?.Id);
         }
 
-        public async Task DeletePullRequestComment(long pullRequestId, long commentId)
+        public async Task DeletePullRequestComment(long pullRequestId, long commentId,long version)
         {
             await _bitbucketClient.PullRequestsClient.DeletePullRequestComment(
                 _gitWatcher.ActiveRepo.Name,
                 _gitWatcher.ActiveRepo.Owner,
                 pullRequestId,
-                commentId);
+                commentId,
+                version
+                );
         }
 
         public bool IsOriginRepo(GitRemoteRepository gitRemoteRepository)

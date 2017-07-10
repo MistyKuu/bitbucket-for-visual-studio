@@ -26,6 +26,6 @@ namespace BitBucket.REST.API.Models.Standard
         public long Id { get; set; }
 
         public bool IsDeleted { get; set; }
-
+        public long Version { get; set; }
     }
 }
