@@ -38,9 +38,9 @@ namespace GitClientVS.Contracts.Interfaces.Services
         Task<IEnumerable<GitUser>> GetDefaultReviewers();
         Task<string> GetFileContent(string hash, string path);
 
-        Task AddPullRequestComment(GitComment comment);
+        Task AddPullRequestComment(long id, GitComment comment);
 
-        Task DeletePullRequestComment(long id);
+        Task DeletePullRequestComment(long pullRequestId, long commentId);
 
         Task<IEnumerable<GitPullRequest>> GetPullRequests(
             int limit = 50,

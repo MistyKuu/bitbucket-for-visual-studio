@@ -100,7 +100,11 @@ namespace BitBucket.REST.API.Helpers
         }
         public static string PullRequestComments(string owner, string repositoryName, long id)
         {
-            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/commits";
+            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{id}/comments";
+        }
+        public static string PullRequestComment(string owner, string repositoryName,long pullRequestId, long id)
+        {
+            return $"projects/{owner}/repos/{repositoryName}/pull-requests/{pullRequestId}/comments/{id}";
         }
     }
 }

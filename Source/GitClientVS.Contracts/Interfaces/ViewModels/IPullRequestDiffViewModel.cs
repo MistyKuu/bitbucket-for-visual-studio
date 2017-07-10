@@ -20,5 +20,6 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         string FromCommit { get; set; }
         string ToCommit { get; set; }
         List<ICommentTree> InlineCommentTree { get; set; }
+        long Id { get; set; }
     }
 }

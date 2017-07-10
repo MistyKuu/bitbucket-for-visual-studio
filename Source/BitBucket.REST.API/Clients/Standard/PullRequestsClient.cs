@@ -129,8 +129,9 @@ namespace BitBucket.REST.API.Clients.Standard
 
         public async Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
         {
-            var url = ApiUrls.PullRequestComments(ownerName, repositoryName, id);
-            return await RestClient.GetAllPages<Comment>(url);
+            var url = ApiUrls.PullRequestCommentsV1(ownerName, repositoryName, id);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            return (await _versionOneClient.ExecuteTaskAsync<List<CommentV1>>(request)).Data.MapTo<List<Comment>>();
         }
 
         public async Task AddPullRequestComment(
@@ -147,7 +148,7 @@ namespace BitBucket.REST.API.Clients.Standard
             var url = ApiUrls.PullRequestCommentsV1(ownerName, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.POST);
 
-            var body = new CommentRequest()
+            var body = new CommentV1()
             {
                 Content = content,
                 LineFrom = lineFrom,
@@ -161,9 +162,9 @@ namespace BitBucket.REST.API.Clients.Standard
             await _versionOneClient.ExecuteTaskAsync(request);
         }
 
-        public async Task DeletePullRequestComment(string repositoryName, string ownerName, long id)
+        public async Task DeletePullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id)
         {
-            var url = ApiUrls.PullRequestCommentsV1(ownerName, repositoryName, id);
+            var url = ApiUrls.PullRequestCommentV1(ownerName, repositoryName, pullRequestId, id);
             var request = new BitbucketRestRequest(url, Method.DELETE);
             await _versionOneClient.ExecuteTaskAsync(request);
         }

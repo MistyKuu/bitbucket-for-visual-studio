@@ -60,6 +60,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             set => this.RaiseAndSetIfChanged(ref _comments, value);
         }
 
+        public long Id { get; set; }
         public string FromCommit { get; set; }
         public string ToCommit { get; set; }
 
@@ -85,11 +86,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         public string ErrorMessage { get; set; }
-        public IEnumerable<ReactiveCommand> ThrowableCommands =>  new[] { ShowDiffCommand, AddCommentCommand, EditCommentCommand, DeleteCommentCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { ShowDiffCommand, AddCommentCommand, EditCommentCommand, DeleteCommentCommand };
 
         private async Task AddComment(GitComment comment)
         {
-            await _gitClientService.AddPullRequestComment(comment);
+            await _gitClientService.AddPullRequestComment(Id, comment);
         }
 
         private Task EditComment(GitComment comment)
@@ -99,7 +100,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task DeleteComment(GitComment comment)
         {
-            await _gitClientService.DeletePullRequestComment(comment.Id);
+            await _gitClientService.DeletePullRequestComment(Id,comment.Id);
         }
 
         private Task ShowDiff(TreeFile file)

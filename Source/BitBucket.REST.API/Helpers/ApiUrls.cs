@@ -121,7 +121,11 @@ namespace BitBucket.REST.API.Helpers
 
         public static string PullRequestCommentsV1(string username, string repository, long id)
         {
-            return $@"repositories/{username}/{repository}/pullrequests/{id}/comments --data=""content=string""";
+            return $@"repositories/{username}/{repository}/pullrequests/{id}/comments";
+        }
+        public static string PullRequestCommentV1(string username, string repository,long pullRequestId, long id)
+        {
+            return $@"repositories/{username}/{repository}/pullrequests/{pullRequestId}/comments/{id}";
         }
 
         public static string User()

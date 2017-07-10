@@ -25,5 +25,7 @@ namespace BitBucket.REST.API.Models.Standard
         [JsonProperty(PropertyName = "id")]
         public long Id { get; set; }
 
+        public bool IsDeleted { get; set; }
+
     }
 }

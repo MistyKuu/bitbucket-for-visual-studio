@@ -139,12 +139,12 @@ namespace GitClientVS.Services
             return await _bitbucketClient.PullRequestsClient.GetFileContent(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, hash, path);
         }
 
-        public async Task AddPullRequestComment(GitComment comment)
+        public async Task AddPullRequestComment(long id, GitComment comment)
         {
             await _bitbucketClient.PullRequestsClient.AddPullRequestComment(
                 _gitWatcher.ActiveRepo.Name,
                 _gitWatcher.ActiveRepo.Owner,
-                comment.Id,
+                id,
                 comment.Content.Html,
                 comment.From,
                 comment.To,
@@ -152,12 +152,13 @@ namespace GitClientVS.Services
                 comment.Parent?.Id);
         }
 
-        public async Task DeletePullRequestComment(long id)
+        public async Task DeletePullRequestComment(long pullRequestId, long commentId)
         {
             await _bitbucketClient.PullRequestsClient.DeletePullRequestComment(
                 _gitWatcher.ActiveRepo.Name,
                 _gitWatcher.ActiveRepo.Owner,
-                id);
+                pullRequestId,
+                commentId);
         }
 
         public bool IsOriginRepo(GitRemoteRepository gitRemoteRepository)
@@ -347,7 +348,7 @@ namespace GitClientVS.Services
         {
             var commentDictionary = comments.ToDictionary(x => x.Id, x => x);
 
-            foreach (var comment in comments)
+            foreach (var comment in comments.ToList())
             {
                 var ancestors = new List<Comment>();
 
@@ -355,20 +356,43 @@ namespace GitClientVS.Services
                 do
                 {
                     ancestors.Add(current);
-                    current = GetParent(commentDictionary, current);
+                    current = GetParent(commentDictionary, current, comments);
                 }
                 while (current != null);
 
-                var firstAncestor = ancestors.Last();
+                var firstAncestor = ancestors.LastOrDefault(x => !x.IsDeleted);
 
-                foreach (var ancestor in ancestors)
-                    ancestor.Inline = firstAncestor.Inline;
+                if (firstAncestor != null)
+                    foreach (var ancestor in ancestors)
+                        ancestor.Inline = firstAncestor.Inline;
             }
         }
 
-        private static Comment GetParent(Dictionary<long, Comment> commentDictionary, Comment current)
+        private static Comment GetParent(Dictionary<long, Comment> commentDictionary, Comment current, List<Comment> comments)
         {
-            return current.Parent == null ? null : commentDictionary[current.Parent.Id];
+            if (current.Parent != null)
+            {
+                if (commentDictionary.ContainsKey(current.Parent.Id))
+                {
+                    return commentDictionary[current.Parent.Id];
+                }
+                else
+                {
+                    var comment = new Comment()
+                    {
+                        Content = new Content() { Html = "Comment has been deleted" },
+                        Id = current.Parent.Id,
+                        IsDeleted = true
+                    };
+
+                    comments.Add(comment);
+                    commentDictionary.Add(comment.Id, comment);
+
+                    return comment;
+                }
+            }
+
+            return null;
         }
     }
 }

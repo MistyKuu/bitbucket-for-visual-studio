@@ -207,6 +207,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             PullRequestDiffViewModel.FromCommit = PullRequest.SourceBranch.Target.Hash;
             PullRequestDiffViewModel.ToCommit = PullRequest.DestinationBranch.Target.Hash;
+            PullRequestDiffViewModel.Id = id;
         }
 
         private async Task GetPullRequestInfo(long id)
