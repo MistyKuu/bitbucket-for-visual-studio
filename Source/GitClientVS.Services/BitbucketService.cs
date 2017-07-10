@@ -139,9 +139,9 @@ namespace GitClientVS.Services
             return await _bitbucketClient.PullRequestsClient.GetFileContent(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, hash, path);
         }
 
-        public async Task AddPullRequestComment(long id, GitComment comment)
+        public async Task<GitComment> AddPullRequestComment(long id, GitComment comment)
         {
-            await _bitbucketClient.PullRequestsClient.AddPullRequestComment(
+            var response = await _bitbucketClient.PullRequestsClient.AddPullRequestComment(
                 _gitWatcher.ActiveRepo.Name,
                 _gitWatcher.ActiveRepo.Owner,
                 id,
@@ -150,6 +150,8 @@ namespace GitClientVS.Services
                 comment.To,
                 comment.Path,
                 comment.Parent?.Id);
+
+            return response.MapTo<GitComment>();
         }
 
         public async Task DeletePullRequestComment(long pullRequestId, long commentId,long version)
@@ -338,13 +340,6 @@ namespace GitClientVS.Services
 
             return comments.MapTo<List<GitComment>>();
         }
-
-
-        public async Task AddComment(long id)
-        {
-
-        }
-
 
         private static void AssignInlinesToChildren(List<Comment> comments)
         {

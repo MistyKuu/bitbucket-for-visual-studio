@@ -203,15 +203,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             }
         }
 
-        public async Task AddPullRequestComment(
-            string repositoryName,
-            string ownerName,
-            long id,
-            string content,
-            long? lineFrom = null,
-            long? lineTo = null,
-            string fileName = null,
-            long? parentId = null)
+        public async Task<Comment> AddPullRequestComment(string repositoryName, string ownerName, long id, string content, long? lineFrom = null, long? lineTo = null, string fileName = null, long? parentId = null)
         {
             var url = EnterpriseApiUrls.PullRequestComments(ownerName, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.POST);
@@ -230,7 +222,9 @@ namespace BitBucket.REST.API.Clients.Enterprise
                     } : null
             };
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(body), ParameterType.RequestBody);
-            await RestClient.ExecuteTaskAsync(request);
+
+            var response= await RestClient.ExecuteTaskAsync<EnterpriseComment>(request);
+            return response.Data.MapTo<Comment>();
         }
 
         public async Task DeletePullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, long version)

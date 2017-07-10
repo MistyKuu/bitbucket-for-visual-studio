@@ -9,14 +9,14 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
     public interface IPullRequestDiffViewModel : IViewModelWithErrorMessage
     {
         ReactiveCommand ShowDiffCommand { get; }
-        ReactiveCommand AddCommentCommand { get; }
+        ReactiveCommand ReplyCommentCommand { get; }
         ReactiveCommand EditCommentCommand { get; }
         ReactiveCommand DeleteCommentCommand { get; }
         List<ITreeFile> FilesTree { get; set; }
         List<FileDiff> FileDiffs { get; set; }
         List<GitCommit> Commits { get; set; }
         List<ICommentTree> CommentTree { get; set; }
-        List<GitComment> Comments { get; set; }
+        int CommentsCount { get; }
         string FromCommit { get; set; }
         string ToCommit { get; set; }
         List<ICommentTree> InlineCommentTree { get; set; }

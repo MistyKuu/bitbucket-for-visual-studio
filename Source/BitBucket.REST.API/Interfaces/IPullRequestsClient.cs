@@ -5,6 +5,7 @@ using BitBucket.REST.API.Models.Enterprise;
 using BitBucket.REST.API.Models.Standard;
 using BitBucket.REST.API.QueryBuilders;
 using ParseDiff;
+using RestSharp;
 
 namespace BitBucket.REST.API.Interfaces
 {
@@ -30,16 +31,7 @@ namespace BitBucket.REST.API.Interfaces
         IPullRequestQueryBuilder GetPullRequestQueryBuilder();
         Task<string> GetFileContent(string repoName, string owner, string hash, string path);
 
-        Task AddPullRequestComment(
-            string repositoryName,
-            string ownerName,
-            long id,
-            string content,
-            long? lineFrom = null,
-            long? lineTo = null,
-            string fileName = null,
-            long? parentId = null
-        );
+        Task<Comment> AddPullRequestComment(string repositoryName, string ownerName, long id, string content, long? lineFrom = null, long? lineTo = null, string fileName = null, long? parentId = null);
 
         Task DeletePullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, long version);
     }

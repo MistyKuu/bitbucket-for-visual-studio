@@ -77,7 +77,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         public IPullRequestDiffViewModel PullRequestDiffViewModel { get; set; }
 
         public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _mergeCommand, _approveCommand, _disapproveCommand, _declineCommand }.Concat(PullRequestDiffViewModel.ThrowableCommands);
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand};
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _approveCommand, _disapproveCommand, _declineCommand, _mergeCommand };
 
         public string ErrorMessage
         {
@@ -121,7 +121,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             yield return _eventAggregatorService.GetEvent<ThemeChangedEvent>().Subscribe(ev =>
             {
-                CurrentTheme = ev.Theme;
+                CurrentTheme = ev.Theme;//todo remove this logic , it shouldn't work like that
                 PullRequestDiffViewModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffViewModel.Comments.ToList(), CurrentTheme).ToList();
                 //todo should update inlinecommentree as well?
             });
@@ -222,9 +222,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             var pqComments = (await _gitClientService.GetPullRequestComments(id)).ToList();
             var inlineComments = pqComments.Where(comment => comment.IsInline).ToList();
 
-            PullRequestDiffViewModel.Comments = pqComments.Where(comment => comment.IsInline == false).ToList();
             PullRequestDiffViewModel.InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments, CurrentTheme).ToList();
-            PullRequestDiffViewModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffViewModel.Comments.ToList(), CurrentTheme).ToList();
+            PullRequestDiffViewModel.CommentTree = _treeStructureGenerator.CreateCommentTree(pqComments.Where(x => x.IsInline).ToList(), CurrentTheme).ToList();
         }
 
         private async Task CreateCommits(long id)
