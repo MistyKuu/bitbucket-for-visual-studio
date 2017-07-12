@@ -130,13 +130,9 @@ namespace GitClientVS.Infrastructure.ViewModels
                 Path = comment.Path
             };
 
-            var responseComment = await _gitClientService.AddPullRequestComment(Id, newComment);
-            responseComment.IsInline = comment.IsInline;
-
-            commentTree.AddComment(responseComment);
-
-            if (!comment.IsInline)
-                CommentsCount++;
+            await _gitClientService.AddPullRequestComment(Id, newComment);
+            var comments = await _gitClientService.GetPullRequestComments(Id);
+            AddComments(comments);//todo temp solution just to make it work
         }
 
         private Task EditComment(ICommentTree commentTreee)
@@ -148,10 +144,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var comment = commentTree.Comment;
             await _gitClientService.DeletePullRequestComment(Id, comment.Id, comment.Version);
-            commentTree.DeleteCurrentComment();
-
-            if (!comment.IsInline)
-                CommentsCount--;
+            var comments = await _gitClientService.GetPullRequestComments(Id);
+            AddComments(comments); //todo temp solution just to make it work
         }
 
         private Task ShowDiff(TreeFile file)
