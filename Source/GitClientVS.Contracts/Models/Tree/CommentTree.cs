@@ -24,6 +24,7 @@ namespace GitClientVS.Contracts.Models.Tree
         {
             Comment.IsDeleted = true;
             this.RaisePropertyChanged(nameof(AllDeleted));
+            this.RaisePropertyChanged(nameof(Comment));
         }
 
         public void AddComment(GitComment comment)
