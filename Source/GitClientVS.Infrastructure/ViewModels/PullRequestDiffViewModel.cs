@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Helpers;
+using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
@@ -21,6 +22,7 @@ namespace GitClientVS.Infrastructure.ViewModels
     {
         private readonly ICommandsService _commandsService;
         private readonly IGitClientService _gitClientService;
+        private readonly ITreeStructureGenerator _treeStructureGenerator;
         private List<ITreeFile> _filesTree;
         private List<GitCommit> _commits;
         private List<FileDiff> _fileDiffs;
@@ -36,31 +38,37 @@ namespace GitClientVS.Infrastructure.ViewModels
         public List<ITreeFile> FilesTree
         {
             get => _filesTree;
-            set => this.RaiseAndSetIfChanged(ref _filesTree, value);
+            private set => this.RaiseAndSetIfChanged(ref _filesTree, value);
         }
 
         public List<FileDiff> FileDiffs
         {
             get => _fileDiffs;
-            set => this.RaiseAndSetIfChanged(ref _fileDiffs, value);
+            private set => this.RaiseAndSetIfChanged(ref _fileDiffs, value);
         }
 
         public List<GitCommit> Commits
         {
             get => _commits;
-            set => this.RaiseAndSetIfChanged(ref _commits, value);
+            private set => this.RaiseAndSetIfChanged(ref _commits, value);
         }
 
         public List<ICommentTree> CommentTree
         {
             get => _commentTree;
-            set => this.RaiseAndSetIfChanged(ref _commentTree, value);
+            private set => this.RaiseAndSetIfChanged(ref _commentTree, value);
         }
 
         public int CommentsCount
         {
             get => _commentsCount;
-            set => this.RaiseAndSetIfChanged(ref _commentsCount, value);
+            private set => this.RaiseAndSetIfChanged(ref _commentsCount, value);
+        }
+
+        public List<ICommentTree> InlineCommentTree
+        {
+            get => _inlineCommentTree;
+            private set => this.RaiseAndSetIfChanged(ref _inlineCommentTree, value);
         }
 
         public long Id { get; set; }
@@ -68,17 +76,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         public string ToCommit { get; set; }
 
 
-        public List<ICommentTree> InlineCommentTree
-        {
-            get => _inlineCommentTree;
-            set => this.RaiseAndSetIfChanged(ref _inlineCommentTree, value);
-        }
-
         [ImportingConstructor]
-        public PullRequestDiffViewModel(ICommandsService commandsService, IGitClientService gitClientService)
+        public PullRequestDiffViewModel(ICommandsService commandsService, IGitClientService gitClientService, ITreeStructureGenerator treeStructureGenerator)
         {
             _commandsService = commandsService;
             _gitClientService = gitClientService;
+            _treeStructureGenerator = treeStructureGenerator;
         }
 
         public void InitializeCommands()
@@ -91,6 +94,28 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public string ErrorMessage { get; set; }
         public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { ShowDiffCommand, ReplyCommentCommand, EditCommentCommand, DeleteCommentCommand };
+
+
+        public void AddFileDiffs(IEnumerable<FileDiff> fileDiffs)
+        {
+            FileDiffs = fileDiffs.ToList();
+            FilesTree = _treeStructureGenerator.CreateFileTree(FileDiffs).ToList();
+        }
+
+        public void AddComments(IEnumerable<GitComment> pqComments)
+        {
+            var inlineComments = pqComments.Where(comment => comment.IsInline).ToList();
+            var notInlineComments = pqComments.Where(x => !x.IsInline).ToList();
+
+            InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments).ToList();
+            CommentTree = _treeStructureGenerator.CreateCommentTree(notInlineComments).ToList();
+            CommentsCount = notInlineComments.Count(x => !x.IsDeleted);
+        }
+
+        public void AddCommits(IEnumerable<GitCommit> commits)
+        {
+            Commits = commits.ToList();
+        }
 
         private async Task ReplyToComment(ICommentTree commentTree)
         {

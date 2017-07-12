@@ -140,9 +140,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public string ExistingBranchText => RemotePullRequest == null ? null : $"#{RemotePullRequest.Id} {RemotePullRequest.Title} (created {RemotePullRequest.Created})";
 
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand}.Concat(PullRequestDiffViewModel.ThrowableCommands);
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand }.Concat(PullRequestDiffViewModel.ThrowableCommands);
 
-        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand};
+        public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _createNewPullRequestCommand, _setPullRequestDataCommand };
 
         public ICommand InitializeCommand => _initializeCommand;
         public ICommand CreateNewPullRequestCommand => _createNewPullRequestCommand;
@@ -239,7 +239,9 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task SetPullRequestData()
         {
             var pullRequest = await _gitClientService.GetPullRequestForBranches(SourceBranch.Name, DestinationBranch.Name);
-            PullRequestDiffViewModel.Commits = (await _gitClientService.GetCommitsRange(SourceBranch, DestinationBranch)).ToList();
+            var commits = (await _gitClientService.GetCommitsRange(SourceBranch, DestinationBranch)).ToList();
+
+            PullRequestDiffViewModel.AddCommits(commits);
 
             await CreateDiffContent(SourceBranch.Target.Hash, DestinationBranch.Target.Hash);
 
@@ -314,9 +316,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task CreateDiffContent(string fromCommit, string toCommit)
         {
             var fileDiffs = (await _gitClientService.GetCommitsDiff(fromCommit, toCommit)).ToList();
-            PullRequestDiffViewModel.FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
-            PullRequestDiffViewModel.FileDiffs = fileDiffs;
-
+            PullRequestDiffViewModel.AddFileDiffs(fileDiffs);
             PullRequestDiffViewModel.FromCommit = fromCommit;
             PullRequestDiffViewModel.ToCommit = toCommit;
         }

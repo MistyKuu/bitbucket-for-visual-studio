@@ -22,7 +22,6 @@ namespace GitClientVS.Infrastructure.ViewModels
     {
         private readonly IGitClientService _gitClientService;
         private readonly IUserInformationService _userInformationService;
-        private readonly ITreeStructureGenerator _treeStructureGenerator;
         private readonly IMessageBoxService _messageBoxService;
         private readonly IVsTools _vsTools;
         private string _errorMessage;
@@ -98,7 +97,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             ICommandsService commandsService,
             IUserInformationService userInformationService,
             IEventAggregatorService eventAggregatorService,
-            ITreeStructureGenerator treeStructureGenerator,
             IMessageBoxService messageBoxService,
             IDataNotifier dataNotifier,
             IPullRequestDiffViewModel pullRequestDiffViewModel
@@ -106,7 +104,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _gitClientService = gitClientService;
             _userInformationService = userInformationService;
-            _treeStructureGenerator = treeStructureGenerator;
             _messageBoxService = messageBoxService;
             _eventAggregatorService = eventAggregatorService;
             _dataNotifier = dataNotifier;
@@ -218,24 +215,20 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task CreateComments(long id)
         {
             var pqComments = (await _gitClientService.GetPullRequestComments(id)).ToList();
-            var inlineComments = pqComments.Where(comment => comment.IsInline).ToList();
-            var notInlineComments = pqComments.Where(x => !x.IsInline).ToList();
-
-            PullRequestDiffViewModel.InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments).ToList();
-            PullRequestDiffViewModel.CommentTree = _treeStructureGenerator.CreateCommentTree(notInlineComments).ToList();
-            PullRequestDiffViewModel.CommentsCount = notInlineComments.Count(x => !x.IsDeleted);
+            PullRequestDiffViewModel.AddComments(pqComments);
         }
 
         private async Task CreateCommits(long id)
         {
-            PullRequestDiffViewModel.Commits = (await _gitClientService.GetPullRequestCommits(id)).ToList();
+            var commits = (await _gitClientService.GetPullRequestCommits(id)).ToList();
+            PullRequestDiffViewModel.AddCommits(commits);
         }
 
         private async Task CreateDiffContent(long id)
         {
             var fileDiffs = (await _gitClientService.GetPullRequestDiff(id)).ToList();
-            PullRequestDiffViewModel.FilesTree = _treeStructureGenerator.CreateFileTree(fileDiffs).ToList();
-            PullRequestDiffViewModel.FileDiffs = fileDiffs;
+
+            PullRequestDiffViewModel.AddFileDiffs(fileDiffs);
         }
 
         private void CreatePullRequestCommands(GitPullRequest pullRequest)

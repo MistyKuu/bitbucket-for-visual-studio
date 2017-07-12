@@ -27,7 +27,6 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
         private IUserInformationService _userInfoService;
         private IMessageBoxService _messageBoxService;
-        private ITreeStructureGenerator _treeStructureGenerator;
         private IEventAggregatorService _eventAggregatorService;
         private ICommandsService _commandsService;
         private IVsTools _vsTools;
@@ -41,7 +40,6 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitService = MockRepository.GenerateMock<IGitService>();
             _userInfoService = MockRepository.GenerateMock<IUserInformationService>();
             _messageBoxService = MockRepository.GenerateMock<IMessageBoxService>();
-            _treeStructureGenerator = MockRepository.GenerateMock<ITreeStructureGenerator>();
             _eventAggregatorService = new EventAggregatorService();
             _commandsService = MockRepository.GenerateMock<ICommandsService>();
             _vsTools = MockRepository.GenerateMock<IVsTools>();
@@ -176,8 +174,6 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         {
             IEnumerable<GitCommit> commits = new List<GitCommit>() { new GitCommit() };
             IEnumerable<GitComment> comments = new List<GitComment>() { new GitComment() };
-            IEnumerable<ICommentTree> commentTree = new List<ICommentTree>() { new CommentTree() };
-            IEnumerable<ITreeFile> filesTree = new List<ITreeFile>() { new TreeDirectory("root") };
             IEnumerable<FileDiff> filesDiff = new List<FileDiff>() { new FileDiff() };
 
             _userInfoService.Stub(x => x.ConnectionData).Return(connectionData);
@@ -187,9 +183,8 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitClientService.Expect(x => x.GetPullRequestCommits(id)).Return(commits.FromTaskAsync());
             _gitClientService.Expect(x => x.GetPullRequestDiff(id)).Return(filesDiff.FromTaskAsync());
 
-            _treeStructureGenerator.Expect(x => x.CreateFileTree(filesDiff)).Return(filesTree);
-            _treeStructureGenerator.Expect(x => x.CreateCommentTree(Arg<IEnumerable<GitComment>>.Is.Anything, Arg<char>.Is.Anything))
-                .Return(commentTree);
+            _pullRequestDiffViewModel.Expect(x => x.AddFileDiffs(filesDiff));
+            _pullRequestDiffViewModel.Expect(x => x.AddComments(comments));
 
             return CreateSut();
         }
@@ -202,7 +197,6 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
                 _commandsService,
                 _userInfoService,
                 _eventAggregatorService,
-                _treeStructureGenerator,
                 _messageBoxService,
                 new DataNotifier(),
                 _pullRequestDiffViewModel

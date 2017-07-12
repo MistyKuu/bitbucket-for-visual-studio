@@ -12,14 +12,18 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         ReactiveCommand ReplyCommentCommand { get; }
         ReactiveCommand EditCommentCommand { get; }
         ReactiveCommand DeleteCommentCommand { get; }
-        List<ITreeFile> FilesTree { get; set; }
-        List<FileDiff> FileDiffs { get; set; }
-        List<GitCommit> Commits { get; set; }
-        List<ICommentTree> CommentTree { get; set; }
-        int CommentsCount { get; set; }
+        List<ITreeFile> FilesTree { get;}
+        List<FileDiff> FileDiffs { get; }
+        List<GitCommit> Commits { get; }
+        List<ICommentTree> CommentTree { get;  }
+        int CommentsCount { get; }
+        List<ICommentTree> InlineCommentTree { get; }
+        long Id { get; set; }
         string FromCommit { get; set; }
         string ToCommit { get; set; }
-        List<ICommentTree> InlineCommentTree { get; set; }
-        long Id { get; set; }
+
+        void AddFileDiffs(IEnumerable<FileDiff> fileDiffs);
+        void AddComments(IEnumerable<GitComment> pqComments);
+        void AddCommits(IEnumerable<GitCommit> commits);
     }
 }
