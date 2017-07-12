@@ -16,7 +16,7 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         List<FileDiff> FileDiffs { get; set; }
         List<GitCommit> Commits { get; set; }
         List<ICommentTree> CommentTree { get; set; }
-        int CommentsCount { get; }
+        int CommentsCount { get; set; }
         string FromCommit { get; set; }
         string ToCommit { get; set; }
         List<ICommentTree> InlineCommentTree { get; set; }

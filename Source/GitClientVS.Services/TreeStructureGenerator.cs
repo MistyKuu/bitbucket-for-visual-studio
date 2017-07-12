@@ -17,14 +17,12 @@ namespace GitClientVS.Services
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class TreeStructureGenerator : ITreeStructureGenerator
     {
-        public IEnumerable<ICommentTree> CreateCommentTree(IEnumerable<GitComment> gitComments, Theme currentTheme, char separator = '/')
+        public IEnumerable<ICommentTree> CreateCommentTree(IEnumerable<GitComment> gitComments, char separator = '/')
         {
             Dictionary<long, GitComment> searchableGitComments = new Dictionary<long, GitComment>();
 
             foreach (var comment in gitComments)
             {
-                WrapComment(comment, currentTheme);
-
                 searchableGitComments.Add(comment.Id, comment);
             }
 
@@ -161,12 +159,6 @@ namespace GitClientVS.Services
 
                 treeFile.IsExpanded = true;
             }
-        }
-
-        private void WrapComment(GitComment comment, Theme currentTheme)
-        {
-            var foregroundColor = currentTheme == Theme.Light ? "black" : "white";
-            comment.Content.DisplayHtml = $"<body style='background-color:transparent;color:{foregroundColor};font-size:13px'>" + comment.Content.Html + "</body>";
         }
     }
 }

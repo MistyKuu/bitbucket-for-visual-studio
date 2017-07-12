@@ -1,23 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using GitClientVS.Contracts.Models.GitClientModels;
+using ReactiveUI;
 
 namespace GitClientVS.Contracts.Models.Tree
 {
-    public class CommentTree : ICommentTree
+    public class CommentTree : ReactiveObject, ICommentTree
     {
-        public List<ICommentTree> Comments { get; set; }
+        public ReactiveList<ICommentTree> Comments { get; set; }
         public GitComment Comment { get; set; }
         public bool IsExpanded { get; set; }
+        public bool AllDeleted => Comments.All(x => x.AllDeleted) && Comment.IsDeleted;
 
         public CommentTree()
         {
-            Comments = new List<ICommentTree>();
+            Comments = new ReactiveList<ICommentTree>();
+            this.WhenAnyObservable(x => x.Comments.Changed).Subscribe(_ => { this.RaisePropertyChanged(nameof(AllDeleted)); });
+        }
+
+        public void DeleteCurrentComment()
+        {
+            Comment.IsDeleted = true;
+            this.RaisePropertyChanged(nameof(AllDeleted));
+        }
+
+        public void AddComment(GitComment comment)
+        {
+            Comments.Add(new CommentTree(comment));
         }
 
         public CommentTree(GitComment comment)
         {
             Comment = comment;
-            Comments = new List<ICommentTree>();
+            Comments = new ReactiveList<ICommentTree>();
             IsExpanded = true;
         }
     }

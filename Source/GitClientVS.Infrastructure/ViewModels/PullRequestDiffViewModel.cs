@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Helpers;
 using GitClientVS.Contracts.Interfaces.Services;
@@ -25,6 +26,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private List<FileDiff> _fileDiffs;
         private List<ICommentTree> _commentTree;
         private List<ICommentTree> _inlineCommentTree;
+        private int _commentsCount;
 
         public ReactiveCommand ShowDiffCommand { get; set; }
         public ReactiveCommand ReplyCommentCommand { get; set; }
@@ -55,11 +57,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             set => this.RaiseAndSetIfChanged(ref _commentTree, value);
         }
 
+        public int CommentsCount
+        {
+            get => _commentsCount;
+            set => this.RaiseAndSetIfChanged(ref _commentsCount, value);
+        }
+
         public long Id { get; set; }
         public string FromCommit { get; set; }
         public string ToCommit { get; set; }
 
-        public int CommentsCount { get; set; }
 
         public List<ICommentTree> InlineCommentTree
         {
@@ -72,22 +79,23 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _commandsService = commandsService;
             _gitClientService = gitClientService;
-            this.WhenAnyValue(x => x.CommentTree).Subscribe(_ => CommentsCount = CommentTree.Flatten(y => true, y => y.Comments)?.Count() ?? 0);
         }
 
         public void InitializeCommands()
         {
             ShowDiffCommand = ReactiveCommand.CreateFromTask<TreeFile>(ShowDiff);
-            ReplyCommentCommand = ReactiveCommand.CreateFromTask<GitComment>(ReplyToComment);
-            EditCommentCommand = ReactiveCommand.CreateFromTask<GitComment>(EditComment);
-            DeleteCommentCommand = ReactiveCommand.CreateFromTask<GitComment>(DeleteComment);
+            ReplyCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(ReplyToComment);
+            EditCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(EditComment);
+            DeleteCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(DeleteComment);
         }
 
         public string ErrorMessage { get; set; }
         public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { ShowDiffCommand, ReplyCommentCommand, EditCommentCommand, DeleteCommentCommand };
 
-        private async Task ReplyToComment(GitComment comment)
+        private async Task ReplyToComment(ICommentTree commentTree)
         {
+            var comment = commentTree.Comment;
+
             var newComment = new GitComment()
             {
                 Content = comment.Content,
@@ -98,18 +106,27 @@ namespace GitClientVS.Infrastructure.ViewModels
             };
 
             var responseComment = await _gitClientService.AddPullRequestComment(Id, newComment);
-            //todo this comment has to be added to comments list and update tree ^_^
+            responseComment.IsInline = comment.IsInline;
+
+            commentTree.AddComment(responseComment);
+
+            if (!comment.IsInline)
+                CommentsCount++;
         }
 
-        private Task EditComment(GitComment comment)
+        private Task EditComment(ICommentTree commentTreee)
         {
             throw new NotImplementedException();
         }
 
-        private async Task DeleteComment(GitComment comment)
+        private async Task DeleteComment(ICommentTree commentTree)
         {
+            var comment = commentTree.Comment;
             await _gitClientService.DeletePullRequestComment(Id, comment.Id, comment.Version);
-            //todo this comment has to be added to removed from comments list and update tree ^_^
+            commentTree.DeleteCurrentComment();
+
+            if (!comment.IsInline)
+                CommentsCount--;
         }
 
         private Task ShowDiff(TreeFile file)

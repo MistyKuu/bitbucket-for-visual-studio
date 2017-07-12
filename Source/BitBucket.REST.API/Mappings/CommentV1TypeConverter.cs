@@ -12,7 +12,7 @@ namespace BitBucket.REST.API.Mappings
                 Content = new Content() { Html = source.ContentRendered },
                 CreatedOn = source.CreatedOn,
                 UpdatedOn = source.UpdatedOn,
-                Id = source.CommentId,
+                Id = source.CommentId.Value,
                 IsDeleted = source.Deleted,
                 Parent = source.ParentId.HasValue ? new Parent() { Id = source.ParentId.Value } : null,
                 User = new User()

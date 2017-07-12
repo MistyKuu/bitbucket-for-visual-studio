@@ -142,19 +142,32 @@
                 <HierarchicalDataTemplate DataType="{x:Type tree:CommentTree}" ItemsSource="{Binding Comments}">
 
                     <StackPanel Orientation="Vertical" Margin="0,5,0,5">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                              <Style.Triggers>
+                                  <DataTrigger Binding="{Binding AllDeleted}">
+                                      <Setter Property="Visibility" Value="Collapsed"/>
+                                  </DataTrigger>
+                                  <DataTrigger Binding="{Binding Comment.IsDeleted}">
+                                      <Setter Property="Background" Value="Blue"/>
+                                  </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        
                         <StackPanel Orientation="Horizontal">
                             <Image VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
                         </StackPanel>
 
-                        <wpf:HtmlPanel Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.DisplayHtml}" Background="Transparent" Margin="30,-10,0,0" />
+                        <wpf:HtmlPanel Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.Html,Converter={converters:DisplayHtmlConverter}}" Background="Transparent" Margin="30,-10,0,0" />
 
                         <StackPanel Orientation="Horizontal">
-                            <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=AddCommand}" CommandParameter="{Binding Comment}"/>
+                            <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=AddCommand}" CommandParameter="{Binding}"/>
                             <Separator Style="{StaticResource VerticalSeparator}" />
-                            <Button Style="{StaticResource ActionLinkButton}" Content="Edit" Command="{Binding ElementName=CommentView,Path=EditCommand}" CommandParameter="{Binding Comment}"/>
+                            <Button Style="{StaticResource ActionLinkButton}" Content="Edit" Command="{Binding ElementName=CommentView,Path=EditCommand}" CommandParameter="{Binding}"/>
                             <Separator Style="{StaticResource VerticalSeparator}" />
-                            <Button Style="{StaticResource ActionLinkButton}" Content="Delete" Command="{Binding ElementName=CommentView,Path=DeleteCommand}" CommandParameter="{Binding Comment}"/>
+                            <Button Style="{StaticResource ActionLinkButton}" Content="Delete" Command="{Binding ElementName=CommentView,Path=DeleteCommand}" CommandParameter="{Binding}"/>
                             <Separator Style="{StaticResource VerticalSeparator}" />
                             <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.UpdatedOn}" Foreground="Gray"></TextBlock>
                         </StackPanel>

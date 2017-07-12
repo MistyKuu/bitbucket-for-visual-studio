@@ -29,7 +29,7 @@ namespace BitBucket.REST.API.Models.Standard
         [JsonProperty(PropertyName = "deleted")]
         public bool Deleted { get; set; }
         [JsonProperty(PropertyName = "comment_id")]
-        public long CommentId { get; set; }
+        public long? CommentId { get; set; }
         [JsonProperty(PropertyName = "author_info")]
         public AuthorInfoV1 AuthorInfo { get; set; }
     }

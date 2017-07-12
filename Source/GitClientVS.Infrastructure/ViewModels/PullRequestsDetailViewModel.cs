@@ -121,9 +121,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             yield return _eventAggregatorService.GetEvent<ThemeChangedEvent>().Subscribe(ev =>
             {
-                CurrentTheme = ev.Theme;//todo remove this logic , it shouldn't work like that
-                PullRequestDiffViewModel.CommentTree = _treeStructureGenerator.CreateCommentTree(PullRequestDiffViewModel.Comments.ToList(), CurrentTheme).ToList();
-                //todo should update inlinecommentree as well?
+                CurrentTheme = ev.Theme;
             });
 
             this.WhenAnyObservable(
@@ -221,9 +219,11 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var pqComments = (await _gitClientService.GetPullRequestComments(id)).ToList();
             var inlineComments = pqComments.Where(comment => comment.IsInline).ToList();
+            var notInlineComments = pqComments.Where(x => !x.IsInline).ToList();
 
-            PullRequestDiffViewModel.InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments, CurrentTheme).ToList();
-            PullRequestDiffViewModel.CommentTree = _treeStructureGenerator.CreateCommentTree(pqComments.Where(x => x.IsInline).ToList(), CurrentTheme).ToList();
+            PullRequestDiffViewModel.InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments).ToList();
+            PullRequestDiffViewModel.CommentTree = _treeStructureGenerator.CreateCommentTree(notInlineComments).ToList();
+            PullRequestDiffViewModel.CommentsCount = notInlineComments.Count(x => !x.IsDeleted);
         }
 
         private async Task CreateCommits(long id)

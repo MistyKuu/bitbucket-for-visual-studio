@@ -73,7 +73,6 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
             Assert.AreEqual(pullRequest, sut.PullRequest);
             Assert.IsNotEmpty(sut.PullRequestDiffViewModel.CommentTree);
-            Assert.IsNotEmpty(sut.PullRequestDiffViewModel.Comments);
             Assert.IsNotEmpty(sut.PullRequestDiffViewModel.Commits);
             Assert.IsNotEmpty(sut.PullRequestDiffViewModel.FileDiffs);
             Assert.IsNotEmpty(sut.PullRequestDiffViewModel.FilesTree);
@@ -189,7 +188,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitClientService.Expect(x => x.GetPullRequestDiff(id)).Return(filesDiff.FromTaskAsync());
 
             _treeStructureGenerator.Expect(x => x.CreateFileTree(filesDiff)).Return(filesTree);
-            _treeStructureGenerator.Expect(x => x.CreateCommentTree(Arg<IEnumerable<GitComment>>.Is.Anything, Arg<Theme>.Is.Anything, Arg<char>.Is.Anything))
+            _treeStructureGenerator.Expect(x => x.CreateCommentTree(Arg<IEnumerable<GitComment>>.Is.Anything, Arg<char>.Is.Anything))
                 .Return(commentTree);
 
             return CreateSut();
