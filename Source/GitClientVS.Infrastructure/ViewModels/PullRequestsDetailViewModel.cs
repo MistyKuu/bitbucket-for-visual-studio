@@ -202,7 +202,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             PullRequestDiffViewModel.FromCommit = PullRequest.SourceBranch.Target.Hash;
             PullRequestDiffViewModel.ToCommit = PullRequest.DestinationBranch.Target.Hash;
-            PullRequestDiffViewModel.Id = id;
         }
 
         private async Task GetPullRequestInfo(long id)
@@ -215,7 +214,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private async Task CreateComments(long id)
         {
             var pqComments = (await _gitClientService.GetPullRequestComments(id)).ToList();
-            PullRequestDiffViewModel.AddComments(pqComments);
+            PullRequestDiffViewModel.AddComments(id, pqComments);
         }
 
         private async Task CreateCommits(long id)

@@ -166,12 +166,12 @@
                 </ScrollViewer>
             </controls:MetroTabItem>
 
-            <controls:MetroTabItem Visibility="{Binding CommentTree,Converter={converters:NullToNonVisibilityConverter}}"  controls:ControlsHelper.HeaderFontSize="14" Header="{Binding CommentsCount,FallbackValue=0}"  HeaderStringFormat="{}Comments ({0})">
+            <controls:MetroTabItem Visibility="{Binding CommentViewModel.CommentTree,Converter={converters:NullToNonVisibilityConverter}}"  controls:ControlsHelper.HeaderFontSize="14" Header="{Binding CommentViewModel.CommentsCount,FallbackValue=0}"  HeaderStringFormat="{}Comments ({0})">
                <local:CommentsTreeView 
-                   CommentTree="{Binding CommentTree}" 
-                   DeleteCommand="{Binding DeleteCommentCommand}"
-                   AddCommand="{Binding ReplyCommentCommand}"
-                   EditCommand="{Binding EditCommentCommand}"
+                   CommentTree="{Binding CommentViewModel.CommentTree}" 
+                   DeleteCommand="{Binding CommentViewModel.DeleteCommentCommand}"
+                   ReplyCommand="{Binding CommentViewModel.ReplyCommentCommand}"
+                   EditCommand="{Binding CommentViewModel.EditCommentCommand}"
                    />
             </controls:MetroTabItem>
         </controls:MetroAnimatedTabControl>

@@ -53,15 +53,15 @@ namespace GitClientVS.UI.Controls
         }
 
 
-        public ICommand AddCommand
+        public ICommand ReplyCommand
         {
-            get { return (ICommand)GetValue(AddCommandProperty); }
-            set { SetValue(AddCommandProperty, value); }
+            get { return (ICommand)GetValue(ReplyCommandProperty); }
+            set { SetValue(ReplyCommandProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ReplyCommand.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty AddCommandProperty =
-            DependencyProperty.Register("AddCommand", typeof(ICommand), typeof(CommentsTreeView), new PropertyMetadata(null));
+        public static readonly DependencyProperty ReplyCommandProperty =
+            DependencyProperty.Register("ReplyCommand", typeof(ICommand), typeof(CommentsTreeView), new PropertyMetadata(null));
 
 
 

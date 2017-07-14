@@ -70,7 +70,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             sut.Initialize(id);
 
             Assert.AreEqual(pullRequest, sut.PullRequest);
-            Assert.IsNotEmpty(sut.PullRequestDiffViewModel.CommentTree);
+            Assert.IsNotEmpty(sut.PullRequestDiffViewModel.CommentViewModel.CommentTree);
             Assert.IsNotEmpty(sut.PullRequestDiffViewModel.Commits);
             Assert.IsNotEmpty(sut.PullRequestDiffViewModel.FileDiffs);
             Assert.IsNotEmpty(sut.PullRequestDiffViewModel.FilesTree);
@@ -184,7 +184,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitClientService.Expect(x => x.GetPullRequestDiff(id)).Return(filesDiff.FromTaskAsync());
 
             _pullRequestDiffViewModel.Expect(x => x.AddFileDiffs(filesDiff));
-            _pullRequestDiffViewModel.Expect(x => x.AddComments(comments));
+            _pullRequestDiffViewModel.Expect(x => x.AddComments(id,comments));
 
             return CreateSut();
         }
