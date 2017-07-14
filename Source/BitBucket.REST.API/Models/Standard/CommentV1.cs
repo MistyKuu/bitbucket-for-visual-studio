@@ -12,11 +12,11 @@ namespace BitBucket.REST.API.Models.Standard
         [JsonProperty("content")]
         public string Content { get; set; }
 
-        [JsonProperty("line_From")]
+        [JsonProperty("line_from")]
         public long? LineFrom { get; set; }
-        [JsonProperty("line_To")]
+        [JsonProperty("line_to")]
         public long? LineTo { get; set; }
-        [JsonProperty("fileName")]
+        [JsonProperty("filename")]
         public string FileName { get; set; }
         [JsonProperty("parent_id")]
         public long? ParentId { get; set; }
@@ -38,7 +38,7 @@ namespace BitBucket.REST.API.Models.Standard
     {
         [JsonProperty(PropertyName = "username")]
         public string UserName { get; set; }
-        [JsonProperty(PropertyName = "display_Name")]
+        [JsonProperty(PropertyName = "display_name")]
         public string DisplayName { get; set; }
         [JsonProperty(PropertyName = "avatar")]
         public string AvatarUrl { get; set; }

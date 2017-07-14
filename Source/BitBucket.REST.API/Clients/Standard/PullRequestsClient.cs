@@ -142,9 +142,9 @@ namespace BitBucket.REST.API.Clients.Standard
             var body = new CommentV1()
             {
                 Content = content,
-                LineFrom = lineFrom,
-                LineTo = lineTo,
-                FileName = fileName,
+                LineFrom = parentId != null ? null : lineFrom,
+                LineTo = parentId != null ? null : lineTo,
+                FileName = parentId != null ? null : fileName,
                 ParentId = parentId
             };
 

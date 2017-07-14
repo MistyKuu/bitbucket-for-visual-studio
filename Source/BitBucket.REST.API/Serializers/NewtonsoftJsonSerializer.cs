@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
@@ -7,6 +10,7 @@ namespace BitBucket.REST.API.Serializers
 {
     public class NewtonsoftJsonSerializer : IJsonSerializer
     {
+        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly Newtonsoft.Json.JsonSerializer _serializer;
 
         public NewtonsoftJsonSerializer()
@@ -20,7 +24,7 @@ namespace BitBucket.REST.API.Serializers
             };
         }
 
-   
+
         public NewtonsoftJsonSerializer(Newtonsoft.Json.JsonSerializer serializer)
         {
             ContentType = "application/json";
@@ -56,7 +60,15 @@ namespace BitBucket.REST.API.Serializers
             {
                 using (var jsonTextReader = new JsonTextReader(stringReader))
                 {
-                    return _serializer.Deserialize<T>(jsonTextReader);
+                    try
+                    {
+                        return _serializer.Deserialize<T>(jsonTextReader);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error($"Couldn't deserialize json: {json}. Error: {ex}");
+                        throw;
+                    }
                 }
             }
         }

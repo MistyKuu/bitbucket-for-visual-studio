@@ -98,7 +98,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var comment = commentTree.Comment;
             await _gitClientService.DeletePullRequestComment(PullRequestId, comment.Id, comment.Version);
-            await UpdateComments(PullRequestId);
+            await UpdateComments(PullRequestId); //todo temp solution just to make it work
         }
 
         public void InitializeCommands()
