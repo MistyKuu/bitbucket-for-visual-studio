@@ -77,9 +77,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             FilesTree = _treeStructureGenerator.CreateFileTree(FileDiffs).ToList();
         }
 
-        public void AddComments(long pullRequestId, IEnumerable<GitComment> pqComments)
+        public async Task UpdateComments(long pullRequestId)
         {
-            CommentViewModel.AddComments(pullRequestId, pqComments);
+            await CommentViewModel.UpdateComments(pullRequestId);
         }
 
         public void AddCommits(IEnumerable<GitCommit> commits)

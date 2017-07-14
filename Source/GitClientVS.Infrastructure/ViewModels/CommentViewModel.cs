@@ -54,11 +54,13 @@ namespace GitClientVS.Infrastructure.ViewModels
             _treeStructureGenerator = treeStructureGenerator;
         }
 
-        public void AddComments(long pullRequestId, IEnumerable<GitComment> pqComments)
+        public async Task UpdateComments(long pullRequestId)
         {
             PullRequestId = pullRequestId;
-            var inlineComments = pqComments.Where(comment => comment.IsInline).ToList();
-            var notInlineComments = pqComments.Where(x => !x.IsInline).ToList();
+            var comments = await _gitClientService.GetPullRequestComments(PullRequestId);
+
+            var inlineComments = comments.Where(comment => comment.IsInline).ToList();
+            var notInlineComments = comments.Where(x => !x.IsInline).ToList();
 
             InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments).ToList();
             CommentTree = _treeStructureGenerator.CreateCommentTree(notInlineComments).ToList();
@@ -79,8 +81,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             };
 
             await _gitClientService.AddPullRequestComment(PullRequestId, newComment);
-            var comments = await _gitClientService.GetPullRequestComments(PullRequestId);
-            AddComments(PullRequestId, comments);//todo temp solution just to make it work
+            await UpdateComments(PullRequestId);//todo temp solution just to make it work
         }
 
         private Task EditComment(ICommentTree commentTree)
@@ -97,8 +98,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var comment = commentTree.Comment;
             await _gitClientService.DeletePullRequestComment(PullRequestId, comment.Id, comment.Version);
-            var comments = await _gitClientService.GetPullRequestComments(PullRequestId);
-            AddComments(PullRequestId, comments);
+            await UpdateComments(PullRequestId);
         }
 
         public void InitializeCommands()
@@ -111,6 +111,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
         public string ErrorMessage { get; set; }
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { ReplyCommentCommand, EditCommentCommand, DeleteCommentCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { ReplyCommentCommand, EditCommentCommand, DeleteCommentCommand, AddCommentCommand };
     }
 }

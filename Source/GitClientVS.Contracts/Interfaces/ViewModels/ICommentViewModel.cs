@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Contracts.Models.Tree;
 using ReactiveUI;
@@ -17,6 +18,6 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         long PullRequestId { get; }
         List<ICommentTree> InlineCommentTree { get; }
 
-        void AddComments(long pullRequestId, IEnumerable<GitComment> pqComments);
+        Task UpdateComments(long pullRequestId);
     }
 }

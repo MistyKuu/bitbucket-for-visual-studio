@@ -213,8 +213,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task CreateComments(long id)
         {
-            var pqComments = (await _gitClientService.GetPullRequestComments(id)).ToList();
-            PullRequestDiffViewModel.AddComments(id, pqComments);
+            await PullRequestDiffViewModel.UpdateComments(id);
         }
 
         private async Task CreateCommits(long id)

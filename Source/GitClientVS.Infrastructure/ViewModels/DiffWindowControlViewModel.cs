@@ -136,7 +136,10 @@ namespace GitClientVS.Infrastructure.ViewModels
                                            .Where(x => x.Comment.Path == FileDiff.From || x.Comment.Path == FileDiff.To)
                                            .ToList() ?? new List<ICommentTree>();
 
-            var fileLevelComment = topLevelFileComments.FirstOrDefault(x => x.Comment.From == null && x.Comment.To == null);
+            var fileLevelComment = topLevelFileComments
+                .Where(x=>!x.Comment.IsDeleted)
+                .FirstOrDefault(x => x.Comment.From == null && x.Comment.To == null);
+
             if (fileLevelComment != null)
                 DisplayedModels.Add(fileLevelComment);
 

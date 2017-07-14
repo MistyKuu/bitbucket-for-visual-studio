@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Contracts.Models.Tree;
 using ParseDiff;
@@ -18,6 +19,6 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
 
         void AddFileDiffs(IEnumerable<FileDiff> fileDiffs);
         void AddCommits(IEnumerable<GitCommit> commits);
-        void AddComments(long pullRequestId, IEnumerable<GitComment> pqComments);
+        Task UpdateComments(long pullRequestId);
     }
 }

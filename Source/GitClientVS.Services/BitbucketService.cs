@@ -154,7 +154,7 @@ namespace GitClientVS.Services
             return response.MapTo<GitComment>();
         }
 
-        public async Task DeletePullRequestComment(long pullRequestId, long commentId,long version)
+        public async Task DeletePullRequestComment(long pullRequestId, long commentId, long version)
         {
             await _bitbucketClient.PullRequestsClient.DeletePullRequestComment(
                 _gitWatcher.ActiveRepo.Name,
@@ -357,11 +357,10 @@ namespace GitClientVS.Services
                 }
                 while (current != null);
 
-                var firstAncestor = ancestors.LastOrDefault(x => !x.IsDeleted);
+                var firstAncestor = ancestors.Last();
 
-                if (firstAncestor != null)
-                    foreach (var ancestor in ancestors)
-                        ancestor.Inline = firstAncestor.Inline;
+                foreach (var ancestor in ancestors)
+                    ancestor.Inline = firstAncestor.Inline;
             }
         }
 
