@@ -38,7 +38,6 @@
                         DeleteCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.DeleteCommentCommand}"
                         ReplyCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.ReplyCommentCommand}"
                         EditCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.EditCommentCommand}"
-                        AddCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.AddCommentCommand}"
                         />
                     </Grid>
 

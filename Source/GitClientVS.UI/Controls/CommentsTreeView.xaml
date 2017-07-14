@@ -164,8 +164,6 @@
                                                     <wpf:HtmlPanel Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.Html,Converter={converters:DisplayHtmlConverter}}" Background="Transparent" Margin="30,-10,0,0" />
 
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Button Style="{StaticResource ActionLinkButton}" Content="Add" Command="{Binding ElementName=CommentView,Path=AddCommand}" CommandParameter="{Binding}"/>
-                                                        <Separator Style="{StaticResource VerticalSeparator}" />
                                                         <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=ReplyCommand}" CommandParameter="{Binding}"/>
                                                         <Separator Style="{StaticResource VerticalSeparator}" />
                                                         <Button Style="{StaticResource ActionLinkButton}" Content="Edit" Command="{Binding ElementName=CommentView,Path=EditCommand}" CommandParameter="{Binding}"/>

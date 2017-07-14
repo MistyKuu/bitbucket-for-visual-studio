@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+using BitBucket.REST.API.Models.Standard;
 using GitClientVS.Contracts.Interfaces;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
@@ -21,6 +22,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private int _commentsCount;
         private readonly IGitClientService _gitClientService;
         private readonly ITreeStructureGenerator _treeStructureGenerator;
+        private string _addCommentText;
 
         public ReactiveCommand ReplyCommentCommand { get; private set; }
         public ReactiveCommand EditCommentCommand { get; private set; }
@@ -39,6 +41,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get => _commentsCount;
             private set => this.RaiseAndSetIfChanged(ref _commentsCount, value);
+        }
+
+        public string AddCommentText
+        {
+            get => _addCommentText;
+            set => this.RaiseAndSetIfChanged(ref _addCommentText, value);
         }
 
         public List<ICommentTree> InlineCommentTree
@@ -89,9 +97,20 @@ namespace GitClientVS.Infrastructure.ViewModels
             throw new NotImplementedException();
         }
 
-        private Task<ICommentTree> AddComment(ICommentTree commentTree)
+        private async Task AddComment(Inline inline)
         {
-            throw new NotImplementedException();
+            var comment = new GitComment()
+            {
+                Content = new GitCommentContent() { Html = AddCommentText },
+                IsInline = inline != null,
+                Path = inline?.Path,
+                From = inline?.From,
+                To = inline?.To
+            };
+
+            await _gitClientService.AddPullRequestComment(PullRequestId, comment);
+            await UpdateComments(PullRequestId); //todo temp solution just to make it work
+            AddCommentText = string.Empty;
         }
 
         private async Task DeleteComment(ICommentTree commentTree)
@@ -106,7 +125,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             ReplyCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(ReplyToComment);
             EditCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(EditComment);
             DeleteCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(DeleteComment);
-            AddCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(AddComment);
+            AddCommentCommand = ReactiveCommand.CreateFromTask<Inline>(AddComment);
         }
 
 

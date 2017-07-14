@@ -12,6 +12,7 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         ReactiveCommand EditCommentCommand { get; }
         ReactiveCommand DeleteCommentCommand { get; }
         ReactiveCommand AddCommentCommand { get; }
+        string AddCommentText { get; set; }
 
         List<ICommentTree> CommentTree { get; }
         int CommentsCount { get; }
