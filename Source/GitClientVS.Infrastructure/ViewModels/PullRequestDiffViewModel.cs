@@ -94,7 +94,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 FromCommit = FromCommit,
                 ToCommit = ToCommit,
                 TreeFile = file,
-                InlineCommentTree = CommentViewModel.InlineCommentTree
+                CommentViewModel = CommentViewModel
             };
 
             _commandsService.ShowDiffWindow(fileDiffModel, file.FileDiff.Id);

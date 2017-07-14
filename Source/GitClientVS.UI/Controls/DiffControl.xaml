@@ -9,8 +9,11 @@
              xmlns:parseDiff="clr-namespace:ParseDiff;assembly=ParseDiff"
              xmlns:tree="clr-namespace:GitClientVS.Contracts.Models.Tree;assembly=GitClientVS.Contracts"
              xmlns:controls="clr-namespace:GitClientVS.UI.Controls"
+             xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" x:Name="CurrentControl">
+             d:DesignHeight="300" d:DesignWidth="300" x:Name="CurrentControl"
+             d:DataContext="{d:DesignInstance viewModels:DiffWindowControlViewModel,IsDesignTimeCreatable=False}"
+             >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -30,7 +33,13 @@
                         <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                             
-                    <controls:CommentsTreeView SingleCommentTree="{Binding}"/>
+                    <controls:CommentsTreeView 
+                        SingleCommentTree="{Binding}"
+                        DeleteCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.DeleteCommentCommand}"
+                        ReplyCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.ReplyCommentCommand}"
+                        EditCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.EditCommentCommand}"
+                        AddCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.AddCommentCommand}"
+                        />
                     </Grid>
 
                 </Border>
@@ -46,8 +55,8 @@
                     <avalonedit:TextEditor x:Name="TextEditorControl" 
                                            diffControlUtils:AvalonEditBehaviour.TextBinding="{Binding Text}" 
                                            diffControlUtils:AvalonEditBehaviour.IsDiffEditor="True"
-                                           diffControlUtils:AvalonEditBehaviour.FileDiff="{Binding ElementName=CurrentControl,Path=FileDiff}"
-                                           diffControlUtils:AvalonEditBehaviour.Theme="{Binding ElementName=CurrentControl,Path=Theme}"
+                                           diffControlUtils:AvalonEditBehaviour.FileDiff="{Binding ElementName=CurrentControl,Path=DataContext.FileDiff}"
+                                           diffControlUtils:AvalonEditBehaviour.Theme="{Binding ElementName=CurrentControl,Path=DataContext.CurrentTheme}"
                                            HorizontalAlignment="Stretch"
                                            VerticalScrollBarVisibility="Hidden"
                                            HorizontalScrollBarVisibility="Hidden"

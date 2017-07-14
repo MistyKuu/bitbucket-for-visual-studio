@@ -107,9 +107,6 @@
                                     <Trigger Property="IsExpanded" Value="false">
                                         <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
                                     </Trigger>
-                                    <DataTrigger Binding="{Binding AllDeleted}" Value="True">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
 
                                     <Trigger Property="IsSelected" Value="true">
                                         <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
@@ -140,6 +137,9 @@
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
+                        <DataTrigger Binding="{Binding AllDeleted}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
                 <HierarchicalDataTemplate DataType="{x:Type tree:CommentTree}" ItemsSource="{Binding Comments}">

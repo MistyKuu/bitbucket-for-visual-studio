@@ -19,17 +19,6 @@ using ReactiveUI;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
-    public class DiffViewDisplayedModel
-    {
-        public object Item { get; set; }
-
-        public DiffViewDisplayedModel(object item)
-        {
-            Item = item;
-        }
-    }
-
-
     [Export(typeof(IDiffWindowControlViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class DiffWindowControlViewModel : ViewModelBase, IDiffWindowControlViewModel
@@ -49,6 +38,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private Theme _currentTheme;
         private FileDiffModel _fileDiffModel;
         private ObservableCollection<object> _displayedModels;
+        private ICommentViewModel _commentViewModel;
 
 
         public ICommand ShowSideBySideDiffCommand => _showSideBySideDiffCommand;
@@ -89,6 +79,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             set => this.RaiseAndSetIfChanged(ref _fileDiff, value);
         }
 
+        public ICommentViewModel CommentViewModel
+        {
+            get => _commentViewModel;
+            set => this.RaiseAndSetIfChanged(ref _commentViewModel, value);
+        }
+
         public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _showSideBySideDiffCommand, _viewFileCommand };
         public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _showSideBySideDiffCommand, _viewFileCommand };
 
@@ -97,7 +93,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             IEventAggregatorService eventAggregator,
             IUserInformationService userInfoService,
             IGitClientService gitClientService,
-            ICommandsService commandsService)
+            ICommandsService commandsService
+            )
         {
             _eventAggregator = eventAggregator;
             _userInfoService = userInfoService;
@@ -109,6 +106,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         protected override IEnumerable<IDisposable> SetupObservables()
         {
             yield return _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(ev => CurrentTheme = ev.Theme);
+            this.WhenAnyValue(x => x.CommentViewModel, x => x.CommentViewModel.InlineCommentTree).Subscribe(_ => PrepareDiffModels());
         }
 
         public void InitializeCommands()
@@ -122,8 +120,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _fileDiffModel = fileDiffModel;
             FileDiff = fileDiffModel.TreeFile.FileDiff;
-
-            PrepareDiffModels();
+            CommentViewModel = fileDiffModel.CommentViewModel;
 
             return Task.CompletedTask;
         }
@@ -132,9 +129,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             DisplayedModels = new ObservableCollection<object>();
 
-
             var topLevelFileComments = _fileDiffModel
+                                           .CommentViewModel
                                            .InlineCommentTree?
+                                           .Where(x => !x.AllDeleted)
                                            .Where(x => x.Comment.Path == FileDiff.From || x.Comment.Path == FileDiff.To)
                                            .ToList() ?? new List<ICommentTree>();
 
@@ -163,8 +161,8 @@ namespace GitClientVS.Infrastructure.ViewModels
 
                 DisplayedModels.Add(firstChunk);
 
-                foreach(var comment in currentComments)
-                DisplayedModels.Add(comment);
+                foreach (var comment in currentComments)
+                    DisplayedModels.Add(comment);
 
                 chunk = secondChunk;
             }
