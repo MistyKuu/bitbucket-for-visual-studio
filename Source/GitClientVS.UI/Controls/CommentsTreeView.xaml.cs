@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GitClientVS.Contracts.Models.Tree;
+using ReactiveUI;
 
 namespace GitClientVS.UI.Controls
 {
@@ -76,8 +77,6 @@ namespace GitClientVS.UI.Controls
         public static readonly DependencyProperty EditCommandProperty =
             DependencyProperty.Register("EditCommand", typeof(ICommand), typeof(CommentsTreeView), new PropertyMetadata(null));
 
-
-
         public ICommand DeleteCommand
         {
             get { return (ICommand)GetValue(DeleteCommandProperty); }
@@ -88,6 +87,15 @@ namespace GitClientVS.UI.Controls
         public static readonly DependencyProperty DeleteCommandProperty =
             DependencyProperty.Register("DeleteCommand", typeof(ICommand), typeof(CommentsTreeView), new PropertyMetadata(null));
 
+        public ICommand AddCommand
+        {
+            get { return (ICommand)GetValue(AddCommandProperty); }
+            set { SetValue(AddCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for AddCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty AddCommandProperty =
+            DependencyProperty.Register("AddCommand", typeof(ICommand), typeof(CommentsTreeView), new PropertyMetadata(null));
 
         public CommentsTreeView()
         {

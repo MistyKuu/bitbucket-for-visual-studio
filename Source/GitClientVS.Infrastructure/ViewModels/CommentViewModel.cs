@@ -25,6 +25,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ReactiveCommand ReplyCommentCommand { get; private set; }
         public ReactiveCommand EditCommentCommand { get; private set; }
         public ReactiveCommand DeleteCommentCommand { get; private set; }
+        public ReactiveCommand AddCommentCommand { get; private set; }
 
         public long PullRequestId { get; private set; }
 
@@ -82,7 +83,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             AddComments(PullRequestId, comments);//todo temp solution just to make it work
         }
 
-        private Task EditComment(ICommentTree commentTreee)
+        private Task EditComment(ICommentTree commentTree)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Task<ICommentTree> AddComment(ICommentTree commentTree)
         {
             throw new NotImplementedException();
         }
@@ -100,7 +106,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             ReplyCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(ReplyToComment);
             EditCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(EditComment);
             DeleteCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(DeleteComment);
+            AddCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(AddComment);
         }
+
 
         public string ErrorMessage { get; set; }
         public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { ReplyCommentCommand, EditCommentCommand, DeleteCommentCommand };

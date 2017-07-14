@@ -172,6 +172,7 @@
                    DeleteCommand="{Binding CommentViewModel.DeleteCommentCommand}"
                    ReplyCommand="{Binding CommentViewModel.ReplyCommentCommand}"
                    EditCommand="{Binding CommentViewModel.EditCommentCommand}"
+                   AddCommand="{Binding CommentViewModel.AddCommentCommand}"
                    />
             </controls:MetroTabItem>
         </controls:MetroAnimatedTabControl>
