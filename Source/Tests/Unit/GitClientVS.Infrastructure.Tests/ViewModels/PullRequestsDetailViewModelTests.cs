@@ -184,7 +184,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitClientService.Expect(x => x.GetPullRequestDiff(id)).Return(filesDiff.FromTaskAsync());
 
             _pullRequestDiffViewModel.Expect(x => x.AddFileDiffs(filesDiff));
-            _pullRequestDiffViewModel.Expect(x => x.UpdateComments(id,comments));
+            _pullRequestDiffViewModel.Expect(x => x.UpdateComments(id)).Return(comments.FromTaskAsync());
 
             return CreateSut();
         }

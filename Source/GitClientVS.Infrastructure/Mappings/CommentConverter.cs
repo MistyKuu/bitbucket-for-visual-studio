@@ -18,9 +18,12 @@ namespace GitClientVS.Infrastructure.Mappings
                 Id = source.Id,
                 Parent = source.Parent.MapTo<GitCommentParent>(),
                 User = source.User.MapTo<GitUser>(),
-                From = source.Inline?.From,
-                To = source.Inline?.To,
-                Path = source.Inline?.Path,
+                Inline = source.Inline != null ? new GitCommentInline()
+                {
+                    From = source.Inline.From,
+                    To = source.Inline.To,
+                    Path = source.Inline.Path,
+                } : null,
                 IsInline = source.Inline != null,
                 IsDeleted = source.IsDeleted,
                 Version = source.Version

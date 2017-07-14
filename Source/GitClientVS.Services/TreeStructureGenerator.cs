@@ -73,9 +73,7 @@ namespace GitClientVS.Services
                     User = comment.User,
                     UpdatedOn = comment.UpdatedOn,
                     IsInline = comment.IsInline,
-                    Path = comment.Path,
-                    From = comment.From,
-                    To = comment.To,
+                    Inline = comment.Inline,
                     IsDeleted = comment.IsDeleted
                 }));
             }

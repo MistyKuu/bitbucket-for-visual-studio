@@ -10,6 +10,8 @@
              xmlns:tree="clr-namespace:GitClientVS.Contracts.Models.Tree;assembly=GitClientVS.Contracts"
              xmlns:controls="clr-namespace:GitClientVS.UI.Controls"
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
+             xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
+             xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" x:Name="CurrentControl"
              d:DataContext="{d:DesignInstance viewModels:DiffWindowControlViewModel,IsDesignTimeCreatable=False}"
@@ -23,17 +25,22 @@
     </UserControl.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <Grid.Resources>
 
             <DataTemplate DataType="{x:Type tree:CommentTree}">
                 <Border Margin="5" BorderThickness="0.2" BorderBrush="Black" Padding="5">
                     <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                            
-                    <controls:CommentsTreeView 
+
+                        <controls:CommentsTreeView 
                         SingleCommentTree="{Binding}"
                         DeleteCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.DeleteCommentCommand}"
                         ReplyCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.ReplyCommentCommand}"
@@ -70,13 +77,20 @@
                 </Grid>
 
             </DataTemplate>
+            <gitClientModels:GitCommentInline x:Key="FileInline" Path="{Binding FileDiff.DisplayFileName}"/>
         </Grid.Resources>
 
 
         <TextBlock Visibility="Collapsed" x:Name="Tb"/>
         <!--TODO A HACK TO USE TB FOREGROUND-->
 
-        <ScrollViewer PreviewMouseWheel="UIElement_OnPreviewMouseWheel">
+        <controls:AddCommentView Grid.Row="0" 
+                              AddCommand="{Binding CommentViewModel.AddCommentCommand}"
+                              CurrentText="{bindings:ValidatedBinding CommentViewModel.AddCommentText, Mode=TwoWay}"
+                             Inline="{StaticResource FileInline}"
+        />
+
+        <ScrollViewer Grid.Row="1" PreviewMouseWheel="UIElement_OnPreviewMouseWheel">
             <ItemsControl ItemsSource="{Binding DisplayedModels}">
                 <ItemsControl.Resources>
                     <Style TargetType="{x:Type ListBoxItem}">

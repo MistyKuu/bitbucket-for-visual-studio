@@ -117,6 +117,9 @@
     <Compile Include="Controls\BranchIcon.xaml.cs">
       <DependentUpon>BranchIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AddCommentView.xaml.cs">
+      <DependentUpon>AddCommentView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CustomizedListItem.xaml.cs">
       <DependentUpon>CustomizedListItem.xaml</DependentUpon>
     </Compile>
@@ -252,6 +255,10 @@
     <Page Include="Controls\BranchIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AddCommentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\CustomizedListItem.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -175,25 +175,10 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBox controls:TextBoxHelper.Watermark="What do you want to say?" AcceptsReturn="True" MinLines="3" Text="{Binding CommentViewModel.AddCommentText,Mode=TwoWay}"/>
-
-                        <Button Grid.Row="1" Margin="5" 
-                                Command="{Binding CommentViewModel.AddCommentCommand}"
-                                CommandParameter="{x:Null}"
-                                Content="Comment" 
-                                HorizontalAlignment="Left"
-                                >
-                            <Button.Style>
-                                <Style TargetType="Button" BasedOn="{StaticResource MetroFlatButton}"/>
-                            </Button.Style>
-                        </Button>
-                    </Grid>
-
+                    <local:AddCommentView Grid.Row="0" 
+                                          AddCommand="{Binding CommentViewModel.AddCommentCommand}"
+                                          CurrentText="{bindings:ValidatedBinding CommentViewModel.AddCommentText,Mode=TwoWay}"
+                                          />
 
                     <local:CommentsTreeView  Grid.Row="1"
                         CommentTree="{Binding CommentViewModel.CommentTree}" 

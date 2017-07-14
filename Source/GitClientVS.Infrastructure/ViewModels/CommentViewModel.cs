@@ -83,9 +83,13 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 Content = comment.Content,
                 Parent = new GitCommentParent() { Id = comment.Id },
-                From = comment.From,
-                To = comment.To,
-                Path = comment.Path
+                Inline = comment.Inline != null ? new GitCommentInline()
+                {
+
+                    Path = comment.Inline.Path,
+                    From = comment.Inline.From,
+                    To = comment.Inline.To
+                } : null
             };
 
             await _gitClientService.AddPullRequestComment(PullRequestId, newComment);
@@ -97,15 +101,19 @@ namespace GitClientVS.Infrastructure.ViewModels
             throw new NotImplementedException();
         }
 
-        private async Task AddComment(Inline inline)
+        private async Task AddComment(GitCommentInline inline)
         {
             var comment = new GitComment()
             {
                 Content = new GitCommentContent() { Html = AddCommentText },
                 IsInline = inline != null,
-                Path = inline?.Path,
-                From = inline?.From,
-                To = inline?.To
+                Inline = inline != null ? new GitCommentInline()
+                {
+
+                    Path = inline.Path,
+                    From = inline.From,
+                    To = inline.To
+                } : null
             };
 
             await _gitClientService.AddPullRequestComment(PullRequestId, comment);
@@ -125,7 +133,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             ReplyCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(ReplyToComment);
             EditCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(EditComment);
             DeleteCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(DeleteComment);
-            AddCommentCommand = ReactiveCommand.CreateFromTask<Inline>(AddComment);
+            AddCommentCommand = ReactiveCommand.CreateFromTask<GitCommentInline>(AddComment);
         }
 
 

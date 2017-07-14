@@ -11,12 +11,17 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public GitCommentContent Content { get; set; }
         public long Id { get; set; }
         public GitCommentParent Parent { get; set; }
+        public GitCommentInline Inline { get; set; }
         public bool IsInline { get; set; }
+        public bool IsDeleted { get; set; }
+        public long Version { get; set; }
+    }
+
+    public class GitCommentInline
+    {
         public long? From { get; set; }
         public long? To { get; set; }
         public string Path { get; set; }
-        public bool IsDeleted { get; set; }
-        public long Version { get; set; }
     }
 
     public class GitCommentParent

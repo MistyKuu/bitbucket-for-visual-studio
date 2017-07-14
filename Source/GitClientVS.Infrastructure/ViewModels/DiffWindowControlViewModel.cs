@@ -133,12 +133,12 @@ namespace GitClientVS.Infrastructure.ViewModels
                                            .CommentViewModel
                                            .InlineCommentTree?
                                            .Where(x => !x.AllDeleted)
-                                           .Where(x => x.Comment.Path == FileDiff.From || x.Comment.Path == FileDiff.To)
+                                           .Where(x => x.Comment.Inline.Path == FileDiff.From || x.Comment.Inline.Path == FileDiff.To)
                                            .ToList() ?? new List<ICommentTree>();
 
             var fileLevelComment = topLevelFileComments
                 .Where(x=>!x.Comment.IsDeleted)
-                .FirstOrDefault(x => x.Comment.From == null && x.Comment.To == null);
+                .FirstOrDefault(x => x.Comment.Inline.From == null && x.Comment.Inline.To == null);
 
             if (fileLevelComment != null)
                 DisplayedModels.Add(fileLevelComment);
@@ -146,7 +146,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             foreach (var chunk in FileDiff.Chunks)
             {
                 var splitChanges = chunk.Changes.Where(
-                    x => topLevelFileComments.Any(ch => ch.Comment.From == x.OldIndex && ch.Comment.To == x.NewIndex)).ToList();
+                    x => topLevelFileComments.Any(ch => ch.Comment.Inline.From == x.OldIndex && ch.Comment.Inline.To == x.NewIndex)).ToList();
 
                 SplitChunkByIndexes(chunk, splitChanges, topLevelFileComments);
             }
@@ -157,7 +157,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             foreach (var change in splitChanges)
             {
                 var currentChangeIndex = chunk.Changes.IndexOf(change);
-                var currentComments = topLevelFileComments.Where(x => x.Comment.From == change.OldIndex && x.Comment.To == change.NewIndex).ToList();
+                var currentComments = topLevelFileComments.Where(x => x.Comment.Inline.From == change.OldIndex && x.Comment.Inline.To == change.NewIndex).ToList();
 
                 var firstChunk = new ChunkDiff { Changes = chunk.Changes.Take(currentChangeIndex + 1).ToList() };
                 var secondChunk = new ChunkDiff { Changes = chunk.Changes.Skip(currentChangeIndex + 1).ToList() };
