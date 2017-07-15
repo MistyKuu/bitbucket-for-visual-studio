@@ -83,13 +83,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 Content = comment.Content,
                 Parent = new GitCommentParent() { Id = comment.Id },
-                Inline = comment.Inline != null ? new GitCommentInline()
-                {
-
-                    Path = comment.Inline.Path,
-                    From = comment.Inline.From,
-                    To = comment.Inline.To
-                } : null
+                Inline = comment.Inline !=null ? new GitCommentInline() {Path = comment.Inline.Path} : null
             };
 
             await _gitClientService.AddPullRequestComment(PullRequestId, newComment);

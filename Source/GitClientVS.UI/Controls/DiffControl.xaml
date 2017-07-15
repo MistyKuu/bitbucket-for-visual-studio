@@ -12,6 +12,7 @@
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
+             xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" x:Name="CurrentControl"
              d:DataContext="{d:DesignInstance viewModels:DiffWindowControlViewModel,IsDesignTimeCreatable=False}"
@@ -77,7 +78,6 @@
                 </Grid>
 
             </DataTemplate>
-            <gitClientModels:GitCommentInline x:Key="FileInline" Path="{Binding FileDiff.DisplayFileName}"/>
         </Grid.Resources>
 
 
@@ -87,8 +87,10 @@
         <controls:AddCommentView Grid.Row="0" 
                               AddCommand="{Binding CommentViewModel.AddCommentCommand}"
                               CurrentText="{bindings:ValidatedBinding CommentViewModel.AddCommentText, Mode=TwoWay}"
-                             Inline="{StaticResource FileInline}"
-        />
+                                 Inline="{Binding FileLevelInline}"
+                                 >
+
+        </controls:AddCommentView>
 
         <ScrollViewer Grid.Row="1" PreviewMouseWheel="UIElement_OnPreviewMouseWheel">
             <ItemsControl ItemsSource="{Binding DisplayedModels}">

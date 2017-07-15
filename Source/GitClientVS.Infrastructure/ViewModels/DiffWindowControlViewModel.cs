@@ -39,6 +39,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private FileDiffModel _fileDiffModel;
         private ObservableCollection<object> _displayedModels;
         private ICommentViewModel _commentViewModel;
+        private GitCommentInline _fileLevelInline;
 
 
         public ICommand ShowSideBySideDiffCommand => _showSideBySideDiffCommand;
@@ -85,6 +86,12 @@ namespace GitClientVS.Infrastructure.ViewModels
             set => this.RaiseAndSetIfChanged(ref _commentViewModel, value);
         }
 
+        public GitCommentInline FileLevelInline
+        {
+            get => _fileLevelInline;
+            set => this.RaiseAndSetIfChanged(ref _fileLevelInline, value);
+        }
+
         public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { _initializeCommand, _showSideBySideDiffCommand, _viewFileCommand };
         public IEnumerable<ReactiveCommand> LoadingCommands => new[] { _initializeCommand, _showSideBySideDiffCommand, _viewFileCommand };
 
@@ -120,6 +127,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             _fileDiffModel = fileDiffModel;
             FileDiff = fileDiffModel.TreeFile.FileDiff;
+            FileLevelInline = new GitCommentInline() { Path = FileDiff.DisplayFileName };
+
             CommentViewModel = fileDiffModel.CommentViewModel;
 
             return Task.CompletedTask;
@@ -137,8 +146,9 @@ namespace GitClientVS.Infrastructure.ViewModels
                                            .ToList() ?? new List<ICommentTree>();
 
             var fileLevelComment = topLevelFileComments
-                .Where(x=>!x.Comment.IsDeleted)
-                .FirstOrDefault(x => x.Comment.Inline.From == null && x.Comment.Inline.To == null);
+                .Where(x => !x.Comment.IsDeleted)
+                .Where(x => x.Comment.Inline.From == null && x.Comment.Inline.To == null)
+                .ToList();
 
             if (fileLevelComment != null)
                 DisplayedModels.Add(fileLevelComment);

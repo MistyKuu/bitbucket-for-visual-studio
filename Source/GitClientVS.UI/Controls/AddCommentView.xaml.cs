@@ -54,7 +54,7 @@ namespace GitClientVS.UI.Controls
 
         // Using a DependencyProperty as the backing store for Inline.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty InlineProperty =
-            DependencyProperty.Register("Inline", typeof(Inline), typeof(AddCommentView), new PropertyMetadata(null));
+            DependencyProperty.Register("Inline", typeof(GitCommentInline), typeof(AddCommentView), new PropertyMetadata(null));
 
 
 
