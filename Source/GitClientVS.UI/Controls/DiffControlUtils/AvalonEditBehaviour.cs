@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using GitClientVS.Contracts.Models;
 using ICSharpCode.AvalonEdit;
@@ -95,6 +96,7 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
         {
             TextEditor textEditor = d as TextEditor;
             // textEditor.TextArea.TextView.LineTransformers.Add(new DiffLineColorizer((ChunkDiff)textEditor.DataContext));
+            textEditor.TextArea.LeftMargins.Add(new Button(){Content = "TEST"});
             textEditor.TextArea.LeftMargins.Add(new TwoColumnMargin());
             textEditor.TextArea.LeftMargins.Add(DottedLineMargin.Create());
 

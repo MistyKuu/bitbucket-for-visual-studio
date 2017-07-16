@@ -9,6 +9,10 @@ using ParseDiff;
 
 namespace GitClientVS.UI.Controls.DiffControlUtils
 {
+    public class TestMargin : AbstractMargin
+    {
+    }
+
     public class TwoColumnMargin : LineNumberMargin
     {
         private double _emSize;
