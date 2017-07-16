@@ -139,6 +139,18 @@ namespace GitClientVS.Services
             return await _bitbucketClient.PullRequestsClient.GetFileContent(_gitWatcher.ActiveRepo.Name, _gitWatcher.ActiveRepo.Owner, hash, path);
         }
 
+        public async Task<GitComment> EditPullRequestComment(long id, GitComment comment)
+        {
+            var response = await _bitbucketClient.PullRequestsClient.EditPullRequestComment(
+                _gitWatcher.ActiveRepo.Name,
+                _gitWatcher.ActiveRepo.Owner,
+                id,
+                comment.Id,
+                comment.Content.Html);
+
+            return response.MapTo<GitComment>();
+        }
+
         public async Task<GitComment> AddPullRequestComment(long id, GitComment comment)
         {
             var response = await _bitbucketClient.PullRequestsClient.AddPullRequestComment(

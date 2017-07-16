@@ -13,5 +13,9 @@ namespace GitClientVS.Contracts.Models.Tree
         bool AllDeleted { get; }
         void DeleteCurrentComment();
         void AddComment(GitComment comment);
+        bool IsEditExpanded { get; set; }
+        bool IsReplyExpanded { get; set; }
+        string EditContent { get; set; }
+        string ReplyContent { get; set; }
     }
 }

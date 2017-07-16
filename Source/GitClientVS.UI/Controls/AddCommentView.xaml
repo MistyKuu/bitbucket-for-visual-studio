@@ -26,15 +26,18 @@
         </Grid.RowDefinitions>
         <TextBox controls:TextBoxHelper.Watermark="What do you want to say?" AcceptsReturn="True" MinLines="1" MaxLines="3" Text="{bindings:ValidatedBinding CurrentText,Mode=TwoWay}"/>
 
-        <Button Grid.Row="1" Margin="5" 
-                Command="{Binding AddCommand}"
-                CommandParameter="{Binding Inline}"
-                Content="Comment" 
-                HorizontalAlignment="Left"
-        >
-            <Button.Style>
-                <Style TargetType="Button" BasedOn="{StaticResource MetroFlatButton}"/>
-            </Button.Style>
-        </Button>
+        <StackPanel Orientation="Horizontal" Grid.Row="1"  HorizontalAlignment="Left">
+            <Button Margin="5" 
+                    Command="{Binding AddCommand}"
+                    CommandParameter="{Binding AddCommandParameter}"
+                    Content="{Binding ButtonLabelContent}" 
+                    Style="{StaticResource ActionLinkButton}"
+            />
+            <Button Margin="5" 
+                    Command="{Binding CancelCommand}"
+                    Content="Cancel" 
+                    Style="{StaticResource ActionLinkButton}"
+           />
+        </StackPanel>
     </Grid>
 </UserControl>

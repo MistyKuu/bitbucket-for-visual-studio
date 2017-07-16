@@ -13,6 +13,8 @@
              xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
              xmlns:tree="clr-namespace:GitClientVS.Contracts.Models.Tree;assembly=GitClientVS.Contracts"
+             xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="CommentView"
@@ -154,25 +156,50 @@
                                     <DataTrigger Binding="{Binding Comment.IsDeleted}" Value="False">
                                         <Setter Property="Content">
                                             <Setter.Value>
-                                                <StackPanel Orientation="Vertical" Margin="0,5,0,5" >
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="*"/>
+                                                    </Grid.RowDefinitions>
 
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Image VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
-                                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
+                                                    <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,5,0,5" >
+
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Image VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
+                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
+                                                        </StackPanel>
+
+                                                        <wpf:HtmlPanel Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.Html,Converter={converters:DisplayHtmlConverter}}" Background="Transparent" Margin="30,-10,0,0" />
+
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=EnterReplyModeCommand}" CommandParameter="{Binding}"/>
+                                                            <Separator Style="{StaticResource VerticalSeparator}" />
+                                                            <Button Style="{StaticResource ActionLinkButton}" Content="Edit" Command="{Binding ElementName=CommentView,Path=EnterEditModeCommand}" CommandParameter="{Binding}"/>
+                                                            <Separator Style="{StaticResource VerticalSeparator}" />
+                                                            <Button Style="{StaticResource ActionLinkButton}" Content="Delete" Command="{Binding ElementName=CommentView,Path=DeleteCommand}" CommandParameter="{Binding}"/>
+                                                            <Separator Style="{StaticResource VerticalSeparator}" />
+                                                            <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.UpdatedOn}" Foreground="Gray"></TextBlock>
+                                                        </StackPanel>
                                                     </StackPanel>
 
-                                                    <wpf:HtmlPanel Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.Html,Converter={converters:DisplayHtmlConverter}}" Background="Transparent" Margin="30,-10,0,0" />
+                                                    <Grid Grid.Row="1">
+                                                        <local:AddCommentView
+                                                                              AddCommand="{Binding ElementName=CommentView,Path=ReplyCommand}"
+                                                                              AddCommandParameter="{Binding}"
+                                                                              CurrentText="{bindings:ValidatedBinding ReplyContent}"
+                                                                              ButtonLabelContent="Reply"
+                                                                              Visibility="{Binding IsReplyExpanded, Converter={converters:BoolToVisibilityConverter},Mode=TwoWay}"
+                                                        />
+                                                        <local:AddCommentView
+                                                                              AddCommand="{Binding ElementName=CommentView,Path=EditCommand}"
+                                                                              AddCommandParameter="{Binding}"
+                                                                              CurrentText="{bindings:ValidatedBinding EditContent}"
+                                                                              ButtonLabelContent="Edit"
+                                                                              Visibility="{Binding IsEditExpanded, Converter={converters:BoolToVisibilityConverter},Mode=TwoWay}"
+                                                        />
+                                                    </Grid>
+                                                </Grid>
 
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=ReplyCommand}" CommandParameter="{Binding}"/>
-                                                        <Separator Style="{StaticResource VerticalSeparator}" />
-                                                        <Button Style="{StaticResource ActionLinkButton}" Content="Edit" Command="{Binding ElementName=CommentView,Path=EditCommand}" CommandParameter="{Binding}"/>
-                                                        <Separator Style="{StaticResource VerticalSeparator}" />
-                                                        <Button Style="{StaticResource ActionLinkButton}" Content="Delete" Command="{Binding ElementName=CommentView,Path=DeleteCommand}" CommandParameter="{Binding}"/>
-                                                        <Separator Style="{StaticResource VerticalSeparator}" />
-                                                        <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.UpdatedOn}" Foreground="Gray"></TextBlock>
-                                                    </StackPanel>
-                                                </StackPanel>
                                             </Setter.Value>
                                         </Setter>
                                     </DataTrigger>

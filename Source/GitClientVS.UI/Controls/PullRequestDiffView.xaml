@@ -178,6 +178,7 @@
                     <local:AddCommentView Grid.Row="0" 
                                           AddCommand="{Binding CommentViewModel.AddCommentCommand}"
                                           CurrentText="{bindings:ValidatedBinding CommentViewModel.AddCommentText,Mode=TwoWay}"
+                                          ButtonLabelContent="Comment"
                                           />
 
                     <local:CommentsTreeView  Grid.Row="1"

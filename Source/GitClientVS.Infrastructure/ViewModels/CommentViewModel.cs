@@ -81,18 +81,21 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             var newComment = new GitComment()
             {
-                Content = comment.Content,
+                Content = new GitCommentContent() { Html = commentTree.ReplyContent },
                 Parent = new GitCommentParent() { Id = comment.Id },
-                Inline = comment.Inline !=null ? new GitCommentInline() {Path = comment.Inline.Path} : null
+                Inline = comment.Inline != null ? new GitCommentInline() { Path = comment.Inline.Path } : null
             };
 
             await _gitClientService.AddPullRequestComment(PullRequestId, newComment);
             await UpdateComments(PullRequestId);//todo temp solution just to make it work
         }
 
-        private Task EditComment(ICommentTree commentTree)
+        private async Task EditComment(ICommentTree commentTree)
         {
-            throw new NotImplementedException();
+            commentTree.Comment.Content = new GitCommentContent() { Html = commentTree.EditContent };
+
+            await _gitClientService.EditPullRequestComment(PullRequestId, commentTree.Comment);
+            await UpdateComments(PullRequestId);//todo temp solution just to make it work
         }
 
         private async Task AddComment(GitCommentInline inline)

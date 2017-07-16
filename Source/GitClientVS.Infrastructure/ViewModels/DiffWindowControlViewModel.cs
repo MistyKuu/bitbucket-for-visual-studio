@@ -145,12 +145,12 @@ namespace GitClientVS.Infrastructure.ViewModels
                                            .Where(x => x.Comment.Inline.Path == FileDiff.From || x.Comment.Inline.Path == FileDiff.To)
                                            .ToList() ?? new List<ICommentTree>();
 
-            var fileLevelComment = topLevelFileComments
+            var fileLevelComments = topLevelFileComments
                 .Where(x => !x.Comment.IsDeleted)
                 .Where(x => x.Comment.Inline.From == null && x.Comment.Inline.To == null)
                 .ToList();
 
-            if (fileLevelComment != null)
+            foreach(var fileLevelComment in fileLevelComments)
                 DisplayedModels.Add(fileLevelComment);
 
             foreach (var chunk in FileDiff.Chunks)

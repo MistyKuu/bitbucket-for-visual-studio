@@ -60,5 +60,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
            bool isDescSorted = true,
            string author = null
        );
+
+        Task<GitComment> EditPullRequestComment(long id, GitComment comment);
     }
 }

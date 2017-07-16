@@ -83,13 +83,42 @@ namespace GitClientVS.UI.Controls
             set { SetValue(DeleteCommandProperty, value); }
         }
 
+        public ICommand EnterEditModeCommand => _enterEditModeCommand ?? (_enterEditModeCommand = ReactiveCommand.Create<ICommentTree>(EnterEditMode));
+        public ICommand EnterReplyModeCommand => _enterReplyModeCommand ?? (_enterReplyModeCommand = ReactiveCommand.Create<ICommentTree>(EnterReplyMode));
+
         // Using a DependencyProperty as the backing store for DeleteCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DeleteCommandProperty =
             DependencyProperty.Register("DeleteCommand", typeof(ICommand), typeof(CommentsTreeView), new PropertyMetadata(null));
 
+
+        private ICommand _enterEditModeCommand;
+        private ICommand _enterReplyModeCommand;
+
         public CommentsTreeView()
         {
             InitializeComponent();
+        }
+
+        private void EnterReplyMode(ICommentTree commentTree)
+        {
+            if (commentTree != null)
+            {
+                commentTree.IsReplyExpanded = !commentTree.IsReplyExpanded;
+
+                if (commentTree.IsReplyExpanded)
+                    commentTree.IsEditExpanded = false;
+            }
+        }
+
+        private void EnterEditMode(ICommentTree commentTree)
+        {
+            if (commentTree != null)
+            {
+                commentTree.IsEditExpanded = !commentTree.IsEditExpanded;
+
+                if (commentTree.IsEditExpanded)
+                    commentTree.IsReplyExpanded = false;
+            }
         }
     }
 }

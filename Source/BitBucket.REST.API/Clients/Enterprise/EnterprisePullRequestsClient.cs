@@ -234,6 +234,11 @@ namespace BitBucket.REST.API.Clients.Enterprise
             await RestClient.ExecuteTaskAsync(request);
         }
 
+        public Task<Comment> EditPullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, string content)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
         {
             var url = EnterpriseApiUrls.PullRequestActivities(ownerName, repositoryName, id);

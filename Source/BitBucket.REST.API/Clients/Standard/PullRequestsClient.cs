@@ -144,7 +144,7 @@ namespace BitBucket.REST.API.Clients.Standard
                 Content = content,
                 LineFrom = parentId != null ? null : lineFrom,
                 LineTo = parentId != null ? null : lineTo,
-                FileName = parentId != null ? null : fileName,
+                FileName = fileName,
                 ParentId = parentId
             };
 
@@ -159,6 +159,22 @@ namespace BitBucket.REST.API.Clients.Standard
             var url = ApiUrls.PullRequestCommentV1(ownerName, repositoryName, pullRequestId, id);
             var request = new BitbucketRestRequest(url, Method.DELETE);
             await _versionOneClient.ExecuteTaskAsync(request);
+        }
+
+        public async Task<Comment> EditPullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, string content)
+        {
+            var url = ApiUrls.PullRequestCommentV1(ownerName, repositoryName, pullRequestId, id);
+            var request = new BitbucketRestRequest(url, Method.PUT);
+
+            var body = new CommentV1()
+            {
+                Content = content
+            };
+
+            request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(body), ParameterType.RequestBody);
+
+            var response = await _versionOneClient.ExecuteTaskAsync<CommentV1>(request);
+            return response.Data.MapTo<Comment>();
         }
 
         public async Task<PullRequest> GetPullRequest(string repositoryName, string owner, long id)

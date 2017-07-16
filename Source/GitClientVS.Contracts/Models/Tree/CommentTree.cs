@@ -10,23 +10,46 @@ namespace GitClientVS.Contracts.Models.Tree
 {
     public class CommentTree : ReactiveObject, ICommentTree
     {
+        private bool _isReplyExpanded;
+        private bool _isEditExpanded;
+        private string _editContent;
+        private string _replyContent;
         public ReactiveList<ICommentTree> Comments { get; set; }
         public GitComment Comment { get; set; }
         public bool IsExpanded { get; set; }
-        public bool AllDeleted
+
+        public bool IsEditExpanded
         {
-            get => Comments.All(x => x.AllDeleted) && Comment.IsDeleted;
+            get => _isEditExpanded;
+            set => this.RaiseAndSetIfChanged(ref _isEditExpanded, value);
         }
 
-        public CommentTree()
+        public bool IsReplyExpanded
         {
-            Comments = new ReactiveList<ICommentTree> { ChangeTrackingEnabled = true };
+            get => _isReplyExpanded;
+            set => this.RaiseAndSetIfChanged(ref _isReplyExpanded, value);
         }
 
-        public CommentTree(GitComment comment) : this()
+        public string EditContent
+        {
+            get => _editContent;
+            set => this.RaiseAndSetIfChanged(ref _editContent, value);
+        }
+
+        public string ReplyContent
+        {
+            get => _replyContent;
+            set => this.RaiseAndSetIfChanged(ref _replyContent, value);
+        }
+
+        public bool AllDeleted => Comments.All(x => x.AllDeleted) && Comment.IsDeleted;
+
+        public CommentTree(GitComment comment) 
         {
             Comment = comment;
             IsExpanded = true;
+            EditContent = comment?.Content?.Html;
+            Comments = new ReactiveList<ICommentTree>();
         }
 
         public void DeleteCurrentComment()

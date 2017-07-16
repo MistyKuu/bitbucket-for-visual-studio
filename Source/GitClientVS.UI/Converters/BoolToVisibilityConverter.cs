@@ -22,7 +22,10 @@ namespace GitClientVS.UI.Converters
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (value == null)
+                return null;
+
+            return ((Visibility) value) == Visibility.Visible;
         }
     }
 }

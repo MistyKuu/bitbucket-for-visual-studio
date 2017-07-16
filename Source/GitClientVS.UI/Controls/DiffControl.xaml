@@ -87,7 +87,8 @@
         <controls:AddCommentView Grid.Row="0" 
                               AddCommand="{Binding CommentViewModel.AddCommentCommand}"
                               CurrentText="{bindings:ValidatedBinding CommentViewModel.AddCommentText, Mode=TwoWay}"
-                                 Inline="{Binding FileLevelInline}"
+                             AddCommandParameter="{Binding FileLevelInline}"
+                              ButtonLabelContent="Comment"
                                  >
 
         </controls:AddCommentView>

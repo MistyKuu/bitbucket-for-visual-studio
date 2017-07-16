@@ -80,7 +80,7 @@ namespace GitClientVS.Services
 
 
 
-            ICommentTree entryComment = new CommentTree();
+            ICommentTree entryComment = new CommentTree(null);
             for (var i = 0; i <= maxLevel; i++)
             {
                 List<ObjectTree> preparedComments = result[i];
