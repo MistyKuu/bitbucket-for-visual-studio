@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using GitClientVS.Contracts.Models;
 using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Editing;
+using ICSharpCode.AvalonEdit.Folding;
+using ICSharpCode.AvalonEdit.Rendering;
 using ParseDiff;
 
 namespace GitClientVS.UI.Controls.DiffControlUtils
 {
+   
     public sealed class AvalonEditBehaviour : DependencyObject
     {
         private static readonly Dictionary<string, string> HighlightMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
@@ -96,8 +101,8 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
         {
             TextEditor textEditor = d as TextEditor;
             // textEditor.TextArea.TextView.LineTransformers.Add(new DiffLineColorizer((ChunkDiff)textEditor.DataContext));
-            textEditor.TextArea.LeftMargins.Add(new Button(){Content = "TEST"});
-            textEditor.TextArea.LeftMargins.Add(new TwoColumnMargin());
+            textEditor.TextArea.LeftMargins.Add(new MarginControl(){Chunk = (ChunkDiff)textEditor.DataContext});
+         //   textEditor.TextArea.LeftMargins.Add(new TwoColumnMargin());
             textEditor.TextArea.LeftMargins.Add(DottedLineMargin.Create());
 
             var theme = GetTheme(textEditor);

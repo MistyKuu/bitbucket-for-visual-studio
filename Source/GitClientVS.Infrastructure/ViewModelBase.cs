@@ -34,7 +34,7 @@ namespace GitClientVS.Infrastructure
 
         public virtual void Dispose()
         {
-            foreach (var obs in _disposables)
+            foreach (var obs in _disposables ?? Enumerable.Empty<IDisposable>())
                 obs?.Dispose();
         }
     }
