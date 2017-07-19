@@ -159,30 +159,32 @@
                                                 <Grid>
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
                                                         <RowDefinition Height="*"/>
                                                     </Grid.RowDefinitions>
+                                                    
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
 
-                                                    <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,5,0,5" >
+                                                    <Image Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
+                                                    <TextBlock Grid.Row="0" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
 
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Image VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
-                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
-                                                        </StackPanel>
+                                                    <wpf:HtmlPanel Margin="0,-10,0,2"  Grid.Row="1" Grid.Column="1"  Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.Html,Converter={converters:DisplayHtmlConverter}}" Background="Transparent" />
 
-                                                        <wpf:HtmlPanel Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.Html,Converter={converters:DisplayHtmlConverter}}" Background="Transparent" Margin="30,-10,0,0" />
-
-                                                        <StackPanel Orientation="Horizontal">
+                                                        <StackPanel Grid.Column="1" Grid.Row="2"  Orientation="Horizontal" Margin="0,2,0,0">
                                                             <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=EnterReplyModeCommand}" CommandParameter="{Binding}"/>
                                                             <Separator Style="{StaticResource VerticalSeparator}" />
                                                             <Button Style="{StaticResource ActionLinkButton}" Content="Edit" Command="{Binding ElementName=CommentView,Path=EnterEditModeCommand}" CommandParameter="{Binding}"/>
                                                             <Separator Style="{StaticResource VerticalSeparator}" />
                                                             <Button Style="{StaticResource ActionLinkButton}" Content="Delete" Command="{Binding ElementName=CommentView,Path=DeleteCommand}" CommandParameter="{Binding}"/>
                                                             <Separator Style="{StaticResource VerticalSeparator}" />
-                                                            <TextBlock HorizontalAlignment="Stretch" Margin="40,5,0,0" Text="{Binding Comment.UpdatedOn}" Foreground="Gray"></TextBlock>
+                                                            <TextBlock HorizontalAlignment="Stretch" Margin="5,0,0,0" Text="{Binding Comment.UpdatedOn}" Foreground="Gray"></TextBlock>
                                                         </StackPanel>
-                                                    </StackPanel>
 
-                                                    <Grid Grid.Row="1">
+                                                    <Grid Grid.Row="3" Grid.Column="1" Margin="0,5">
                                                         <local:AddCommentView
                                                                               AddCommand="{Binding ElementName=CommentView,Path=ReplyCommand}"
                                                                               AddCommandParameter="{Binding}"

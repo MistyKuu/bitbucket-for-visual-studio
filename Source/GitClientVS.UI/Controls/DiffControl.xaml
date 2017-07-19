@@ -13,6 +13,7 @@
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
              xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
+             xmlns:infrastructure="clr-namespace:GitClientVS.Infrastructure;assembly=GitClientVS.Infrastructure"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" x:Name="CurrentControl"
              d:DataContext="{d:DesignInstance viewModels:DiffWindowControlViewModel,IsDesignTimeCreatable=False}"
@@ -32,7 +33,7 @@
         </Grid.RowDefinitions>
 
         <Grid.Resources>
-            <DataTemplate DataType="{x:Type viewModels:AddModeModel}">
+            <DataTemplate DataType="{x:Type infrastructure:AddModeModel}">
                 <controls:AddCommentView 
                                       AddCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.AddInlineCommentCommand}"
                                       CurrentText="{Binding ElementName=CurrentControl, Path= DataContext.CommentViewModel.InlineCommentText, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -41,8 +42,7 @@
                 />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type tree:CommentTree}">
-                <Border Margin="5" BorderThickness="0.2" BorderBrush="Black" Padding="5">
+            <DataTemplate DataType="{x:Type infrastructure:CommentTreeCollection}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -50,14 +50,12 @@
                         </Grid.RowDefinitions>
 
                         <controls:CommentsTreeView 
-                        SingleCommentTree="{Binding}"
+                        CommentTree="{Binding Elements}"
                         DeleteCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.DeleteCommentCommand}"
                         ReplyCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.ReplyCommentCommand}"
                         EditCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.EditCommentCommand}"
                         />
                     </Grid>
-
-                </Border>
             </DataTemplate>
 
 
@@ -93,12 +91,14 @@
         <TextBlock Visibility="Collapsed" x:Name="Tb"/>
         <!--TODO A HACK TO USE TB FOREGROUND-->
 
-        <controls:AddCommentView Grid.Row="0" 
-                              AddCommand="{Binding CommentViewModel.AddFileLevelCommentCommand}"
-                              CurrentText="{bindings:ValidatedBinding CommentViewModel.FileLevelCommentText}"
-                              AddCommandParameter="{Binding FileLevelInline}"
-                              ButtonLabelContent="Comment"
-                                 />
+        <Border Grid.Row="0" BorderThickness="0,0,0,0.1" BorderBrush="Black" Margin="5">
+            <controls:AddCommentView 
+                                     AddCommand="{Binding CommentViewModel.AddFileLevelCommentCommand}"
+                                     CurrentText="{bindings:ValidatedBinding CommentViewModel.FileLevelCommentText,Mode=TwoWay}"
+                                     AddCommandParameter="{Binding FileLevelInline}"
+                                     ButtonLabelContent="Comment"
+            />
+        </Border>
 
         <ScrollViewer Grid.Row="1" PreviewMouseWheel="UIElement_OnPreviewMouseWheel">
             <ItemsControl ItemsSource="{Binding DisplayedModels}">

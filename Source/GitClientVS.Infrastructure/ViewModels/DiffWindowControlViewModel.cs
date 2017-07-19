@@ -19,17 +19,6 @@ using ReactiveUI;
 
 namespace GitClientVS.Infrastructure.ViewModels
 {
-    public class AddModeModel
-    {
-        public GitCommentInline Inline { get; }
-
-        public AddModeModel(GitCommentInline inline)
-        {
-            Inline = inline;
-        }
-    }
-
-
     [Export(typeof(IDiffWindowControlViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class DiffWindowControlViewModel : ViewModelBase, IDiffWindowControlViewModel
@@ -187,8 +176,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 .Where(x => x.Comment.Inline.From == null && x.Comment.Inline.To == null)
                 .ToList();
 
-            foreach (var fileLevelComment in fileLevelComments)
-                DisplayedModels.Add(fileLevelComment);
+            DisplayedModels.Add(new CommentTreeCollection(fileLevelComments));
 
             foreach (var chunk in FileDiff.Chunks)
             {
@@ -211,8 +199,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
                 DisplayedModels.Add(firstChunk);
 
-                foreach (var comment in currentComments)
-                    DisplayedModels.Add(comment);
+                DisplayedModels.Add(new CommentTreeCollection(currentComments));
 
                 chunk = secondChunk;
             }

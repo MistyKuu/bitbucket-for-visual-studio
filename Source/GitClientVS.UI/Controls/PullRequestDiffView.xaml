@@ -175,13 +175,17 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <local:AddCommentView Grid.Row="0" 
-                                          AddCommand="{Binding CommentViewModel.AddCommentCommand}"
-                                          CurrentText="{bindings:ValidatedBinding CommentViewModel.CommentText,Mode=TwoWay}"
-                                          ButtonLabelContent="Comment"
-                                          />
+                    <Border Grid.Row="0" BorderThickness="0,0,0,0.1" BorderBrush="Black" Margin="5">
+                        <local:AddCommentView 
+                                              AddCommand="{Binding CommentViewModel.AddCommentCommand}"
+                                              CurrentText="{bindings:ValidatedBinding CommentViewModel.CommentText,Mode=TwoWay}"
+                                              ButtonLabelContent="Comment"
+                        />
+                    </Border>
+                    
+                    
 
-                    <local:CommentsTreeView  Grid.Row="1"
+                    <local:CommentsTreeView  Grid.Row="1" Margin="5"
                         CommentTree="{Binding CommentViewModel.CommentTree}" 
                         DeleteCommand="{Binding CommentViewModel.DeleteCommentCommand}"
                         ReplyCommand="{Binding CommentViewModel.ReplyCommentCommand}"
