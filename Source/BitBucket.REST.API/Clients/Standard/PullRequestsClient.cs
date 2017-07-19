@@ -161,7 +161,7 @@ namespace BitBucket.REST.API.Clients.Standard
             await _versionOneClient.ExecuteTaskAsync(request);
         }
 
-        public async Task<Comment> EditPullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, string content)
+        public async Task<Comment> EditPullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, string content, long commentVersion)
         {
             var url = ApiUrls.PullRequestCommentV1(ownerName, repositoryName, pullRequestId, id);
             var request = new BitbucketRestRequest(url, Method.PUT);

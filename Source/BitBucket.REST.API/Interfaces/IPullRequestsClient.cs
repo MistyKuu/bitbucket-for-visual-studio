@@ -34,6 +34,6 @@ namespace BitBucket.REST.API.Interfaces
         Task<Comment> AddPullRequestComment(string repositoryName, string ownerName, long id, string content, long? lineFrom = null, long? lineTo = null, string fileName = null, long? parentId = null);
 
         Task DeletePullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, long version);
-        Task<Comment> EditPullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, string content);
+        Task<Comment> EditPullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, string content, long commentVersion);
     }
 }

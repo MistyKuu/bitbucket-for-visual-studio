@@ -146,7 +146,9 @@ namespace GitClientVS.Services
                 _gitWatcher.ActiveRepo.Owner,
                 id,
                 comment.Id,
-                comment.Content.Html);
+                comment.Content.Html,
+                comment.Version
+                );
 
             return response.MapTo<GitComment>();
         }
