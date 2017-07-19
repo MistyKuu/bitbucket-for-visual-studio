@@ -25,6 +25,20 @@ namespace GitClientVS.UI.Controls
             DependencyProperty.Register("Chunk", typeof(ChunkDiff), typeof(MarginControl), new PropertyMetadata(null));
 
 
+
+
+        public ICommand EnterAddModeCommand
+        {
+            get { return (ICommand)GetValue(EnterAddModeCommandProperty); }
+            set { SetValue(EnterAddModeCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EnterAddModeCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EnterAddModeCommandProperty =
+            DependencyProperty.Register("EnterAddModeCommand", typeof(ICommand), typeof(MarginControl), new PropertyMetadata(null));
+
+
+
         public MarginControl()
         {
             InitializeComponent();

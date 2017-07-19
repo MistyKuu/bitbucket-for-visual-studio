@@ -23,6 +23,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly ITreeStructureGenerator _treeStructureGenerator;
         private string _addCommentText;
+        private string _addInlineCommentText;
 
         public ReactiveCommand ReplyCommentCommand { get; private set; }
         public ReactiveCommand EditCommentCommand { get; private set; }
@@ -47,6 +48,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get => _addCommentText;
             set => this.RaiseAndSetIfChanged(ref _addCommentText, value);
+        }
+
+        public string AddInlineCommentText
+        {
+            get => _addInlineCommentText;
+            set => this.RaiseAndSetIfChanged(ref _addInlineCommentText, value);
         }
 
         public List<ICommentTree> InlineCommentTree
@@ -102,11 +109,10 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var comment = new GitComment()
             {
-                Content = new GitCommentContent() { Html = AddCommentText },
+                Content = new GitCommentContent() { Html = inline != null ? AddInlineCommentText : AddCommentText },
                 IsInline = inline != null,
                 Inline = inline != null ? new GitCommentInline()
                 {
-
                     Path = inline.Path,
                     From = inline.From,
                     To = inline.To
@@ -116,6 +122,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             await _gitClientService.AddPullRequestComment(PullRequestId, comment);
             await UpdateComments(PullRequestId); //todo temp solution just to make it work
             AddCommentText = string.Empty;
+            AddInlineCommentText = string.Empty;
         }
 
         private async Task DeleteComment(ICommentTree commentTree)

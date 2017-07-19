@@ -32,6 +32,14 @@
         </Grid.RowDefinitions>
 
         <Grid.Resources>
+            <DataTemplate DataType="{x:Type viewModels:AddModeModel}">
+                <controls:AddCommentView 
+                                      AddCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.AddCommentCommand}"
+                                      CurrentText="{Binding ElementName=CurrentControl, Path= DataContext.CommentViewModel.AddInlineCommentText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                      ButtonLabelContent="Comment"
+                                      AddCommandParameter="{Binding Inline}"
+                />
+            </DataTemplate>
 
             <DataTemplate DataType="{x:Type tree:CommentTree}">
                 <Border Margin="5" BorderThickness="0.2" BorderBrush="Black" Padding="5">
@@ -64,6 +72,7 @@
                                            diffControlUtils:AvalonEditBehaviour.IsDiffEditor="True"
                                            diffControlUtils:AvalonEditBehaviour.FileDiff="{Binding ElementName=CurrentControl,Path=DataContext.FileDiff}"
                                            diffControlUtils:AvalonEditBehaviour.Theme="{Binding ElementName=CurrentControl,Path=DataContext.CurrentTheme}"
+                                           diffControlUtils:AvalonEditBehaviour.EnterAddModeCommand="{Binding ElementName=CurrentControl,Path=DataContext.EnterAddModeCommand}"
                                            HorizontalAlignment="Stretch"
                                            VerticalScrollBarVisibility="Hidden"
                                            HorizontalScrollBarVisibility="Hidden"
@@ -87,7 +96,7 @@
         <controls:AddCommentView Grid.Row="0" 
                               AddCommand="{Binding CommentViewModel.AddCommentCommand}"
                               CurrentText="{bindings:ValidatedBinding CommentViewModel.AddCommentText, Mode=TwoWay}"
-                             AddCommandParameter="{Binding FileLevelInline}"
+                              AddCommandParameter="{Binding FileLevelInline}"
                               ButtonLabelContent="Comment"
                                  >
 

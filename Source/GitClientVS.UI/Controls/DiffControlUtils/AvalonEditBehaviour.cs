@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using GitClientVS.Contracts.Models;
 using ICSharpCode.AvalonEdit;
@@ -15,7 +16,7 @@ using ParseDiff;
 
 namespace GitClientVS.UI.Controls.DiffControlUtils
 {
-   
+
     public sealed class AvalonEditBehaviour : DependencyObject
     {
         private static readonly Dictionary<string, string> HighlightMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
@@ -100,16 +101,29 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
         private static void BehaviourAttached(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             TextEditor textEditor = d as TextEditor;
-            // textEditor.TextArea.TextView.LineTransformers.Add(new DiffLineColorizer((ChunkDiff)textEditor.DataContext));
-            textEditor.TextArea.LeftMargins.Add(new MarginControl(){Chunk = (ChunkDiff)textEditor.DataContext});
-         //   textEditor.TextArea.LeftMargins.Add(new TwoColumnMargin());
-            textEditor.TextArea.LeftMargins.Add(DottedLineMargin.Create());
+            AddMargins(textEditor);
 
             var theme = GetTheme(textEditor);
 
             ChangeBackgroundRenderer(textEditor, theme);
+        }
 
-          
+        private static void OnEnterAddModeCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            TextEditor textEditor = d as TextEditor;
+            AddMargins(textEditor);
+        }
+
+        private static void AddMargins(TextEditor textEditor)
+        {
+            textEditor.TextArea.LeftMargins.Clear();
+
+            textEditor.TextArea.LeftMargins.Add(new MarginControl()
+            {
+                Chunk = (ChunkDiff)textEditor.DataContext,
+                EnterAddModeCommand = GetEnterAddModeCommand(textEditor)
+            });
+            textEditor.TextArea.LeftMargins.Add(DottedLineMargin.Create());
         }
 
 
@@ -155,6 +169,21 @@ namespace GitClientVS.UI.Controls.DiffControlUtils
         // Using a DependencyProperty as the backing store for TextBindingChanged. This enables animation, styling, binding, etc...  
         public static readonly DependencyProperty TextBindingProperty =
         DependencyProperty.RegisterAttached("TextBinding", typeof(string), typeof(AvalonEditBehaviour), new PropertyMetadata(null, TextBindingChanged));
+
+        public static readonly DependencyProperty EnterAddModeCommandProperty = DependencyProperty.RegisterAttached("EnterAddModeCommand", typeof(ICommand), typeof(AvalonEditBehaviour), new PropertyMetadata(null, OnEnterAddModeCommandChanged));
+
+      
+
+        public static ICommand GetEnterAddModeCommand(UIElement element)
+        {
+            return (ICommand)element.GetValue(EnterAddModeCommandProperty);
+        }
+
+        public static void SetEnterAddModeCommand(UIElement element, ICommand value)
+        {
+            element.SetValue(EnterAddModeCommandProperty, value);
+        }
+
         private static void TextBindingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             TextEditor textEditor = d as TextEditor;

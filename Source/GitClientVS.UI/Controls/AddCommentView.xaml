@@ -33,11 +33,6 @@
                     Content="{Binding ButtonLabelContent}" 
                     Style="{StaticResource ActionLinkButton}"
             />
-            <Button Margin="5" 
-                    Command="{Binding CancelCommand}"
-                    Content="Cancel" 
-                    Style="{StaticResource ActionLinkButton}"
-           />
         </StackPanel>
     </Grid>
 </UserControl>
