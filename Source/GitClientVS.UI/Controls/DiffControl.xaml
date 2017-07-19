@@ -34,8 +34,8 @@
         <Grid.Resources>
             <DataTemplate DataType="{x:Type viewModels:AddModeModel}">
                 <controls:AddCommentView 
-                                      AddCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.AddCommentCommand}"
-                                      CurrentText="{Binding ElementName=CurrentControl, Path= DataContext.CommentViewModel.AddInlineCommentText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                      AddCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.AddInlineCommentCommand}"
+                                      CurrentText="{Binding ElementName=CurrentControl, Path= DataContext.CommentViewModel.InlineCommentText, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                       ButtonLabelContent="Comment"
                                       AddCommandParameter="{Binding Inline}"
                 />
@@ -94,13 +94,11 @@
         <!--TODO A HACK TO USE TB FOREGROUND-->
 
         <controls:AddCommentView Grid.Row="0" 
-                              AddCommand="{Binding CommentViewModel.AddCommentCommand}"
-                              CurrentText="{bindings:ValidatedBinding CommentViewModel.AddCommentText, Mode=TwoWay}"
+                              AddCommand="{Binding CommentViewModel.AddFileLevelCommentCommand}"
+                              CurrentText="{bindings:ValidatedBinding CommentViewModel.FileLevelCommentText}"
                               AddCommandParameter="{Binding FileLevelInline}"
                               ButtonLabelContent="Comment"
-                                 >
-
-        </controls:AddCommentView>
+                                 />
 
         <ScrollViewer Grid.Row="1" PreviewMouseWheel="UIElement_OnPreviewMouseWheel">
             <ItemsControl ItemsSource="{Binding DisplayedModels}">

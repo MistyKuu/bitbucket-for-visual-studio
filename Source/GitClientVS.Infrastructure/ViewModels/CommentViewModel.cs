@@ -22,13 +22,16 @@ namespace GitClientVS.Infrastructure.ViewModels
         private int _commentsCount;
         private readonly IGitClientService _gitClientService;
         private readonly ITreeStructureGenerator _treeStructureGenerator;
-        private string _addCommentText;
-        private string _addInlineCommentText;
+        private string _commentText;
+        private string _fileLevelCommentText;
+        private string _inlineCommentText;
 
         public ReactiveCommand ReplyCommentCommand { get; private set; }
         public ReactiveCommand EditCommentCommand { get; private set; }
         public ReactiveCommand DeleteCommentCommand { get; private set; }
         public ReactiveCommand AddCommentCommand { get; private set; }
+        public ReactiveCommand AddFileLevelCommentCommand { get; private set; }
+        public ReactiveCommand AddInlineCommentCommand { get; private set; }
 
         public long PullRequestId { get; private set; }
 
@@ -44,16 +47,22 @@ namespace GitClientVS.Infrastructure.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _commentsCount, value);
         }
 
-        public string AddCommentText
+        public string CommentText
         {
-            get => _addCommentText;
-            set => this.RaiseAndSetIfChanged(ref _addCommentText, value);
+            get => _commentText;
+            set => this.RaiseAndSetIfChanged(ref _commentText, value);
         }
 
-        public string AddInlineCommentText
+        public string FileLevelCommentText
         {
-            get => _addInlineCommentText;
-            set => this.RaiseAndSetIfChanged(ref _addInlineCommentText, value);
+            get => _fileLevelCommentText;
+            set => this.RaiseAndSetIfChanged(ref _fileLevelCommentText, value);
+        }
+
+        public string InlineCommentText
+        {
+            get => _inlineCommentText;
+            set => this.RaiseAndSetIfChanged(ref _inlineCommentText, value);
         }
 
         public List<ICommentTree> InlineCommentTree
@@ -105,11 +114,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             await UpdateComments(PullRequestId);//todo temp solution just to make it work
         }
 
-        private async Task AddComment(GitCommentInline inline)
+        private async Task AddComment(GitCommentInline inline, string text)
         {
             var comment = new GitComment()
             {
-                Content = new GitCommentContent() { Html = inline != null ? AddInlineCommentText : AddCommentText },
+                Content = new GitCommentContent() { Html = text },
                 IsInline = inline != null,
                 Inline = inline != null ? new GitCommentInline()
                 {
@@ -121,8 +130,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             await _gitClientService.AddPullRequestComment(PullRequestId, comment);
             await UpdateComments(PullRequestId); //todo temp solution just to make it work
-            AddCommentText = string.Empty;
-            AddInlineCommentText = string.Empty;
         }
 
         private async Task DeleteComment(ICommentTree commentTree)
@@ -137,7 +144,21 @@ namespace GitClientVS.Infrastructure.ViewModels
             ReplyCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(ReplyToComment);
             EditCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(EditComment);
             DeleteCommentCommand = ReactiveCommand.CreateFromTask<ICommentTree>(DeleteComment);
-            AddCommentCommand = ReactiveCommand.CreateFromTask<GitCommentInline>(AddComment);
+            AddCommentCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                await AddComment(null, CommentText);
+                CommentText = string.Empty;
+            });
+            AddFileLevelCommentCommand = ReactiveCommand.CreateFromTask<GitCommentInline>(async inline =>
+            {
+                await AddComment(inline, FileLevelCommentText);
+                FileLevelCommentText = string.Empty;
+            });
+            AddInlineCommentCommand = ReactiveCommand.CreateFromTask<GitCommentInline>(async inline =>
+            {
+                await AddComment(inline, InlineCommentText);
+                InlineCommentText = string.Empty;
+            });
         }
 
 
