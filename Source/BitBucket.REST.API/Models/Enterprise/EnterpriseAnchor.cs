@@ -4,7 +4,7 @@ namespace BitBucket.REST.API.Models.Enterprise
 {
     public class EnterpriseAnchor
     {
-        [JsonProperty(PropertyName = "sourcePath")]
+        [JsonProperty(PropertyName = "srcPath")]
         public string SourcePath { get; set; }
 
         [JsonProperty(PropertyName = "path")]
@@ -17,6 +17,6 @@ namespace BitBucket.REST.API.Models.Enterprise
         public string LineType { get; set; }
 
         [JsonProperty(PropertyName = "fileType")]
-        public FileDiffType FileType { get; set; }
+        public FileDiffType? FileType { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Content = new Content() { Html = source.Text },
                 CreatedOn = source.CreatedOn.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture),
                 UpdatedOn = source.UpdatedOn.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture),
-                Id = source.Id,
+                Id = source.Id.Value,
                 Parent = source.Parent != null ? new Parent() { Id = source.Parent.Id } : null,
                 Version = source.Version
             };
@@ -29,6 +29,10 @@ namespace BitBucket.REST.API.Mappings.Converters
                     From = source.Anchor.FileType == FileDiffType.From ? source.Anchor.Line : null,
                     To = source.Anchor.FileType == FileDiffType.To ? source.Anchor.Line : null,
                 };
+
+                //Check if lineType is context and then assign null to from, it's because Context comes with From type and we want to set both
+                if (source.Anchor.LineType == "CONTEXT")
+                    comment.Inline.To = comment.Inline.From;
             }
 
             comment.User.Links.Avatar = new Link() { Href = comment.User.Links.Self.Href + "/avatar.png" };

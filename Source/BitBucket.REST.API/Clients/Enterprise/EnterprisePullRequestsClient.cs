@@ -208,6 +208,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             var url = EnterpriseApiUrls.PullRequestComments(ownerName, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.POST);
 
+
             var body = new EnterpriseComment()
             {
                 Text = content,
@@ -216,14 +217,15 @@ namespace BitBucket.REST.API.Clients.Enterprise
                     ? new EnterpriseAnchor()
                     {
                         Line = lineFrom ?? lineTo,
-                        FileType = lineFrom != null ? FileDiffType.From : FileDiffType.To,
+                        FileType = lineFrom != null && lineTo != null ? (FileDiffType?)null : lineFrom != null ? FileDiffType.From : FileDiffType.To,
                         Path = fileName,
                         SourcePath = fileName,
+                        LineType = lineFrom != null && lineTo != null ? "CONTEXT" : lineFrom != null ? "REMOVED" : "ADDED",
                     } : null
             };
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(body), ParameterType.RequestBody);
 
-            var response= await RestClient.ExecuteTaskAsync<EnterpriseComment>(request);
+            var response = await RestClient.ExecuteTaskAsync<EnterpriseComment>(request);
             return response.Data.MapTo<Comment>();
         }
 
@@ -236,7 +238,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         public async Task<Comment> EditPullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, string content, long commentVersion)
         {
-            var url = EnterpriseApiUrls.PullRequestComment(ownerName, repositoryName, pullRequestId,id);
+            var url = EnterpriseApiUrls.PullRequestComment(ownerName, repositoryName, pullRequestId, id);
             var request = new BitbucketRestRequest(url, Method.PUT);
 
             var body = new EnterpriseComment()
@@ -334,7 +336,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
         {
             foreach (var child in parent.Comments)
             {
-                child.Parent = new EnterpriseParent() { Id = parent.Id };
+                child.Parent = new EnterpriseParent() { Id = parent.Id.Value };
                 AssignCommentParent(child);
             }
         }

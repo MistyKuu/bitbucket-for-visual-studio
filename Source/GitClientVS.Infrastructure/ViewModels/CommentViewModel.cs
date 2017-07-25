@@ -163,6 +163,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
         public string ErrorMessage { get; set; }
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { ReplyCommentCommand, EditCommentCommand, DeleteCommentCommand, AddCommentCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { ReplyCommentCommand, EditCommentCommand, DeleteCommentCommand, AddCommentCommand,AddInlineCommentCommand,AddFileLevelCommentCommand };
     }
 }

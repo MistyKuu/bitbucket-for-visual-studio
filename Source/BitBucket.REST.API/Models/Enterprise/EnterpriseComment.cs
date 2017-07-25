@@ -21,7 +21,7 @@ namespace BitBucket.REST.API.Models.Enterprise
         public string Text { get; set; }
 
         [JsonProperty(PropertyName = "id")]
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         [JsonProperty(PropertyName = "version")]
         public long Version { get; set; }
