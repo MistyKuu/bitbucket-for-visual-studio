@@ -22,6 +22,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private int _commentsCount;
         private readonly IGitClientService _gitClientService;
         private readonly ITreeStructureGenerator _treeStructureGenerator;
+        private readonly IUserInformationService _userInformationService;
         private string _commentText;
         private string _fileLevelCommentText;
         private string _inlineCommentText;
@@ -71,11 +72,14 @@ namespace GitClientVS.Infrastructure.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _inlineCommentTree, value);
         }
 
+        public string CurrentUserName => _userInformationService.ConnectionData.UserName;
+
         [ImportingConstructor]
-        public CommentViewModel(IGitClientService gitClientService, ITreeStructureGenerator treeStructureGenerator)
+        public CommentViewModel(IGitClientService gitClientService, ITreeStructureGenerator treeStructureGenerator,IUserInformationService userInformationService)
         {
             _gitClientService = gitClientService;
             _treeStructureGenerator = treeStructureGenerator;
+            _userInformationService = userInformationService;
         }
 
         public async Task UpdateComments(long pullRequestId)

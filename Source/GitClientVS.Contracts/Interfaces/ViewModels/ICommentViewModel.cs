@@ -14,7 +14,7 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         ReactiveCommand AddCommentCommand { get; }
         ReactiveCommand AddFileLevelCommentCommand { get; }
         ReactiveCommand AddInlineCommentCommand { get; }
-
+        string CurrentUserName { get; }
 
         string CommentText { get; set; }
         string FileLevelCommentText { get; set; }

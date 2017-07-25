@@ -91,6 +91,20 @@ namespace GitClientVS.UI.Controls
             DependencyProperty.Register("DeleteCommand", typeof(ICommand), typeof(CommentsTreeView), new PropertyMetadata(null));
 
 
+
+        public string UserName
+        {
+            get { return (string)GetValue(UserNameProperty); }
+            set { SetValue(UserNameProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for UserName.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UserNameProperty =
+            DependencyProperty.Register("UserName", typeof(string), typeof(CommentsTreeView), new PropertyMetadata(null));
+
+
+
+
         private ICommand _enterEditModeCommand;
         private ICommand _enterReplyModeCommand;
 

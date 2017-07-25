@@ -173,6 +173,7 @@
     <Compile Include="Converters\TaskCompletionNotifier.cs" />
     <Compile Include="Converters\TreeViewFolderIconConverter.cs" />
     <Compile Include="Converters\UrlToImageSourceConverter.cs" />
+    <Compile Include="Converters\UserCommentButtonVisibilityConverter.cs" />
     <Compile Include="Extensions\EnumToItemsSource.cs" />
     <Compile Include="Helpers\AssemblyResolver.cs" />
     <Compile Include="Helpers\TreeViewHelpers.cs" />
