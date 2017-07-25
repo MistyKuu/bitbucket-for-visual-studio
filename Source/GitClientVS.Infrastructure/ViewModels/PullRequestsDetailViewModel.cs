@@ -33,6 +33,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand<Unit, Unit> _mergeCommand;
         private ReactiveCommand<Unit, Unit> _confirmationMergeCommand;
         private ReactiveCommand<Unit, Unit> _confirmationDeclineCommand;
+        private ReactiveCommand<Unit, Unit> _refreshPullRequestCommand;
+
         private GitPullRequest _pullRequest;
         private string _mainSectionCommandText;
         private Theme _currentTheme;
@@ -125,7 +127,9 @@ namespace GitClientVS.Infrastructure.ViewModels
                 x => x._approveCommand,
                 x => x._declineCommand,
                 x => x._disapproveCommand,
-                x => x._mergeCommand)
+                x => x._mergeCommand,
+                x => x._refreshPullRequestCommand
+                )
                 .Where(x => PullRequest != null)
                 .Select(x => PullRequest.Id)
                 .InvokeCommand(_initializeCommand);
@@ -134,10 +138,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         public ICommand InitializeCommand => _initializeCommand;
+        public ICommand RefreshPullRequestCommand => _refreshPullRequestCommand;
 
         public void InitializeCommands()
         {
             _initializeCommand = ReactiveCommand.CreateFromTask<long>(LoadPullRequestData);
+            _refreshPullRequestCommand = ReactiveCommand.Create(() => { });
             _approveCommand = ReactiveCommand.CreateFromTask(async _ =>
             {
                 await _gitClientService.ApprovePullRequest(PullRequest.Id);
