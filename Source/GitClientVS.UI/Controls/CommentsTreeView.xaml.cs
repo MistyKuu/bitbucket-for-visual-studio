@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,15 +12,145 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 using GitClientVS.Contracts.Models.Tree;
+using GitClientVS.UI.Converters;
+using HTMLConverter;
 using ReactiveUI;
 
 namespace GitClientVS.UI.Controls
 {
+    public class HtmlRichTextBoxBehavior : DependencyObject
+    {
+        public static readonly DependencyProperty TextProperty =
+            DependencyProperty.RegisterAttached("Text", typeof(string),
+                typeof(HtmlRichTextBoxBehavior), new UIPropertyMetadata(null, OnValueChanged));
+
+        public static string GetText(RichTextBox o) { return (string)o.GetValue(TextProperty); }
+
+        public static void SetText(RichTextBox o, string value) { o.SetValue(TextProperty, value); }
+
+        private static void OnValueChanged(DependencyObject dependencyObject,
+            DependencyPropertyChangedEventArgs e)
+        {
+            var richTextBox = (RichTextBox)dependencyObject;
+            var text = (e.NewValue ?? string.Empty).ToString();
+            var xaml = HtmlToXamlConverter.ConvertHtmlToXaml(text, true);
+            var flowDocument = XamlReader.Parse(xaml) as FlowDocument;
+            HyperlinksSubscriptions(flowDocument);
+            richTextBox.Document = flowDocument;
+        }
+
+        private static void HyperlinksSubscriptions(FlowDocument flowDocument)
+        {
+            if (flowDocument == null) return;
+            GetVisualChildren(flowDocument).OfType<Hyperlink>().ToList()
+                .ForEach(i => i.RequestNavigate += HyperlinkNavigate);
+        }
+
+        private static IEnumerable<DependencyObject> GetVisualChildren(DependencyObject root)
+        {
+            foreach (var child in LogicalTreeHelper.GetChildren(root).OfType<DependencyObject>())
+            {
+                yield return child;
+                foreach (var descendants in GetVisualChildren(child)) yield return descendants;
+            }
+        }
+
+        private static void HyperlinkNavigate(object sender,
+            System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+    }
+    public class WebBrowserBehavior
+    {
+        public static readonly DependencyProperty BodyProperty =
+            DependencyProperty.RegisterAttached("Body", typeof(string), typeof(WebBrowserBehavior),
+                new PropertyMetadata(OnChanged));
+
+        public static string GetBody(DependencyObject dependencyObject)
+        {
+            return (string)dependencyObject.GetValue(BodyProperty);
+        }
+
+        public static void SetBody(DependencyObject dependencyObject, string body)
+        {
+            dependencyObject.SetValue(BodyProperty, body);
+        }
+
+        private static void OnChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var browser = ((WebBrowser) d);
+            browser.LoadCompleted += Browser_LoadCompleted;
+            browser.Navigating += Browser_Navigating;
+
+            browser.NavigateToString((string) e.NewValue);
+        }
+
+        private static void Browser_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            var browser = ((WebBrowser)sender);
+            browser.Width = 0;
+            browser.Height = 0;
+        }
+
+        private static void Browser_LoadCompleted(object sender, NavigationEventArgs e)
+        {
+            var browser = ((WebBrowser)sender);
+            browser.Width = ((dynamic)browser.Document).Body.parentElement.scrollWidth;
+            browser.Height = ((dynamic)browser.Document).Body.parentElement.scrollHeight;
+        }
+    }
+    public class HtmlToFlowDocConverter : BaseMarkupExtensionConverter
+    {
+        public override object Convert(object value, Type targetType, object parameter,
+            CultureInfo culture)
+        {
+            var xaml = HtmlToXamlConverter.ConvertHtmlToXaml((string)value, true);
+            var flowDocument = XamlReader.Parse(xaml);
+            if (flowDocument is FlowDocument)
+                SubscribeToAllHyperlinks((FlowDocument)flowDocument);
+            return flowDocument;
+        }
+
+        private void SubscribeToAllHyperlinks(FlowDocument flowDocument)
+        {
+            var hyperlinks = GetVisuals(flowDocument).OfType<Hyperlink>();
+            foreach (var link in hyperlinks)
+                link.RequestNavigate += LinkRequestNavigate;
+        }
+
+        private static IEnumerable<DependencyObject> GetVisuals(DependencyObject root)
+        {
+            foreach (var child in
+                LogicalTreeHelper.GetChildren(root).OfType<DependencyObject>())
+            {
+                yield return child;
+                foreach (var descendants in GetVisuals(child))
+                    yield return descendants;
+            }
+        }
+
+        private void LinkRequestNavigate(object sender,
+            System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+
+        public override object ConvertBack(object value, Type targetType, object parameter,
+            CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
     /// <summary>
     /// Interaction logic for CommentsTreeView.xaml
     /// </summary>

@@ -15,6 +15,7 @@
              xmlns:tree="clr-namespace:GitClientVS.Contracts.Models.Tree;assembly=GitClientVS.Contracts"
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:behaviours="clr-namespace:GitClientVS.UI.Behaviours"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="CommentView"
@@ -27,6 +28,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converters:UserCommentButtonVisibilityConverter x:Key="UserCommentButtonVisibilityConverter" />
+            <local:HtmlToFlowDocConverter x:Key="HtmlToFlowDocConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -167,8 +169,12 @@
                             <Image Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="20" Height="20" Margin="0,0,5,0"/>
                             <TextBlock Grid.Row="0" Grid.Column="1"  VerticalAlignment="Top" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
 
-                            <wpf:HtmlPanel MaxHeight="100"  Margin="-8,-10,0,2"  Grid.Row="1" Grid.Column="1"  Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.Html,Converter={converters:DisplayHtmlConverter}}" Background="Transparent" />
-
+                            <RichTextBox Grid.Row="1" Grid.Column="1"   Background="Transparent"
+                                         BorderThickness="0"
+                                         behaviours:HtmlRichTextBoxBehavior.Text="{Binding Comment.Content.Html}" 
+                                         IsDocumentEnabled="True"
+                                         IsReadOnly="True" />
+                         
                             <StackPanel Grid.Column="1" Grid.Row="2"  Orientation="Horizontal" Margin="0,2,0,0">
                                 <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=EnterReplyModeCommand}" CommandParameter="{Binding}"/>
                                 <Separator Style="{StaticResource VerticalSeparator}" />

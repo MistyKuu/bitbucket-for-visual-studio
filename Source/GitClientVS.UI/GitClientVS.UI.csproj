@@ -36,6 +36,10 @@
     <Reference Include="HtmlRenderer.WPF, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\HtmlRenderer.WPF.1.5.1-beta1\lib\net45\HtmlRenderer.WPF.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlToXamlConverter, Version=1.0.5727.24510, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AssemblyReferences\HtmlToXamlConverter.dll</HintPath>
+    </Reference>
     <Reference Include="Humanizer, Version=2.1.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Humanizer.Core.2.1.0\lib\netstandard1.0\Humanizer.dll</HintPath>
     </Reference>
