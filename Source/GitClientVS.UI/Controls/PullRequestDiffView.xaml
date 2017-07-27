@@ -175,7 +175,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" BorderThickness="0,0,0,0.1" BorderBrush="Black" Margin="5">
+                    <Border Grid.Row="0" BorderThickness="0,0,0,0.1" BorderBrush="Black" Margin="10">
                         <local:AddCommentView 
                                               AddCommand="{Binding CommentViewModel.AddCommentCommand}"
                                               CurrentText="{bindings:ValidatedBinding CommentViewModel.CommentText,Mode=TwoWay}"
