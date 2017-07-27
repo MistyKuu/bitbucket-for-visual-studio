@@ -148,7 +148,7 @@ namespace BitBucket.REST.API.Clients.Standard
                 ParentId = parentId
             };
 
-            if (body.LineFrom!=null &&  body.LineFrom == body.LineTo)
+            if (body.LineFrom != null)//we can't set both
                 body.LineTo = null;
 
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(body), ParameterType.RequestBody);
