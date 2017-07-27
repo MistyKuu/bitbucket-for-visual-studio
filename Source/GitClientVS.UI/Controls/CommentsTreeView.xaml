@@ -146,85 +146,71 @@
                     </Style.Triggers>
                 </Style>
                 <HierarchicalDataTemplate DataType="{x:Type tree:CommentTree}" ItemsSource="{Binding Comments}">
-                    <ContentControl>
-                        <ContentControl.Style>
-                            <Style TargetType="ContentControl">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Comment.IsDeleted}" Value="True">
-                                        <Setter Property="Content" Value="DELETED"/>
-                                    </DataTrigger>
+                    <Grid>
+                        <Grid Visibility="{Binding Comment.IsDeleted, Converter={converters:BoolToVisibilityConverter}}">
+                            <TextBlock Text="Deleted"/>
+                        </Grid>
 
-                                    <DataTrigger Binding="{Binding Comment.IsDeleted}" Value="False">
-                                        <Setter Property="Content">
-                                            <Setter.Value>
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="*"/>
-                                                    </Grid.RowDefinitions>
+                        <Grid Visibility="{Binding Comment.IsDeleted, Converter={converters:BoolToNonVisibilityConverter}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
 
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                                                    <Image Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
-                                                    <TextBlock Grid.Row="0" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
+                            <Image Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="30" Height="30" Margin="0,0,5,0"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
 
-                                                    <wpf:HtmlPanel Margin="0,-10,0,2"  Grid.Row="1" Grid.Column="1"  Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.Html,Converter={converters:DisplayHtmlConverter}}" Background="Transparent" />
+                            <wpf:HtmlPanel Margin="0,-10,0,2"  Grid.Row="1" Grid.Column="1"  Padding="0" BaseStylesheet="p { margin: 0;}" BorderThickness="0" Text="{Binding Comment.Content.Html,Converter={converters:DisplayHtmlConverter}}" Background="Transparent" />
 
-                                                    <StackPanel Grid.Column="1" Grid.Row="2"  Orientation="Horizontal" Margin="0,2,0,0">
-                                                        <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=EnterReplyModeCommand}" CommandParameter="{Binding}"/>
-                                                        <Separator Style="{StaticResource VerticalSeparator}" />
-                                                        <Button Style="{StaticResource ActionLinkButton}" Content="Edit" Command="{Binding ElementName=CommentView,Path=EnterEditModeCommand}" CommandParameter="{Binding}">
-                                                            <Button.Visibility>
-                                                                <MultiBinding Converter="{StaticResource UserCommentButtonVisibilityConverter}">
-                                                                    <Binding Path="UserName" ElementName="CommentView" />
-                                                                    <Binding Path="Comment" />
-                                                                </MultiBinding>
-                                                            </Button.Visibility>
-                                                        </Button>
-                                                        <Separator Style="{StaticResource VerticalSeparator}" />
-                                                        <Button Style="{StaticResource ActionLinkButton}" Content="Delete" Command="{Binding ElementName=CommentView,Path=DeleteCommand}" CommandParameter="{Binding}" >
-                                                            <Button.Visibility>
-                                                                <MultiBinding Converter="{StaticResource UserCommentButtonVisibilityConverter}">
-                                                                    <Binding Path="UserName" ElementName="CommentView" />
-                                                                    <Binding Path="Comment" />
-                                                                </MultiBinding>
-                                                            </Button.Visibility>
-                                                        </Button>
-                                                        <Separator Style="{StaticResource VerticalSeparator}" />
-                                                        <TextBlock HorizontalAlignment="Stretch" Margin="5,0,0,0" Text="{Binding Comment.UpdatedOn}" Foreground="Gray"></TextBlock>
-                                                    </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="2"  Orientation="Horizontal" Margin="0,2,0,0">
+                                <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=EnterReplyModeCommand}" CommandParameter="{Binding}"/>
+                                <Separator Style="{StaticResource VerticalSeparator}" />
+                                <Button x:Name="EditButton"  Style="{StaticResource ActionLinkButton}" Content="Edit" Command="{Binding ElementName=CommentView,Path=EnterEditModeCommand}" CommandParameter="{Binding}">
+                                    <Button.Visibility>
+                                        <MultiBinding Converter="{StaticResource UserCommentButtonVisibilityConverter}">
+                                            <Binding Path="UserName" ElementName="CommentView" />
+                                            <Binding Path="Comment" />
+                                        </MultiBinding>
+                                    </Button.Visibility>
+                                </Button>
+                                <Separator Style="{StaticResource VerticalSeparator}" Visibility="{Binding ElementName=EditButton,Path=Visibility}" />
+                                <Button x:Name="DeleteButton" Style="{StaticResource ActionLinkButton}" Content="Delete" Command="{Binding ElementName=CommentView,Path=DeleteCommand}" CommandParameter="{Binding}" >
+                                    <Button.Visibility>
+                                        <MultiBinding Converter="{StaticResource UserCommentButtonVisibilityConverter}">
+                                            <Binding Path="UserName" ElementName="CommentView" />
+                                            <Binding Path="Comment" />
+                                        </MultiBinding>
+                                    </Button.Visibility>
+                                </Button>
+                                <Separator Style="{StaticResource VerticalSeparator}" Visibility="{Binding ElementName=DeleteButton,Path=Visibility}"/>
+                                <TextBlock HorizontalAlignment="Stretch" Margin="5,0,0,0" Text="{Binding Comment.UpdatedOn}" Foreground="Gray"></TextBlock>
+                            </StackPanel>
 
-                                                    <Grid Grid.Row="3" Grid.Column="1" Margin="0,5">
-                                                        <local:AddCommentView
-                                                                              AddCommand="{Binding ElementName=CommentView,Path=ReplyCommand}"
-                                                                              AddCommandParameter="{Binding}"
-                                                                              CurrentText="{bindings:ValidatedBinding ReplyContent}"
-                                                                              ButtonLabelContent="Reply"
-                                                                              Visibility="{Binding IsReplyExpanded, Converter={converters:BoolToVisibilityConverter},Mode=TwoWay}"
-                                                        />
-                                                        <local:AddCommentView
-                                                                              AddCommand="{Binding ElementName=CommentView,Path=EditCommand}"
-                                                                              AddCommandParameter="{Binding}"
-                                                                              CurrentText="{bindings:ValidatedBinding EditContent}"
-                                                                              ButtonLabelContent="Edit"
-                                                                              Visibility="{Binding IsEditExpanded, Converter={converters:BoolToVisibilityConverter},Mode=TwoWay}"
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-
-                                            </Setter.Value>
-                                        </Setter>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ContentControl.Style>
-                    </ContentControl>
-
+                            <Grid Grid.Row="3" Grid.Column="1" Margin="0,5">
+                                <local:AddCommentView
+                                    AddCommand="{Binding ElementName=CommentView,Path=ReplyCommand}"
+                                    AddCommandParameter="{Binding}"
+                                    CurrentText="{bindings:ValidatedBinding ReplyContent}"
+                                    ButtonLabelContent="Comment"
+                                    Visibility="{Binding IsReplyExpanded, Converter={converters:BoolToVisibilityConverter},Mode=TwoWay}"
+                                />
+                                <local:AddCommentView
+                                    AddCommand="{Binding ElementName=CommentView,Path=EditCommand}"
+                                    AddCommandParameter="{Binding}"
+                                    CurrentText="{bindings:ValidatedBinding EditContent}"
+                                    ButtonLabelContent="Comment"
+                                    Visibility="{Binding IsEditExpanded, Converter={converters:BoolToVisibilityConverter},Mode=TwoWay}"
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
         </TreeView>

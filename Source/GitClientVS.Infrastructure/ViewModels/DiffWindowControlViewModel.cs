@@ -180,8 +180,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             foreach (var chunk in FileDiff.Chunks)
             {
-                var splitChanges = chunk.Changes.Where(
-                    x => topLevelFileComments.Any(ch => ch.Comment.Inline.From == x.OldIndex && ch.Comment.Inline.To == x.NewIndex)).ToList();
+                var splitChanges = chunk.Changes.Where(x => topLevelFileComments.Any(ch => CommentMatchesLine(ch, x))).ToList();
 
                 SplitChunkByIndexes(chunk, splitChanges, topLevelFileComments);
             }
@@ -192,7 +191,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             foreach (var change in splitChanges)
             {
                 var currentChangeIndex = chunk.Changes.IndexOf(change);
-                var currentComments = topLevelFileComments.Where(x => x.Comment.Inline.From == change.OldIndex && x.Comment.Inline.To == change.NewIndex).ToList();
+                var currentComments = topLevelFileComments.Where(x => CommentMatchesLine(x, change)).ToList();
 
                 var firstChunk = new ChunkDiff { Changes = chunk.Changes.Take(currentChangeIndex + 1).ToList() };
                 var secondChunk = new ChunkDiff { Changes = chunk.Changes.Skip(currentChangeIndex + 1).ToList() };
@@ -206,6 +205,12 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             if (chunk.Changes.Any())
                 DisplayedModels.Add(chunk);
+        }
+
+        private bool CommentMatchesLine(ICommentTree commentTree, LineDiff change)
+        {
+            var inline = commentTree.Comment.Inline;
+            return (inline.From != null && inline.From == change.OldIndex) || (inline.To != null && inline.To == change.NewIndex);
         }
 
         private Task ViewFile()
