@@ -22,6 +22,7 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media;
 using GitClientVS.Contracts.Interfaces.Services;
+using GitClientVS.Infrastructure;
 using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.UI.Helpers;
 using GitClientVS.VisualStudio.UI.Settings;
@@ -104,7 +105,8 @@ namespace GitClientVS.VisualStudio.UI
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             await base.InitializeAsync(cancellationToken, progress);
-            var componentModel = (IComponentModel) await GetServiceAsync(typeof(SComponentModel));
+            var componentModel = (IComponentModel)await GetServiceAsync(typeof(SComponentModel));
+
             await InitializePackageAsync(componentModel);
         }
 
@@ -113,6 +115,9 @@ namespace GitClientVS.VisualStudio.UI
             try
             {
                 var serviceProvider = componentModel.DefaultExportProvider;
+
+                Application.Current.Resources.Add(Consts.IocResource, serviceProvider);
+
                 var appInitializer = serviceProvider.GetExportedValue<IAppInitializer>();
                 var commandsService = serviceProvider.GetExportedValue<ICommandsService>();
                 var gitWatcher = serviceProvider.GetExportedValue<IGitWatcher>();

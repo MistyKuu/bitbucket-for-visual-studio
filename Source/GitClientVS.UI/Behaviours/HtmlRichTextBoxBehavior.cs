@@ -7,7 +7,7 @@ using System.Windows.Documents;
 using System.Windows.Markup;
 using HTMLConverter;
 
-namespace GitClientVS.UI.Controls
+namespace GitClientVS.UI.Behaviours
 {
     public class HtmlRichTextBoxBehavior : DependencyObject
     {

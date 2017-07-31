@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
+using GitClientVS.Contracts.Interfaces.Services;
 
 namespace GitClientVS.UI.Converters
 {

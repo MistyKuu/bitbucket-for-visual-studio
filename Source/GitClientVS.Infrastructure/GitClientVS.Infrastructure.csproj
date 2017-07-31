@@ -96,6 +96,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CacheKeys.cs" />
+    <Compile Include="Consts.cs" />
     <Compile Include="Extensions\ChainingExtensions.cs" />
     <Compile Include="Extensions\CommonExtensions.cs" />
     <Compile Include="Extensions\IServiceProviderExtensions.cs" />
