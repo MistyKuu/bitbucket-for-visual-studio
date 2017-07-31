@@ -168,13 +168,11 @@
                             <Image Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="20" Height="20" Margin="0,0,5,0"/>
                             <TextBlock Grid.Row="0" Grid.Column="1"  VerticalAlignment="Top" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
 
-                            <!--<RichTextBox Grid.Row="1" Grid.Column="1"   Background="Transparent"
+                            <RichTextBox Grid.Row="1" Grid.Column="1"   Background="Transparent"
                                          BorderThickness="0"
                                          behaviours:HtmlRichTextBoxBehavior.Text="{Binding Comment.Content.Html}" 
                                          IsDocumentEnabled="True"
-                                         IsReadOnly="True" />-->
-
-                            <Image Grid.Row="1" Grid.Column="1" Width="30" Height="30" Margin="5" Tag="{Binding Converter={converters:UrlToImageSourceConverter}}" Source="{Binding RelativeSource={RelativeSource Self},Path= Tag.Result}" />
+                                         IsReadOnly="True" />
 
                             <StackPanel Grid.Column="1" Grid.Row="2"  Orientation="Horizontal" Margin="0,2,0,0">
                                 <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=EnterReplyModeCommand}" CommandParameter="{Binding}"/>

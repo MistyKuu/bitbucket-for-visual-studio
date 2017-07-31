@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Markup;
+using GitClientVS.UI.Converters;
 using HTMLConverter;
 
 namespace GitClientVS.UI.Behaviours
@@ -27,14 +29,28 @@ namespace GitClientVS.UI.Behaviours
             var xaml = HtmlToXamlConverter.ConvertHtmlToXaml(text, true);
             var flowDocument = XamlReader.Parse(xaml) as FlowDocument;
             HyperlinksSubscriptions(flowDocument);
+            DownloadAuthenticatedImages(flowDocument);
+
             richTextBox.Document = flowDocument;
+        }
+
+        private static void DownloadAuthenticatedImages(FlowDocument flowDocument)
+        {
+            var converter = new UrlToImageSourceConverter();
+
+            GetVisualChildren(flowDocument).OfType<Image>().ToList().ForEach(i =>
+            {
+                converter.GetImage(i.Source.ToString()).ContinueWith((t) =>
+                {
+                    i.Source = t.Result;
+                }, TaskScheduler.FromCurrentSynchronizationContext());
+            });
         }
 
         private static void HyperlinksSubscriptions(FlowDocument flowDocument)
         {
             if (flowDocument == null) return;
-            GetVisualChildren(flowDocument).OfType<Hyperlink>().ToList()
-                .ForEach(i => i.RequestNavigate += HyperlinkNavigate);
+            GetVisualChildren(flowDocument).OfType<Hyperlink>().ToList().ForEach(i => i.RequestNavigate += HyperlinkNavigate);
         }
 
         private static IEnumerable<DependencyObject> GetVisualChildren(DependencyObject root)

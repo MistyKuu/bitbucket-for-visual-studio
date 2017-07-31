@@ -48,13 +48,13 @@ namespace GitClientVS.UI.Converters
             return notifier;
         }
 
-        private async Task<BitmapImage> GetImage(string url)
+        public async Task<BitmapImage> GetImage(string url)
         {
             var client = new RestClient(url)
             {
                 Authenticator = new HttpBasicAuthenticator(_userInfoService.ConnectionData.UserName, _userInfoService.ConnectionData.Password)
             };
-            var response = await client.ExecuteTaskAsync(new RestRequest(url, Method.GET));
+            var response = await client.ExecuteTaskAsync(new RestRequest(string.Empty, Method.GET));
 
             var buffer = response.RawBytes;
 
