@@ -16,6 +16,8 @@
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:behaviours="clr-namespace:GitClientVS.UI.Behaviours"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:xaml="clr-namespace:Markdown.Xaml;assembly=Markdown.Xaml"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="CommentView"
@@ -25,13 +27,36 @@
             <ResourceDictionary.MergedDictionaries>
                 <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+
+                <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/Markdown.Demo.Styles.Default.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <converters:UserCommentButtonVisibilityConverter x:Key="UserCommentButtonVisibilityConverter" />
+            <converters:UrlToImageSourceConverter x:Key="UrlToImageSourceConverter"  />
+            <Style TargetType="{x:Type Paragraph}">
+                <Setter Property="Margin" Value="0"/>
+            </Style>
+
+            <xaml:Markdown x:Key="Markdown"
+                           DocumentStyle="{StaticResource DocumentStyle}"
+                           Heading1Style="{StaticResource H1Style}"
+                           Heading2Style="{StaticResource H2Style}"
+                           Heading3Style="{StaticResource H3Style}"
+                           Heading4Style="{StaticResource H4Style}"
+                           LinkStyle="{StaticResource LinkStyle}"
+                           ImageStyle="{StaticResource ImageStyle}"
+                           SeparatorStyle="{StaticResource SeparatorStyle}"
+                           AssetPathRoot="{x:Static system:Environment.CurrentDirectory}"
+                           ImageManager="{StaticResource UrlToImageSourceConverter}"
+                           />
+
+
+            <xaml:TextToFlowDocumentConverter x:Key="TextToFlowDocumentConverter"  Markdown="{StaticResource Markdown}"/>
         </ResourceDictionary>
+
     </UserControl.Resources>
     <Grid>
-        <TreeView  ItemsSource="{Binding ElementName=CommentView,Path=CommentTree}" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <TreeView ItemsSource="{Binding ElementName=CommentView,Path=CommentTree}" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <TreeView.Resources>
                 <Style x:Key="TreeViewItemFocusVisual">
                     <Setter Property="Control.Template">
@@ -168,11 +193,13 @@
                             <Image Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="20" Height="20" Margin="0,0,5,0"/>
                             <TextBlock Grid.Row="0" Grid.Column="1"  VerticalAlignment="Top" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
 
-                            <RichTextBox Grid.Row="1" Grid.Column="1"   Background="Transparent"
-                                         BorderThickness="0"
-                                         behaviours:HtmlRichTextBoxBehavior.Text="{Binding Comment.Content.Html}" 
-                                         IsDocumentEnabled="True"
-                                         IsReadOnly="True" />
+                            <FlowDocumentScrollViewer Grid.Row="1" Grid.Column="1" 
+                                                      VerticalAlignment="Stretch"
+                                                      HorizontalAlignment="Stretch"
+                                                      Margin="5"
+                                                      VerticalScrollBarVisibility="Disabled"
+                                                      HorizontalScrollBarVisibility="Disabled"
+                                                      Document="{Binding Comment.Content.Html, Converter={StaticResource TextToFlowDocumentConverter}}" />
 
                             <StackPanel Grid.Column="1" Grid.Row="2"  Orientation="Horizontal" Margin="0,2,0,0">
                                 <Button Style="{StaticResource ActionLinkButton}" Content="Reply" Command="{Binding ElementName=CommentView,Path=EnterReplyModeCommand}" CommandParameter="{Binding}"/>

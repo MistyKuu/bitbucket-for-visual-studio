@@ -9,7 +9,7 @@ namespace BitBucket.REST.API.Mappings
         {
             var comment = new Comment()
             {
-                Content = new Content() { Html = source.ContentRendered },
+                Content = new Content() { Html = source.Content },
                 CreatedOn = source.CreatedOn,
                 UpdatedOn = source.UpdatedOn,
                 Id = source.CommentId.Value,

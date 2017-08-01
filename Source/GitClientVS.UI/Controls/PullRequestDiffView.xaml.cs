@@ -34,5 +34,7 @@ namespace GitClientVS.UI.Controls
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
+
+       
     }
 }

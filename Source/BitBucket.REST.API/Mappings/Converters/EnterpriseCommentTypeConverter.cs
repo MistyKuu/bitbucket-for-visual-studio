@@ -29,10 +29,6 @@ namespace BitBucket.REST.API.Mappings.Converters
                     From = source.Anchor.FileType == FileDiffType.From ? source.Anchor.Line : null,
                     To = source.Anchor.FileType == FileDiffType.To ? source.Anchor.Line : null,
                 };
-
-                //Check if lineType is context and then assign null to from, it's because Context comes with From type and we want to set both
-                //if (source.Anchor.LineType == "CONTEXT")
-                //    comment.Inline.To = comment.Inline.From;
             }
 
             comment.User.Links.Avatar = new Link() { Href = comment.User.Links.Self.Href + "/avatar.png" };

@@ -182,10 +182,10 @@
                                               ButtonLabelContent="Comment"
                         />
                     </Border>
-                    
-                    
 
-                    <local:CommentsTreeView  Grid.Row="1" Margin="5"
+
+
+                    <local:CommentsTreeView Grid.Row="1" Margin="5"
                         CommentTree="{Binding CommentViewModel.CommentTree}" 
                         DeleteCommand="{Binding CommentViewModel.DeleteCommentCommand}"
                         ReplyCommand="{Binding CommentViewModel.ReplyCommentCommand}"

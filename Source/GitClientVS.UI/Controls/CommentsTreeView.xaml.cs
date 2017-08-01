@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,6 +17,8 @@ using System.Windows.Shapes;
 using System.Xml;
 using GitClientVS.Contracts.Models.Tree;
 using GitClientVS.UI.Converters;
+using GitClientVS.UI.Helpers;
+using MahApps.Metro.Controls;
 using ReactiveUI;
 
 namespace GitClientVS.UI.Controls
@@ -108,6 +111,7 @@ namespace GitClientVS.UI.Controls
 
         private ICommand _enterEditModeCommand;
         private ICommand _enterReplyModeCommand;
+        private ScrollViewer _scrollViewer;
 
         public CommentsTreeView()
         {

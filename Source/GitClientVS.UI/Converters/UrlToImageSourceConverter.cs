@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Cache;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,6 +22,7 @@ using System.Xml;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Infrastructure;
 using GitClientVS.UI.AttachedProperties;
+using Markdown.Xaml;
 using RestSharp;
 using RestSharp.Authenticators;
 using Svg;
@@ -28,7 +30,7 @@ using Image = System.Drawing.Image;
 
 namespace GitClientVS.UI.Converters
 {
-    public class UrlToImageSourceConverter : BaseMarkupExtensionConverter
+    public class UrlToImageSourceConverter : BaseMarkupExtensionConverter, IImageManager
     {
         private static IUserInformationService _userInfoService;
         private RestClient _client;
@@ -37,6 +39,11 @@ namespace GitClientVS.UI.Converters
         {
             ExportProvider provider = (ExportProvider)Application.Current.Resources[Consts.IocResource];
             _userInfoService = _userInfoService ?? provider.GetExportedValue<IUserInformationService>();
+        }
+
+        public Task<BitmapImage> DownloadImage(string url)
+        {
+            return GetImage(url);
         }
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -50,15 +57,18 @@ namespace GitClientVS.UI.Converters
 
         public async Task<BitmapImage> GetImage(string url)
         {
-            var client = new RestClient(url)
-            {
-                Authenticator = new HttpBasicAuthenticator(_userInfoService.ConnectionData.UserName, _userInfoService.ConnectionData.Password)
-            };
-            var response = await client.ExecuteTaskAsync(new RestRequest(string.Empty, Method.GET));
+            var httpClient = new HttpClient();
 
-            var buffer = response.RawBytes;
+            httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue(
+                    "Basic",
+                    System.Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_userInfoService.ConnectionData.UserName}:{_userInfoService.ConnectionData.Password}")));
 
-            return response.ContentType.Contains("svg", StringComparison.InvariantCultureIgnoreCase) ? GetSvgImage(buffer) : UrlToBitmap(buffer);
+            var resp = await httpClient.GetAsync(url);
+            var filetype = resp.Content.Headers.ContentType.MediaType;
+            var buffer = await resp.Content.ReadAsByteArrayAsync();
+
+            return filetype.Contains("svg", StringComparison.InvariantCultureIgnoreCase) ? GetSvgImage(buffer) : UrlToBitmap(buffer);
         }
 
         private BitmapImage GetSvgImage(byte[] buffer)

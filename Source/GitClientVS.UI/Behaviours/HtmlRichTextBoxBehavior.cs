@@ -1,13 +1,17 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Markup;
+using System.Windows.Media.Imaging;
 using GitClientVS.UI.Converters;
 using HTMLConverter;
+using Markdown.Xaml;
 
 namespace GitClientVS.UI.Behaviours
 {
