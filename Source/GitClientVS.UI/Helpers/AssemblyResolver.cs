@@ -37,7 +37,6 @@ namespace GitClientVS.UI.Helpers
             "System.Reactive.Linq",
             "System.Reactive.PlatformServices",
             "System.Reactive.Windows.Threading",
-            "HtmlToXamlConverter",
             "Markdown.Xaml",
         };//todo version incompability
 
