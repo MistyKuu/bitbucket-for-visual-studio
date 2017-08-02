@@ -229,7 +229,7 @@
                                 <TextBlock HorizontalAlignment="Stretch" Margin="5,0,0,0" Text="{Binding Comment.UpdatedOn,Converter={converters:HumanizeDateTimeConverter}}" Foreground="Gray"></TextBlock>
                             </StackPanel>
 
-                            <Grid Grid.Row="3" Grid.Column="1" Margin="0,5">
+                            <Grid Grid.Row="3" Grid.Column="1" Margin="0,5,0,0">
                                 <local:AddCommentView
                                     AddCommand="{Binding ElementName=CommentView,Path=ReplyCommand}"
                                     AddCommandParameter="{Binding}"
