@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using BitBucket.REST.API.Models.Standard;
 using GitClientVS.Contracts.Interfaces;
@@ -95,7 +97,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private void RebuildTree()
         {
-            var inlineComments = Comments.Where(comment => comment.Inline !=null).ToList();
+            var inlineComments = Comments.Where(comment => comment.Inline != null).ToList();
             var notInlineComments = Comments.Where(x => x.Inline == null).ToList();
 
             InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments).ToList();
@@ -116,7 +118,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             var newServerComment = await _gitClientService.AddPullRequestComment(PullRequestId, newComment);
             newServerComment.Inline = comment.Inline;
-            newServerComment.Parent = new GitCommentParent() {Id = comment.Id};
+            newServerComment.Parent = new GitCommentParent() { Id = comment.Id };
 
             Comments.Add(newServerComment);
             RebuildTree();
@@ -173,17 +175,17 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 await AddComment(null, CommentText);
                 CommentText = string.Empty;
-            });
+            }, Changed.Select(y => !string.IsNullOrEmpty(CommentText)));
             AddFileLevelCommentCommand = ReactiveCommand.CreateFromTask<GitCommentInline>(async inline =>
             {
                 await AddComment(inline, FileLevelCommentText);
                 FileLevelCommentText = string.Empty;
-            });
+            }, Changed.Select(y => !string.IsNullOrEmpty(FileLevelCommentText)));
             AddInlineCommentCommand = ReactiveCommand.CreateFromTask<GitCommentInline>(async inline =>
             {
                 await AddComment(inline, InlineCommentText);
                 InlineCommentText = string.Empty;
-            });
+            }, Changed.Select(y => !string.IsNullOrEmpty(InlineCommentText)));
         }
 
 
