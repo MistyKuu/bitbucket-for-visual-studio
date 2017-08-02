@@ -17,12 +17,12 @@ namespace BitBucket.REST.API.Mappings
                 Parent = source.ParentId.HasValue ? new Parent() { Id = source.ParentId.Value } : null,
                 User = new User()
                 {
-                    Username = source.AuthorInfo?.UserName,
-                    DisplayName = source.AuthorInfo?.DisplayName,
+                    Username = source.AuthorInfo?.UserName ?? source.UserName,
+                    DisplayName = source.AuthorInfo?.DisplayName ?? source.DisplayName,
                     Links = new Links()
                     {
-                        Self = new Link() { Href = source.AuthorInfo?.AvatarUrl },
-                        Avatar = new Link() { Href = source.AuthorInfo?.AvatarUrl },
+                        Self = new Link() { Href = source.AuthorInfo?.AvatarUrl ?? source.AvatarUrl },
+                        Avatar = new Link() { Href = source.AuthorInfo?.AvatarUrl ?? source.AvatarUrl },
                     }
                 },
             };

@@ -74,8 +74,11 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public string CurrentUserName => _userInformationService.ConnectionData.UserName;
 
+        public List<GitComment> Comments { get; set; }
+
+
         [ImportingConstructor]
-        public CommentViewModel(IGitClientService gitClientService, ITreeStructureGenerator treeStructureGenerator,IUserInformationService userInformationService)
+        public CommentViewModel(IGitClientService gitClientService, ITreeStructureGenerator treeStructureGenerator, IUserInformationService userInformationService)
         {
             _gitClientService = gitClientService;
             _treeStructureGenerator = treeStructureGenerator;
@@ -85,10 +88,15 @@ namespace GitClientVS.Infrastructure.ViewModels
         public async Task UpdateComments(long pullRequestId)
         {
             PullRequestId = pullRequestId;
-            var comments = await _gitClientService.GetPullRequestComments(PullRequestId);
+            Comments = (await _gitClientService.GetPullRequestComments(PullRequestId)).ToList();
 
-            var inlineComments = comments.Where(comment => comment.IsInline).ToList();
-            var notInlineComments = comments.Where(x => !x.IsInline).ToList();
+            RebuildTree();
+        }
+
+        private void RebuildTree()
+        {
+            var inlineComments = Comments.Where(comment => comment.Inline !=null).ToList();
+            var notInlineComments = Comments.Where(x => x.Inline == null).ToList();
 
             InlineCommentTree = _treeStructureGenerator.CreateCommentTree(inlineComments).ToList();
             CommentTree = _treeStructureGenerator.CreateCommentTree(notInlineComments).ToList();
@@ -106,16 +114,25 @@ namespace GitClientVS.Infrastructure.ViewModels
                 Inline = comment.Inline != null ? new GitCommentInline() { Path = comment.Inline.Path } : null
             };
 
-            await _gitClientService.AddPullRequestComment(PullRequestId, newComment);
-            await UpdateComments(PullRequestId);//todo temp solution just to make it work
+            var newServerComment = await _gitClientService.AddPullRequestComment(PullRequestId, newComment);
+            newServerComment.Inline = comment.Inline;
+            newServerComment.Parent = new GitCommentParent() {Id = comment.Id};
+
+            Comments.Add(newServerComment);
+            RebuildTree();
         }
 
         private async Task EditComment(ICommentTree commentTree)
         {
             commentTree.Comment.Content = new GitCommentContent() { Html = commentTree.EditContent };
 
-            await _gitClientService.EditPullRequestComment(PullRequestId, commentTree.Comment);
-            await UpdateComments(PullRequestId);//todo temp solution just to make it work
+            var newServerComment = await _gitClientService.EditPullRequestComment(PullRequestId, commentTree.Comment);
+            newServerComment.Inline = commentTree.Comment.Inline;
+            newServerComment.Parent = commentTree.Comment.Parent;
+
+            var index = Comments.FindIndex(x => x.Id == newServerComment.Id);
+            Comments[index] = newServerComment;
+            RebuildTree();
         }
 
         private async Task AddComment(GitCommentInline inline, string text)
@@ -123,7 +140,6 @@ namespace GitClientVS.Infrastructure.ViewModels
             var comment = new GitComment()
             {
                 Content = new GitCommentContent() { Html = text },
-                IsInline = inline != null,
                 Inline = inline != null ? new GitCommentInline()
                 {
                     Path = inline.Path,
@@ -132,15 +148,20 @@ namespace GitClientVS.Infrastructure.ViewModels
                 } : null
             };
 
-            await _gitClientService.AddPullRequestComment(PullRequestId, comment);
-            await UpdateComments(PullRequestId); //todo temp solution just to make it work
+            var newServerComment = await _gitClientService.AddPullRequestComment(PullRequestId, comment);
+            newServerComment.Inline = comment.Inline;
+            Comments.Add(newServerComment);
+            RebuildTree();
         }
 
         private async Task DeleteComment(ICommentTree commentTree)
         {
             var comment = commentTree.Comment;
             await _gitClientService.DeletePullRequestComment(PullRequestId, comment.Id, comment.Version);
-            await UpdateComments(PullRequestId); //todo temp solution just to make it work
+
+            var index = Comments.FindIndex(x => x.Id == comment.Id);
+            Comments[index].IsDeleted = true;
+            RebuildTree();
         }
 
         public void InitializeCommands()
@@ -167,6 +188,6 @@ namespace GitClientVS.Infrastructure.ViewModels
 
 
         public string ErrorMessage { get; set; }
-        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { ReplyCommentCommand, EditCommentCommand, DeleteCommentCommand, AddCommentCommand,AddInlineCommentCommand,AddFileLevelCommentCommand };
+        public IEnumerable<ReactiveCommand> ThrowableCommands => new[] { ReplyCommentCommand, EditCommentCommand, DeleteCommentCommand, AddCommentCommand, AddInlineCommentCommand, AddFileLevelCommentCommand };
     }
 }

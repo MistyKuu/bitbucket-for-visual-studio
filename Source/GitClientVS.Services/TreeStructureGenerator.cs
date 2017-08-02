@@ -72,7 +72,6 @@ namespace GitClientVS.Services
                     Parent = comment.Parent,
                     User = comment.User,
                     UpdatedOn = comment.UpdatedOn,
-                    IsInline = comment.IsInline,
                     Inline = comment.Inline,
                     IsDeleted = comment.IsDeleted,
                     Version = comment.Version
