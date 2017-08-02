@@ -175,12 +175,15 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 await AddComment(null, CommentText);
                 CommentText = string.Empty;
-            }, Changed.Select(y => !string.IsNullOrEmpty(CommentText)));
+            }, 
+            Changed.Select(y => !string.IsNullOrEmpty(CommentText)));
+
             AddFileLevelCommentCommand = ReactiveCommand.CreateFromTask<GitCommentInline>(async inline =>
             {
                 await AddComment(inline, FileLevelCommentText);
                 FileLevelCommentText = string.Empty;
             }, Changed.Select(y => !string.IsNullOrEmpty(FileLevelCommentText)));
+
             AddInlineCommentCommand = ReactiveCommand.CreateFromTask<GitCommentInline>(async inline =>
             {
                 await AddComment(inline, InlineCommentText);

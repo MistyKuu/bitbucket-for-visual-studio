@@ -56,7 +56,7 @@
 
     </UserControl.Resources>
     <Grid>
-        <TreeView ItemsSource="{Binding ElementName=CommentView,Path=CommentTree}" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <TreeView ItemsSource="{Binding ElementName=CommentView,Path=CommentTree}" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
             <TreeView.Resources>
                 <Style x:Key="TreeViewItemFocusVisual">
                     <Setter Property="Control.Template">
@@ -222,7 +222,7 @@
                                     </Button.Visibility>
                                 </Button>
                                 <Separator Style="{StaticResource VerticalSeparator}" Visibility="{Binding ElementName=DeleteButton,Path=Visibility}"/>
-                                <TextBlock HorizontalAlignment="Stretch" Margin="5,0,0,0" Text="{Binding Comment.UpdatedOn}" Foreground="Gray"></TextBlock>
+                                <TextBlock HorizontalAlignment="Stretch" Margin="5,0,0,0" Text="{Binding Comment.UpdatedOn,Converter={converters:HumanizeDateTimeConverter}}" Foreground="Gray"></TextBlock>
                             </StackPanel>
 
                             <Grid Grid.Row="3" Grid.Column="1" Margin="0,5">
