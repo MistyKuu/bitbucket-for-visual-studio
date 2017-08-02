@@ -136,6 +136,16 @@
                                 <TextBlock FontWeight="Bold" Foreground="Red">
                                             <Run Text="-"/><Run Text="{Binding Removed}"/>
                                 </TextBlock>
+                               
+
+                                <Image Margin="20,1,5,0" Source="../Images/comment.png"
+                                       Width="16"
+                                       Height="16"
+                                       SnapsToDevicePixels="True"
+                                />
+                                <TextBlock >
+                                    <Run Text="{Binding Comments}"/>
+                                </TextBlock>
                             </StackPanel>
                         </DataTemplate>
                     </TreeView.Resources>

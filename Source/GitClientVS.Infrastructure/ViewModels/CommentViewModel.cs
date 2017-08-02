@@ -17,7 +17,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 {
     [Export(typeof(ICommentViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class CommentViewModel : ViewModelBase, ICommentViewModel
+    public class CommentViewModel : ViewModelBase,ICommentViewModel
     {
         private List<ICommentTree> _commentTree;
         private List<ICommentTree> _inlineCommentTree;
@@ -84,7 +84,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         public string CurrentUserName => _userInformationService.ConnectionData.UserName;
 
         public List<GitComment> Comments { get; set; }
-
 
         [ImportingConstructor]
         public CommentViewModel(IGitClientService gitClientService, ITreeStructureGenerator treeStructureGenerator, IUserInformationService userInformationService)

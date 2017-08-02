@@ -200,7 +200,7 @@
                             <FlowDocumentScrollViewer Grid.Row="1" Grid.Column="1" 
                                                       VerticalAlignment="Stretch"
                                                       HorizontalAlignment="Stretch"
-                                                      Margin="5"
+                                                      Margin="0,0,0,2"
                                                       VerticalScrollBarVisibility="Disabled"
                                                       HorizontalScrollBarVisibility="Disabled"
                                                       Document="{Binding Comment.Content.Html, Converter={StaticResource TextToFlowDocumentConverter}}" />

@@ -27,5 +27,6 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         GitComment LastEditedComment { get; }
 
         Task UpdateComments(long pullRequestId);
+        List<GitComment> Comments { get; set; }
     }
 }

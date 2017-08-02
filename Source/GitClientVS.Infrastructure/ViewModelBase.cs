@@ -16,7 +16,6 @@ namespace GitClientVS.Infrastructure
     public abstract class ViewModelBase : ReactiveValidatedObject, IViewModel, IDisposable
     {
         private IEnumerable<IDisposable> _disposables;
-
         protected ViewModelBase()
         {
             (this as IViewModelWithCommands)?.InitializeCommands();

@@ -12,6 +12,7 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
+using GitClientVS.Contracts.Models.Tree;
 using ReactiveUI;
 
 namespace GitClientVS.Infrastructure.ViewModels
@@ -208,6 +209,18 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             PullRequestDiffViewModel.FromCommit = PullRequest.SourceBranch.Target.Hash;
             PullRequestDiffViewModel.ToCommit = PullRequest.DestinationBranch.Target.Hash;
+
+            UpdateCommentsCountInFiles(PullRequestDiffViewModel.FilesTree);
+
+        }
+
+        private void UpdateCommentsCountInFiles(IEnumerable<ITreeFile> files)
+        {
+            foreach (var treeFile in files)
+            {
+                treeFile.Comments = PullRequestDiffViewModel.CommentViewModel.Comments.Where(x=>!x.IsDeleted).Count(x => x.Inline != null && treeFile.FileDiff != null && x.Inline.Path == treeFile.FileDiff.DisplayFileName);
+                UpdateCommentsCountInFiles(treeFile.Files);
+            }
         }
 
         private async Task GetPullRequestInfo(long id)

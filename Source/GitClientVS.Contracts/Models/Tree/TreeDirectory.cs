@@ -23,6 +23,8 @@ namespace GitClientVS.Contracts.Models.Tree
             }
         }
 
+        public long Comments { get; set; }
+
         public bool IsExpanded
         {
             get { return _isExpanded; }
