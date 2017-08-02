@@ -56,7 +56,11 @@
 
     </UserControl.Resources>
     <Grid>
-        <TreeView ItemsSource="{Binding ElementName=CommentView,Path=CommentTree}" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+        <TreeView x:Name="TView" ItemsSource="{Binding ElementName=CommentView,Path=CommentTree}" Margin="0,4,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+            <i:Interaction.Behaviors>
+                <behaviours:MoveToTouchedTreeViewItem TrackedItem="{Binding ElementName=CommentView,Path=TrackedItem}" />
+            </i:Interaction.Behaviors>
+
             <TreeView.Resources>
                 <Style x:Key="TreeViewItemFocusVisual">
                     <Setter Property="Control.Template">

@@ -24,6 +24,7 @@ namespace GitClientVS.Contracts.Interfaces.ViewModels
         int CommentsCount { get; }
         long PullRequestId { get; }
         List<ICommentTree> InlineCommentTree { get; }
+        GitComment LastEditedComment { get; }
 
         Task UpdateComments(long pullRequestId);
     }

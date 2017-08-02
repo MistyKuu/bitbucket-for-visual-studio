@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
+using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Contracts.Models.Tree;
 using GitClientVS.UI.Converters;
 using GitClientVS.UI.Helpers;
@@ -28,6 +29,18 @@ namespace GitClientVS.UI.Controls
     /// </summary>
     public partial class CommentsTreeView : UserControl
     {
+        public GitComment TrackedItem
+        {
+            get { return (GitComment)GetValue(TrackedItemProperty); }
+            set { SetValue(TrackedItemProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for TrackedItem.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TrackedItemProperty =
+            DependencyProperty.Register("TrackedItem", typeof(GitComment), typeof(CommentsTreeView), new PropertyMetadata(null));
+
+
+
         public List<ICommentTree> CommentTree
         {
             get { return (List<ICommentTree>)GetValue(CommentTreeProperty); }
@@ -111,7 +124,6 @@ namespace GitClientVS.UI.Controls
 
         private ICommand _enterEditModeCommand;
         private ICommand _enterReplyModeCommand;
-        private ScrollViewer _scrollViewer;
 
         public CommentsTreeView()
         {

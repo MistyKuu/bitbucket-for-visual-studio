@@ -113,6 +113,7 @@
     <Compile Include="AttachedProperties\SelectTreeViewAfterItemClickBehavior.cs" />
     <Compile Include="AttachedProperties\SetErrorTemplateAfterTouchBehavior.cs" />
     <Compile Include="Behaviours\AutoCompleteBoxDelegateAndResetBehaviour.cs" />
+    <Compile Include="Behaviours\MoveToTouchedTreeViewItem.cs" />
     <Compile Include="Behaviours\ScrollHelper.cs" />
     <Compile Include="Behaviours\ScrollViewerMonitor.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />

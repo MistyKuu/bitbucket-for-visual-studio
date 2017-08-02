@@ -191,6 +191,7 @@
                         ReplyCommand="{Binding CommentViewModel.ReplyCommentCommand}"
                         EditCommand="{Binding CommentViewModel.EditCommentCommand}"
                         UserName ="{Binding CommentViewModel.CurrentUserName}"
+                        TrackedItem ="{Binding CommentViewModel.LastEditedComment}"
                     />
                 </Grid>
             </controls:MetroTabItem>

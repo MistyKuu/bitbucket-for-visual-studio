@@ -28,6 +28,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private string _commentText;
         private string _fileLevelCommentText;
         private string _inlineCommentText;
+        private GitComment _lastEditedComment;
 
         public ReactiveCommand ReplyCommentCommand { get; private set; }
         public ReactiveCommand EditCommentCommand { get; private set; }
@@ -37,6 +38,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ReactiveCommand AddInlineCommentCommand { get; private set; }
 
         public long PullRequestId { get; private set; }
+
+        public GitComment LastEditedComment
+        {
+            get => _lastEditedComment;
+            private set => this.RaiseAndSetIfChanged(ref _lastEditedComment, value);
+        }
 
         public List<ICommentTree> CommentTree
         {
@@ -91,8 +98,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             PullRequestId = pullRequestId;
             Comments = (await _gitClientService.GetPullRequestComments(PullRequestId)).ToList();
-
             RebuildTree();
+            LastEditedComment = CommentTree.FirstOrDefault()?.Comment;
         }
 
         private void RebuildTree()
@@ -121,7 +128,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             newServerComment.Parent = new GitCommentParent() { Id = comment.Id };
 
             Comments.Add(newServerComment);
+
             RebuildTree();
+            LastEditedComment = newServerComment;
         }
 
         private async Task EditComment(ICommentTree commentTree)
@@ -134,7 +143,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             var index = Comments.FindIndex(x => x.Id == newServerComment.Id);
             Comments[index] = newServerComment;
+
             RebuildTree();
+            LastEditedComment = newServerComment;
         }
 
         private async Task AddComment(GitCommentInline inline, string text)
@@ -153,7 +164,9 @@ namespace GitClientVS.Infrastructure.ViewModels
             var newServerComment = await _gitClientService.AddPullRequestComment(PullRequestId, comment);
             newServerComment.Inline = comment.Inline;
             Comments.Add(newServerComment);
+
             RebuildTree();
+            LastEditedComment = newServerComment;
         }
 
         private async Task DeleteComment(ICommentTree commentTree)
@@ -163,7 +176,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
             var index = Comments.FindIndex(x => x.Id == comment.Id);
             Comments[index].IsDeleted = true;
+
             RebuildTree();
+            LastEditedComment = Comments[index];
         }
 
         public void InitializeCommands()

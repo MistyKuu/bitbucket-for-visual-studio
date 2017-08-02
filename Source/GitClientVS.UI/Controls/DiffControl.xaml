@@ -55,6 +55,7 @@
                         ReplyCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.ReplyCommentCommand}"
                         EditCommand="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.EditCommentCommand}"
                         UserName ="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.CurrentUserName}"
+                        TrackedItem ="{Binding ElementName=CurrentControl,Path= DataContext.CommentViewModel.LastEditedComment}"
                         />
                     </Grid>
             </DataTemplate>
