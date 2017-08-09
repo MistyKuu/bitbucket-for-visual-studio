@@ -42,18 +42,25 @@ namespace GitClientVS.VisualStudio.UI
 
         public async Task Initialize()
         {
-            LoggerConfigurator.Setup();
-            _userInformationService.StartListening();
-
-            var result = _storageService.LoadUserData();
-
-            Mapper.Initialize(cfg =>
+            try
             {
-                cfg.AddProfile<GitMappingsProfile>();
-                BitBucketEnterpriseMappings.AddEnterpriseProfile(cfg);
-            });
+                LoggerConfigurator.Setup();
+                _userInformationService.StartListening();
 
-            await GitClientLogin(result);
+                var result = _storageService.LoadUserData();
+
+                Mapper.Initialize(cfg =>
+                {
+                    cfg.AddProfile<GitMappingsProfile>();
+                    BitBucketEnterpriseMappings.AddEnterpriseProfile(cfg);
+                });
+
+                await GitClientLogin(result);
+            }
+            catch (Exception e)
+            {
+                Logger.Error("Error during App initialization: " + e);
+            }
         }
 
         private async Task GitClientLogin(Result<ConnectionData> result)

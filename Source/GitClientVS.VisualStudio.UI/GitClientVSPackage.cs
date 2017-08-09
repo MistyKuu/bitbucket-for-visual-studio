@@ -123,7 +123,7 @@ namespace GitClientVS.VisualStudio.UI
                 var gitWatcher = serviceProvider.GetExportedValue<IGitWatcher>();
                 commandsService.Initialize(this);
                 gitWatcher.Initialize();
-                await appInitializer.Initialize();
+                appInitializer.Initialize();
 
                 Logger.Info("Initialized GitClientVsPackage Extension");
             }

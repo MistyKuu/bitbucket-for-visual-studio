@@ -40,13 +40,13 @@ namespace GitClientVS.Infrastructure.ViewModels
         private LocalRepo _selectRepository;
         private IVsTools _vsTools;
         private ITeamExplorerCommandsService _teamExplorerCommandsService;
+        private bool _isLoading;
 
         public ICommand OpenLoginCommand => _openLoginCommand;
         public ICommand OpenCreateCommand => _openCreateCommand;
         public ICommand LogoutCommand => _logoutCommand;
         public ICommand OpenCloneCommand => _openCloneCommand;
         public ICommand InitializeCommand => _initializeCommand;
-
 
         public LocalRepo SelectedRepository
         {

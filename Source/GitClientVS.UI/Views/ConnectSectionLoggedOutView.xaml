@@ -7,6 +7,9 @@
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              xmlns:prop="clr-namespace:GitClientVS.UI"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
+             xmlns:controls="clr-namespace:GitClientVS.UI.Controls"
+             xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:ConnectSectionViewModel,IsDesignTimeCreatable=False}" >
 
@@ -19,6 +22,15 @@
     </UserControl.Resources>
 
     <Grid>
-        <Button Style="{StaticResource ActionLinkButton}" Margin="5"  KeyboardNavigation.TabIndex="0" Command="{Binding OpenLoginCommand}" Content="{x:Static prop:Resources.Login}"/>
+        <controls1:ProgressRing  Grid.Row="0" x:Name="Pr"
+                               Foreground="{DynamicResource AccentColorBrush}" 
+                               HorizontalAlignment="Left" 
+                               VerticalAlignment="Center" 
+                               Width="20"
+                               Height="20"
+                               Visibility="{Binding ConnectionData.IsLoggingIn,Converter={converters:BoolToVisibilityConverter}}"
+        />
+      
+        <Button Visibility="{Binding ElementName=Pr,Path=Visibility,Converter={converters:NegateVisibilityConverter}}" x:Name="LoginButton"  Style="{StaticResource ActionLinkButton}" Margin="5"  KeyboardNavigation.TabIndex="0" Command="{Binding OpenLoginCommand}" Content="{x:Static prop:Resources.Login}"/>
     </Grid>
 </UserControl>

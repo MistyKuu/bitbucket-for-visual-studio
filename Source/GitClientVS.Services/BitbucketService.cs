@@ -50,22 +50,32 @@ namespace GitClientVS.Services
             if (IsConnected)
                 return;
 
+            OnConnectionChanged(new ConnectionData() { IsLoggingIn = true });
+
             if (string.IsNullOrEmpty(gitCredentials.Login) ||
                 string.IsNullOrEmpty(gitCredentials.Password))
                 throw new Exception("Credentials fields cannot be empty");
 
-            _bitbucketClient = await CreateBitbucketClient(gitCredentials);
+            ConnectionData connectionData = ConnectionData.NotLogged;
 
-            var connectionData = new ConnectionData()
+            try
             {
-                IsLoggedIn = true,
-                UserName = _bitbucketClient.ApiConnection.Credentials.Login,
-                Password = gitCredentials.Password,
-                Host = gitCredentials.Host,
-                IsEnterprise = gitCredentials.IsEnterprise
-            };
+                 connectionData = new ConnectionData()
+                {
+                    Password = gitCredentials.Password,
+                    Host = gitCredentials.Host,
+                    IsEnterprise = gitCredentials.IsEnterprise,
+                    IsLoggingIn = false
+                };
+                _bitbucketClient = await CreateBitbucketClient(gitCredentials);
 
-            OnConnectionChanged(connectionData);
+                connectionData.UserName = _bitbucketClient.ApiConnection.Credentials.Login;
+                connectionData.IsLoggedIn = true;
+            }
+            finally
+            {
+                OnConnectionChanged(connectionData);
+            }
         }
 
         private async Task<IBitbucketClient> CreateBitbucketClient(GitCredentials gitCredentials)

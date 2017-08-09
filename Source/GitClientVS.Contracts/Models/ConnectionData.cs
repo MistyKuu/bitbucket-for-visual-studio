@@ -10,6 +10,8 @@ namespace GitClientVS.Contracts.Models
         [JsonProperty]
         public bool IsLoggedIn { get; set; }
         [JsonProperty]
+        public bool IsLoggingIn { get; set; }
+        [JsonProperty]
         public string UserName { get; set; }
         [JsonProperty]
         public string Password { get; set; }
