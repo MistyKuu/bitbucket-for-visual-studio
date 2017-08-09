@@ -195,7 +195,7 @@
                                 </ToggleButton.Style>
                             </ToggleButton>
                             
-                            <TextBlock Margin="5,10" Text="Comment Deleted" FontWeight="Light"/>
+                            <TextBlock Margin="5,10" Text="Comment Deleted" FontWeight="Light" Foreground="Black"/>
                         </StackPanel>
 
                         <Grid Margin="0,5" Visibility="{Binding Comment.IsDeleted, Converter={converters:BoolToNonVisibilityConverter}}">
