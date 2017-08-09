@@ -26,6 +26,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         private IGitClientService _gitClientService;
         private IGitService _gitService;
         private IFileService _fileService;
+        private IEventAggregatorService _eventAggregatorService;
 
 
         [SetUp]
@@ -34,6 +35,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitClientService = MockRepository.GenerateMock<IGitClientService>();
             _gitService = MockRepository.GenerateMock<IGitService>();
             _fileService = MockRepository.GenerateMock<IFileService>();
+            _eventAggregatorService = MockRepository.GenerateMock<IEventAggregatorService>();
 
             _sut = CreateSut();
         }
@@ -44,7 +46,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         public void OnCreate_DefaultClonePathIsCorrect_ShouldBeUsed()
         {
             _gitService.Expect(x => x.GetDefaultRepoPath()).Return("DefaultRepoPath");
-            var sut = new CloneRepositoriesDialogViewModel(_gitClientService, _gitService, _fileService);
+            var sut = new CloneRepositoriesDialogViewModel(_gitClientService, _gitService, _fileService, _eventAggregatorService);
             Assert.That(sut.ClonePath, Is.EqualTo("DefaultRepoPath"));
         }
 
@@ -52,7 +54,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         public void OnCreate_DefaultClonePathIsInCorrect_ShouldUseDefaultRepoPath()
         {
             _gitService.Expect(x => x.GetDefaultRepoPath()).Return(string.Empty);
-            var sut = new CloneRepositoriesDialogViewModel(_gitClientService, _gitService, _fileService);
+            var sut = new CloneRepositoriesDialogViewModel(_gitClientService, _gitService, _fileService, _eventAggregatorService);
             Assert.That(sut.ClonePath, Is.EqualTo(Paths.DefaultRepositoryPath));
         }
 
@@ -228,7 +230,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
         private CloneRepositoriesDialogViewModel CreateSut()
         {
-            return new CloneRepositoriesDialogViewModel(_gitClientService, _gitService, _fileService);
+            return new CloneRepositoriesDialogViewModel(_gitClientService, _gitService, _fileService, _eventAggregatorService);
         }
     }
 }
