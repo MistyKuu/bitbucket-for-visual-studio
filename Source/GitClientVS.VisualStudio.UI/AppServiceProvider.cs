@@ -60,7 +60,7 @@ namespace GitClientVS.VisualStudio.UI
             {
                 var result = serviceImporter(serviceType);
                 if (result is IDisposable)
-                    _disposables.Add(result as IDisposable);
+                    _disposables.Add(result as IDisposable); //todo this will hold all objects
 
                 if (result != null)
                     return result;

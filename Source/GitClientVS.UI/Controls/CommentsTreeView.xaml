@@ -113,7 +113,7 @@
                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
                     <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
                     <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-                    <Setter Property="IsExpanded" Value="True"/>
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay}"/>
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="Focusable" Value="False"/>
                     <Setter Property="Padding" Value="0,0,0,0"/>
@@ -176,10 +176,27 @@
                     </Style.Triggers>
                 </Style>
                 <HierarchicalDataTemplate DataType="{x:Type tree:CommentTree}" ItemsSource="{Binding Comments}">
-                    <Grid>
-                        <Grid Visibility="{Binding Comment.IsDeleted, Converter={converters:BoolToVisibilityConverter}}">
-                            <TextBlock Text="Deleted"/>
-                        </Grid>
+                    <Grid >
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#E6E6E7" Visibility="{Binding Comment.IsDeleted, Converter={converters:BoolToVisibilityConverter}}">
+                            <ToggleButton x:Name="Expander"
+                                          VerticalAlignment="Center"
+                                          ClickMode="Press"
+                                          IsChecked="{Binding IsExpanded,Mode=TwoWay}"
+                            >
+                                <ToggleButton.Style>
+                                    <Style TargetType="ToggleButton" BasedOn="{StaticResource ExpandCollapseToggleStyle}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Comments.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
+                            
+                            <TextBlock Margin="5,10" Text="Comment Deleted" FontWeight="Light"/>
+                        </StackPanel>
 
                         <Grid Margin="0,5" Visibility="{Binding Comment.IsDeleted, Converter={converters:BoolToNonVisibilityConverter}}">
                             <Grid.RowDefinitions>
@@ -194,7 +211,26 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Image Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="20" Height="20" Margin="0,0,5,0"/>
+                            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                                <ToggleButton 
+                                              ClickMode="Press"
+                                              IsChecked="{Binding IsExpanded,Mode=TwoWay}"
+                                              >
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton" BasedOn="{StaticResource ExpandCollapseToggleStyle}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Comments.Count}" Value="0">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                    </ToggleButton>
+                           
+                                <Image  VerticalAlignment="Center" Source="{Binding Comment.User.Links.Avatar.Href}" Width="20" Height="20" Margin="0,0,5,0"/>
+                            </StackPanel>
+                            
                             <TextBlock Grid.Row="0" Grid.Column="1"  VerticalAlignment="Top" HorizontalAlignment="Stretch" Text="{Binding Comment.User.DisplayName}" FontWeight="Bold" Foreground="CornflowerBlue"></TextBlock>
 
                             <FlowDocumentScrollViewer Grid.Row="1" Grid.Column="1" 
@@ -227,6 +263,8 @@
                                 </Button>
                                 <Separator Style="{StaticResource VerticalSeparator}" Visibility="{Binding ElementName=DeleteButton,Path=Visibility}"/>
                                 <TextBlock HorizontalAlignment="Stretch" Margin="5,0,0,0" Text="{Binding Comment.UpdatedOn,Converter={converters:HumanizeDateTimeConverter}}" Foreground="Gray"></TextBlock>
+
+                              
                             </StackPanel>
 
                             <Grid Grid.Row="3" Grid.Column="1" Margin="0,5,0,0">

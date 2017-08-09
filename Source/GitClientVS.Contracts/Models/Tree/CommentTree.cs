@@ -14,9 +14,15 @@ namespace GitClientVS.Contracts.Models.Tree
         private bool _isEditExpanded;
         private string _editContent;
         private string _replyContent;
+        private bool _isExpanded;
         public ReactiveList<ICommentTree> Comments { get; set; }
         public GitComment Comment { get; set; }
-        public bool IsExpanded { get; set; }
+
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set => this.RaiseAndSetIfChanged(ref _isExpanded, value);
+        }
 
         public bool IsEditExpanded
         {
