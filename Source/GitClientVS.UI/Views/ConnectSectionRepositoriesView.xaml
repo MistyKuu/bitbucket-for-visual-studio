@@ -28,7 +28,8 @@
 
                 <Setter Property="Margin" Value="0"/>
                 <Setter Property="Padding" Value="0"/>
-
+              
+               
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ListBoxItem">
@@ -162,6 +163,13 @@
             SelectedItem="{Binding SelectedRepository, Mode=TwoWay}"
             ItemContainerStyle="{StaticResource ListBoxItemRepositoryStyle}"
             >
+            <ListBox.ContextMenu>
+                <ContextMenu Style="{x:Null}">
+                    <MenuItem Header="Open" Click="ListBox_MouseClickFromContext"/>
+                    <MenuItem Header="Open In File Explorer" Click="FileExplorer_OnClick"/>
+                    <MenuItem Header="Open Command Prompt" Click="CommandPrompt_OnClick"/>
+                </ContextMenu>
+            </ListBox.ContextMenu>
         </ListBox>
     </Grid>
 </UserControl>
