@@ -113,6 +113,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task ReplyToComment(ICommentTree commentTree)
         {
+            if (string.IsNullOrEmpty(commentTree.ReplyContent))
+                return;
+
             var comment = commentTree.Comment;
 
             var newComment = new GitComment()
@@ -134,6 +137,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task EditComment(ICommentTree commentTree)
         {
+            if (string.IsNullOrEmpty(commentTree.EditContent))
+                return;
+
             commentTree.Comment.Content = new GitCommentContent() { Html = commentTree.EditContent };
 
             var newServerComment = await _gitClientService.EditPullRequestComment(PullRequestId, commentTree.Comment);
@@ -149,6 +155,9 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         private async Task AddComment(GitCommentInline inline, string text)
         {
+            if (string.IsNullOrEmpty(text))
+                return;
+
             var comment = new GitComment()
             {
                 Content = new GitCommentContent() { Html = text },
