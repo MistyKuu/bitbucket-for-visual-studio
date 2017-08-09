@@ -51,6 +51,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _commandsService = MockRepository.GenerateMock<ICommandsService>();
             _pullRequestDiffViewModel = MockRepository.GenerateMock<IPullRequestDiffViewModel>();
 
+            _pullRequestDiffViewModel.Stub(x => x.ThrowableCommands).Return(new List<ReactiveCommand>());
 
             _sut = CreateSut();
         }
@@ -133,6 +134,10 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             List<ITreeFile> treeFiles = new List<ITreeFile>() { new TreeDirectory("name") };
             IEnumerable<GitUser> defaultReviewers = new List<GitUser>() { new GitUser(), new GitUser() };
 
+            _pullRequestDiffViewModel.Stub(x => x.Commits).Return(commits.ToList());
+            _pullRequestDiffViewModel.Stub(x => x.FileDiffs).Return(fileDiffs.ToList());
+            _pullRequestDiffViewModel.Stub(x => x.FilesTree).Return(treeFiles);
+
             _gitService.Expect(x => x.GetActiveRepository()).Return(activeRepository);
             _gitClientService.Expect(x => x.GetBranches()).Return(remoteBranches.FromTaskAsync());
 
@@ -162,6 +167,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         [Test]
         public void Initialize_CurrentBranchIsLocalBranch_UserShouldBeNotified()
         {
+           
             var remoteBranches = GetRemoteBranches();
             var activeRepository = GetActiveRepo();
 
@@ -169,11 +175,12 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitClientService.Expect(x => x.GetBranches()).Return(remoteBranches.FromTaskAsync());
 
             _sut.Message = null;
+
             _sut.Initialize();
 
+
             Assert.That(_sut.SourceBranch, Is.EqualTo(remoteBranches.OrderBy(x => x.Name).First()));
-            Assert.That(_sut.DestinationBranch,
-                Is.EqualTo(remoteBranches.First(x => x.Name == "RemoteDefaultBranchName")));
+            Assert.That(_sut.DestinationBranch, Is.EqualTo(remoteBranches.First(x => x.Name == "RemoteDefaultBranchName")));
             Assert.NotNull(_sut.Message);
         }
 
