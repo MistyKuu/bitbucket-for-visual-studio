@@ -8,6 +8,7 @@
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
              xmlns:diffControlUtils="clr-namespace:GitClientVS.UI.Controls.DiffControlUtils"
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance controls1:MarginControl,IsDesignTimeCreatable=False}" 
@@ -24,6 +25,10 @@
     </UserControl.Resources>
 
     <Grid>
+        <Grid.Resources>
+            <system:String x:Key="Comment">&#xE90A;</system:String>
+        </Grid.Resources>
+        
         <ItemsControl ItemsSource="{Binding Chunk.Changes}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -37,7 +42,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="+" HorizontalAlignment="Center" Margin="5,0,0,0">
+                        <TextBlock Grid.Column="0" Text="{StaticResource Comment}"  HorizontalAlignment="Center" Margin="5,0,0,0" FontFamily="Segoe MDL2 Assets" >
+                        
                         <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Opacity" Value="0"/>
