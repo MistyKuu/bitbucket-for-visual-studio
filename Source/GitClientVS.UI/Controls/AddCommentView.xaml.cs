@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Contracts.Models.Tree;
 using ReactiveUI;
@@ -62,6 +63,20 @@ namespace GitClientVS.UI.Controls
         {
             InitializeComponent();
             (this.Content as FrameworkElement).DataContext = this;
+            this.IsVisibleChanged += UserControl_IsVisibleChanged;
+        }
+
+
+
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.Visibility == Visibility.Visible)
+            {
+                this.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    Keyboard.Focus(Tb);
+                }, DispatcherPriority.Render);
+            }
         }
     }
 }

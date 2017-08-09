@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml;
 using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Contracts.Models.Tree;
