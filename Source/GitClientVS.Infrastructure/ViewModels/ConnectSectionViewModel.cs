@@ -128,6 +128,10 @@ namespace GitClientVS.Infrastructure.ViewModels
             yield return _eventAggregator.GetEvent<ConnectionChangedEvent>()
                 .Select(x => Unit.Default)
                 .InvokeCommand(_initializeCommand);
+
+            yield return _eventAggregator.GetEvent<ClonedRepositoryEvent>()
+                .Select(x => Unit.Default)
+                .InvokeCommand(_initializeCommand);
         }
 
         private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)

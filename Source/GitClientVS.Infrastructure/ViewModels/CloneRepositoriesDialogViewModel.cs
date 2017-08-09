@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using ReactiveUI;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models.GitClientModels;
@@ -23,6 +24,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IGitService _gitService;
         private readonly IFileService _fileService;
+        private readonly IEventAggregatorService _eventAggregatorService;
         private ReactiveCommand _cloneCommand;
         private ReactiveCommand _choosePathCommand;
         private ReactiveCommand<Unit, Unit> _initializeCommand;
@@ -92,12 +94,14 @@ namespace GitClientVS.Infrastructure.ViewModels
         public CloneRepositoriesDialogViewModel(
             IGitClientService gitClientService,
             IGitService gitService,
-            IFileService fileService
+            IFileService fileService,
+            IEventAggregatorService eventAggregatorService
             )
         {
             _gitClientService = gitClientService;
             _gitService = gitService;
             _fileService = fileService;
+            _eventAggregatorService = eventAggregatorService;
 
             var gitClonePath = _gitService.GetDefaultRepoPath();
             ClonePath = !string.IsNullOrEmpty(gitClonePath) ? gitClonePath : Paths.DefaultRepositoryPath;
@@ -140,6 +144,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             await Task.Run(() =>
             {
                 _gitService.CloneRepository(SelectedRepository.CloneUrl, SelectedRepository.Name, ClonePath);
+                _eventAggregatorService.Publish(new ClonedRepositoryEvent());
             });
 
             OnClose();

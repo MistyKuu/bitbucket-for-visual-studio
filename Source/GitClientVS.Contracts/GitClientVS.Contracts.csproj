@@ -69,6 +69,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Events\ActiveRepositoryChangedEvent.cs" />
+    <Compile Include="Events\ClonedRepositoryEvent.cs" />
     <Compile Include="Events\ConnectionChangedEvent.cs" />
     <Compile Include="Events\NavigationEvent.cs" />
     <Compile Include="Events\ShowConfirmationEvent.cs" />
