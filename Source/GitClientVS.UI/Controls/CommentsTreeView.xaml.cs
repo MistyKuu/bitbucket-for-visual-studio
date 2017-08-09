@@ -124,10 +124,30 @@ namespace GitClientVS.UI.Controls
 
         private ICommand _enterEditModeCommand;
         private ICommand _enterReplyModeCommand;
+        private ScrollViewer _sv;
 
         public CommentsTreeView()
         {
             InitializeComponent();
+            TView.Loaded += TView_Loaded;
+        }
+
+        private void TView_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (VisualTreeHelper.GetChildrenCount(TView) > 0)
+            {
+                var border = VisualTreeHelper.GetChild(TView, 0);
+                _sv = VisualTreeHelper.GetChild(border, 0) as ScrollViewer;
+                if (_sv != null)
+                    _sv.PreviewMouseWheel += Sv_PreviewMouseWheel;
+            }
+
+        }
+
+        private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            _sv.ScrollToVerticalOffset(_sv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
 
         private void EnterReplyMode(ICommentTree commentTree)

@@ -189,9 +189,9 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <Image Width="20" Height="20" Margin="5" 
+                                <Image Width="30" Height="30" Margin="5" 
                                        Source="{Binding RelativeSource={RelativeSource Self},Path= Tag.Result}" 
-                                       Tag="{Binding Key.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar}, FallbackValue={StaticResource DefaultAvatar},Converter={converters:UrlToImageSourceConverter}}">
+                                       Tag="{Binding Key.Links.Avatar.Href,TargetNullValue={StaticResource DefaultAvatar},FallbackValue={StaticResource DefaultAvatar},Converter={converters:UrlToImageSourceConverter}}">
                                     <Image.ToolTip>
                                         <TextBlock Text="{Binding Key.DisplayName}"/>
                                     </Image.ToolTip>
