@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using GitClientVS.Contracts.Events;
 using GitClientVS.Contracts.Interfaces.Services;
-using GitClientVS.Contracts.Interfaces.ViewModels;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Infrastructure;
 using GitClientVS.Infrastructure.Mappings;
-using GitClientVS.TeamFoundation;
-using GitClientVS.UI.Helpers;
 using log4net;
-using log4net.Repository.Hierarchy;
 
 namespace GitClientVS.VisualStudio.UI
 {
@@ -46,7 +38,6 @@ namespace GitClientVS.VisualStudio.UI
             {
                 LoggerConfigurator.Setup();
                 _userInformationService.StartListening();
-
                 var result = _storageService.LoadUserData();
 
                 Mapper.Initialize(cfg =>

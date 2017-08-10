@@ -6,6 +6,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TeamFoundation.Git.Extensibility;
 
 namespace GitClientVS.TeamFoundation
 {
@@ -13,6 +14,7 @@ namespace GitClientVS.TeamFoundation
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class TeamExplorerCommandsService : ITeamExplorerCommandsService
     {
+        private readonly ITeamExplorer _teamExplorer; // good morning MEF, I'm empty field but if I'm not here you won't load my plugin silently :)
         private readonly IAppServiceProvider _appServiceProvider;
 
         [ImportingConstructor]

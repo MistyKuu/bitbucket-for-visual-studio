@@ -43,8 +43,5 @@ namespace GitClientVS.TeamFoundation.Sections
         {
             return ((ITeamExplorerPage)ServiceProvider.GetService(typeof(ITeamExplorerPage))).GetSection(section);
         }
-
-
-
     }
 }

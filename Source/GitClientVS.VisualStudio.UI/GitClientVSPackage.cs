@@ -5,38 +5,20 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Markup;
-using System.Windows.Media;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Infrastructure;
-using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.UI.Helpers;
 using GitClientVS.VisualStudio.UI.Settings;
 using GitClientVS.VisualStudio.UI.Window;
 using log4net;
-using log4net.Repository.Hierarchy;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.Win32;
-using IServiceProvider = System.IServiceProvider;
 using Task = System.Threading.Tasks.Task;
 
 namespace GitClientVS.VisualStudio.UI
