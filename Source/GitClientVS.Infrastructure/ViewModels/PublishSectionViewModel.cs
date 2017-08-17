@@ -97,6 +97,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitService = gitService;
             _userInformationService = userInformationService;
             _gitWatcher = gitWatcher;
+            _isPrivate = true;
         }
 
 
