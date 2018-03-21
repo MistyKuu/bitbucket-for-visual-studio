@@ -14,7 +14,7 @@
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d" 
-             Style="{DynamicResource DefaultMetroWindowStyle}"
+             Style="{DynamicResource DefaultMetroWindowStyleCopy}"
              WindowStartupLocation="CenterOwner"
              Title="{x:Static ui:Resources.CloneWindowTitle}"
              WindowTitleBrush="#004f83"
@@ -27,6 +27,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="DefaultMetroWindowStyleCopy" TargetType="{x:Type controls:MetroWindow}" BasedOn="{StaticResource DefaultMetroWindowStyle}" />
             <DataTemplate x:Key="GroupingHeader">
                 <StackPanel>
                     <TextBlock Text="{Binding Path=Name}"  Margin="10,10,10,0" />
