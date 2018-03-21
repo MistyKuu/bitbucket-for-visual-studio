@@ -30,6 +30,7 @@ namespace BitBucket.REST.API.Wrappers
             this.AddHandler("text/x-json", serializer);
             this.AddHandler("text/javascript", serializer);
             this.AddHandler("*+json", serializer);
+            this.AddHandler("*", serializer);
 
             var auth = new Authenticator(connection.Credentials);
             this.Authenticator = auth.CreatedAuthenticator;
