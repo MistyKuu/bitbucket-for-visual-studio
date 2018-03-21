@@ -309,8 +309,16 @@ namespace GitClientVS.Infrastructure.ViewModels
             Title = SourceBranch.Name;
             Description = string.Join(Environment.NewLine, commits.Select((x) => $"* " + x.Message?.Trim()).Reverse());
             SelectedReviewers.Clear();
-            foreach (var defReviewer in await _gitClientService.GetDefaultReviewers())
-                SelectedReviewers.Add(defReviewer);
+
+            try
+            {
+                foreach (var defReviewer in await _gitClientService.GetDefaultReviewers())
+                    SelectedReviewers.Add(defReviewer);
+            }
+            catch (Exception)
+            {
+                // not repo admin, ignore
+            }
         }
 
         private async Task CreateDiffContent(string fromCommit, string toCommit)
