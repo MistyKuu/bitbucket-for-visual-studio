@@ -20,6 +20,7 @@ using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
+using System.Net;
 
 namespace GitClientVS.VisualStudio.UI
 {
@@ -62,6 +63,7 @@ namespace GitClientVS.VisualStudio.UI
 
         static GitClientVSPackage()
         {
+            HttpWebRequest.DefaultMaximumErrorResponseLength = 1048576;
             AssemblyResolver.InitializeAssemblyResolver();
         }
 
