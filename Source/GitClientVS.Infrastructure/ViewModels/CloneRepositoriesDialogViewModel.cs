@@ -62,8 +62,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
         [Required(AllowEmptyStrings = false)]
+        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(HasSelectedRepository), ErrorMessage = "Please select repository")]
         [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathNotExists), ErrorMessage = "Directory already exists")]
-        [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathHasSelectedRepository), ErrorMessage = "Please select repository")]
         [ValidatesViaMethod(AllowBlanks = false, AllowNull = false, Name = nameof(ClonePathIsPath), ErrorMessage = "Clone Path must be a valid path")]
         public string ClonePath
         {
@@ -172,7 +172,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             return IsObjectValid();
         }
 
-        public bool ClonePathHasSelectedRepository(string clonePath)
+        public bool HasSelectedRepository(string clonePath)
         {
             return SelectedRepository != null;
         }
