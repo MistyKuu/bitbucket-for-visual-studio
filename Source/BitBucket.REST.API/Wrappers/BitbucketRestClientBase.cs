@@ -24,11 +24,13 @@ namespace BitBucket.REST.API.Wrappers
             Connection = connection;
 
             var serializer = new NewtonsoftJsonSerializer();
+            this.ClearHandlers();
             this.AddHandler("application/json", serializer);
             this.AddHandler("text/json", serializer);
             this.AddHandler("text/plain", serializer);
             this.AddHandler("text/x-json", serializer);
             this.AddHandler("text/javascript", serializer);
+            this.AddHandler("+", serializer);
             this.AddHandler("*+json", serializer);
             this.AddHandler("*", serializer);
 
