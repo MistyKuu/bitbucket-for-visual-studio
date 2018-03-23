@@ -11,6 +11,14 @@ Bitbucket Extension is a plugin for Visual Studio integration with Bitbucket Git
 *  View files, commits and comments from pull request.
 *  View Pull request diff with syntax language highlighting.
 
+## Donate via PayPal
+
+The extension will stay free forever. You can volonturarily support the project by donating via PayPal.
+
+<a href="https://paypal.me/BitbucketVsExtension">
+  <img alt="Support via PayPal" src="https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg"/>
+</a>
+
 ## Getting Started
 
 ### Prerequisites
