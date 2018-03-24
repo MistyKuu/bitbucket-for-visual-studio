@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="69c97fa4-92b5-448c-b5db-037dd9c2c8c9" Version="1.37.3" Language="en-US" Publisher="MistyK" />
+        <Identity Id="69c97fa4-92b5-448c-b5db-037dd9c2c8c9" Version="1.38" Language="en-US" Publisher="MistyK" />
         <DisplayName>Visual Studio Bitbucket Extension</DisplayName>
         <Description xml:space="preserve">Provides the integration with Atlassian Bitbucket - bitbucket.org.</Description>
         <MoreInfo>https://github.com/MistyKuu/bitbucketvsextension</MoreInfo>

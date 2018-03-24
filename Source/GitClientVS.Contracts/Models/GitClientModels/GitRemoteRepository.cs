@@ -18,6 +18,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
         public string Owner { get; set; }
         public string CloneUrl { get; set; }
         public List<GitLocalBranch> Branches { get; set; }
+        public bool IsTeam { get; set; }
 
         public GitRemoteRepository()
         {

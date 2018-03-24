@@ -200,7 +200,7 @@ namespace GitClientVS.Services
         {
             var repository = newRepository.MapTo<Repository>();
             repository.Name = repository.Name.Replace(' ', '-');
-            var result = await _bitbucketClient.RepositoriesClient.CreateRepository(repository);
+            var result = await _bitbucketClient.RepositoriesClient.CreateRepository(repository, newRepository.IsTeam);
             return result.MapTo<GitRemoteRepository>();
         }
 

@@ -65,7 +65,7 @@ namespace Bitbucket.REST.API.Tests.Standard
                 .Capture()
                 .Args<IRestRequest, IRestResponse<Repository>>((s, req) => s.ExecuteTaskAsync<Repository>(req), response);
 
-            var repository = await _sut.CreateRepository(inputRepository);
+            var repository = await _sut.CreateRepository(inputRepository, false);
 
             Assert.AreEqual(1, result.CallCount);
 
