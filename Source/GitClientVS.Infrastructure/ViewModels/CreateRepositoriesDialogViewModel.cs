@@ -80,6 +80,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitClientService = gitClientService;
             _gitService = gitService;
             _fileService = fileService;
+            _isPrivate = true;
 
             var path = _gitService.GetDefaultRepoPath();
             LocalPath = !string.IsNullOrEmpty(path) ? path : Paths.DefaultRepositoryPath;

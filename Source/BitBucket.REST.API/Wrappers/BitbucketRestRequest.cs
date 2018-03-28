@@ -13,6 +13,7 @@ namespace BitBucket.REST.API.Wrappers
         public BitbucketRestRequest(string resource, Method method) : base(resource, method)
         {
             this.JsonSerializer = new NewtonsoftJsonSerializer();
+            this.RequestFormat = DataFormat.Json;
         }
     }
 }

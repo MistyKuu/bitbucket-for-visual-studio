@@ -29,8 +29,8 @@ namespace GitClientVS.Infrastructure.ViewModels
         private bool _isPrivate;
         private string _errorMessage;
         private bool _isLoading;
-        private List<string> _owners;
-        private string _selectedOwner;
+        private List<Owner> _owners;
+        private Owner _selectedOwner;
 
         public ICommand PublishRepositoryCommand => _publishRepositoryCommand;
         public ICommand InitializeCommand => _initializeCommand;
@@ -65,14 +65,14 @@ namespace GitClientVS.Infrastructure.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isLoading, value);
         }
 
-        public List<string> Owners
+        public List<Owner> Owners
         {
             get => _owners;
             set => this.RaiseAndSetIfChanged(ref _owners, value);
         }
 
         [Required]
-        public string SelectedOwner
+        public Owner SelectedOwner
         {
             get => _selectedOwner;
             set => this.RaiseAndSetIfChanged(ref _selectedOwner, value);
@@ -97,10 +97,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             _gitService = gitService;
             _userInformationService = userInformationService;
             _gitWatcher = gitWatcher;
+            _isPrivate = true;
         }
 
 
-       
+
         public void InitializeCommands()
         {
             _publishRepositoryCommand = ReactiveCommand.CreateFromTask(_ => PublishRepository(), CanPublishRepository());
@@ -112,8 +113,8 @@ namespace GitClientVS.Infrastructure.ViewModels
             if (!_userInformationService.ConnectionData.IsLoggedIn)
                 return;
 
-            var teamNames = (await _gitClientService.GetTeams()).Select(x => x.Name).ToList();
-            teamNames.Insert(0, _userInformationService.ConnectionData.UserName);
+            var teamNames = (await _gitClientService.GetTeams()).Select(x => new Owner() { Name = x.Name, IsTeam = true }).ToList();
+            teamNames.Insert(0, new Owner() { Name = _userInformationService.ConnectionData.UserName, IsTeam = false });
             Owners = teamNames;
             SelectedOwner = Owners.FirstOrDefault();
         }
@@ -125,7 +126,8 @@ namespace GitClientVS.Infrastructure.ViewModels
                 Name = RepositoryName.Replace(' ', '-'),
                 Description = Description,
                 IsPrivate = IsPrivate,
-                Owner = SelectedOwner
+                Owner = SelectedOwner.Name,
+                IsTeam = SelectedOwner.IsTeam
             };
 
             var remoteRepo = await _gitClientService.CreateRepositoryAsync(gitRemoteRepository);
@@ -146,5 +148,17 @@ namespace GitClientVS.Infrastructure.ViewModels
         }
 
 
+    }
+
+
+    public class Owner
+    {
+        public string Name { get; set; }
+        public bool IsTeam { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name} {(IsTeam ? " (Team)" : string.Empty)}";
+        }
     }
 }

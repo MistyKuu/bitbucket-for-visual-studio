@@ -75,7 +75,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
             _sut.Initialize();
 
-            _sut.SelectedOwner = "owner";
+            _sut.SelectedOwner = new Owner() {Name= "owner" };
             _sut.RepositoryName = "repoName";
 
             Assert.IsTrue(_sut.PublishRepositoryCommand.CanExecute(null));
@@ -92,7 +92,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
             _sut.Initialize();
 
-            _sut.SelectedOwner = string.Empty;
+            _sut.SelectedOwner = new Owner() { Name = "" };
             _sut.RepositoryName = "repoName";
 
             Assert.IsFalse(_sut.PublishRepositoryCommand.CanExecute(null));
@@ -112,7 +112,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
             var remoteRepo = new GitRemoteRepository();
 
-            _sut.SelectedOwner = "owner";
+            _sut.SelectedOwner = new Owner() { Name = "owner" };
             _sut.RepositoryName = "repoName with space";
             _sut.Description = "description";
             _sut.IsPrivate = true;

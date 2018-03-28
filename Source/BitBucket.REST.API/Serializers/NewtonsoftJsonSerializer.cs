@@ -5,6 +5,7 @@ using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
+using BitBucket.REST.API.Exceptions;
 
 namespace BitBucket.REST.API.Serializers
 {

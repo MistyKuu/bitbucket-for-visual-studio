@@ -13,7 +13,7 @@
              xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              mc:Ignorable="d" 
              Title=""
-             Style="{DynamicResource DefaultMetroWindowStyle}"
+             Style="{DynamicResource DefaultMetroWindowStyleCopy}"
              ShowTitleBar="true"
              BorderThickness="0" 
              GlowBrush="Black"
@@ -29,6 +29,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="DefaultMetroWindowStyleCopy" TargetType="{x:Type controls:MetroWindow}" BasedOn="{StaticResource DefaultMetroWindowStyle}" />
         </ResourceDictionary>
     </controls:MetroWindow.Resources>
 
