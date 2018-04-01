@@ -17,10 +17,10 @@ namespace BitBucket.REST.API
         public Connection ApiConnection { get; }
         public BitBucketType BitBucketType { get; } = BitBucketType.Enterprise;
 
-        public EnterpriseBitbucketClient(Connection apiConnection)
+        public EnterpriseBitbucketClient(Connection apiConnection,IProxyResolver proxyResolver)
         {
             ApiConnection = apiConnection;
-            var client = new EnterpriseBitbucketRestClient(apiConnection);
+            var client = new EnterpriseBitbucketRestClient(apiConnection) { ProxyResolver = proxyResolver };
             RepositoriesClient = new EnterpriseRepositoriesClient(client, ApiConnection);
             UserClient = new EnterpriseUserClient(client, ApiConnection);
             PullRequestsClient = new EnterprisePullRequestsClient(client, ApiConnection);

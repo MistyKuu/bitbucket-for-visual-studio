@@ -125,6 +125,7 @@
     <Compile Include="CommentTreeCollection.cs" />
     <Compile Include="ViewModels\CommentViewModel.cs" />
     <Compile Include="ViewModels\DiffWindowControlViewModel.cs" />
+    <Compile Include="ViewModels\ProxyLoginDialogViewModel.cs" />
     <Compile Include="ViewModels\PullRequestDiffViewModel.cs" />
     <Compile Include="ViewModels\PullRequestsDetailViewModel.cs" />
     <Compile Include="ViewModels\PublishSectionViewModel.cs" />

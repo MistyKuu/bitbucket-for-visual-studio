@@ -30,13 +30,19 @@ namespace GitClientVS.Services
             _hashService = hashService;
         }
 
-        public Result SaveUserData(ConnectionData connectionData) 
+        public Result SaveUserData(ConnectionData connectionData) => SaveEncryptedSettings(connectionData, Paths.GitClientUserDataPath);
+        public Result<ConnectionData> LoadUserData() => LoadEncryptedSettings<ConnectionData>(Paths.GitClientUserDataPath);
+        public Result SaveProxySettings(ProxySettings proxySettings) => SaveEncryptedSettings(proxySettings, Paths.GitClientProxyDataPath);
+        public Result<ProxySettings> LoadProxySettings() => LoadEncryptedSettings<ProxySettings>(Paths.GitClientProxyDataPath);
+
+
+        private Result SaveEncryptedSettings<T>(T settings, string filePath)
         {
             try
             {
-                JsonConvert.SerializeObject(connectionData)
-                   .Then(_hashService.Encrypt)
-                   .Then(cred => _fileService.Save(Paths.GitClientUserDataPath, cred));
+                JsonConvert.SerializeObject(settings)
+                              .Then(_hashService.Encrypt)
+                              .Then(cred => _fileService.Save(filePath, cred));
             }
             catch (Exception ex)
             {
@@ -47,24 +53,25 @@ namespace GitClientVS.Services
             return Result.Success();
         }
 
-        public Result<ConnectionData> LoadUserData()
+        private Result<T> LoadEncryptedSettings<T>(string filePath) where T : class
         {
             try
             {
-                if(!File.Exists(Paths.GitClientUserDataPath))
-                    return Result<ConnectionData>.Fail();
+                if (!File.Exists(filePath))
+                    return Result<T>.Fail();
 
                 return _fileService
-                    .Read(Paths.GitClientUserDataPath)
+                    .Read(filePath)
                     .Then(_hashService.Decrypt)
-                    .Then(JsonConvert.DeserializeObject<ConnectionData>)
-                    .Then(Result<ConnectionData>.Success);
+                    .Then(JsonConvert.DeserializeObject<T>)
+                    .Then(Result<T>.Success);
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                return Result<ConnectionData>.Fail(ex);
+                return Result<T>.Fail(ex);
             }
         }
+
     }
 }

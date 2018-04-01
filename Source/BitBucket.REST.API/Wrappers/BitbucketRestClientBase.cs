@@ -11,6 +11,7 @@ using RestSharp;
 using log4net;
 using System.Collections.Generic;
 using System.Globalization;
+using BitBucket.REST.API.Interfaces;
 
 namespace BitBucket.REST.API.Wrappers
 {
@@ -18,6 +19,7 @@ namespace BitBucket.REST.API.Wrappers
     {
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         protected Connection Connection;
+        public IProxyResolver ProxyResolver { get; set; }
 
         protected BitbucketRestClientBase(Connection connection) : base(connection.ApiUrl)
         {
@@ -45,28 +47,23 @@ namespace BitBucket.REST.API.Wrappers
         public override async Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)
         {
             Logger.Info($"Calling ExecuteTaskAsync. BaseUrl: {BaseUrl} Resource: {request.Resource}");
+            request.Credentials = ProxyResolver.GetCredentials();
             request.AddHeader("X-Atlassian-Token", " no-check");
             var response = await base.ExecuteTaskAsync<T>(request);
             response = await RedirectIfNeededAndGetResponse(response, request);
+            response = await UseProxyIfNeededAndGetResponse(response, request);
             this.CheckResponseStatusCode(response);
             return response;
         }
 
-        public override async Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
+        public async override Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
         {
-            Logger.Info($"Calling ExecuteTaskAsync. BaseUrl: {BaseUrl} Resource: {request.Resource}");
-            request.AddHeader("X-Atlassian-Token", " no-check");
-            var response = await base.ExecuteTaskAsync(request);
-            response = await RedirectIfNeededAndGetResponse(response, request);
-            this.CheckResponseStatusCode(response);
-            return response;
+            var resp = await ExecuteTaskAsync<bool>(request);
+            return resp;
         }
 
         private void CheckResponseStatusCode(IRestResponse response)
         {
-            if (response.ErrorException != null)
-                throw response.ErrorException;
-
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 throw new AuthorizationException();
@@ -76,6 +73,9 @@ namespace BitBucket.REST.API.Wrappers
             {
                 throw new ForbiddenException(response.ErrorMessage);
             }
+
+            if (response.ErrorException != null)
+                throw response.ErrorException;
 
             if (((int)response.StatusCode) >= 400)
             {
@@ -118,22 +118,16 @@ namespace BitBucket.REST.API.Wrappers
             return response;
         }
 
-        private async Task<IRestResponse> RedirectIfNeededAndGetResponse(IRestResponse response, IRestRequest request)
+        private async Task<IRestResponse<T>> UseProxyIfNeededAndGetResponse<T>(IRestResponse<T> response, IRestRequest request)
         {
-            while (response.StatusCode == HttpStatusCode.Redirect)
+            if (response.StatusCode == HttpStatusCode.ProxyAuthenticationRequired)
             {
-                var newLocation = GetNewLocationFromHeader(response);
-
-                if (newLocation == null)
-                    return response;
-
-                request.Resource = RemoveBaseUrl(newLocation);
-                response = await base.ExecuteTaskAsync(request);
+                request.Credentials = ProxyResolver?.Authenticate(response.ResponseUri.ToString());
+                response = await base.ExecuteTaskAsync<T>(request);
             }
 
             return response;
         }
-
 
         private static Parameter GetNewLocationFromHeader(IRestResponse response)
         {

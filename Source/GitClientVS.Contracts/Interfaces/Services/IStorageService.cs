@@ -6,5 +6,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
     {
         Result SaveUserData(ConnectionData connectionData);
         Result<ConnectionData> LoadUserData();
+        Result SaveProxySettings(ProxySettings proxySettings);
+        Result<ProxySettings> LoadProxySettings();
     }
 }

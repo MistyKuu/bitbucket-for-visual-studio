@@ -74,6 +74,7 @@
     <Compile Include="Events\NavigationEvent.cs" />
     <Compile Include="Events\ShowConfirmationEvent.cs" />
     <Compile Include="Events\ThemeChangedEvent.cs" />
+    <Compile Include="Interfaces\IBitbucketClientFactory.cs" />
     <Compile Include="Interfaces\IClosingable.cs" />
     <Compile Include="Interfaces\Services\IDataNotifier.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Interfaces\ViewModels\ICommentViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\ICreatePullRequestsViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IDiffWindowControlViewModel.cs" />
+    <Compile Include="Interfaces\ViewModels\IProxyLoginDialogViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPublishSectionViewModel.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestDetailView.cs" />
     <Compile Include="Interfaces\ViewModels\IPullRequestDiffViewModel.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="Interfaces\ViewModels\ICloneRepositoriesDialogViewModel.cs" />
     <Compile Include="Interfaces\Views\ICloneRepositoriesDialogView.cs" />
     <Compile Include="Interfaces\Views\IDiffWindowControl.cs" />
+    <Compile Include="Interfaces\Views\IProxyLoginDialogView.cs" />
     <Compile Include="Interfaces\Views\IPublishSectionView.cs" />
     <Compile Include="Interfaces\Views\IPullRequestsMainView.cs" />
     <Compile Include="Interfaces\ILoadableViewModel.cs" />
@@ -127,6 +130,7 @@
     <Compile Include="Models\GitClientModels\PageIterator.cs" />
     <Compile Include="Models\GitCredentials.cs" />
     <Compile Include="Models\LocalRepo.cs" />
+    <Compile Include="Models\ProxySettings.cs" />
     <Compile Include="Models\PullRequestActionModel.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\Tree\CommentTree.cs" />
@@ -162,6 +166,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BitBucket.REST.API\BitBucket.REST.API.csproj">
+      <Project>{8d9a6680-2f77-485e-b90d-70e70a3444cf}</Project>
+      <Name>BitBucket.REST.API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ParseDiff\ParseDiff.csproj">
       <Project>{65672e92-c353-4d21-a098-6a5beb42cdf4}</Project>
       <Name>ParseDiff</Name>

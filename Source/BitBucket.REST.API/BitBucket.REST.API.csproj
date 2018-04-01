@@ -64,7 +64,6 @@
     <Compile Include="Authentication\Credentials.cs" />
     <Compile Include="Authentication\OAuthAuthenticator.cs" />
     <Compile Include="BitbucketClient.cs" />
-    <Compile Include="BitbucketClientFactory.cs" />
     <Compile Include="BitBucketType.cs" />
     <Compile Include="Clients\ApiClient.cs" />
     <Compile Include="Clients\Enterprise\EnterpriseRepositoriesClient.cs" />
@@ -73,6 +72,7 @@
     <Compile Include="Clients\Enterprise\EnterprisePullRequestsClient.cs" />
     <Compile Include="Interfaces\IBitbucketRestClient.cs" />
     <Compile Include="Interfaces\IEnterpriseBitbucketRestClient.cs" />
+    <Compile Include="Interfaces\IProxyResolver.cs" />
     <Compile Include="Mappings\CommentV1TypeConverter.cs" />
     <Compile Include="Mappings\Converters\RepositoryV1TypeConverter.cs" />
     <Compile Include="Models\Enterprise\EnterpriseAnchor.cs" />
@@ -85,7 +85,6 @@
     <Compile Include="EnterpriseBitbucketClient.cs" />
     <Compile Include="Helpers\EnterpriseApiUrls.cs" />
     <Compile Include="Helpers\LinqExtensions.cs" />
-    <Compile Include="Interfaces\IBitbucketClientFactory.cs" />
     <Compile Include="Interfaces\IBitbucketClient.cs" />
     <Compile Include="Interfaces\IPullRequestsClient.cs" />
     <Compile Include="Interfaces\IUserClient.cs" />
