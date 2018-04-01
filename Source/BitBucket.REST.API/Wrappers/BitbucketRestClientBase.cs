@@ -29,15 +29,14 @@ namespace BitBucket.REST.API.Wrappers
             this.ClearHandlers();
             this.AddHandler("application/json", serializer);
             this.AddHandler("text/json", serializer);
-            this.AddHandler("text/plain", serializer);
             this.AddHandler("text/x-json", serializer);
             this.AddHandler("text/javascript", serializer);
             this.AddHandler("*+json", serializer);
-            this.AddHandler("*", serializer);
 
             var auth = new Authenticator(connection.Credentials);
             this.Authenticator = auth.CreatedAuthenticator;
             this.FollowRedirects = false;
+            Proxy = Proxy ?? (WebRequest.DefaultWebProxy ?? WebRequest.GetSystemWebProxy());
         }
 
 
@@ -47,7 +46,7 @@ namespace BitBucket.REST.API.Wrappers
         public override async Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)
         {
             Logger.Info($"Calling ExecuteTaskAsync. BaseUrl: {BaseUrl} Resource: {request.Resource}");
-            request.Credentials = ProxyResolver.GetCredentials();
+            Proxy.Credentials = ProxyResolver?.GetCredentials();
             request.AddHeader("X-Atlassian-Token", " no-check");
             var response = await base.ExecuteTaskAsync<T>(request);
             response = await RedirectIfNeededAndGetResponse(response, request);
@@ -64,6 +63,11 @@ namespace BitBucket.REST.API.Wrappers
 
         private void CheckResponseStatusCode(IRestResponse response)
         {
+            if (response.StatusCode == HttpStatusCode.ProxyAuthenticationRequired)
+            {
+                throw new ProxyAuthorizationException(response.Content);
+            }
+
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 throw new AuthorizationException();
@@ -75,7 +79,10 @@ namespace BitBucket.REST.API.Wrappers
             }
 
             if (response.ErrorException != null)
+            {
+                Logger.Error($"Error content: {response.Content}");
                 throw response.ErrorException;
+            }
 
             if (((int)response.StatusCode) >= 400)
             {
@@ -122,7 +129,7 @@ namespace BitBucket.REST.API.Wrappers
         {
             if (response.StatusCode == HttpStatusCode.ProxyAuthenticationRequired)
             {
-                request.Credentials = ProxyResolver?.Authenticate(response.ResponseUri.ToString());
+                Proxy.Credentials = ProxyResolver?.Authenticate(response.ResponseUri.ToString());
                 response = await base.ExecuteTaskAsync<T>(request);
             }
 

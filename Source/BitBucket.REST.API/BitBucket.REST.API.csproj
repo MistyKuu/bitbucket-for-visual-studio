@@ -70,6 +70,8 @@
     <Compile Include="Clients\Enterprise\EnterpriseTeamsClient.cs" />
     <Compile Include="Clients\Enterprise\EnterpriseUserClient.cs" />
     <Compile Include="Clients\Enterprise\EnterprisePullRequestsClient.cs" />
+    <Compile Include="Exceptions\AppException.cs" />
+    <Compile Include="Exceptions\ProxyAuthorizationException.cs" />
     <Compile Include="Interfaces\IBitbucketRestClient.cs" />
     <Compile Include="Interfaces\IEnterpriseBitbucketRestClient.cs" />
     <Compile Include="Interfaces\IProxyResolver.cs" />

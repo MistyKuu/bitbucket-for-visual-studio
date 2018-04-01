@@ -18,9 +18,12 @@ namespace GitClientVS.Services
     {
         private readonly ExportFactory<IProxyLoginDialogView> _proxyViewFactory;
         private readonly IStorageService _storageService;
+        private NetworkCredential _credentials;
 
         [ImportingConstructor]
-        public LoginProxyResolver(ExportFactory<IProxyLoginDialogView> proxyViewFactory, IStorageService storageService)
+        public LoginProxyResolver(
+            ExportFactory<IProxyLoginDialogView> proxyViewFactory, 
+            IStorageService storageService)
         {
             _proxyViewFactory = proxyViewFactory;
             _storageService = storageService;
@@ -28,10 +31,16 @@ namespace GitClientVS.Services
 
         public ICredentials GetCredentials()
         {
+            if (_credentials != null)
+                return _credentials;
+
             var result = _storageService.LoadProxySettings();
 
             if (result.IsSuccess)
-                return new NetworkCredential(result.Data.Name, result.Data.Password);
+            {
+                _credentials = new NetworkCredential(result.Data.Name, result.Data.Password);
+                return _credentials;
+            }
 
             return null;
         }
@@ -47,6 +56,10 @@ namespace GitClientVS.Services
             {
                 _storageService.SaveProxySettings(new Contracts.Models.ProxySettings() { Name = vm.Login, Password = vm.Password });
                 return new NetworkCredential(vm.Login, vm.Password);
+            }
+            else
+            {
+                _credentials = null;
             }
 
             return null;
