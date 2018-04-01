@@ -68,7 +68,7 @@ namespace GitClientVS.Infrastructure.ViewModels
 
         public void InitializeCommands()
         {
-            _acceptCommand = ReactiveCommand.Create(OnClose);
+            _acceptCommand = ReactiveCommand.Create(OnClose, CanExecuteObservable());
         }
 
         private IObservable<bool> CanExecuteObservable()
