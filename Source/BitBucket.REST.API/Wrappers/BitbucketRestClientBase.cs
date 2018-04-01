@@ -58,7 +58,7 @@ namespace BitBucket.REST.API.Wrappers
 
         public async override Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
         {
-            var resp = await ExecuteTaskAsync<bool>(request);
+            var resp = await ExecuteTaskAsync<bool?>(request);
             return resp;
         }
 
