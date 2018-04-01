@@ -19,6 +19,7 @@ using GitClientVS.Contracts.Models.GitClientModels;
 using GitClientVS.Infrastructure;
 using GitClientVS.Infrastructure.Extensions;
 using ParseDiff;
+using GitClientVS.Contracts.Interfaces;
 
 namespace GitClientVS.Services
 {
@@ -28,16 +29,21 @@ namespace GitClientVS.Services
     {
         private readonly IEventAggregatorService _eventAggregator;
         private readonly IGitWatcher _gitWatcher;
+        private readonly IBitbucketClientFactory _bitbucketClientFactory;
         private IBitbucketClient _bitbucketClient;
 
         public bool IsConnected => _bitbucketClient != null;
         public string GitClientType => _bitbucketClient?.BitBucketType.ToString();
 
         [ImportingConstructor]
-        public BitbucketService(IEventAggregatorService eventAggregator, IGitWatcher gitWatcher)
+        public BitbucketService(
+            IEventAggregatorService eventAggregator, 
+            IGitWatcher gitWatcher,
+            IBitbucketClientFactory bitbucketClientFactory)
         {
             _eventAggregator = eventAggregator;
             _gitWatcher = gitWatcher;
+            _bitbucketClientFactory = bitbucketClientFactory;
         }
 
 
@@ -80,14 +86,12 @@ namespace GitClientVS.Services
 
         private async Task<IBitbucketClient> CreateBitbucketClient(GitCredentials gitCredentials)
         {
-            var bitbucketClientFactory = new BitbucketClientFactory();//todo inject?
-
             var credentials = new Credentials(gitCredentials.Login, gitCredentials.Password);
 
             if (!gitCredentials.IsEnterprise)
-                return await bitbucketClientFactory.CreateStandardBitBucketClient(credentials);
+                return await _bitbucketClientFactory.CreateStandardBitBucketClient(credentials);
             else
-                return await bitbucketClientFactory.CreateEnterpriseBitBucketClient(gitCredentials.Host, credentials);
+                return await _bitbucketClientFactory.CreateEnterpriseBitBucketClient(gitCredentials.Host, credentials);
         }
 
 

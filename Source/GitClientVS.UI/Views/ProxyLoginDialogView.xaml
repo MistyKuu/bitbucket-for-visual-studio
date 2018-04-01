@@ -1,0 +1,92 @@
+﻿<controls:MetroWindow x:Class="GitClientVS.UI.Views.ProxyLoginDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:platformUi="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.11.0"
+             xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
+             xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
+             xmlns:ui="clr-namespace:GitClientVS.UI"
+             xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
+             xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
+             mc:Ignorable="d" 
+             Title=""
+             Style="{DynamicResource DefaultMetroWindowStyleCopy}"
+             ShowTitleBar="true"
+             BorderThickness="0" 
+             GlowBrush="Black"
+             WindowStartupLocation="CenterOwner"
+             WindowTitleBrush="#004f83"
+             Background="#004f83"
+             Width="400"
+             Height="200"       
+             FocusManager.FocusedElement="{Binding ElementName=LoginBox}"
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:LoginDialogViewModel,IsDesignTimeCreatable=False}"  >
+    <controls:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <styles:SharedResourceDictionary Source="pack://application:,,,/GitClientVS.UI;component/Styles/SharedDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="DefaultMetroWindowStyleCopy" TargetType="{x:Type controls:MetroWindow}" BasedOn="{StaticResource DefaultMetroWindowStyle}" />
+        </ResourceDictionary>
+    </controls:MetroWindow.Resources>
+
+
+    <Grid Margin="20,20,20,5">
+        <Grid.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Padding" Value="10,0"/>
+            </Style>
+            <Style x:Key="OkButtonStyle" TargetType="{x:Type Button}"
+                BasedOn="{StaticResource MetroFlatButton}" 
+                />
+
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{Binding Text}" Grid.Row="0" Foreground="White" HorizontalAlignment="Center" FontWeight="Bold" TextWrapping="Wrap"/>
+
+        <Grid Grid.Row="1" Margin="50,0,50,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBox Margin="3"  x:Name="LoginBox" Grid.Row="0" Style="{StaticResource ValidatedTextBoxStyle}"  controls:TextBoxHelper.Watermark="Login" Text="{bindings:ValidatedBinding Login}"/>
+            <PasswordBox
+                Margin="3"
+                x:Name="PasswordBox"
+                PasswordChanged="PasswordBox_OnPasswordChanged"
+                Grid.Row="1"
+                controls:TextBoxHelper.Watermark="Password"
+                bindings:PasswordHelper.Attach="True" 
+                bindings:PasswordHelper.Password="{bindings:ValidatedBinding Password,Mode=TwoWay}"
+                >
+                <PasswordBox.Style>
+                    <Style TargetType="PasswordBox" BasedOn="{StaticResource {x:Type PasswordBox}}">
+                        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorDataTemplate}"/>
+                    </Style>
+                </PasswordBox.Style>
+            </PasswordBox>
+
+            <Button Margin="2" IsDefault="True" Style="{StaticResource OkButtonStyle}" IsEnabled="True" Grid.Row="2"  Command="{Binding AcceptCommand}" Content="Ok" HorizontalAlignment="Center"/>
+            <controls1:ErrorView  Grid.Row="3" Grid.Column="0"  />
+
+        </Grid>
+    </Grid>
+</controls:MetroWindow>
+
+
+

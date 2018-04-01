@@ -19,13 +19,8 @@ namespace GitClientVS.Infrastructure.Utils
                 return gitEx.Message;
             if (ex is WebException webExc)
                 return webExc.Message;
-            if (ex is AuthorizationException)
-                return "Incorrect credentials";
-            if (ex is ForbiddenException)
-                return "Operation is forbidden";
-            if (ex is RequestFailedException reqFailedEx)
-                return reqFailedEx.IsFriendlyMessage ? ex.Message : "Wrong request";
-
+            if (ex is AppException appEx)
+                return appEx.DisplayedMessage;
             if (ex is UnauthorizedAccessException)
                 return "Unauthorized";
 

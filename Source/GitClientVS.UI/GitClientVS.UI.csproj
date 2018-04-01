@@ -204,6 +204,9 @@
     <Compile Include="Views\ConnectSectionLoggedOutView.xaml.cs">
       <DependentUpon>ConnectSectionLoggedOutView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ProxyLoginDialogView.xaml.cs">
+      <DependentUpon>ProxyLoginDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PullRequestsWindowContainer.xaml.cs">
       <DependentUpon>PullRequestsWindowContainer.xaml</DependentUpon>
     </Compile>
@@ -349,6 +352,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ConnectSectionLoggedOutView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ProxyLoginDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,14 +1,10 @@
-﻿using System;
-
-namespace BitBucket.REST.API.Exceptions
+﻿namespace BitBucket.REST.API.Exceptions
 {
-    public class AuthorizationException : Exception
+    public class AuthorizationException : AppException
     {
-     
-
-        public override string Message
+        public AuthorizationException()
         {
-            get { return "Unauthorized"; }
+            DisplayedMessage = "Unauthorized / Invalid Credentials";
         }
     }
 }

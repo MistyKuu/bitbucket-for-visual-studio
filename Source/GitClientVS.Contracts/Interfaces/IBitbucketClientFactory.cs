@@ -1,8 +1,9 @@
+using BitBucket.REST.API.Interfaces;
+using BitBucket.REST.API.Models;
 using System;
 using System.Threading.Tasks;
-using BitBucket.REST.API.Models;
 
-namespace BitBucket.REST.API.Interfaces
+namespace GitClientVS.Contracts.Interfaces
 {
     public interface IBitbucketClientFactory
     {
