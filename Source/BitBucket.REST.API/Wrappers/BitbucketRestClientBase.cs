@@ -43,6 +43,17 @@ namespace BitBucket.REST.API.Wrappers
         public abstract Task<IEnumerable<T>> GetAllPages<T>(string url, int limit = 50, QueryString query = null);
         protected abstract string DeserializeError(IRestResponse response);
 
+        public override async Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
+        {
+            Logger.Info($"Calling ExecuteTaskAsync. BaseUrl: {BaseUrl} Resource: {request.Resource}");
+            request.AddHeader("X-Atlassian-Token", " no-check");
+            var response = await base.ExecuteTaskAsync(request);
+            response = await RedirectIfNeededAndGetResponse(response, request);
+            response = await UseProxyIfNeededAndGetResponse(response, request);
+            this.CheckResponseStatusCode(response);
+            return response;
+        }
+
         public override async Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)
         {
             Logger.Info($"Calling ExecuteTaskAsync. BaseUrl: {BaseUrl} Resource: {request.Resource}");
@@ -53,12 +64,6 @@ namespace BitBucket.REST.API.Wrappers
             response = await UseProxyIfNeededAndGetResponse(response, request);
             this.CheckResponseStatusCode(response);
             return response;
-        }
-
-        public async override Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
-        {
-            var resp = await ExecuteTaskAsync<bool?>(request);
-            return resp;
         }
 
         private void CheckResponseStatusCode(IRestResponse response)
@@ -131,6 +136,34 @@ namespace BitBucket.REST.API.Wrappers
             {
                 Proxy.Credentials = ProxyResolver?.Authenticate(response.ResponseUri.ToString());
                 response = await base.ExecuteTaskAsync<T>(request);
+            }
+
+            return response;
+        }
+
+        //non generic method unify later.
+        private async Task<IRestResponse> RedirectIfNeededAndGetResponse(IRestResponse response, IRestRequest request)
+        {
+            while (response.StatusCode == HttpStatusCode.Redirect)
+            {
+                var newLocation = GetNewLocationFromHeader(response);
+
+                if (newLocation == null)
+                    return response;
+
+                request.Resource = RemoveBaseUrl(newLocation);
+                response = await base.ExecuteTaskAsync(request);
+            }
+
+            return response;
+        }
+
+        private async Task<IRestResponse> UseProxyIfNeededAndGetResponse(IRestResponse response, IRestRequest request)
+        {
+            if (response.StatusCode == HttpStatusCode.ProxyAuthenticationRequired)
+            {
+                Proxy.Credentials = ProxyResolver?.Authenticate(response.ResponseUri.ToString());
+                response = await base.ExecuteTaskAsync(request);
             }
 
             return response;
