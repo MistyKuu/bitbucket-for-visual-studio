@@ -91,7 +91,10 @@ namespace GitClientVS.VisualStudio.UI
             await base.InitializeAsync(cancellationToken, progress);
             var componentModel = (IComponentModel)await GetServiceAsync(typeof(SComponentModel));
 
-            await InitializePackageAsync(componentModel);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                InitializePackageAsync(componentModel);
+            });
         }
 
         private async Task InitializePackageAsync(IComponentModel componentModel)

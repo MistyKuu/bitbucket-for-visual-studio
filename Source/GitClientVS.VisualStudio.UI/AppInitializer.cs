@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using AutoMapper;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models;
