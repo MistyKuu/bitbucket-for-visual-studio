@@ -22,8 +22,8 @@
         <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.Contracts" Path="|GitClientVS.Contracts|" />
         <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.UI" Path="|GitClientVS.UI|" />
         <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.Infrastructure" Path="|GitClientVS.Infrastructure|" />
-        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.TeamFoundation.14" Path="|GitClientVS.TeamFoundation.14|" />
-        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.TeamFoundation.15" Path="|GitClientVS.TeamFoundation.15|" />
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.TeamFoundation.14" TargetVersion="[14.0,15.0)" Path="|GitClientVS.TeamFoundation.14|" />
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.TeamFoundation.15" TargetVersion="[15.0,16.0)" Path="|GitClientVS.TeamFoundation.15|" />
     </Assets>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.26004.1,16.0)" DisplayName="Visual Studio core editor" />
