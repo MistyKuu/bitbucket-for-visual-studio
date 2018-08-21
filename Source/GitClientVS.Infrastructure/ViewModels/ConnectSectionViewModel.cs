@@ -12,7 +12,6 @@ using GitClientVS.Contracts.Models;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive;
-using Microsoft.VisualStudio;
 using log4net;
 
 namespace GitClientVS.Infrastructure.ViewModels

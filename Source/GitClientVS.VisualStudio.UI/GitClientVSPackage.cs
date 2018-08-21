@@ -16,11 +16,11 @@ using GitClientVS.UI.Helpers;
 using GitClientVS.VisualStudio.UI.Settings;
 using GitClientVS.VisualStudio.UI.Window;
 using log4net;
-using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 using System.Net;
+using Microsoft.VisualStudio.ComponentModelHost;
 
 namespace GitClientVS.VisualStudio.UI
 {
