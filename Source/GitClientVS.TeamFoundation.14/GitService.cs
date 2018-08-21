@@ -85,6 +85,9 @@ namespace GitClientVS.TeamFoundation
         {
             var repoPath = Repository.Discover(path);
             var repo = repoPath == null ? null : new Repository(repoPath);
+            if (repo == null)
+                return null;
+
             var cloneUrl = repo.Network.Remotes["origin"]?.Url ?? repo.Network.Remotes.FirstOrDefault()?.Url;
             return cloneUrl;
         }

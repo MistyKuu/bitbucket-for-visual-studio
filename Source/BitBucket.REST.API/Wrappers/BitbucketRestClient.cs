@@ -49,7 +49,7 @@ namespace BitBucket.REST.API.Wrappers
 
                 result.Values.AddRange(response.Data.Values);
 
-            } while (response.Data?.Next != null);//todo 99% this value should be used instead of pagenumber
+            } while (response.Data?.Next != null);
 
             return result.Values;
         }
