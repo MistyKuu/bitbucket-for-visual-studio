@@ -12,7 +12,6 @@ using GitClientVS.Contracts.Interfaces.Views;
 using GitClientVS.Infrastructure.Extensions;
 using GitClientVS.Infrastructure.ViewModels;
 using GitClientVS.UI.Views;
-using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell.Interop;
 using ReactiveUI;
 

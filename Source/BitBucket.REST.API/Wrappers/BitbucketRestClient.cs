@@ -26,12 +26,17 @@ namespace BitBucket.REST.API.Wrappers
             {
                 Values = new List<T>()
             };
-            IRestResponse<IteratorBasedPage<T>> response;
-            var pageNumber = 1;
+            IRestResponse<IteratorBasedPage<T>> response = null;
             do
             {
                 var request = new BitbucketRestRequest(url, Method.GET);
-                request.AddQueryParameter("pagelen", limit.ToString()).AddQueryParameter("page", pageNumber.ToString());
+
+                var page = response?.Data?.Next;
+
+                request.AddQueryParameter("pagelen", limit.ToString());
+
+                if (page != null)
+                    request.AddQueryParameter("page", page);
 
                 if (query != null)
                     foreach (var par in query)
@@ -44,8 +49,7 @@ namespace BitBucket.REST.API.Wrappers
 
                 result.Values.AddRange(response.Data.Values);
 
-                pageNumber++;
-            } while (response.Data?.Next != null);//todo 99% this value should be used instead of pagenumber
+            } while (response.Data?.Next != null);
 
             return result.Values;
         }
