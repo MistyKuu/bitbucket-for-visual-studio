@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                     xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:attachedProperties="clr-namespace:GitClientVS.UI.AttachedProperties"

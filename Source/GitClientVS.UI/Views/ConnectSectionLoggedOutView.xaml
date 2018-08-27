@@ -7,8 +7,7 @@
              xmlns:viewModels="clr-namespace:GitClientVS.Infrastructure.ViewModels;assembly=GitClientVS.Infrastructure"
              xmlns:prop="clr-namespace:GitClientVS.UI"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
-             xmlns:controls="clr-namespace:GitClientVS.UI.Controls"
-             xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:ConnectSectionViewModel,IsDesignTimeCreatable=False}" >
@@ -22,7 +21,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <controls1:ProgressRing  Grid.Row="0" x:Name="Pr"
+        <controls:ProgressRing  Grid.Row="0" x:Name="Pr"
                                Foreground="{DynamicResource AccentColorBrush}" 
                                HorizontalAlignment="Left" 
                                VerticalAlignment="Center" 

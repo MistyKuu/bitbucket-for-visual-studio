@@ -9,7 +9,7 @@
              xmlns:gitClientModels="clr-namespace:GitClientVS.Contracts.Models.GitClientModels;assembly=GitClientVS.Contracts"
              xmlns:ui="clr-namespace:GitClientVS.UI"
              xmlns:bindings="clr-namespace:GitClientVS.UI.Bindings"
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              xmlns:controls1="clr-namespace:GitClientVS.UI.Controls"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"

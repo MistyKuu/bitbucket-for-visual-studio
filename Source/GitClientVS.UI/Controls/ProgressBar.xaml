@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GitClientVS.UI.Controls"
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
              xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              mc:Ignorable="d" 
