@@ -20,7 +20,8 @@ using Microsoft.VisualStudio.Shell;
 [assembly: ProvideCodeBase(AssemblyName = "ICSharpCode.AvalonEdit", CodeBase = @"$PackageFolder$\ICSharpCode.AvalonEdit.dll")]
 [assembly: ProvideCodeBase(AssemblyName = "log4net", CodeBase = @"$PackageFolder$\log4net.dll")]
 [assembly: ProvideCodeBase(AssemblyName = "Newtonsoft.Json", CodeBase = @"$PackageFolder$\Newtonsoft.Json.dll")]
-
+[assembly: ProvideCodeBase(AssemblyName = "MahApps.Metro", CodeBase = @"$PackageFolder$\MahApps.Metro.dll")]
+[assembly: ProvideCodeBase(AssemblyName = "ControlzEx", CodeBase = @"$PackageFolder$\ControlzEx.dll")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

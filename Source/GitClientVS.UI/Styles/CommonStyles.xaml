@@ -5,7 +5,7 @@
     <Style x:Key="MetrowWindowsStyle">
 
     </Style>
-    <Style x:Key="DefaultMetroWindowStyle" TargetType="{x:Type controls:MetroWindow}">
+    <Style x:Key="DefaultMetroWindowStyle" TargetType="{x:Type controls:MetroWindow}" BasedOn="{StaticResource {x:Type controls:MetroWindow}}">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Topmost" Value="True"/>
