@@ -1,4 +1,6 @@
-﻿using System;
+﻿using log4net;
+using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -43,10 +45,31 @@ namespace GitClientVS.UI.Helpers
 
         public static void InitializeAssemblyResolver()
         {
+            Debug.WriteLine("Initializing assembly resolver");
+
             if (_resolverInitialized)
                 return;
             AppDomain.CurrentDomain.AssemblyResolve += LoadAssemblyFromRunDir;
             _resolverInitialized = true;
+
+            LoadAssembly("MahApps.Metro"); // many issues with unloaded mahapps.metro
+            LoadAssembly("ControlzEx");
+        }
+
+        public static Assembly LoadAssembly(string assemblyName)
+        {
+            Debug.WriteLine($"Loading assembly: {assemblyName}");
+
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var filename = Path.Combine(path, assemblyName + ".dll");
+
+            if (!File.Exists(filename))
+            {
+                Debug.WriteLine($"Couldn't load assembly {assemblyName} from {Path.GetFullPath(filename)}");
+                return null;
+            }
+
+            return Assembly.LoadFrom(filename);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
@@ -57,11 +80,10 @@ namespace GitClientVS.UI.Helpers
                 var name = new AssemblyName(e.Name);
                 if (!OurAssemblies.Contains(name.Name))
                     return null;
-                var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                var filename = Path.Combine(path, name.Name + ".dll");
-                if (!File.Exists(filename))
-                    return null;
-                return Assembly.LoadFrom(filename);
+
+                Debug.WriteLine("Loading unloaded assembly from assembly resolve");
+
+                return LoadAssembly(name.Name);
             }
             catch (Exception ex)
             {
@@ -73,7 +95,7 @@ namespace GitClientVS.UI.Helpers
                     ex,
                     Environment.NewLine);
 
-
+                Debug.WriteLine(log);
             }
             return null;
         }

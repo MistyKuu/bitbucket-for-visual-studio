@@ -37,7 +37,6 @@ namespace GitClientVS.VisualStudio.UI
         {
             try
             {
-                LoggerConfigurator.Setup();
                 _userInformationService.StartListening();
                 var result = _storageService.LoadUserData();
 

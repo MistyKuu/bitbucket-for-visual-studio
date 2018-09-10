@@ -63,6 +63,7 @@ namespace GitClientVS.VisualStudio.UI
 
         static GitClientVSPackage()
         {
+            LoggerConfigurator.Setup();
             HttpWebRequest.DefaultMaximumErrorResponseLength = 1048576;
             AssemblyResolver.InitializeAssemblyResolver();
         }
