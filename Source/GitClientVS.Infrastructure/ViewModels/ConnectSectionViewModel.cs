@@ -154,7 +154,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                     _teamExplorerCommandsService.NavigateToHomePage();
                 }
             }
-            else if (SelectedRepository.IsActive)
+            else if (SelectedRepository != null && SelectedRepository.IsActive)
             {
                 _teamExplorerCommandsService.NavigateToHomePage();
             }

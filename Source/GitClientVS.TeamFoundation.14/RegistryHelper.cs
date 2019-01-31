@@ -28,6 +28,9 @@ namespace GitClientVS.TeamFoundation
         {
             using (var key = OpenGitKey("Repositories"))
             {
+                if (key == null)
+                    return new List<string>();
+
                 return key.GetSubKeyNames().Select(x =>
                 {
                     using (var subkey = key.OpenSubKey(x))
