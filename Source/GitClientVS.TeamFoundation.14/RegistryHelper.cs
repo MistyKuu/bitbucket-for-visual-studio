@@ -2,16 +2,18 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace GitClientVS.TeamFoundation
 {
     internal class RegistryHelper
     {
-        const string TEGitKey = @"Software\Microsoft\VisualStudio\14.0\TeamFoundation\GitSourceControl";
+        private static int MajorVersion => Process.GetCurrentProcess().MainModule.FileVersionInfo.FileMajorPart;
         private static RegistryKey OpenGitKey(string path)
         {
-            return Registry.CurrentUser.OpenSubKey(TEGitKey + "\\" + path, true);
+            var keyName = $"Software\\Microsoft\\VisualStudio\\{MajorVersion}.0\\TeamFoundation\\GitSourceControl\\{path}";
+            return Registry.CurrentUser.OpenSubKey(keyName, true);
         }
 
         public static string GetLocalClonePath()

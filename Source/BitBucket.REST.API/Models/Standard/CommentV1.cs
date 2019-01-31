@@ -9,8 +9,6 @@ namespace BitBucket.REST.API.Models.Standard
 {
     public class CommentV1
     {
-        private AuthorInfoV1 _authorInfo;
-
         [JsonProperty("content")]
         public string Content { get; set; }
 

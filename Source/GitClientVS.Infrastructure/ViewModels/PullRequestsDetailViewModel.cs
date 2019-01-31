@@ -24,7 +24,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IGitClientService _gitClientService;
         private readonly IUserInformationService _userInformationService;
         private readonly IMessageBoxService _messageBoxService;
-        private readonly IVsTools _vsTools;
         private string _errorMessage;
         private bool _isLoading;
         private ReactiveCommand _initializeCommand;
