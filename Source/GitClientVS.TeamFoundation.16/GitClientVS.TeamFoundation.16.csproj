@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GitClientVS.TeamFoundation</RootNamespace>
-    <AssemblyName>GitClientVS.TeamFoundation.15</AssemblyName>
+    <AssemblyName>GitClientVS.TeamFoundation.16</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -50,21 +50,27 @@
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.Client">
       <HintPath>..\..\AssemblyReferences\VS2019\Microsoft.TeamFoundation.Client.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.Common">
       <HintPath>..\..\AssemblyReferences\VS2019\Microsoft.TeamFoundation.Common.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.Controls">
       <HintPath>..\..\AssemblyReferences\VS2019\Microsoft.TeamFoundation.Controls.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.Git.Client">
       <HintPath>..\..\AssemblyReferences\VS2019\Microsoft.TeamFoundation.Git.Client.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.Git.Controls">
       <HintPath>..\..\AssemblyReferences\VS2019\Microsoft.TeamFoundation.Git.Controls.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.Git.Provider">
       <HintPath>..\..\AssemblyReferences\VS2019\Microsoft.TeamFoundation.Git.Provider.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Imaging, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.VisualStudio.Imaging.14.3.25407\lib\net45\Microsoft.VisualStudio.Imaging.dll</HintPath>
