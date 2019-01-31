@@ -39,7 +39,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private LocalRepo _selectRepository;
         private IVsTools _vsTools;
         private ITeamExplorerCommandsService _teamExplorerCommandsService;
-        private bool _isLoading;
 
         public ICommand OpenLoginCommand => _openLoginCommand;
         public ICommand OpenCreateCommand => _openCreateCommand;
@@ -155,7 +154,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                     _teamExplorerCommandsService.NavigateToHomePage();
                 }
             }
-            else if (SelectedRepository.IsActive)
+            else if (SelectedRepository != null && SelectedRepository.IsActive)
             {
                 _teamExplorerCommandsService.NavigateToHomePage();
             }

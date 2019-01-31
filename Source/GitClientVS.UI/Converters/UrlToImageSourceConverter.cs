@@ -33,7 +33,6 @@ namespace GitClientVS.UI.Converters
     public class UrlToImageSourceConverter : BaseMarkupExtensionConverter, IImageManager
     {
         private static IUserInformationService _userInfoService;
-        private RestClient _client;
 
         static UrlToImageSourceConverter()
         {

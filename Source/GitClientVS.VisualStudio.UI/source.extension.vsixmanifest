@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="69c97fa4-92b5-448c-b5db-037dd9c2c8c9" Version="1.37.95" Language="en-US" Publisher="MistyK" />
+        <Identity Id="69c97fa4-92b5-448c-b5db-037dd9c2c8c9" Version="1.40" Language="en-US" Publisher="MistyK" />
         <DisplayName>Visual Studio Bitbucket Extension</DisplayName>
         <Description xml:space="preserve">Provides the integration with Atlassian Bitbucket - bitbucket.org.</Description>
         <MoreInfo>https://github.com/MistyKuu/bitbucketvsextension</MoreInfo>
@@ -9,11 +9,13 @@
         <Tags>bitbucket git visual studio</Tags>
     </Metadata>
     <Installation AllUsers="true">
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0,15.0]" />
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0,17.0]" />
+        <InstallationTarget Id="Microsoft.VisualStudio.IntegratedShell" Version="[15.0,17.0)" />
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
         <Dependency Id="Microsoft.VisualStudio.MPF.14.0" DisplayName="Visual Studio MPF 14.0" d:Source="Installed" Version="[14.0,)" />
+        <Dependency Id="Microsoft.VisualStudio.TeamFoundation.TeamExplorer.Extensions" DisplayName="Team Explorer" d:Source="Installed" Version="[14.0,)" />
     </Dependencies>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
@@ -24,8 +26,8 @@
         <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.Infrastructure" Path="|GitClientVS.Infrastructure|" />
         <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.TeamFoundation.14" TargetVersion="[14.0,15.0)" Path="|GitClientVS.TeamFoundation.14|" />
         <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.TeamFoundation.15" TargetVersion="[15.0,16.0)" Path="|GitClientVS.TeamFoundation.15|" />
-        <!-- Sometimes the version of `ServiceHub.VSDetouredHost.exe` is used when installing for Visual Studio 2017, see https://github.com/github/VisualStudio/pull/1875 -->
-        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.TeamFoundation.15" TargetVersion="[1.0,2.0)" Path="|GitClientVS.TeamFoundation.15|" />
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="GitClientVS.TeamFoundation.16" TargetVersion="[16.0,17.0)" Path="|GitClientVS.TeamFoundation.16|" />
+
     </Assets>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.26004.1,16.0)" DisplayName="Visual Studio core editor" />

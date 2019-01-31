@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GitClientVS.TeamFoundation</RootNamespace>
     <AssemblyName>GitClientVS.TeamFoundation.15</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -159,6 +160,9 @@
     <Compile Include="..\GitClientVS.TeamFoundation.14\NavigationItems\PullRequestNavigationItem.cs">
       <Link>NavigationItems\PullRequestNavigationItem.cs</Link>
     </Compile>
+    <Compile Include="..\GitClientVS.TeamFoundation.14\RegistryHelper.cs">
+      <Link>RegistryHelper.cs</Link>
+    </Compile>
     <Compile Include="..\GitClientVS.TeamFoundation.14\Sections\ConnectSection.cs">
       <Link>Sections\ConnectSection.cs</Link>
     </Compile>
@@ -184,7 +188,6 @@
       <Link>TeamFoundation\TeamExplorerBaseSection.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegistryHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GitClientVS.Contracts\GitClientVS.Contracts.csproj">

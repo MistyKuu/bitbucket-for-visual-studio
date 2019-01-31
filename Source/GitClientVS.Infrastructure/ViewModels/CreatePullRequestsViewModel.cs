@@ -32,7 +32,6 @@ namespace GitClientVS.Infrastructure.ViewModels
         private readonly IPageNavigationService<IPullRequestsWindow> _pageNavigationService;
         private readonly IEventAggregatorService _eventAggregator;
         private readonly ITreeStructureGenerator _treeStructureGenerator;
-        private readonly IVsTools _vsTools;
         private ReactiveCommand _initializeCommand;
         private ReactiveCommand _removeReviewerCommand;
         private bool _isLoading;
