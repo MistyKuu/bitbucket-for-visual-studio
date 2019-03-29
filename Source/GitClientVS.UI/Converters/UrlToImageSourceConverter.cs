@@ -55,7 +55,7 @@ namespace GitClientVS.UI.Converters
         }
 
         public async Task<BitmapImage> GetImage(string url)
-        {//todo this stopped working
+        {//todo this stopped working https://community.atlassian.com/t5/Bitbucket-articles/Retrieve-the-user-s-avatar-via-the-REST-API-endpoints/ba-p/940531
             var token = System.Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_userInfoService.ConnectionData.UserName}:{_userInfoService.ConnectionData.Password}"));
             RestClient client = new RestClient(url);
             RestRequest request = new RestRequest("", Method.GET);
