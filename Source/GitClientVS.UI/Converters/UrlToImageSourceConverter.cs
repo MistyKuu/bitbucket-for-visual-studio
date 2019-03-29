@@ -55,19 +55,16 @@ namespace GitClientVS.UI.Converters
         }
 
         public async Task<BitmapImage> GetImage(string url)
-        {
-            var httpClient = new HttpClient();
+        {//todo this stopped working
+            var token = System.Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_userInfoService.ConnectionData.UserName}:{_userInfoService.ConnectionData.Password}"));
+            RestClient client = new RestClient(url);
+            RestRequest request = new RestRequest("", Method.GET);
+            request.AddParameter("Authorization", string.Format("Basic " + token), ParameterType.HttpHeader);
+            var resp = await client.ExecuteTaskAsync(request);
 
-            httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue(
-                    "Basic",
-                    System.Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_userInfoService.ConnectionData.UserName}:{_userInfoService.ConnectionData.Password}")));
+            var buffer = resp.RawBytes;
 
-            var resp = await httpClient.GetAsync(url);
-            var filetype = resp.Content.Headers.ContentType.MediaType;
-            var buffer = await resp.Content.ReadAsByteArrayAsync();
-
-            return filetype.Contains("svg", StringComparison.InvariantCultureIgnoreCase) ? GetSvgImage(buffer) : UrlToBitmap(buffer);
+            return resp.ContentType.Contains("svg", StringComparison.InvariantCultureIgnoreCase) ? GetSvgImage(buffer) : UrlToBitmap(buffer);
         }
 
         private BitmapImage GetSvgImage(byte[] buffer)

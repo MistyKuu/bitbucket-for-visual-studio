@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,8 +35,16 @@ namespace BitBucket.REST.API.Clients.Standard
 
         public async Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
         {
-            var url = ApiUrls.PullRequestsAuthors(ownerName, repositoryName);
-            return await _internalRestClient.GetAllPages<UserShort>(url, 100);
+            try
+            {
+                var url = ApiUrls.PullRequestsAuthors(ownerName, repositoryName);
+                return await _internalRestClient.GetAllPages<UserShort>(url, 100);
+            }
+            catch (Exception) //todo this doesn't work, prevent failure of app
+            {
+                return new List<UserShort>();
+            }
+          
         }
 
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int page, int limit = 50,
