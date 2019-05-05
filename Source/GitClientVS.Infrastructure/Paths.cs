@@ -13,6 +13,6 @@ namespace GitClientVS.Infrastructure
         public static string GitClientLogFilePath => Path.Combine(GitClientStorageDirectory, "Logs", "logs.txt");
         public static string GitClientUserDataPath => Path.Combine(GitClientStorageDirectory, "User", "data.dat");
         public static string GitClientProxyDataPath => Path.Combine(GitClientStorageDirectory, "User", "proxy.dat");
-        public static string DefaultRepositoryPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Source", "Repos");
+        public static string DefaultRepositoryPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Source", "Repos");
     }
 }
