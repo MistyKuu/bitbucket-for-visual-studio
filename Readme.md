@@ -35,6 +35,10 @@ Visual Studio 2015/2017 installed.
 Go to [Visual Studio Bitbucket Extension](https://marketplace.visualstudio.com/items?itemName=MistyK.VisualStudioBitbucketExtension), download VSIX file and install it.
 You can also install it from within Visual Studio. ```Tools -> Extensions and Updates```.
 
+### Troubleshooting
+
+Please create an issue and upload log file located under %AppData%\GitClientVSExtension\Logs\logs.txt
+
 ### Demo
 
 ![Demo](https://j.gifs.com/NxwPp8.gif)
