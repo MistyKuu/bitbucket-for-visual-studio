@@ -15,8 +15,8 @@ Bitbucket Extension is a plugin for Visual Studio integration with Bitbucket Git
 
 The extension will stay free forever. You can voluntarily support me by donating via PayPal.
 
-<a href="https://paypal.me/BitbucketVsExtension">
-  <img alt="Support via PayPal" src="https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg"/>
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PVR3Q5234ZLH8&source=url">
+  <img src="https://www.paypalobjects.com/en_US/PL/i/btn/btn_donateCC_LG.gif"/>
 </a>
 
 ## Contributing
