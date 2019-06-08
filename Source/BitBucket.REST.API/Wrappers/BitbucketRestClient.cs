@@ -26,20 +26,16 @@ namespace BitBucket.REST.API.Wrappers
             {
                 Values = new List<T>()
             };
-            IRestResponse<IteratorBasedPage<T>> response = null;
 
             var request = new BitbucketRestRequest(url, Method.GET);
-            var page = response?.Data?.Next;
-            request.AddQueryParameter("pagelen", limit.ToString());
 
-            if (page != null)
-                request.AddQueryParameter("page", page);
+            request.AddQueryParameter("pagelen", limit.ToString());
 
             if (query != null)
                 foreach (var par in query)
                     request.AddQueryParameter(par.Key, par.Value);
 
-            response = await this.ExecuteTaskAsync<IteratorBasedPage<T>>(request);
+            var response = await this.ExecuteTaskAsync<IteratorBasedPage<T>>(request);
 
             if (response.Data?.Values != null)
                 result.Values.AddRange(response.Data.Values);
