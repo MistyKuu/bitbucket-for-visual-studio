@@ -92,10 +92,7 @@ namespace GitClientVS.VisualStudio.UI
             await base.InitializeAsync(cancellationToken, progress);
             var componentModel = (IComponentModel)await GetServiceAsync(typeof(SComponentModel));
 
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                InitializePackageAsync(componentModel);
-            });
+            await InitializePackageAsync(componentModel);
         }
 
         private async Task InitializePackageAsync(IComponentModel componentModel)
@@ -111,7 +108,7 @@ namespace GitClientVS.VisualStudio.UI
                 var gitWatcher = serviceProvider.GetExportedValue<IGitWatcher>();
                 commandsService.Initialize(this);
                 gitWatcher.Initialize();
-                appInitializer.Initialize();
+                await appInitializer.Initialize();
 
                 Logger.Info("Initialized GitClientVsPackage Extension");
             }
