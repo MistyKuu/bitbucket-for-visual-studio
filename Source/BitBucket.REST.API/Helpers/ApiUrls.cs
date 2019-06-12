@@ -10,16 +10,6 @@ namespace BitBucket.REST.API.Helpers
             return new Uri(string.Format(CultureInfo.InvariantCulture, pattern, args), UriKind.Relative);
         }
 
-        public static string Mentions(string username, string repository)
-        {
-            return $"mentions/repositories/{username}/{repository}";
-        }
-
-        public static string RepositoriesV1()
-        {
-            return $"user/repositories";
-        }
-
         public static string Repositories(string login)
         {
             return $"repositories/{login}";
@@ -47,7 +37,7 @@ namespace BitBucket.REST.API.Helpers
 
         public static string DownloadFile(string ownerName, string repoName, string hash, string filePath)
         {
-            return $"repositories/{ownerName}/{repoName}/raw/{hash}/{filePath}";
+            return $"repositories/{ownerName}/{repoName}/src/{hash}/{filePath}";
         }
 
         public static string Teams(string role = "member")
@@ -74,14 +64,9 @@ namespace BitBucket.REST.API.Helpers
             return $"repositories/{username}/{repository}/pullrequests";
         }
 
-        public static string PullRequestsAuthors(string username, string repository)
-        {
-            return $"repositories/{username}/{repository}/pr-authors/";
-        }
-
         public static string RepositoryUsers(string username, string repository)
         {
-            return $"privileges/{username}/{repository}";
+            return $"teams/{username}/permissions/repositories/{repository}";
         }
 
         public static string PullRequest(string username, string repository, long id)
@@ -118,25 +103,20 @@ namespace BitBucket.REST.API.Helpers
         {
             return $"repositories/{username}/{repository}/pullrequests/{id}/comments";
         }
-
-        public static string PullRequestCommentsV1(string username, string repository, long id)
+        public static string PullRequestComments(string username, string repository,long pullRequestId, long commentId)
         {
-            return $@"repositories/{username}/{repository}/pullrequests/{id}/comments";
-        }
-        public static string PullRequestCommentV1(string username, string repository,long pullRequestId, long id)
-        {
-            return $@"repositories/{username}/{repository}/pullrequests/{pullRequestId}/comments/{id}";
+            return $"repositories/{username}/{repository}/pullrequests/{pullRequestId}/comments/{commentId}";
         }
 
         public static string User()
         {
             return "user";
         }
-
-        public static string Repositories()
+        public static string User(string id)
         {
-            return "repositories";
+            return $"user/{id}";
         }
+
 
         public static string DefaultReviewers(string username, string repository)
         {

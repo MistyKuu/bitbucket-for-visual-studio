@@ -17,34 +17,14 @@ namespace BitBucket.REST.API.Clients.Standard
 {
     public class PullRequestsClient : ApiClient, IPullRequestsClient
     {
-        private readonly IBitbucketRestClient _internalRestClient;
-        private readonly IBitbucketRestClient _webClient;
-        private readonly IBitbucketRestClient _versionOneClient;
-
-        public PullRequestsClient(
-            IBitbucketRestClient restClient,
-            IBitbucketRestClient internalRestClient,
-            IBitbucketRestClient webClient,
-            IBitbucketRestClient versionOneClient,
+        public PullRequestsClient(IBitbucketRestClient restClient,
             Connection connection) : base(restClient, connection)
         {
-            _internalRestClient = internalRestClient;
-            _webClient = webClient;
-            _versionOneClient = versionOneClient;
         }
 
-        public async Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
+        public Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
         {
-            try
-            {
-                var url = ApiUrls.PullRequestsAuthors(ownerName, repositoryName);
-                return await _internalRestClient.GetAllPages<UserShort>(url, 100);
-            }
-            catch (Exception) //todo this doesn't work, prevent failure of app
-            {
-                return new List<UserShort>();
-            }
-          
+            return GetRepositoryUsers(repositoryName, ownerName, null);
         }
 
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int page, int limit = 50,
@@ -138,55 +118,54 @@ namespace BitBucket.REST.API.Clients.Standard
 
         public async Task<IEnumerable<Comment>> GetPullRequestComments(string repositoryName, string ownerName, long id)
         {
-            var url = ApiUrls.PullRequestCommentsV1(ownerName, repositoryName, id);
-            var request = new BitbucketRestRequest(url, Method.GET);
-            return (await _versionOneClient.ExecuteTaskAsync<List<CommentV1>>(request)).Data.MapTo<List<Comment>>();
+            var url = ApiUrls.PullRequestComments(ownerName, repositoryName, id);
+            return (await RestClient.GetAllPages<Comment>(url));
         }
 
         public async Task<Comment> AddPullRequestComment(string repositoryName, string ownerName, long id, string content, long? lineFrom = null, long? lineTo = null, string fileName = null, long? parentId = null)
         {
-            var url = ApiUrls.PullRequestCommentsV1(ownerName, repositoryName, id);
+            var url = ApiUrls.PullRequestComments(ownerName, repositoryName, id);
             var request = new BitbucketRestRequest(url, Method.POST);
 
-            var body = new CommentV1()
+            var body = new Comment()
             {
-                Content = content,
-                LineFrom = parentId != null ? null : lineFrom,
-                LineTo = parentId != null ? null : lineTo,
-                FileName = fileName,
-                ParentId = parentId
+                Content = new Content() { Raw = content },
+                Inline = fileName != null ? new Inline()
+                {
+                    From = parentId != null ? null : lineFrom,
+                    To = parentId != null ? null : lineTo,
+                    Path = fileName
+                } : null,
+                Parent = parentId.HasValue ? new Parent() { Id = parentId.Value } : null
             };
-
-            if (body.LineFrom != null)//we can't set both
-                body.LineTo = null;
 
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(body), ParameterType.RequestBody);
 
-            var response = await _versionOneClient.ExecuteTaskAsync<CommentV1>(request);
-            return response.Data.MapTo<Comment>();
+            var response = await RestClient.ExecuteTaskAsync<Comment>(request);
+            return response.Data;
         }
 
         public async Task DeletePullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, long version)
         {
-            var url = ApiUrls.PullRequestCommentV1(ownerName, repositoryName, pullRequestId, id);
+            var url = ApiUrls.PullRequestComments(ownerName, repositoryName, pullRequestId, id);
             var request = new BitbucketRestRequest(url, Method.DELETE);
-            await _versionOneClient.ExecuteTaskAsync(request);
+            await RestClient.ExecuteTaskAsync(request);
         }
 
         public async Task<Comment> EditPullRequestComment(string repositoryName, string ownerName, long pullRequestId, long id, string content, long commentVersion)
         {
-            var url = ApiUrls.PullRequestCommentV1(ownerName, repositoryName, pullRequestId, id);
+            var url = ApiUrls.PullRequestComments(ownerName, repositoryName, pullRequestId, id);
             var request = new BitbucketRestRequest(url, Method.PUT);
 
-            var body = new CommentV1()
+            var body = new Comment()
             {
-                Content = content
+                Content = new Content() { Raw = content },
             };
 
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(body), ParameterType.RequestBody);
 
-            var response = await _versionOneClient.ExecuteTaskAsync<CommentV1>(request);
-            return response.Data.MapTo<Comment>();
+            var response = await RestClient.ExecuteTaskAsync<Comment>(request);
+            return response.Data;
         }
 
         public async Task<PullRequest> GetPullRequest(string repositoryName, string owner, long id)
@@ -234,7 +213,7 @@ namespace BitBucket.REST.API.Clients.Standard
         {
             var url = ApiUrls.DownloadFile(owner, repoName, hash, path);
             var request = new BitbucketRestRequest(url, Method.GET);
-            var response = await _versionOneClient.ExecuteTaskAsync(request);
+            var response = await RestClient.ExecuteTaskAsync(request);
             return response.Content;
         }
 
@@ -268,19 +247,14 @@ namespace BitBucket.REST.API.Clients.Standard
 
         public async Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName, string filter)
         {
-            var url = ApiUrls.Mentions(ownerName, repositoryName);
-            var query = new QueryString()
-            {
-                {"term",filter }
-            };
+            var url = ApiUrls.RepositoryUsers(ownerName, repositoryName);
 
-            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await RestClient.GetAllPages<PermissionDto>(url);
 
-            foreach (var par in query)
-                request.AddQueryParameter(par.Key, par.Value);
-
-            var response = await _webClient.ExecuteTaskAsync<List<UserShort>>(request);
-            return response.Data;
+            return response
+                .Select(x => new UserShort() { DisplayName = x.User.DisplayName, FromUserName = x.User.Uuid })
+                .Where(x => filter == null || x.DisplayName.StartsWith(filter, true, CultureInfo.InvariantCulture))
+                .ToList();
         }
     }
 }

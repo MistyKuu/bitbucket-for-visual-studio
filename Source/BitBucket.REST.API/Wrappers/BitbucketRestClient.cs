@@ -58,15 +58,8 @@ namespace BitBucket.REST.API.Wrappers
 
             var error = (JObject)errorObject["error"];
             var message = error["message"].Value<string>();
-            var fields = error["fields"];
-
-            string fieldsMessage = string.Empty;
-
-            if (fields != null)
-            {
-                fieldsMessage = string.Join(", ", fields.SelectMany(x => ((JProperty)x).Value.Values<string>()));
-                message += ". " + fieldsMessage;
-            }
+            var fields = error["fields"]?.ToList().Select(x => x.ToString()).ToList() ?? new List<string>();
+            message += ". " + string.Join(", ", fields);
 
             return message;
         }

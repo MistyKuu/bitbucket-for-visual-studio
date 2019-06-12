@@ -8,13 +8,14 @@ namespace GitClientVS.Contracts.Models.GitClientModels
 {
     public class GitUser
     {
+        public string Uuid { get; set; }
         public string Username { get; set; }
         public string DisplayName { get; set; }
         public GitLinks Links { get; set; }
 
         protected bool Equals(GitUser other)
         {
-            return string.Equals(Username, other.Username);
+            return string.Equals(Uuid, other.Uuid);
         }
 
         public override bool Equals(object obj)
@@ -27,7 +28,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
 
         public override int GetHashCode()
         {
-            return (Username != null ? Username.GetHashCode() : 0);
+            return (Uuid != null ? Uuid.GetHashCode() : 0);
         }
     }
 }

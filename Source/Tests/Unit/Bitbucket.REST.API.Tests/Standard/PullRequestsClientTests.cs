@@ -34,9 +34,6 @@ namespace Bitbucket.REST.API.Tests.Standard
         public void SetUp()
         {
             _restClient = MockRepository.GenerateMock<IBitbucketRestClient>();
-            _internalClient = MockRepository.GenerateMock<IBitbucketRestClient>();
-            _webClient = MockRepository.GenerateMock<IBitbucketRestClient>();
-            _versionOneClient = MockRepository.GenerateMock<IBitbucketRestClient>();
 
             var connection = new Connection(
                 new Uri("http://url.com"),
@@ -44,7 +41,7 @@ namespace Bitbucket.REST.API.Tests.Standard
                 new Credentials("mistyku", "Password")
                 );
 
-            _sut = new PullRequestsClient(_restClient, _internalClient, _webClient, _versionOneClient, connection);
+            _sut = new PullRequestsClient(_restClient, connection);
         }
 
         [Test]

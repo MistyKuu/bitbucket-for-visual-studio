@@ -11,6 +11,6 @@ namespace BitBucket.REST.API.Models.Standard
         public bool Approved { get; set; }
 
         [JsonProperty(PropertyName = "user")]
-        public UserShort User { get; set; }
+        public User User { get; set; }
     }
 }

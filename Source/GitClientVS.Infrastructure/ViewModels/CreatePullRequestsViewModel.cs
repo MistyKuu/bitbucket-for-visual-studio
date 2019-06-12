@@ -202,7 +202,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 Id = RemotePullRequest?.Id ?? 0,
                 CloseSourceBranch = CloseSourceBranch,
-                Reviewers = SelectedReviewers.ToDictionary(x => x, x => true),
+                Reviewers = SelectedReviewers.ToDictionary(x => new GitUser() { Uuid = x.Username }, x => true),
                 Version = RemotePullRequest?.Version,
             };
 
@@ -249,7 +249,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 Title = pullRequest.Title;
                 Description = pullRequest.Description;
                 SelectedReviewers.Clear();
-                foreach (var reviewer in pullRequest.Reviewers.Where(x => x.Key.Username != pullRequest.Author.Username).Select(x => x.Key))
+                foreach (var reviewer in pullRequest.Reviewers.Where(x => x.Key.Uuid != pullRequest.Author.Uuid).Select(x => x.Key))
                     SelectedReviewers.Add(reviewer);
             }
             else

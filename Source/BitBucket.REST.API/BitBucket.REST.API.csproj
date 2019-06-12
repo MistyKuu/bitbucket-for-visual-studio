@@ -136,6 +136,7 @@
     <Compile Include="Models\Enterprise\Hunk.cs" />
     <Compile Include="Models\Enterprise\Line.cs" />
     <Compile Include="Models\Enterprise\Segment.cs" />
+    <Compile Include="Models\Standard\PermissionDto.cs" />
     <Compile Include="Models\Standard\RepositoryPrivilege.cs" />
     <Compile Include="Models\Standard\Author.cs" />
     <Compile Include="Models\Standard\Branch.cs" />
