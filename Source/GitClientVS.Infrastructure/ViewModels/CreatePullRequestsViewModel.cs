@@ -202,7 +202,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 Id = RemotePullRequest?.Id ?? 0,
                 CloseSourceBranch = CloseSourceBranch,
-                Reviewers = SelectedReviewers.ToDictionary(x => new GitUser() { Uuid = x.Username }, x => true),
+                Reviewers = SelectedReviewers.ToDictionary(x => new GitUser() { Uuid = x.Uuid }, x => true),
                 Version = RemotePullRequest?.Version,
             };
 
@@ -295,7 +295,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             try
             {
                 var suggestions = _gitClientService.GetRepositoryUsers(arg).Result;
-                return suggestions.Except(SelectedReviewers, x => x.Username).ToList();
+                return suggestions.Except(SelectedReviewers, x => x.Uuid).ToList();
             }
             catch (Exception ex)
             {

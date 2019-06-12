@@ -33,7 +33,7 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Version = source.Version
             };
 
-            
+
 
 
             pullRequest.Participants = pullRequest.Participants.Where(x => x.Approved).ToList(); // this is sick logic but its complaint with bitbucket server, done by trial and error
@@ -58,7 +58,7 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Source = source.Source.MapTo<EnterpriseBranchSource>(),
                 Destination = source.Destination?.MapTo<EnterpriseBranchSource>(),
                 Id = source.Id,
-                Reviewers = source.Reviewers?.Select(x => new EnterpriseParticipant() { User = new EnterpriseUser() { Username = x.Username } }).ToList(),
+                Reviewers = source.Reviewers?.Select(x => new EnterpriseParticipant() { User = new EnterpriseUser() { Username = x.Username, Uuid = x.Uuid } }).ToList(),
                 Version = source.Version
             };
         }

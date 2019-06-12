@@ -253,14 +253,14 @@ namespace GitClientVS.Infrastructure.ViewModels
             bool isApproveAvailable = false;
 
             foreach (var reviewer in pullRequest.Reviewers)
-                if (reviewer.Key.Username == _userInformationService.ConnectionData.UserName)
+                if (reviewer.Key.Uuid == _userInformationService.ConnectionData.Id)
                 {
                     isApproveAvailable = true;
                     isApproved = reviewer.Value;
                 }
 
             var approvesCount = pullRequest.Reviewers.Count(x => x.Value);
-            var author = pullRequest.Reviewers.FirstOrDefault(x => x.Key.Username == pullRequest.Author.Username);
+            var author = pullRequest.Reviewers.FirstOrDefault(x => x.Key.Uuid == pullRequest.Author.Uuid);
             HasAuthorApproved = author.Value;
             if (author.Key != null)
                 pullRequest.Reviewers.Remove(author.Key);

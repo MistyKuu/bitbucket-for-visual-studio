@@ -22,7 +22,7 @@ namespace BitBucket.REST.API.Clients.Standard
         {
         }
 
-        public Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
+        public Task<IEnumerable<User>> GetAuthors(string repositoryName, string ownerName)
         {
             return GetRepositoryUsers(repositoryName, ownerName, null);
         }
@@ -94,10 +94,10 @@ namespace BitBucket.REST.API.Clients.Standard
             await RestClient.ExecuteTaskAsync(request);
         }
 
-        public async Task<IEnumerable<UserShort>> GetDefaultReviewers(string repositoryName, string ownerName)
+        public async Task<IEnumerable<User>> GetDefaultReviewers(string repositoryName, string ownerName)
         {
             var url = ApiUrls.DefaultReviewers(ownerName, repositoryName);
-            return await RestClient.GetAllPages<UserShort>(url, 100);
+            return await RestClient.GetAllPages<User>(url, 100);
         }
 
         public IPullRequestQueryBuilder GetPullRequestQueryBuilder()
@@ -245,15 +245,15 @@ namespace BitBucket.REST.API.Clients.Standard
         }
 
 
-        public async Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName, string filter)
+        public async Task<IEnumerable<User>> GetRepositoryUsers(string repositoryName, string ownerName, string filter)
         {
             var url = ApiUrls.RepositoryUsers(ownerName, repositoryName);
 
             var response = await RestClient.GetAllPages<PermissionDto>(url);
 
             return response
-                .Select(x => new UserShort() { DisplayName = x.User.DisplayName, FromUserName = x.User.Uuid })
-                .Where(x => filter == null || x.DisplayName.StartsWith(filter, true, CultureInfo.InvariantCulture))
+                .Where(x => filter == null || x.User.DisplayName.StartsWith(filter, true, CultureInfo.InvariantCulture))
+                .Select(x => x.User)
                 .ToList();
         }
     }

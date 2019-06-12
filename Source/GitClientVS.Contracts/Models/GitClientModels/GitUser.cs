@@ -9,7 +9,6 @@ namespace GitClientVS.Contracts.Models.GitClientModels
     public class GitUser
     {
         public string Uuid { get; set; }
-        public string Username { get; set; }
         public string DisplayName { get; set; }
         public GitLinks Links { get; set; }
 
