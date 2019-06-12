@@ -202,7 +202,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             {
                 Id = RemotePullRequest?.Id ?? 0,
                 CloseSourceBranch = CloseSourceBranch,
-                Reviewers = SelectedReviewers.ToDictionary(x => new GitUser() { Uuid = x.Uuid }, x => true),
+                Reviewers = SelectedReviewers.ToDictionary(x => x, x => true),
                 Version = RemotePullRequest?.Version,
             };
 

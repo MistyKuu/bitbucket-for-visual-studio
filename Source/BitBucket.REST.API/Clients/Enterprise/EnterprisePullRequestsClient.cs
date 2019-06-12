@@ -292,6 +292,9 @@ namespace BitBucket.REST.API.Clients.Enterprise
             {
                 Username = Connection.Credentials.Login
             };
+
+            pullRequest.Reviewers = pullRequest.Reviewers.Select(x => new User() { Username = x.DisplayName }).ToList();
+
             var url = EnterpriseApiUrls.PullRequests(owner, repositoryName);
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(pullRequest.MapTo<EnterprisePullRequest>()), ParameterType.RequestBody);
@@ -304,6 +307,8 @@ namespace BitBucket.REST.API.Clients.Enterprise
             {
                 Username = Connection.Credentials.Login
             };
+
+            pullRequest.Reviewers = pullRequest.Reviewers.Select(x => new User() { Username = x.DisplayName }).ToList();
 
             pullRequest.Destination = null;//throws exception if the same dest is set. Unless we allow to change it, leave it null
 

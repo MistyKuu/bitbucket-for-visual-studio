@@ -148,11 +148,11 @@ namespace Bitbucket.REST.API.Tests.Standard
         public async Task GetAuthors_ShouldCallCorrectUrlAndResult()
         {
             var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetAuthorsResponse.json"));
-            var responseData = new NewtonsoftJsonSerializer().Deserialize<IteratorBasedPage<UserShort>>(responseJson);
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<IteratorBasedPage<User>>(responseJson);
 
             var result = _internalClient
                 .Capture()
-                .Args<string, int, QueryString, IEnumerable<UserShort>>((s, url, limit, queryString) => s.GetAllPages<UserShort>(url, limit, queryString), responseData.Values);
+                .Args<string, int, QueryString, IEnumerable<User>>((s, url, limit, queryString) => s.GetAllPages<User>(url, limit, queryString), responseData.Values);
 
             var resultAuthors = (await _sut.GetAuthors("reponame", "owner")).ToList();
 
@@ -225,11 +225,11 @@ namespace Bitbucket.REST.API.Tests.Standard
         public async Task GetDefaultReviewers_ShouldCallCorrectUrlAndResult()
         {
             var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetDefaultReviewersResponse.json"));
-            var responseData = new NewtonsoftJsonSerializer().Deserialize<IteratorBasedPage<UserShort>>(responseJson);
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<IteratorBasedPage<User>>(responseJson);
 
             var result = _restClient
                 .Capture()
-                .Args<string, int, QueryString, IEnumerable<UserShort>>((s, url, limit, queryString) => s.GetAllPages<UserShort>(url, limit, queryString), responseData.Values);
+                .Args<string, int, QueryString, IEnumerable<User>>((s, url, limit, queryString) => s.GetAllPages<User>(url, limit, queryString), responseData.Values);
 
             var resultData = (await _sut.GetDefaultReviewers("reponame", "owner")).ToList();
 
@@ -498,15 +498,15 @@ namespace Bitbucket.REST.API.Tests.Standard
         public async Task GetRepositoryUsers_ShouldCallCorrectUrlAndGetResult()
         {
             var responseJson = Utilities.LoadFile(Paths.GetStandardDataPath("GetRepositoryUsersResponse.json"));
-            var responseData = new NewtonsoftJsonSerializer().Deserialize<List<UserShort>>(responseJson);
+            var responseData = new NewtonsoftJsonSerializer().Deserialize<List<User>>(responseJson);
 
-            var response = MockRepository.GenerateMock<IRestResponse<List<UserShort>>>();
+            var response = MockRepository.GenerateMock<IRestResponse<List<User>>>();
             response.Stub(x => x.Data).Return(responseData);
 
             var result = _webClient
                 .Capture()
-                .Args<IRestRequest, IRestResponse<List<UserShort>>>(
-                    (s, req) => s.ExecuteTaskAsync<List<UserShort>>(req), response);
+                .Args<IRestRequest, IRestResponse<List<User>>>(
+                    (s, req) => s.ExecuteTaskAsync<List<User>>(req), response);
 
             var resultData = (await _sut.GetRepositoryUsers("reponame", "owner", "filter")).ToList();
 

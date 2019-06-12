@@ -65,7 +65,7 @@ namespace GitClientVS.Infrastructure.Mappings
                 },
                 State = source.Status.MapTo<PullRequestOptions>(),
                 CloseSourceBranch = source.CloseSourceBranch,
-                Reviewers = source.Reviewers?.Select(x => new User() { Uuid = x.Key.Uuid }).ToList(),
+                Reviewers = source.Reviewers?.Select(x => new User() { Uuid = x.Key.Uuid, DisplayName = x.Key.DisplayName, Username = x.Key.DisplayName }).ToList(),
                 Version = source.Version
             };
         }
