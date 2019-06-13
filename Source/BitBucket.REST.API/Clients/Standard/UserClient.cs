@@ -24,5 +24,13 @@ namespace BitBucket.REST.API.Clients.Standard
             var response = await RestClient.ExecuteTaskAsync<User>(request);
             return response.Data;
         }
+
+        public async Task<User> GetUser(string id)
+        {
+            var url = ApiUrls.User(id);
+            var request = new BitbucketRestRequest(url, Method.GET);
+            var response = await RestClient.ExecuteTaskAsync<User>(request);
+            return response.Data;
+        }
     }
 }

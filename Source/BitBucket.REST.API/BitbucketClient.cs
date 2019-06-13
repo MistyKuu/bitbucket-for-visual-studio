@@ -21,21 +21,15 @@ namespace BitBucket.REST.API
 
         public BitbucketClient(
             Connection apiConnection,
-            Connection internalConnection, 
-            Connection versionOneApiConnection,
-            Connection webConnection,
             IProxyResolver proxyResolver
             )
         {
             ApiConnection = apiConnection;
             var client = new BitbucketRestClient(apiConnection) { ProxyResolver = proxyResolver };
-            var internalClient = new BitbucketRestClient(internalConnection) { ProxyResolver = proxyResolver };
-            var versionOneClient = new BitbucketRestClient(versionOneApiConnection) { ProxyResolver = proxyResolver };
-            var webClient = new BitbucketRestClient(webConnection) { ProxyResolver = proxyResolver };
 
-            RepositoriesClient = new RepositoriesClient(client, versionOneClient, ApiConnection);
+            RepositoriesClient = new RepositoriesClient(client, ApiConnection);
             UserClient = new UserClient(client, ApiConnection);
-            PullRequestsClient = new PullRequestsClient(client, internalClient, webClient, versionOneClient, ApiConnection);
+            PullRequestsClient = new PullRequestsClient(client, ApiConnection);
             TeamsClient = new TeamsClient(client, ApiConnection);
         }
     }

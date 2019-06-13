@@ -21,11 +21,11 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         }
 
-        public async Task<IEnumerable<UserShort>> GetAuthors(string repositoryName, string ownerName)
+        public async Task<IEnumerable<User>> GetAuthors(string repositoryName, string ownerName)
         {
             var url = EnterpriseApiUrls.PullRequestsAuthors(ownerName, repositoryName);
             var users = await RestClient.GetAllPages<EnterpriseUser>(url, 100);
-            return users.MapTo<List<UserShort>>();
+            return users.MapTo<List<User>>();
         }
 
         public async Task<IteratorBasedPage<PullRequest>> GetPullRequestsPage(string repositoryName, string ownerName, int page, int limit = 50,
@@ -125,9 +125,9 @@ namespace BitBucket.REST.API.Clients.Enterprise
             await RestClient.ExecuteTaskAsync(request);
         }
 
-        public Task<IEnumerable<UserShort>> GetDefaultReviewers(string repositoryName, string ownerName)
+        public Task<IEnumerable<User>> GetDefaultReviewers(string repositoryName, string ownerName)
         {
-            return Task.FromResult(Enumerable.Empty<UserShort>()); //todo in different API do later: http://localhost:7990/rest/default-reviewers/latest/projects/~MISTYK/repos/tttttttttt-df/reviewers?sourceRepoId=72&sourceRefId=refs%2Fheads%2FSECOND-BRANCH&targetRepoId=72&targetRefId=refs%2Fheads%2Fmaster
+            return Task.FromResult(Enumerable.Empty<User>()); //todo in different API do later: http://localhost:7990/rest/default-reviewers/latest/projects/~MISTYK/repos/tttttttttt-df/reviewers?sourceRepoId=72&sourceRefId=refs%2Fheads%2FSECOND-BRANCH&targetRepoId=72&targetRefId=refs%2Fheads%2Fmaster
         }
 
         public IPullRequestQueryBuilder GetPullRequestQueryBuilder()
@@ -185,7 +185,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             return commits;
         }
 
-        private void SetAuthorAvatar(Commit commit, List<UserShort> participants)
+        private void SetAuthorAvatar(Commit commit, List<User> participants)
         {
 
             try
@@ -292,6 +292,9 @@ namespace BitBucket.REST.API.Clients.Enterprise
             {
                 Username = Connection.Credentials.Login
             };
+
+            pullRequest.Reviewers = pullRequest.Reviewers.Select(x => new User() { Username = x.DisplayName }).ToList();
+
             var url = EnterpriseApiUrls.PullRequests(owner, repositoryName);
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(pullRequest.MapTo<EnterprisePullRequest>()), ParameterType.RequestBody);
@@ -305,6 +308,8 @@ namespace BitBucket.REST.API.Clients.Enterprise
                 Username = Connection.Credentials.Login
             };
 
+            pullRequest.Reviewers = pullRequest.Reviewers.Select(x => new User() { Username = x.DisplayName }).ToList();
+
             pullRequest.Destination = null;//throws exception if the same dest is set. Unless we allow to change it, leave it null
 
             var url = EnterpriseApiUrls.PullRequest(owner, repoName, pullRequest.Id);
@@ -313,7 +318,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
             await RestClient.ExecuteTaskAsync(request);
         }
 
-        public async Task<IEnumerable<UserShort>> GetRepositoryUsers(string repositoryName, string ownerName, string filter)
+        public async Task<IEnumerable<User>> GetRepositoryUsers(string repositoryName, string ownerName, string filter)
         {
             var url = EnterpriseApiUrls.Users();
             var queryString = new QueryString()
@@ -327,7 +332,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
             var response = await RestClient.GetAllPages<EnterpriseUser>(url, query: queryString);
 
-            return response.MapTo<List<UserShort>>();
+            return response.MapTo<List<User>>();
         }
 
 

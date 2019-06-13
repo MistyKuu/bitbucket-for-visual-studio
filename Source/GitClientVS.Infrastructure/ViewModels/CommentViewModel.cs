@@ -81,7 +81,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _inlineCommentTree, value);
         }
 
-        public string CurrentUserName => _userInformationService.ConnectionData.UserName;
+        public string CurrentUserName => _userInformationService.ConnectionData.Id;
 
         public List<GitComment> Comments { get; set; }
 

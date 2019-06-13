@@ -136,6 +136,7 @@
     <Compile Include="Models\Enterprise\Hunk.cs" />
     <Compile Include="Models\Enterprise\Line.cs" />
     <Compile Include="Models\Enterprise\Segment.cs" />
+    <Compile Include="Models\Standard\PermissionDto.cs" />
     <Compile Include="Models\Standard\RepositoryPrivilege.cs" />
     <Compile Include="Models\Standard\Author.cs" />
     <Compile Include="Models\Standard\Branch.cs" />
@@ -157,7 +158,6 @@
     <Compile Include="Models\Standard\Source.cs" />
     <Compile Include="Models\Standard\Team.cs" />
     <Compile Include="Models\Standard\User.cs" />
-    <Compile Include="Models\Standard\UserShort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBuilders\EnterprisePullRequestQueryBuilder.cs" />
     <Compile Include="Interfaces\IPullRequestQueryBuilder.cs" />

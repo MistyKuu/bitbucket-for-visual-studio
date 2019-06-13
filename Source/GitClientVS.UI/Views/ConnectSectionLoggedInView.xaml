@@ -27,6 +27,26 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <StackPanel Grid.Row="0">
+            <Separator Style="{StaticResource VerticalSeparator}" />
+            <Button Style="{StaticResource ActionLinkButton}"  Content="{x:Static prop:Resources.ChangeUser}" x:Name="ChangeUserBtn" Click="ChangeUserBtn_OnClick" Margin="4,6,0,0">
+                <Button.ContextMenu>
+                    <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" ItemsSource="{Binding SavedUsers}">
+                        <ContextMenu.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Login}">
+                                    <TextBlock.InputBindings>
+                                        <MouseBinding Command="{Binding Path=DataContext.ChangeUserCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" CommandParameter="{Binding}" MouseAction="LeftClick" />
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ContextMenu.ItemTemplate>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+        </StackPanel>
+
+
 
         <TextBlock Grid.Row="1"  Margin="5" TextWrapping="Wrap">
             <Run Text="Welcome"/>

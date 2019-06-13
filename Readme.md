@@ -11,12 +11,12 @@ Bitbucket Extension is a plugin for Visual Studio integration with Bitbucket Git
 *  View files, commits and comments from pull request.
 *  View Pull request diff with syntax language highlighting.
 
-## Donate via PayPal
+## Donate
 
-The extension will stay free forever. You can voluntarily support me by donating via PayPal.
+The extension will stay free forever. You can voluntarily support me by donating via PayPal/Bank account.
 
-<a href="https://paypal.me/BitbucketVsExtension">
-  <img alt="Support via PayPal" src="https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg"/>
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PVR3Q5234ZLH8&source=url">
+  <img src="https://www.paypalobjects.com/en_US/PL/i/btn/btn_donateCC_LG.gif"/>
 </a>
 
 ## Contributing
@@ -34,6 +34,10 @@ Visual Studio 2015/2017 installed.
 
 Go to [Visual Studio Bitbucket Extension](https://marketplace.visualstudio.com/items?itemName=MistyK.VisualStudioBitbucketExtension), download VSIX file and install it.
 You can also install it from within Visual Studio. ```Tools -> Extensions and Updates```.
+
+### Troubleshooting
+
+Please create an issue and upload log file located under %AppData%\GitClientVSExtension\Logs\logs.txt
 
 ### Demo
 

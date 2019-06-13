@@ -54,18 +54,18 @@ namespace GitClientVS.VisualStudio.UI
             }
         }
 
-        private async Task GitClientLogin(Result<ConnectionData> result)
+        private async Task GitClientLogin(Result<CombinedConnectionData> result)
         {
-            if (result.IsSuccess && result.Data.IsLoggedIn)
+            if (result.IsSuccess && result.Data.Current.IsLoggedIn)
             {
                 try
                 {
                     var cred = new GitCredentials()
                     {
-                        Login = result.Data.UserName,
-                        Password = result.Data.Password,
-                        Host = result.Data.Host,
-                        IsEnterprise = result.Data.IsEnterprise
+                        Login = result.Data.Current.UserName,
+                        Password = result.Data.Current.Password,
+                        Host = result.Data.Current.Host,
+                        IsEnterprise = result.Data.Current.IsEnterprise
                     };
                     await _gitClient.LoginAsync(cred);
                 }

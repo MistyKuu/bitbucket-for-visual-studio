@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Reactive.Linq;
 using System.Windows.Input;
@@ -7,6 +8,7 @@ using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Contracts.Models;
 using GitClientVS.UI.Helpers;
 using Microsoft.VisualStudio.PlatformUI;
+using System.Linq;
 
 namespace GitClientVS.VisualStudio.UI.Services
 {
@@ -54,10 +56,34 @@ namespace GitClientVS.VisualStudio.UI.Services
             _themeObs?.Dispose();
         }
 
+        public List<ConnectionData> GetSavedUsers()
+        {
+            var userData = _storageService.LoadUserData();
+            if (!userData.IsSuccess)
+                return new List<ConnectionData>();
+
+            return userData.Data.SavedUsers.ToList();
+        }
+
         private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)
         {
             ConnectionData = connectionChangedEvent.Data;
-            _storageService.SaveUserData(ConnectionData);
+
+            var userData = _storageService.LoadUserData();
+
+            var data = userData.IsSuccess
+                ? userData.Data
+                : new CombinedConnectionData()
+                {
+                    SavedUsers = new List<ConnectionData>()
+                };
+
+            data.Current = connectionChangedEvent.Data;
+
+            if (connectionChangedEvent.Data.IsLoggedIn && data.SavedUsers.All(x => !x.Equals(connectionChangedEvent.Data)))
+                data.SavedUsers.Add(connectionChangedEvent.Data);
+
+            _storageService.SaveUserData(data);
         }
     }
 }

@@ -249,7 +249,7 @@ namespace GitClientVS.Infrastructure.ViewModels
                 Title = pullRequest.Title;
                 Description = pullRequest.Description;
                 SelectedReviewers.Clear();
-                foreach (var reviewer in pullRequest.Reviewers.Where(x => x.Key.Username != pullRequest.Author.Username).Select(x => x.Key))
+                foreach (var reviewer in pullRequest.Reviewers.Where(x => x.Key.Uuid != pullRequest.Author.Uuid).Select(x => x.Key))
                     SelectedReviewers.Add(reviewer);
             }
             else
@@ -295,7 +295,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             try
             {
                 var suggestions = _gitClientService.GetRepositoryUsers(arg).Result;
-                return suggestions.Except(SelectedReviewers, x => x.Username).ToList();
+                return suggestions.Except(SelectedReviewers, x => x.Uuid).ToList();
             }
             catch (Exception ex)
             {

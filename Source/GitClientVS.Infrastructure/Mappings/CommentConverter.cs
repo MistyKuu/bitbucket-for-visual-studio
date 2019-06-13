@@ -15,7 +15,7 @@ namespace GitClientVS.Infrastructure.Mappings
                 Content = source.Content.MapTo<GitCommentContent>(),
                 CreatedOn = TimeConverter.GetDate(source.CreatedOn),
                 UpdatedOn = TimeConverter.GetDate(source.UpdatedOn),
-                Id = source.Id,
+                Id = source.Id.Value,
                 Parent = source.Parent.MapTo<GitCommentParent>(),
                 User = source.User.MapTo<GitUser>(),
                 Inline = source.Inline != null ? new GitCommentInline()
@@ -24,8 +24,8 @@ namespace GitClientVS.Infrastructure.Mappings
                     To = source.Inline.To,
                     Path = source.Inline.Path,
                 } : null,
-                IsDeleted = source.IsDeleted,
-                Version = source.Version
+                IsDeleted = source.IsDeleted ?? true,
+                Version = source.Version ?? 0
             };
 
 

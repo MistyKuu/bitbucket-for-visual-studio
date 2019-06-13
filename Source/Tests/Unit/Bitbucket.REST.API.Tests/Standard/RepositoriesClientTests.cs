@@ -42,7 +42,7 @@ namespace Bitbucket.REST.API.Tests.Standard
                 cfg.AddProfile<EnterpriseToStandardMappingsProfile>();
             });
 
-            _sut = new RepositoriesClient(_restClient, _versionOneClient, connection);
+            _sut = new RepositoriesClient(_restClient, connection);
         }
 
         [Test]
