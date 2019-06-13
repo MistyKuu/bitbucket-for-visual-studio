@@ -24,5 +24,13 @@ namespace GitClientVS.UI.Views
         {
             InitializeComponent();
         }
+
+
+
+        private void ChangeUserBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            ChangeUserBtn.ContextMenu.PlacementTarget = ChangeUserBtn;
+            ChangeUserBtn.ContextMenu.IsOpen = true;
+        }
     }
 }

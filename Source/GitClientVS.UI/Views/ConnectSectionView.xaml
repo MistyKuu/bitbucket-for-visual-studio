@@ -8,6 +8,7 @@
              xmlns:converters="clr-namespace:GitClientVS.UI.Converters"
              xmlns:styles="clr-namespace:GitClientVS.UI.Styles"
              xmlns:controls="clr-namespace:GitClientVS.UI.Controls"
+             xmlns:prop="clr-namespace:GitClientVS.UI"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:ConnectSectionViewModel,IsDesignTimeCreatable=False}" >
     <UserControl.Resources>
@@ -118,10 +119,11 @@
 
 
         <Grid Grid.Row="1" x:Name="ContentGrid">
-            <local:ConnectSectionLoggedOutView Visibility="{Binding ElementName=LoggedInView,Path=Visibility,Converter={converters:NegateVisibilityConverter}}" />
-            <local:ConnectSectionLoggedInView   x:Name="LoggedInView"  Visibility="{Binding ConnectionData.IsLoggedIn,Converter={converters:BoolToVisibilityConverter}}"/>
+
+            <local:ConnectSectionLoggedOutView  Visibility="{Binding ElementName=LoggedInView,Path=Visibility,Converter={converters:NegateVisibilityConverter}}" />
+            <local:ConnectSectionLoggedInView  x:Name="LoggedInView"  Visibility="{Binding ConnectionData.IsLoggedIn,Converter={converters:BoolToVisibilityConverter}}"/>
         </Grid>
-        
+
     </Grid>
 </UserControl>
 
