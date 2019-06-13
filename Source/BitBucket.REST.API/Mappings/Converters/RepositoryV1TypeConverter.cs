@@ -19,7 +19,7 @@ namespace BitBucket.REST.API.Mappings.Converters
                 HasIssues = source.HasIssues,
                 HasWiki = source.HasWiki,
                 Parent = source.IsFork ? new Parent() : null,//todo this is only because mapping between repository and gitremoterepository uses that
-                Owner = new User() { Username = source.Owner },
+                Owner = new User() { Username = source.Owner, Uuid = source.Owner },
             };
         }
     }

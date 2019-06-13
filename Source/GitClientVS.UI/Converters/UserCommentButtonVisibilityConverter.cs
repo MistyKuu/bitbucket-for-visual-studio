@@ -17,10 +17,10 @@ namespace GitClientVS.UI.Converters
             var gitUser = values[0] as string;
             var gitComment = values[1] as GitComment;
 
-            if (gitComment == null || gitUser == null)
-                return Visibility.Collapsed;
+            if (gitComment == null || gitUser == null || gitComment.User == null)
+                return Visibility.Collapsed;    
 
-            return gitComment.User.Username == gitUser ? Visibility.Visible : Visibility.Collapsed;
+            return gitComment.User.Uuid == gitUser ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

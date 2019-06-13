@@ -80,6 +80,15 @@ namespace GitClientVS.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change User.
+        /// </summary>
+        public static string ChangeUser {
+            get {
+                return ResourceManager.GetString("ChangeUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clone.
         /// </summary>
         public static string Clone {

@@ -12,11 +12,12 @@ namespace BitBucket.REST.API.Mappings.Converters
             {
                 Approved = source.Approved,
                 Role = source.Role,
-                User = new UserShort()
+                User = new User()
                 {
                     Links = source.User.Links.MapTo<Links>(),
                     DisplayName = source.User.DisplayName,
-                    Username = source.User.Username
+                    Uuid = source.User.Username,
+                    Username = source.User.Username,
                 },
             };
         }

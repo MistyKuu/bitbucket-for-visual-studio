@@ -14,7 +14,7 @@ namespace BitBucket.REST.API.Mappings.Converters
             {
                 Author = new Author()
                 {
-                    User = source.Author.MapTo<UserShort>(),
+                    User = source.Author.MapTo<User>(),
                 },
                 Hash = source.Id,
                 Date = source.Date.FromUnixTimeStamp().ToString(CultureInfo.InvariantCulture),

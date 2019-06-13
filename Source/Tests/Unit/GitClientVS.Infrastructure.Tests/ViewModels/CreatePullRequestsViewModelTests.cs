@@ -85,11 +85,11 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
             var pullRequest = new GitPullRequest("Title", "Desc", new GitBranch() { Name = "SrcBranch" }, new GitBranch() { Name = "DestinationBranch" })
             {
-                Author = new GitUser() { Username = "Author" },
+                Author = new GitUser() { Uuid = "Author" },
                 Reviewers = new Dictionary<GitUser, bool>()
                 {
-                    [new GitUser() { Username = "user" }] = true,
-                    [new GitUser() { Username = "Author" }] = true
+                    [new GitUser() { Uuid = "user" }] = true,
+                    [new GitUser() { Uuid = "Author" }] = true
                 }
             };
             IEnumerable<GitCommit> commits = new List<GitCommit>() { new GitCommit() };
@@ -227,7 +227,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _sut.SourceBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
             _sut.DestinationBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
             _sut.CloseSourceBranch = true;
-            _sut.SelectedReviewers = new ReactiveList<GitUser>() { new GitUser() { Username = "User1" }, new GitUser() { Username = "User2" } };
+            _sut.SelectedReviewers = new ReactiveList<GitUser>() { new GitUser() { Uuid = "User1" }, new GitUser() { Uuid = "User2" } };
 
             _pageNavigationService.Expect(x => x.NavigateBack(true));
 
@@ -267,7 +267,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _sut.DestinationBranch = new GitBranch() { Name = Guid.NewGuid().ToString() };
             _sut.CloseSourceBranch = true;
             _sut.SelectedReviewers =
-                new ReactiveList<GitUser>() { new GitUser() { Username = "User1" }, new GitUser() { Username = "User2" } };
+                new ReactiveList<GitUser>() { new GitUser() { Uuid = "User1" }, new GitUser() { Uuid = "User2" } };
 
             _pageNavigationService.Expect(x => x.NavigateBack(true));
 

@@ -76,6 +76,7 @@ namespace GitClientVS.Services
                 _bitbucketClient = await CreateBitbucketClient(gitCredentials);
 
                 connectionData.UserName = _bitbucketClient.ApiConnection.Credentials.Login;
+                connectionData.Id = _bitbucketClient.ApiConnection.Credentials.AccountId;
                 connectionData.IsLoggedIn = true;
             }
             finally
@@ -86,7 +87,7 @@ namespace GitClientVS.Services
 
         private async Task<IBitbucketClient> CreateBitbucketClient(GitCredentials gitCredentials)
         {
-            var credentials = new Credentials(gitCredentials.Login, gitCredentials.Password);
+            var credentials = new Credentials(gitCredentials.Login, gitCredentials.Password); //todo this is wrong for enterprise, should pass UIID
 
             if (!gitCredentials.IsEnterprise)
                 return await _bitbucketClientFactory.CreateStandardBitBucketClient(credentials);
@@ -343,6 +344,12 @@ namespace GitClientVS.Services
             OnConnectionChanged(ConnectionData.NotLogged);
         }
 
+        public async Task ChangeUserAsync(GitCredentials credentials)
+        {
+            _bitbucketClient = null;
+            await LoginAsync(credentials);
+        }
+
         private static void ProcessDiffs(IEnumerable<FileDiff> diffs)
         {
             //todo word level
@@ -371,7 +378,7 @@ namespace GitClientVS.Services
 
         private static void AssignInlinesToChildren(List<Comment> comments)
         {
-            var commentDictionary = comments.ToDictionary(x => x.Id, x => x);
+            var commentDictionary = comments.ToDictionary(x => x.Id.Value, x => x);
 
             foreach (var comment in comments.ToList())
             {

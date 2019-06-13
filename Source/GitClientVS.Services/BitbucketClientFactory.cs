@@ -47,15 +47,11 @@ namespace GitClientVS.Services
             var client = new BitbucketRestClient(apiConnection) { ProxyResolver = _proxyResolver };
             var userClient = new UserClient(client, apiConnection);
             var response = await userClient.GetUser();
-            var credentials = new Credentials(response.Username, apiConnection.Credentials.Password);
+            var credentials = new Credentials(response.Username, apiConnection.Credentials.Password, response.Uuid);
 
             apiConnection = new Connection(host, new Uri($"{host.Scheme}://api.{host.Host}/2.0/"), credentials);
 
-            var internalApiConnection = new Connection(host, new Uri($"{host.Scheme}://{host.Host}/!api/internal/"), credentials);
-            var versionOneApiConnection = new Connection(host, new Uri($"{host.Scheme}://api.{host.Host}/1.0/"), credentials);
-            var webApiConnection = new Connection(host, new Uri(host, "xhr"), credentials);
-
-            return new BitbucketClient(apiConnection, internalApiConnection, versionOneApiConnection, webApiConnection, _proxyResolver);
+            return new BitbucketClient(apiConnection,  _proxyResolver);
         }
     }
 }

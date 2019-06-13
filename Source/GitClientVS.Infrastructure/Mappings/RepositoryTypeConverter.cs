@@ -39,7 +39,8 @@ namespace GitClientVS.Infrastructure.Mappings
                 HasWiki = source.HasWiki,
                 Owner = new User()
                 {
-                    Username = source.Owner
+                    Username = source.Owner,
+                    Uuid = source.Owner
                 },
                 Links = new Links()
                 {

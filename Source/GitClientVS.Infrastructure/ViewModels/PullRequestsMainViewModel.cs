@@ -97,8 +97,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             get
             {
                 return new SuggestionProvider(x => Authors.Where(y =>
-                (y.DisplayName != null && y.DisplayName.Contains(x, StringComparison.InvariantCultureIgnoreCase)) ||
-                (y.Username != null && y.Username.Contains(x, StringComparison.InvariantCultureIgnoreCase))));
+                    (y.DisplayName != null && y.DisplayName.Contains(x, StringComparison.InvariantCultureIgnoreCase))));
             }
         }
 
@@ -167,7 +166,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             var iterator = await _gitClientService.GetPullRequestsPage(
                 state: SelectedStatus,
-                author: SelectedAuthor?.Username,
+                author: SelectedAuthor?.Uuid,
                 limit: pageSize,
                 page: page
                 );

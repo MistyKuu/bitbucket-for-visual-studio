@@ -30,8 +30,20 @@ namespace GitClientVS.Services
             _hashService = hashService;
         }
 
-        public Result SaveUserData(ConnectionData connectionData) => SaveEncryptedSettings(connectionData, Paths.GitClientUserDataPath);
-        public Result<ConnectionData> LoadUserData() => LoadEncryptedSettings<ConnectionData>(Paths.GitClientUserDataPath);
+        public Result SaveUserData(CombinedConnectionData connectionData) => SaveEncryptedSettings(connectionData, Paths.GitClientUserDataPath);
+
+        public Result<CombinedConnectionData> LoadUserData()
+        {
+            var res = LoadEncryptedSettings<CombinedConnectionData>(Paths.GitClientUserDataPath);
+
+            var d = res.Data ?? new CombinedConnectionData(); //for backward compatibility
+            d.SavedUsers = d.SavedUsers ?? new List<ConnectionData>();
+            d.Current = d.Current ?? ConnectionData.NotLogged;
+
+            return res.IsSuccess
+                ? Result<CombinedConnectionData>.Success(d)
+                : Result<CombinedConnectionData>.Fail(res.Exception);
+        }
         public Result SaveProxySettings(ProxySettings proxySettings) => SaveEncryptedSettings(proxySettings, Paths.GitClientProxyDataPath);
         public Result<ProxySettings> LoadProxySettings() => LoadEncryptedSettings<ProxySettings>(Paths.GitClientProxyDataPath);
 

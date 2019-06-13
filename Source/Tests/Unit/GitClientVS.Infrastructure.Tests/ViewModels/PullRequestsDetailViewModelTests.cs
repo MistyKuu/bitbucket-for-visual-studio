@@ -55,10 +55,10 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             {
                 Reviewers = new Dictionary<GitUser, bool>()
                 {
-                    [new GitUser() { Username = "User1" }] = true,
-                    [new GitUser() { Username = "User2" }] = false,
+                    [new GitUser() { Uuid = "User1" }] = true,
+                    [new GitUser() { Uuid = "User2" }] = false,
                 },
-                Author = new GitUser() { Username = pqAuthor }
+                Author = new GitUser() { Uuid = pqAuthor }
             };
 
             var connectionData = new ConnectionData()
@@ -90,11 +90,11 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             {
                 Reviewers = new Dictionary<GitUser, bool>()
                 {
-                    [new GitUser() { Username = "User1" }] = true,
-                    [new GitUser() { Username = "User2" }] = false,
-                    [new GitUser() { Username = currentUser }] = false,
+                    [new GitUser() { Uuid = "User1" }] = true,
+                    [new GitUser() { Uuid = "User2" }] = false,
+                    [new GitUser() { Uuid = currentUser }] = false,
                 },
-                Author = new GitUser() { Username = pqAuthor }
+                Author = new GitUser() { Uuid = pqAuthor }
             };
 
             var connectionData = new ConnectionData()
@@ -119,11 +119,11 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             {
                 Reviewers = new Dictionary<GitUser, bool>()
                 {
-                    [new GitUser() { Username = "User1" }] = true,
-                    [new GitUser() { Username = "User2" }] = false,
-                    [new GitUser() { Username = currentUser }] = true,
+                    [new GitUser() { Uuid = "User1" }] = true,
+                    [new GitUser() { Uuid = "User2" }] = false,
+                    [new GitUser() { Uuid = currentUser }] = true,
                 },
-                Author = new GitUser() { Username = pqAuthor }
+                Author = new GitUser() { Uuid = pqAuthor }
             };
 
             var connectionData = new ConnectionData()
@@ -148,11 +148,11 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             {
                 Reviewers = new Dictionary<GitUser, bool>()
                 {
-                    [new GitUser() { Username = "User1" }] = true,
-                    [new GitUser() { Username = "User2" }] = false,
-                    [new GitUser() { Username = currentUser }] = true,
+                    [new GitUser() { Uuid = "User1" }] = true,
+                    [new GitUser() { Uuid = "User2" }] = false,
+                    [new GitUser() { Uuid = currentUser }] = true,
                 },
-                Author = new GitUser() { Username = pqAuthor }
+                Author = new GitUser() { Uuid = pqAuthor }
             };
 
             var connectionData = new ConnectionData()

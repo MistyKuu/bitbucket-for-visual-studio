@@ -31,7 +31,6 @@ namespace BitBucket.REST.API.Mappings
 
             CreateMap<EnterprisePullRequestOptions, PullRequestOptions>();
             CreateMap<PullRequestOptions, EnterprisePullRequestOptions>();
-            CreateMap<EnterpriseUser, UserShort>();
             CreateMap<EnterpriseCommit, Commit>().ConvertUsing<EnterpriseCommitTypeConverter>();
             CreateMap<EnterpriseComment, Comment>().ConvertUsing<EnterpriseCommentTypeConverter>();
 

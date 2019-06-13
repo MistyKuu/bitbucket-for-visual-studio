@@ -35,7 +35,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         [Test]
         public void Initialize_DataReceived_ShouldLoadAuthorsAndPullRequests()
         {
-            IEnumerable<GitUser> authors = new List<GitUser>() { new GitUser() { Username = "Author1" } };
+            IEnumerable<GitUser> authors = new List<GitUser>() { new GitUser() { Uuid = "Author1" } };
             List<GitPullRequest> pullRequests = new List<GitPullRequest>()
             {
                 new GitPullRequest("Title", "Description", new GitBranch(){Name="SourceBranch"}, new GitBranch() { Name = "DestinationBranch" }),
@@ -52,7 +52,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitClientService.Expect(x => x.GetPullRequestsAuthors()).Return(authors.FromTaskAsync());
             _gitClientService.Expect(x => x.GetPullRequestsPage(
                 state: _sut.SelectedStatus,
-                author: _sut.SelectedAuthor.Username,
+                author: _sut.SelectedAuthor.Uuid,
                 limit: 50,
                 page: 1
                 )).Return(iterator.FromTaskAsync());
@@ -66,7 +66,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
         [Test]
         public void Initialize_LoadNextPageAfterInitialization_ShouldLoadExpectedPullRequests()
         {
-            IEnumerable<GitUser> authors = new List<GitUser>() { new GitUser() { Username = "Author1" } };
+            IEnumerable<GitUser> authors = new List<GitUser>() { new GitUser() { Uuid = "Author1" } };
             List<GitPullRequest> pullRequests = Enumerable
                 .Repeat(new GitPullRequest("Title", "Description", new GitBranch() { Name = "SourceBranch" }, new GitBranch() { Name = "DestinationBranch" }), 100)
                 .ToList();
@@ -82,7 +82,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
             _gitClientService.Expect(x => x.GetPullRequestsAuthors()).Return(authors.FromTaskAsync());
             _gitClientService.Expect(x => x.GetPullRequestsPage(
                 state: _sut.SelectedStatus,
-                author: _sut.SelectedAuthor.Username,
+                author: _sut.SelectedAuthor.Uuid,
                 limit: 50,
                 page: 1
             ))
@@ -97,7 +97,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
             _gitClientService.Expect(x => x.GetPullRequestsPage(
                 state: _sut.SelectedStatus,
-                author: _sut.SelectedAuthor.Username,
+                author: _sut.SelectedAuthor.Uuid,
                 limit: 50,
                 page: 2
             ))
@@ -133,7 +133,7 @@ namespace GitClientVS.Infrastructure.Tests.ViewModels
 
             _gitClientService.Expect(x => x.GetPullRequestsPage(
                 state: _sut.SelectedStatus,
-                author: _sut.SelectedAuthor.Username,
+                author: _sut.SelectedAuthor.Uuid,
                 limit: 50,
                 page: 1
             ))

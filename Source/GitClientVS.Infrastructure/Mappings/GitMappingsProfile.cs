@@ -43,12 +43,8 @@ namespace GitClientVS.Infrastructure.Mappings
             CreateMap<GitBranch, Branch>();
 
 
-            CreateMap<GitUser, UserShort>();
             CreateMap<GitUser, GitUser>();
-
             CreateMap<User, GitUser>();
-            CreateMap<User, UserShort>();
-            CreateMap<UserShort, GitUser>();
             CreateMap<Links, GitLinks>();
             CreateMap<Link, GitLink>();
             CreateMap<GitMergeRequest, MergeRequest>();

@@ -75,7 +75,7 @@
                                            diffControlUtils:AvalonEditBehaviour.EnterAddModeCommand="{Binding ElementName=CurrentControl,Path=DataContext.EnterAddModeCommand}"
                                            HorizontalAlignment="Stretch"
                                            VerticalScrollBarVisibility="Hidden"
-                                           HorizontalScrollBarVisibility="Hidden"
+                                           HorizontalScrollBarVisibility="Auto"
                                            FontFamily="Consolas"
                                            FontSize="10pt" 
                                            IsReadOnly="True"

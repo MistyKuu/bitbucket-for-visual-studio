@@ -32,10 +32,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         private ReactiveCommand _openCloneCommand;
         private ReactiveCommand _openCreateCommand;
         private ReactiveCommand _initializeCommand;
+        private ReactiveCommand _changeUserCommand;
 
         private ConnectionData _connectionData;
         private IGitService _gitService;
         private List<LocalRepo> _localRepositories;
+        private List<GitCredentials> _savedUsers;
         private LocalRepo _selectRepository;
         private IVsTools _vsTools;
         private ITeamExplorerCommandsService _teamExplorerCommandsService;
@@ -44,6 +46,7 @@ namespace GitClientVS.Infrastructure.ViewModels
         public ICommand OpenCreateCommand => _openCreateCommand;
         public ICommand LogoutCommand => _logoutCommand;
         public ICommand OpenCloneCommand => _openCloneCommand;
+        public ICommand ChangeUserCommand => _changeUserCommand;
         public ICommand InitializeCommand => _initializeCommand;
 
         public LocalRepo SelectedRepository
@@ -62,6 +65,12 @@ namespace GitClientVS.Infrastructure.ViewModels
         {
             get => _localRepositories;
             set => this.RaiseAndSetIfChanged(ref _localRepositories, value);
+        }
+
+        public List<GitCredentials> SavedUsers
+        {
+            get => _savedUsers;
+            set => this.RaiseAndSetIfChanged(ref _savedUsers, value);
         }
 
         public string ErrorMessage { get; set; }
@@ -92,6 +101,7 @@ namespace GitClientVS.Infrastructure.ViewModels
             _teamExplorerCommandsService = teamExplorerCommandsService;
 
             ConnectionData = _userInformationService.ConnectionData;
+            SavedUsers = GetSavedUsers();
         }
 
         public void InitializeCommands()
@@ -100,6 +110,11 @@ namespace GitClientVS.Infrastructure.ViewModels
             _openCloneCommand = ReactiveCommand.Create(() => _cloneRepoViewFactory.CreateExport().Value.ShowDialog());
             _openCreateCommand = ReactiveCommand.Create(() => _createRepoViewFactory.CreateExport().Value.ShowDialog());
             _logoutCommand = ReactiveCommand.Create(() => { _gitClientService.Logout(); });
+            _changeUserCommand = ReactiveCommand.CreateFromTask<GitCredentials>(async x =>
+                {
+                    await _gitClientService.ChangeUserAsync(x);
+                });
+
             _initializeCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (!ConnectionData.IsLoggedIn)
@@ -135,6 +150,22 @@ namespace GitClientVS.Infrastructure.ViewModels
         private void ConnectionChanged(ConnectionChangedEvent connectionChangedEvent)
         {
             ConnectionData = connectionChangedEvent.Data;
+            SavedUsers = GetSavedUsers();
+        }
+
+        private List<GitCredentials> GetSavedUsers()
+        {
+            return _userInformationService
+                .GetSavedUsers()
+                .Where(x => !x.Equals(ConnectionData))
+                .Select(x => new GitCredentials()
+                {
+                    Login = x.UserName,
+                    Password = x.Password,
+                    Host = x.IsEnterprise ? x.Host : null,
+                    IsEnterprise = x.IsEnterprise
+                })
+                .ToList();
         }
 
 
