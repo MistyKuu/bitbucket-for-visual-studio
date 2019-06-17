@@ -49,7 +49,7 @@ namespace GitClientVS.Services
             var response = await userClient.GetUser();
             var credentials = new Credentials(response.Username, apiConnection.Credentials.Password, response.Uuid);
 
-            apiConnection = new Connection(host, new Uri($"{host.Scheme}://api.{host.Host}/2.0/"), credentials);
+            apiConnection = new Connection(apiConnection.MainUrl, apiConnection.ApiUrl, credentials);
 
             return new BitbucketClient(apiConnection,  _proxyResolver);
         }
