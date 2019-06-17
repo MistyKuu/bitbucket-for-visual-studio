@@ -29,8 +29,10 @@ namespace BitBucket.REST.API.Clients.Standard
 
         public async Task<IEnumerable<Repository>> GetUserRepositoriesV2(string username)
         {
-            var url = ApiUrls.Repositories(username);
-            return await RestClient.GetAllPages<Repository>(url);
+            var url = ApiUrls.Repositories();
+            var queryStr = new QueryString { { "role", "member" } };
+
+            return await RestClient.GetAllPages<Repository>(url, limit: 50, queryStr);
         }
 
         public async Task<IEnumerable<Branch>> GetBranches(string repoName, string owner)
@@ -92,8 +94,8 @@ namespace BitBucket.REST.API.Clients.Standard
             var url = ApiUrls.DefaultBranch(owner, repoName);
             var request = new BitbucketRestRequest(url, Method.GET);
             throw new NotSupportedException("Deprecated");
-       //     var response = await _versionOneClient.ExecuteTaskAsync<DefaultBranch>(request);
-          //  return response.Data;
+            //     var response = await _versionOneClient.ExecuteTaskAsync<DefaultBranch>(request);
+            //  return response.Data;
         }
     }
 }
