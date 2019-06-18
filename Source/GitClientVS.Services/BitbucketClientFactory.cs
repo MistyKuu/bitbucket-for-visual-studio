@@ -34,8 +34,12 @@ namespace GitClientVS.Services
 
             var apiConnection = new Connection(host, new Uri(host, "rest/api/1.0"), cred);
             EnterpriseBitbucketClient client = new EnterpriseBitbucketClient(apiConnection, _proxyResolver);
-            await ((EnterpriseRepositoriesClient)client.RepositoriesClient).GetRecentRepositories();//will throw exception if not authenticated
-            return client;
+
+            var user = await ((EnterpriseUserClient)client.UserClient).GetUser(cred.Login);
+
+            var credentials = new Credentials(user.UserName, apiConnection.Credentials.Password, user.Uuid);
+            apiConnection = new Connection(apiConnection.MainUrl, apiConnection.ApiUrl, credentials);
+            return new EnterpriseBitbucketClient(apiConnection, _proxyResolver);
         }
 
         public async Task<IBitbucketClient> CreateStandardBitBucketClient(Credentials cred)
@@ -47,7 +51,7 @@ namespace GitClientVS.Services
             var client = new BitbucketRestClient(apiConnection) { ProxyResolver = _proxyResolver };
             var userClient = new UserClient(client, apiConnection);
             var response = await userClient.GetUser();
-            var credentials = new Credentials(response.Username, apiConnection.Credentials.Password, response.Uuid);
+            var credentials = new Credentials(response.UserName, apiConnection.Credentials.Password, response.Uuid);
 
             apiConnection = new Connection(apiConnection.MainUrl, apiConnection.ApiUrl, credentials);
 

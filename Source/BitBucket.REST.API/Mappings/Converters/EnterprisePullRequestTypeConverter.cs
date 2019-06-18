@@ -58,7 +58,7 @@ namespace BitBucket.REST.API.Mappings.Converters
                 Source = source.Source.MapTo<EnterpriseBranchSource>(),
                 Destination = source.Destination?.MapTo<EnterpriseBranchSource>(),
                 Id = source.Id,
-                Reviewers = source.Reviewers?.Select(x => new EnterpriseParticipant() { User = new EnterpriseUser() { Username = x.Username, Uuid = x.Uuid } }).ToList(),
+                Reviewers = source.Reviewers?.Select(x => new EnterpriseParticipant() { User = new EnterpriseUser() { Username = x.UserName, Uuid = x.Uuid } }).ToList(),
                 Version = source.Version
             };
         }

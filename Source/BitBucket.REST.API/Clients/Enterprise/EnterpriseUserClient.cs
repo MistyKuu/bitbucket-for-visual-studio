@@ -15,7 +15,7 @@ using RestSharp;
 
 namespace BitBucket.REST.API.Clients.Enterprise
 {
-    public class EnterpriseUserClient : ApiClient, IUserClient
+    public class EnterpriseUserClient : ApiClient,IUserClient
     {
 
         public EnterpriseUserClient(IEnterpriseBitbucketRestClient restClient, Connection connection) : base(restClient, connection)
@@ -23,15 +23,18 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         }
 
+        public async Task<User> GetUser(string login)
+        {
+            var url = EnterpriseApiUrls.Users(login);
+            var request = new BitbucketRestRequest(url, Method.GET);
+
+            var response = await RestClient.ExecuteTaskAsync<EnterpriseUser>(request);
+            return response.Data.MapTo<User>();
+        }
+
         public Task<User> GetUser()
         {
-            throw new NotImplementedException(); //todo its returning all users (not used anywhere)
-            //var url = EnterpriseApiUrls.User();
-            //var response = await RestClient.GetAllPages<EnterpriseUser>(url);
-            //if (!response.Values.Any())
-            //    throw new Exception("User not found");
-
-            //return response.Values.First().MapTo<User>();
+            throw new NotImplementedException();
         }
     }
 }

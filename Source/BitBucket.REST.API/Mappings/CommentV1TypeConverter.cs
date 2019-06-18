@@ -17,7 +17,7 @@ namespace BitBucket.REST.API.Mappings
                 Parent = source.ParentId.HasValue ? new Parent() { Id = source.ParentId.Value } : null,
                 User = new User()
                 {
-                    Username = source.AuthorInfo?.UserName ?? source.UserName,
+                    UserName = source.AuthorInfo?.UserName ?? source.UserName,
                     DisplayName = source.AuthorInfo?.DisplayName ?? source.DisplayName,
                     Links = new Links()
                     {

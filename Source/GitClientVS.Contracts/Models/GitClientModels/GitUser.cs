@@ -10,6 +10,7 @@ namespace GitClientVS.Contracts.Models.GitClientModels
     {
         public string Uuid { get; set; }
         public string DisplayName { get; set; }
+        public string UserName { get; set; }
         public GitLinks Links { get; set; }
 
         protected bool Equals(GitUser other)

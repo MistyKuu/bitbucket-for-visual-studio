@@ -11,6 +11,7 @@ namespace BitBucket.REST.API.Helpers
             return $"repos";
         }
 
+
         public static string Teams()
         {
             return $"groups";
@@ -31,6 +32,10 @@ namespace BitBucket.REST.API.Helpers
             return $"projects/{ownerName}/repos/{repoName}/branches";
         }
 
+        public static string Users(string userName)
+        {
+            return $"users/{userName}";
+        }
         public static string Users()
         {
             return $"users";

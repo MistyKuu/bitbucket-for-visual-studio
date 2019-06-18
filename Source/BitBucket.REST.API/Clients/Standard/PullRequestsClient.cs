@@ -221,7 +221,7 @@ namespace BitBucket.REST.API.Clients.Standard
         {
             pullRequest.Author = new User()
             {
-                Username = Connection.Credentials.Login,
+                UserName = Connection.Credentials.Login,
             };
 
             pullRequest.Reviewers = pullRequest.Reviewers.Select(x => new User() {Uuid = x.Uuid}).ToList();
@@ -237,7 +237,7 @@ namespace BitBucket.REST.API.Clients.Standard
         {
             pullRequest.Author = new User()
             {
-                Username = Connection.Credentials.Login
+                UserName = Connection.Credentials.Login
             };
 
             pullRequest.Reviewers = pullRequest.Reviewers.Select(x => new User() { Uuid = x.Uuid }).ToList();

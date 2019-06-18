@@ -17,7 +17,7 @@ namespace BitBucket.REST.API.Mappings.Converters
                     Links = source.User.Links.MapTo<Links>(),
                     DisplayName = source.User.DisplayName,
                     Uuid = source.User.Username,
-                    Username = source.User.Username,
+                    UserName = source.User.Username,
                 },
             };
         }

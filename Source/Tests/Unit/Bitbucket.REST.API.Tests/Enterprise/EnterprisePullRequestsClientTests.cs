@@ -70,7 +70,7 @@ namespace Bitbucket.REST.API.Tests.Enterprise
 
                 Assert.AreEqual(true, participant.Approved);
                 Assert.AreEqual("REVIEWER", participant.Role);
-                Assert.AreEqual("TestUser", participant.User.Username);
+                Assert.AreEqual("TestUser", participant.User.UserName);
                 Assert.AreEqual("TestUser", participant.User.DisplayName);
             });
         }
@@ -106,7 +106,7 @@ namespace Bitbucket.REST.API.Tests.Enterprise
                 Description = "description",
                 Source = new Source() { Branch = new Branch() { Name = "master", IsDefault = false } },
                 Destination = new Source() { Branch = new Branch() { Name = "4", IsDefault = false } },
-                Reviewers = new List<User>() { new User() { Username = "MistyK" } },
+                Reviewers = new List<User>() { new User() { UserName = "MistyK" } },
             };
 
             await _sut.CreatePullRequest(pq, "reponame", "owner");
@@ -168,7 +168,7 @@ namespace Bitbucket.REST.API.Tests.Enterprise
             {
                 Assert.AreEqual(responseData.Values.Count, resultAuthors.Count);
                 Assert.AreEqual("MistyKuuuuuuuu", firstResultAuthor.DisplayName);
-                Assert.AreEqual("MistyK", firstResultAuthor.Username);
+                Assert.AreEqual("MistyK", firstResultAuthor.UserName);
                 Assert.AreEqual("mistyksu@gmail.com", firstResultAuthor.Email);
                 Assert.AreEqual("http://localhost:7990/users/mistyk", firstResultAuthor.Links.Self.Href);
 
@@ -491,7 +491,7 @@ namespace Bitbucket.REST.API.Tests.Enterprise
 
                 Assert.AreEqual("MistyKuuuuuuuu", firstUser.DisplayName);
                 Assert.AreEqual("mistyksu@gmail.com", firstUser.Email);
-                Assert.AreEqual("MistyK", firstUser.Username);
+                Assert.AreEqual("MistyK", firstUser.UserName);
             });
 
         }
@@ -506,7 +506,7 @@ namespace Bitbucket.REST.API.Tests.Enterprise
                 Description = "description",
                 Source = new Source() { Branch = new Branch() { Name = "master", IsDefault = false } },
                 Destination = new Source() { Branch = new Branch() { Name = "4", IsDefault = false } },
-                Reviewers = new List<User>() { new User() { Username = "MistyK" } },
+                Reviewers = new List<User>() { new User() { UserName = "MistyK" } },
             };
 
             var result = _restClient
