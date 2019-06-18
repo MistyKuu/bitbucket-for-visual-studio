@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BitBucket.REST.API.Interfaces;
 using GitClientVS.Contracts.Models;
 using GitClientVS.Contracts.Models.GitClientModels;
 using ParseDiff;
@@ -9,6 +10,7 @@ namespace GitClientVS.Contracts.Interfaces.Services
 {
     public interface IGitClientService
     {
+        IBitbucketClient Client { get; }
         string GitClientType { get; }
         string Title { get; }
         string Origin { get; }
