@@ -1,5 +1,7 @@
-﻿using BitBucket.REST.API.Models;
+﻿using System.Threading.Tasks;
+using BitBucket.REST.API.Models;
 using BitBucket.REST.API.Models.Standard;
+using RestSharp;
 
 namespace BitBucket.REST.API.Interfaces
 {

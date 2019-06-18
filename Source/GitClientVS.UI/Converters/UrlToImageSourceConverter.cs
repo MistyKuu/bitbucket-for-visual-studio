@@ -19,6 +19,10 @@ using System.Windows.Interactivity;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
+using BitBucket.REST.API.Interfaces;
+using BitBucket.REST.API.Models;
+using BitBucket.REST.API.Models.Standard;
+using BitBucket.REST.API.Wrappers;
 using GitClientVS.Contracts.Interfaces.Services;
 using GitClientVS.Infrastructure;
 using GitClientVS.UI.AttachedProperties;
@@ -33,11 +37,14 @@ namespace GitClientVS.UI.Converters
     public class UrlToImageSourceConverter : BaseMarkupExtensionConverter, IImageManager
     {
         private static IUserInformationService _userInfoService;
+        private static IProxyResolver _proxyResolver;
+        private static HttpClient _httpClient = new HttpClient();
 
         static UrlToImageSourceConverter()
         {
             ExportProvider provider = (ExportProvider)Application.Current.Resources[Consts.IocResource];
             _userInfoService = _userInfoService ?? provider.GetExportedValue<IUserInformationService>();
+            _proxyResolver = _proxyResolver ?? provider.GetExportedValue<IProxyResolver>();
         }
 
         public Task<BitmapImage> DownloadImage(string url)
@@ -55,16 +62,22 @@ namespace GitClientVS.UI.Converters
         }
 
         public async Task<BitmapImage> GetImage(string url)
-        {//todo this stopped working https://community.atlassian.com/t5/Bitbucket-articles/Retrieve-the-user-s-avatar-via-the-REST-API-endpoints/ba-p/940531
-            var token = System.Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_userInfoService.ConnectionData.UserName}:{_userInfoService.ConnectionData.Password}"));
-            RestClient client = new RestClient(url);
-            RestRequest request = new RestRequest("", Method.GET);
-            request.AddParameter("Authorization", string.Format("Basic " + token), ParameterType.HttpHeader);
-            var resp = await client.ExecuteTaskAsync(request);
+        {
+            var httpClientHandler = new HttpClientHandler()
+            {
+                Proxy = (WebRequest.DefaultWebProxy ?? WebRequest.GetSystemWebProxy()),
+            };
+            if (httpClientHandler.Proxy != null)
+                httpClientHandler.Proxy.Credentials = _proxyResolver?.GetCredentials();
 
-            var buffer = resp.RawBytes;
+            var authHeader = $"Basic {System.Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_userInfoService.ConnectionData.UserName}:{_userInfoService.ConnectionData.Password}"))}";
 
-            return resp.ContentType.Contains("svg", StringComparison.InvariantCultureIgnoreCase) ? GetSvgImage(buffer) : UrlToBitmap(buffer);
+            _httpClient.DefaultRequestHeaders.Remove("Authorization");
+            _httpClient.DefaultRequestHeaders.Add("Authorization", authHeader);
+            var resp = await _httpClient.GetAsync(url);
+            var buffer = await resp.Content.ReadAsByteArrayAsync();
+
+            return resp.Content.Headers.ContentType.MediaType.Contains("svg", StringComparison.InvariantCultureIgnoreCase) ? GetSvgImage(buffer) : UrlToBitmap(buffer);
         }
 
         private BitmapImage GetSvgImage(byte[] buffer)

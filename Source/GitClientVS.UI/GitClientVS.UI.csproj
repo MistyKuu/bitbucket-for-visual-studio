@@ -326,6 +326,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BitBucket.REST.API\BitBucket.REST.API.csproj">
+      <Project>{8D9A6680-2F77-485E-B90D-70E70A3444CF}</Project>
+      <Name>BitBucket.REST.API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GitClientVS.Contracts\GitClientVS.Contracts.csproj">
       <Project>{528A613A-1D51-4B23-851B-2549261B580E}</Project>
       <Name>GitClientVS.Contracts</Name>

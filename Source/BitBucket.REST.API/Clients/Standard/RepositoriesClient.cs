@@ -81,7 +81,7 @@ namespace BitBucket.REST.API.Clients.Standard
 
         public async Task<Repository> CreateRepository(Repository repository, bool isTeam)
         {
-            var login = isTeam ? repository.Owner.Username : Connection.Credentials.Login;
+            var login = isTeam ? repository.Owner.UserName : Connection.Credentials.Login;
             var url = ApiUrls.Repository(login, repository.Name);
             var request = new BitbucketRestRequest(url, Method.POST);
             request.AddParameter("application/json; charset=utf-8", request.JsonSerializer.Serialize(repository), ParameterType.RequestBody);

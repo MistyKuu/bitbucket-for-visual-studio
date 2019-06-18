@@ -37,7 +37,7 @@ namespace BitBucket.REST.API.Clients.Enterprise
 
         public async Task<Repository> CreateRepository(Repository repository, bool isTeam)
         {
-            var login = isTeam ? repository.Owner.Username : Connection.Credentials.Login;
+            var login = isTeam ? repository.Owner.UserName : Connection.Credentials.Login;
             var url = EnterpriseApiUrls.CreateRepositories(login);
             var request = new BitbucketRestRequest(url, Method.POST);
             var enterpriseRepo = new EnterpriseRepository()

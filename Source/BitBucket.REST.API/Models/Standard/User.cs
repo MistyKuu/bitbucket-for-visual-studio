@@ -5,7 +5,7 @@ namespace BitBucket.REST.API.Models.Standard
     public class User
     {
         [JsonProperty(PropertyName = "username")]
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         [JsonProperty(PropertyName = "display_name")]
         public string DisplayName { get; set; }

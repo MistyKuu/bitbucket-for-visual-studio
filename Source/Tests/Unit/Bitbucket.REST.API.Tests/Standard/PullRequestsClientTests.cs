@@ -70,7 +70,7 @@ namespace Bitbucket.REST.API.Tests.Standard
 
                 Assert.AreEqual(true, participant.Approved);
                 Assert.AreEqual("PARTICIPANT", participant.Role);
-                Assert.AreEqual("mistyku", participant.User.Username);
+                Assert.AreEqual("mistyku", participant.User.UserName);
                 Assert.AreEqual("Zibi", participant.User.DisplayName);
             });
         }
@@ -106,7 +106,7 @@ namespace Bitbucket.REST.API.Tests.Standard
                 Description = "* qwdwqdqwd created online with Bitbucket",
                 Source = new Source() { Branch = new Branch() { Name = "master", IsDefault = false } },
                 Destination = new Source() { Branch = new Branch() { Name = "testbranch", IsDefault = false } },
-                Reviewers = new List<User>() { new User() { Username = "bitbucketvsextension", Type = "user" } },
+                Reviewers = new List<User>() { new User() { UserName = "bitbucketvsextension", Type = "user" } },
                 CloseSourceBranch = false,
                 State = PullRequestOptions.OPEN
             };
@@ -170,7 +170,7 @@ namespace Bitbucket.REST.API.Tests.Standard
             {
                 Assert.AreEqual(responseData.Values.Count, resultAuthors.Count);
                 Assert.AreEqual("bitbucketvsextension", firstResultAuthor.DisplayName);
-                Assert.AreEqual("bitbucketvsextension", firstResultAuthor.Username);
+                Assert.AreEqual("bitbucketvsextension", firstResultAuthor.UserName);
                 Assert.AreEqual("https://bitbucket.org/!api/2.0/users/bitbucketvsextension", firstResultAuthor.Links.Self.Href);
 
             });
@@ -445,7 +445,7 @@ namespace Bitbucket.REST.API.Tests.Standard
                 Assert.AreEqual("master", resultData.Title);
                 Assert.AreEqual("master", resultData.Source.Branch.Name);
                 Assert.AreEqual("testbranch", resultData.Destination.Branch.Name);
-                Assert.AreEqual("bitbucketvsextension", resultData.Reviewers.First().Username);
+                Assert.AreEqual("bitbucketvsextension", resultData.Reviewers.First().UserName);
             });
         }
 
@@ -524,7 +524,7 @@ namespace Bitbucket.REST.API.Tests.Standard
 
                 Assert.AreEqual("Zibi", firstUser.DisplayName);
                 Assert.AreEqual(null, firstUser.Email);
-                Assert.AreEqual("mistyku", firstUser.Username);
+                Assert.AreEqual("mistyku", firstUser.UserName);
             });
 
         }
@@ -539,7 +539,7 @@ namespace Bitbucket.REST.API.Tests.Standard
                 Description = "description",
                 Source = new Source() { Branch = new Branch() { Name = "master", IsDefault = false } },
                 Destination = new Source() { Branch = new Branch() { Name = "4", IsDefault = false } },
-                Reviewers = new List<User>() { new User() { Username = "MistyK" } },
+                Reviewers = new List<User>() { new User() { UserName = "MistyK" } },
             };
 
             var result = _restClient
