@@ -1,5 +1,7 @@
 # Visual Studio Bitbucket Extension
 
+# Project is no longer maintained
+
 Bitbucket Extension is a plugin for Visual Studio integration with Bitbucket Git repositories. Main features:
 
 *  Create - lets user to create a git repository on Bitbucket.org and synchronize it with your local version.
